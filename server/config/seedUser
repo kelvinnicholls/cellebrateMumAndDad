@@ -1,0 +1,12 @@
+{
+    "email" : "kelvin.nicholls@gmail.com",
+    "password" : "$2a$10$SO3Ye078P4xCpyh3hjVrcuBA5sJqH4/DsZPjuBS8KwMV4RhTGBLt6",
+    "name" : "kelvin",
+    "adminUser" : true,
+    "relationship" : "Son",
+    "dob" : ISODate("1964-08-18T00:00:00.000Z"),
+    "_creator" : ObjectId("594294a6d764c22df8155c88"),
+    "_id" : ObjectId("594294a6d764c22df8155c88"),
+    "_creatorRef" : ObjectId("594294a6d764c22df8155c89")
+}
+

@@ -1,0 +1,17 @@
+{
+    "test": {
+        "PORT": "3000",
+        "MONGODB_URI": "mongodb://localhost:27017/CelebrateMDAppTest",
+        "JWT_SECRET" : "rthc5hc6468brthyrtywryfghsrthy7i"
+    },
+    "development": {
+        "PORT": "3000",
+        "MONGODB_URI": "mongodb://localhost:27017/CelebrateMDApp",
+        "JWT_SECRET" : "odowecukcsrtthrthrthyrt7yiyiickk"
+    },
+    "heroku": {
+        "PORT": "",
+        "MONGODB_URI": "",
+        "JWT_SECRET" : "sfthrtuyukryuw455fghw74wnrser6y4sfhsrgea"
+    }
+}
