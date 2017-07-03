@@ -219,7 +219,7 @@ describe('POST /users', () => {
         'x-auth': users[0].tokens[0].token
       })
       .field('user', JSON.stringify(user))
-      .attach('file', './tests/' + fileName)
+      .attach('file', './server/tests/' + fileName)
       .expect(200)
       .expect((res) => {
         expect(res.body.email).toBe(email);
@@ -608,7 +608,7 @@ describe('UPDATE /users/:_creatorRef', () => {
         'x-auth': users[1].tokens[0].token
       })
       .field('user', JSON.stringify(user))
-      .attach('file', './tests/' + fileName)
+      .attach('file', './server/tests/' + fileName)
       .expect((res) => {
         expect(res.body.name).toBe(newName);
       })

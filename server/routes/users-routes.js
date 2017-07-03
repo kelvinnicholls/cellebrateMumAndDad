@@ -39,7 +39,7 @@ const userUpdateFields = ['email', 'name', 'adminUser', 'relationship', 'dob', '
 
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './public/images/');
+        cb(null, './server/public/images/');
     },
     filename: function (req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg|gif)$/)) {
