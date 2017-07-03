@@ -1,0 +1,53 @@
+1) Change logged in user's name if they update their name
+
+2) add Add button to users list and hide input until add or edit are pressed and re-hide on submit (also change to Submit button to Create and Update)
+
+3) Add password strength indicator and make the format configurable
+
+4) Add route guards
+
+5) check expiring tokens and how to expire. log out should always delete local mem.
+
+6) async validations to check if unique values (eg name and email) already exist;
+
+7) errors should be returned to screen.
+
+8) add some bootstrap css to error screen
+
+9) add toasts elsewhere
+
+X10) add password strength indicator
+https://blog.brunoscopelliti.com/angularjs-directive-to-test-the-strength-of-a-password/
+
+X11) add validation messages 
+https://scotch.io/tutorials/angular-2-form-validation
+
+12) check toast is still working (especially after of before navigation)
+
+13) add routes to edit user similar to recipe app so that active link works (use similar styling as well)
+
+14) Confirm delete
+
+15) Jumbotron on page not found
+
+16) upload files to db
+
+https://scotch.io/tutorials/build-a-mean-stack-file-uploader-app-with-filestack
+
+https://www.youtube.com/watch?v=wdl59LAe4M8
+
+https://www.youtube.com/watch?v=w2pw8eVq_Qk
+
+17) Only allow update if something has actually changed
+
+18) Only sent cols to update that have actually changed.
+
+19) Add profile pic to logged in user
+
+20) Only update profile pic if it has changed
+
+21) password min length 6 is not working
+
+22) Use events to trigger toast after navigation.
+
+23) Exit when creating/editing a user should navigate back to /users

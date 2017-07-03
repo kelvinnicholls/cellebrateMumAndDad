@@ -1,9 +1,0 @@
-<li class="list-group-item justify-content-between" [ngClass]="{'active': isSelected()}">
-    <img [src]="user?.profilePicLocation || defaultProfilePicFile" class="img-responsive" style="max-height: 30px;">
-    <div class="author">
-        <a (click)="onEdit()">{{ user.name }} ({{ user.relationship }} - {{ user.email }})</a>
-    </div>
-    <div class="config">
-        <a (click)="onDelete()">Delete</a>
-    </div>
-</li>

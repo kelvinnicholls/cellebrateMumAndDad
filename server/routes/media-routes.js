@@ -20,7 +20,7 @@ const mediaInsertFields = ['location', 'isUrl', 'name', 'mimeType', 'description
 router.post('/', authenticate, (req, res) => {
     let body = _.pick(req.body, mediaInsertFields);
     let media = new Media(body);
-    media._creator = req.user._creatorRef;
+    media._creator = req.loggedInUser._creatorRef;
     media.addedDate = new Date().getTime();
     media.save().then((doc) => {
         res.send(doc);

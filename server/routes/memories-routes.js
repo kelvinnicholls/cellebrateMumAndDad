@@ -29,8 +29,8 @@ const memoryInsertFields = ['title', 'description', 'memoryDate', 'tags', 'users
 router.get('/', authenticate, (req, res) => {
 
     let memoriesObj = {};
-    if (!req.user.adminUser) {
-        memoriesObj._creator = req.user._creatorRef;
+    if (!req.loggedInUser.adminUser) {
+        memoriesObj._creator = req.loggedInUser._creatorRef;
     };
 
     Memory.find(memoriesObj).then((memories) => {
@@ -107,8 +107,8 @@ router.delete('/:id', authenticate, (req, res) => {
     let memories = {
         '_id': id
     };
-    if (!req.user.adminUser) {
-        memories._creator = req.user._creatorRef;
+    if (!req.loggedInUser.adminUser) {
+        memories._creator = req.loggedInUser._creatorRef;
     }
 
     Memory.findOneAndRemove(memories).then((memory) => {
@@ -132,9 +132,9 @@ router.delete('/:id', authenticate, (req, res) => {
 router.delete('/', authenticate, (req, res) => {
 
     let memories = {};
-    if (!req.user.adminUser) {
+    if (!req.loggedInUser.adminUser) {
         memories = {
-            '_creator': req.user._creatorRef
+            '_creator': req.loggedInUser._creatorRef
         };
     }
 
@@ -178,8 +178,8 @@ router.patch('/:id', authenticate, (req, res) => {
     let memories = {
         '_id': id
     };
-    if (!req.user.adminUser) {
-        memories._creator = req.user._creatorRef;
+    if (!req.loggedInUser.adminUser) {
+        memories._creator = req.loggedInUser._creatorRef;
     }
 
     Memory.findOneAndUpdate(memories, {

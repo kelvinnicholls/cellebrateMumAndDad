@@ -154,7 +154,7 @@ export class UserService {
             .map((response: any) => {
                 let body = JSON.parse(response._body);
                 if (body._profileMediaId) {
-                  user.profilePicLocation = body._profileMediaId.location.replace(Consts.PUBLIC_REG_EXPR, "");
+                  user.profilePicLocation = body._profileMediaId.location.substring(14);
                 };
                  
                 this.users.forEach((element, index) => {

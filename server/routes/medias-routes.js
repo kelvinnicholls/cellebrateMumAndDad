@@ -27,8 +27,8 @@ const mediaInsertFields = ['location', 'isUrl', 'name', 'mediaType', 'mediaSubty
 router.get('/', authenticate, (req, res) => {
 
     let mediasObj = {};
-    if (!req.user.adminUser) {
-        mediasObj._creator = req.user._creatorRef;
+    if (!req.loggedInUser.adminUser) {
+        mediasObj._creator = req.loggedInUser._creatorRef;
     };
 
     Media.find(mediasObj).then((medias) => {
@@ -105,8 +105,8 @@ router.delete('/:id', authenticate, (req, res) => {
     let medias = {
         '_id': id
     };
-    if (!req.user.adminUser) {
-        medias._creator = req.user._creatorRef;
+    if (!req.loggedInUser.adminUser) {
+        medias._creator = req.loggedInUser._creatorRef;
     }
 
     Media.findOneAndRemove(medias).then((media) => {
@@ -130,9 +130,9 @@ router.delete('/:id', authenticate, (req, res) => {
 router.delete('/', authenticate, (req, res) => {
 
     let medias = {};
-    if (!req.user.adminUser) {
+    if (!req.loggedInUser.adminUser) {
         medias = {
-            '_creator': req.user._creatorRef
+            '_creator': req.loggedInUser._creatorRef
         };
     }
 
@@ -176,8 +176,8 @@ router.patch('/:id', authenticate, (req, res) => {
     let medias = {
         '_id': id
     };
-    if (!req.user.adminUser) {
-        medias._creator = req.user._creatorRef;
+    if (!req.loggedInUser.adminUser) {
+        medias._creator = req.loggedInUser._creatorRef;
     }
 
     Media.findOneAndUpdate(medias, {

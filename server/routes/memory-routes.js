@@ -21,7 +21,7 @@ const memoryInsertFields = ['title', 'description', 'memoryDate', 'tags', 'users
 router.post('/', authenticate, (req, res) => {
     let body = _.pick(req.body, memoryInsertFields);
     let memory = new Memory(body);
-    memory._creator = req.user._creatorRef;
+    memory._creator = req.loggedInUser._creatorRef;
     memory.addedDate = new Date().getTime();
     memory.save().then((doc) => {
         res.send(doc);

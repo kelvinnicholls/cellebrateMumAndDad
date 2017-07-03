@@ -84,6 +84,10 @@ let multerUpload = multer({
 
 let upload = (req, res, next) => {
     multerUpload(req, res, function (err) {
+        console.log("multerUpload req.loggedInUser",req.loggedInUser);
+        console.log("multerUpload req.user",req.user);
+        req.passedUser = JSON.parse(req.body.user);
+        delete req.body.user;
         if (err) {
             console.log('user patch err', err);
             if (err.code === 'LIMIT_FILE_SIZE') {
@@ -107,11 +111,11 @@ let upload = (req, res, next) => {
                 media.originalFileName = req.file.originalname;
                 media.mimeType = req.file.mimetype;
                 media.isUrl = false;
-                media.description = 'Profile picture for ' + req.user.name;
-                media._creator = req.user._creatorRef;
+                media.description = 'Profile picture for ' + req.loggedInUser.name;
+                media._creator = req.loggedInUser._creatorRef;
                 media.addedDate = new Date();
                 media.save().then((media) => {
-                    req.body._profileMediaId = media._id;
+                    req.passedUser._profileMediaId = media._id;
                     req.body.location = location;
                     next();
                 }).catch((e) => {
@@ -125,12 +129,12 @@ let upload = (req, res, next) => {
 
 
 router.post('/', authenticate, upload, (req, res) => {
-    if (req.user.adminUser) {
-        let body = _.pick(JSON.parse(req.body.user), userInsertFields);
-        body._profileMediaId = req.body._profileMediaId;
+    if (req.loggedInUser.adminUser) {
+        let body = _.pick(req.passedUser, userInsertFields);
+        //body._profileMediaId = req.body._profileMediaId;
         var user = new User(body);
         user._creatorRef = new ObjectID();
-        user._creator = user._creatorRef;
+        user._creator = req.loggedInUser._creatorRef;
         user.save().then((user) => {
             user.location = req.body.location;
             res.send(_.pick(user, userOutFields));
@@ -184,7 +188,7 @@ router.patch('/change-password', authenticate, (req, res) => {
 
         }).then((passwordsMatch) => {
 
-            if (passwordsMatch && req.user._id == decoded._id) {
+            if (passwordsMatch && req.loggedInUser._id == decoded._id) {
 
                 utils.getEncryptedPassword(newPassword, function (err, hash) {
                     if (err) {
@@ -231,9 +235,12 @@ router.patch('/change-password', authenticate, (req, res) => {
 router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
     let _creatorRef = new ObjectID(req.params._creatorRef);
     let token = req.header('x-auth');
+    console.log("_creatorRef",_creatorRef);
     User.findOne({
         _creatorRef
     }).then((user) => {
+        console.log("user",user);
+       console.log("req.body",req.body);
         if (!user) {
             return Promise.reject();
         };
@@ -244,9 +251,9 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
             return Promise.reject();
         };
 
-        if (req.user.adminUser || req.user._creatorRef.toHexString() === _creatorRef.toHexString()) {
-            let body = _.pick(JSON.parse(req.body.user), userUpdateFields);
-            body._profileMediaId = req.body._profileMediaId;
+        if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
+            let body = _.pick(req.passedUser, userUpdateFields);
+            //body._profileMediaId = req.body._profileMediaId;
 
             console.log('body', body);
             let userObj = {
@@ -268,10 +275,10 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
             });
 
         } else {
-            if (!req.user.adminUser) {
+            if (!req.loggedInUser.adminUser) {
                 return res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_UPDATE_OTHER_USERS);
             }
-            if (req.user._creatorRef != _creatorRef) {
+            if (req.loggedInUser._creatorRef != _creatorRef) {
                 return res.status(401).send(CONSTS.NON_ADMIN_USERS_CAN_ONLY_UPDATE_THEIR_USER);
             }
         };
@@ -282,11 +289,11 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
 });
 
 router.get('/me', authenticate, (req, res) => {
-    res.send(req.user);
+    res.send(req.loggedInUser);
 });
 
 router.get('/getEncryptedPassword', authenticate, (req, res) => {
-    if (req.user.adminUser) {
+    if (req.loggedInUser.adminUser) {
         let password = req.header('password');
         utils.getEncryptedPassword(password, function (err, hash) {
             if (!hash) {
@@ -306,8 +313,8 @@ router.get('/', authenticate, (req, res) => {
 
     let userObj = {};
 
-    if (!req.user.adminUser) {
-        userObj._id = req.user._id;
+    if (!req.loggedInUser.adminUser) {
+        userObj._id = req.loggedInUser._id;
     };
 
     User.find(userObj).populate('_profileMediaId', ['location']).then((users) => {
@@ -328,7 +335,7 @@ router.get('/', authenticate, (req, res) => {
 
 router.delete('/me/token', authenticate, (req, res) => {
 
-    req.user.removeToken(req.token).then(() => {
+    req.loggedInUser.removeToken(req.token).then(() => {
         res.status(200).send(CONSTS.USER_SUCCESSFULLY_LOGGED_OUT);
     }, (e) => {
         console.log("6 router.delete('/me/token' e", e);
@@ -353,7 +360,7 @@ router.delete('/:_creatorRef', authenticate, (req, res) => {
             return Promise.reject(e);
         };
 
-        if (req.user.adminUser && req.user._creatorRef.toHexString() !== _creatorRef.toHexString() && !user.adminUser) {
+        if (req.loggedInUser.adminUser && req.loggedInUser._creatorRef.toHexString() !== _creatorRef.toHexString() && !user.adminUser) {
             let userObj = {
                 _creatorRef,
                 adminUser: false
@@ -371,10 +378,10 @@ router.delete('/:_creatorRef', authenticate, (req, res) => {
             });
 
         } else {
-            if (!req.user.adminUser) {
+            if (!req.loggedInUser.adminUser) {
                 res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_DELETE_USERS);
             } else
-            if (req.user._creatorRef.toHexString() === _creatorRef.toHexString()) {
+            if (req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
                 res.status(401).send(CONSTS.CANNOT_DELETE_LOGGED_IN_USER);
             } else
             if (user.adminUser) {

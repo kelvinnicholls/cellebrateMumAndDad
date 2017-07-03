@@ -8,7 +8,7 @@ let authenticate = (req, res, next) => {
     if (!user) {
       return Promise.reject();
     }
-    req.user = user;
+    req.loggedInUser = user;
     req.token = token;
     next();
   }).catch((e) => {

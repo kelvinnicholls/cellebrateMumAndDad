@@ -15,7 +15,7 @@ export class User {
         public profilePicLocation?: string
     ) {
         if (profilePicLocation) {
-            this.profilePicLocation = profilePicLocation.replace(Consts.PUBLIC_REG_EXPR, "");
+            this.profilePicLocation = profilePicLocation.substring(14);
         };
     }
 
