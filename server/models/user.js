@@ -132,7 +132,6 @@ UserSchema.methods.removeToken = function (token) {
 
 UserSchema.statics.findByCredentials = function (email, password) {
   let User = this;
-
   return User.findOne({
     email
   }).populate('_profileMediaId', ['location']).then((user) => {

@@ -84,8 +84,6 @@ let multerUpload = multer({
 
 let upload = (req, res, next) => {
     multerUpload(req, res, function (err) {
-        console.log("multerUpload req.loggedInUser",req.loggedInUser);
-        console.log("multerUpload req.user",req.user);
         req.passedUser = JSON.parse(req.body.user);
         delete req.body.user;
         if (err) {
@@ -149,10 +147,13 @@ router.post('/', authenticate, upload, (req, res) => {
 
 router.post('/login', (req, res) => {
 
-    let body = _.pick(req.body, ['email', 'password']);
 
+    let body = _.pick(req.body, ['email', 'password']);
+    console.log("body",body);
     User.findByCredentials(body.email, body.password).then((user) => {
+        console.log("user",user);
         user.generateAuthToken().then((token) => {
+            console.log("token",token);
             res.header('x-auth', token).send(_.pick(user, userOutFields));
         });
     }).catch((e) => {

@@ -22,9 +22,10 @@ export class UserService {
         const headers: Headers = new Headers();
         if (user.profilePicData) {
             fd.append('file', user.profilePicData, user.profilePicData.name);
-        } else {
-            headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
         };
+        //else {
+        //     headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
+        // }
         user.profilePicData = null;
         const userJsonString = JSON.stringify(user);
         fd.append('user', userJsonString);
@@ -139,9 +140,10 @@ export class UserService {
         const headers: Headers = new Headers();
         if (user.profilePicData) {
             fd.append('file', user.profilePicData, user.profilePicData.name);
-        } else {
-            headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
-        }
+        };
+        //else {
+        //     headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
+        // }
 
         user.profilePicData = null;
         const userJsonString = JSON.stringify(user);
@@ -154,13 +156,13 @@ export class UserService {
             .map((response: any) => {
                 let body = JSON.parse(response._body);
                 if (body._profileMediaId) {
-                  user.profilePicLocation = body._profileMediaId.location.substring(14);
+                    user.profilePicLocation = body._profileMediaId.location.substring(14);
                 };
-                 
+
                 this.users.forEach((element, index) => {
                     if (element._creatorRef === user._creatorRef) {
                         return this.users[index] = user;
-                    }; 
+                    };
                 });
 
                 return response.json();
@@ -176,7 +178,7 @@ export class UserService {
         const headers: Headers = new Headers();
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
         let userService = this;
-        return this.http.delete(Consts.API_URL_USERS_ROOT + '/' + user.email, { headers: headers })
+        return this.http.delete(Consts.API_URL_USERS_ROOT + '/' + user._creatorRef, { headers: headers })
             .map((response: Response) => {
                 userService.users.splice(this.users.indexOf(user), 1);
                 return response.json();

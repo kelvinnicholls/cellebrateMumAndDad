@@ -86,6 +86,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
             this.user = null;
             this._creatorRef = null;
             this.profilePicData = null;
+            this.profilePicFile = null;
         } else {
             // Create
             this.user = new User(
@@ -103,7 +104,6 @@ export class UserInputComponent implements OnInit, OnDestroy {
                 .subscribe(
                 data => {
                     this.toastService.showSuccess("User created.");
-                    console.log("UserComponent userService.newUser log", data);
                     this.userService.showUserInput.emit(false);
                     this.userService.selectedUserIndex.emit(-1);
                 },
@@ -112,6 +112,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
             this.user = null;
             this._creatorRef = null;
             this.profilePicData = null;
+            this.profilePicFile = null;
         }
         this.myForm.reset();
     }
@@ -121,6 +122,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.user = null;
         this._creatorRef = null;
         this.profilePicData = null;
+        this.profilePicFile = null;
         this.myForm.reset();
         this.myForm.get('password').setValidators(Validators.required);
         this.myForm.get('password').updateValueAndValidity();
