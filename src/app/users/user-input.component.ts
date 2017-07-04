@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+
 import { UserService } from "./user.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { User } from "./user.model";
@@ -29,7 +32,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;
     profilePicData = null;
-    profilePicFile : File = null;
+    profilePicFile: File = null;
 
 
 
@@ -135,6 +138,14 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.userService.selectedUserIndex.emit(-1);
     }
 
+    forbiddenEmails = (control: FormControl): Promise<any> | Observable<any> => {
+        return this.userService.emailExists(control.value,this.user._creatorRef);
+    }
+
+    forbiddenNames = (control: FormControl): Promise<any> | Observable<any> => {
+        return this.userService.nameExists(control.value,this.user._creatorRef);
+    }
+
     ngOnInit() {
 
         this.clearUserInputSub = this.userService.clearUserInput.subscribe(
@@ -147,13 +158,15 @@ export class UserInputComponent implements OnInit, OnDestroy {
         );
 
         this.myForm = new FormGroup({
-            name: new FormControl(null, Validators.required),
+            name: new FormControl(null, Validators.required,
+                this.forbiddenNames),
             adminUser: new FormControl(null, Validators.required),
             relationship: new FormControl(null, Validators.required),
             email: new FormControl(null, [
                 Validators.required,
-                Validators.pattern(Consts.EMAIL_PATTERN)
-            ]),
+                Validators.pattern(Consts.EMAIL_PATTERN)],
+                this.forbiddenEmails
+            ),
             password: new FormControl(null, [Validators.required, Validators.minLength(6), PasswordValidationService.oneLowercase, PasswordValidationService.oneUppercase]),
             dob: new FormControl(null, null),
             twitterId: new FormControl(null, null),

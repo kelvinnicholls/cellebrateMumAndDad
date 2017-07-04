@@ -125,10 +125,102 @@ describe('GET /users/', () => {
       .end(done);
   });
 
-
   it('should return 401 if not authenticated', (done) => {
     request(app)
       .get('/users')
+      .set({
+        'x-auth': 'xx'
+      })
+      .expect(401)
+      .expect((res) => {
+        expect(res.body).toEqual({});
+      })
+      .end(done);
+  });
+
+});
+
+
+describe('GET /users/email', () => {
+
+  it('should return emailFound true  if passed email exists', (done) => {
+    let email = users[1].email;
+    request(app)
+      .get('/users/email/' + email)
+      .set({
+        'x-auth': users[0].tokens[0].token
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.emailFound).toBe(true);
+      })
+      .end(done);
+  });
+
+  it('should return emailFound false if passed email does not exist', (done) => {
+    let email = "XXXXX" + users[1].email;
+    request(app)
+      .get('/users/email/' + email)
+      .set({
+        'x-auth': users[0].tokens[0].token
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.emailFound).toBe(false);
+      })
+      .end(done);
+  });
+
+  it('should return 401 if not authenticated', (done) => {
+    let email = users[1].email;
+    request(app)
+      .get('/users/email/' + email)
+      .set({
+        'x-auth': 'xx'
+      })
+      .expect(401)
+      .expect((res) => {
+        expect(res.body).toEqual({});
+      })
+      .end(done);
+  });
+
+});
+
+describe('GET /users/name', () => {
+
+  it('should return nameFound true  if passed name exists', (done) => {
+    let name = users[1].name;
+    request(app)
+      .get('/users/name/' + name)
+      .set({
+        'x-auth': users[0].tokens[0].token
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.nameFound).toBe(true);
+      })
+      .end(done);
+  });
+
+  it('should return nameFound false if passed name does not exist', (done) => {
+    let name = "XXXXX" + users[1].name;
+    request(app)
+      .get('/users/name/' + name)
+      .set({
+        'x-auth': users[0].tokens[0].token
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.nameFound).toBe(false);
+      })
+      .end(done);
+  });
+
+  it('should return 401 if not authenticated', (done) => {
+    let name = users[1].name;
+    request(app)
+      .get('/users/name/' + name)
       .set({
         'x-auth': 'xx'
       })

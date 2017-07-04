@@ -1,6 +1,8 @@
 export class Consts {
   public static API_URL_ROOT: string = 'http://localhost:3000/';
   public static API_URL_USERS_ROOT: string = Consts.API_URL_ROOT + 'users';
+  public static API_URL_USERS_ROOT_EMAIL: string = Consts.API_URL_USERS_ROOT + '/email';
+  public static API_URL_USERS_ROOT_NAME: string = Consts.API_URL_USERS_ROOT + '/name';
   public static API_URL_MEDIA_ROOT: string = Consts.API_URL_ROOT + 'media';
   public static API_URL_MEMORIES_ROOT: string = Consts.API_URL_ROOT + 'memories';
   public static API_URL_MEMORY_ROOT: string = Consts.API_URL_ROOT + 'memory';

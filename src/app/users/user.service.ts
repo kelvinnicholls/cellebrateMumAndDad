@@ -213,4 +213,40 @@ export class UserService {
                 return Observable.throw(error.json().error);
             })
     }
+
+
+    emailExists(email: string, creatorRef: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            this.http.get(Consts.API_URL_USERS_ROOT_EMAIL + '/' + email, { headers: headers }).subscribe(
+                (response: any) => {
+                    let body = JSON.parse(response._body);
+                    if ((body.emailFound && !creatorRef) || (body.emailFound && creatorRef && body._creatorRef != creatorRef)) {
+                        resolve({ 'emailIsAlreadyUsed': true });
+                    } else {
+                        resolve(null);
+                    }
+                }
+            );  
+        });
+    }
+
+    nameExists(name: string, creatorRef: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            this.http.get(Consts.API_URL_USERS_ROOT_NAME + '/' + name, { headers: headers }).subscribe(
+                (response: any) => {
+                    let body = JSON.parse(response._body);
+                    if ((body.nameFound && !creatorRef) || (body.nameFound && creatorRef && body._creatorRef != creatorRef)) {
+                        resolve({ 'nameIsAlreadyUsed': true });
+                    } else {
+                        resolve(null);
+                    }
+                }
+            );  
+        });
+    }
+
 }
