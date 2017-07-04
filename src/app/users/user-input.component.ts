@@ -27,7 +27,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     submitType = Consts.CREATE_USER;
 
-    defaultProfilePicFile = 'systemImages/no-profile-pic.jpg';
+    defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;
     profilePicData = null;
     profilePicFile : File = null;
 

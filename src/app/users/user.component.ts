@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from "@angular/core";
 
 import { User } from "./user.model";
 import { UserService } from "./user.service";
+import { Consts } from "../shared/consts";
 
 @Component({
     selector: 'app-user',
@@ -30,7 +31,7 @@ export class UserComponent implements OnInit {
     @Input() index: Number;
     selectedIndex: Number;
     private selectedUserIndexSub: any;
-    defaultProfilePicFile = 'systemImages/no-profile-pic.jpg';
+    defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
     constructor(private userService: UserService) { }
 
     onEdit() {

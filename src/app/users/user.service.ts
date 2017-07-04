@@ -165,6 +165,11 @@ export class UserService {
                     };
                 });
 
+                let loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+                if (loggedInUser._creatorRef === user._creatorRef) {
+                    localStorage.setItem(Consts.LOGGED_IN_USER, JSON.stringify(user));
+                }
+
                 return response.json();
             })
             .catch((error: Response) => {
