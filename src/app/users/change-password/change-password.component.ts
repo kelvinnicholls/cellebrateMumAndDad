@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewContainerRef } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { UserService } from "../user.service";
-import { ToastService } from "../../shared/toast/toast.service";
+import { AppService } from "../../app.service";
+import { Router } from "@angular/router";
+
 import { User } from "../user.model";
 import { Consts } from "../../shared/consts";
 import { PasswordStrengthBarComponent } from '../../shared/password-strength-bar/password-strength-bar.component';
@@ -9,15 +11,13 @@ import { PasswordValidationService } from '../../shared/password-validation.serv
 
 @Component({
     selector: 'change-password',
-    templateUrl: './change-password.component.html',
-    providers: [ToastService]
+    templateUrl: './change-password.component.html'
 })
 export class ChangePasswordComponent implements OnInit {
     user: User;
     myForm: FormGroup;
 
-    constructor(private userService: UserService, private vcr: ViewContainerRef, private toastService: ToastService) {
-        toastService.toast.setRootViewContainerRef(vcr);
+    constructor(private userService: UserService, private appService: AppService, private router: Router) {
     }
 
 
@@ -25,7 +25,8 @@ export class ChangePasswordComponent implements OnInit {
 
         this.userService.changePassword(this.myForm.value.oldPassword, this.myForm.value.newPassword).subscribe(
             result => {
-                this.toastService.showSuccess("Password updated.", { data: { url: '/' } });
+                this.router.navigate(['']);
+                this.appService.showToast(Consts.SUCCESS,"Password updated.");
                 console.log(result);
             }
         );

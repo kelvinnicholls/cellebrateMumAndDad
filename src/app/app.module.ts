@@ -27,6 +27,7 @@ import { GetEncryptedPasswordComponent } from "./auth/get-encrypted-password.com
 import { AuthService } from "./auth/auth.service";
 import { UserService } from "./users/user.service";
 import { ErrorService } from "./errors/error.service";
+import { AppService } from "./app.service";
 import { DropdownDirective } from './shared/dropdown.directive';
 import { HomeComponent } from "./home.component";
 import { AuthGuard } from './auth/auth-guard.service';
@@ -60,7 +61,7 @@ import { PasswordStrengthBarComponent } from './shared/password-strength-bar/pas
         HttpModule,
         ToastModule.forRoot()
     ],
-    providers: [AuthService, UserService, ErrorService,AuthGuard,{provide: ToastOptions, useClass: ToastCustomOption}],
+    providers: [AuthService, UserService, ErrorService,AuthGuard,{provide: ToastOptions, useClass: ToastCustomOption},AppService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

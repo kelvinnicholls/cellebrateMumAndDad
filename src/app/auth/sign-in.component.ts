@@ -1,11 +1,11 @@
-import { Component,ViewContainerRef } from "@angular/core";
+import { Component } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { SignInUser } from "./sign-in-user.model";
 import { AuthService } from "./auth.service";
 import { ErrorService } from "../errors/error.service";
-import { ToastService } from "../shared/toast/toast.service";
+import { AppService } from "../app.service";
 
 
 import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
@@ -15,14 +15,12 @@ import { Consts } from "../shared/consts";
 @Component({
     selector: 'app-sign-in',
     templateUrl: './sign-in.component.html',
-    styleUrls : ['./sign-in.component.css'],
-    providers: [ToastService]
+    styleUrls : ['./sign-in.component.css']
 })
 export class SignInComponent {
     myForm: FormGroup;
 
-    constructor(private authService: AuthService, private router: Router, private errorService: ErrorService, private vcr: ViewContainerRef, private toastService: ToastService) { 
-        toastService.toast.setRootViewContainerRef(vcr);
+    constructor(private authService: AuthService, private router: Router, private errorService: ErrorService, private appService: AppService) { 
     }
 
     onSubmit() {
@@ -34,7 +32,8 @@ export class SignInComponent {
                 let headers = res.headers._headers;
                 localStorage.setItem(Consts.TOKEN, headers.get(Consts.X_AUTH)[0]);
                 localStorage.setItem(Consts.LOGGED_IN_USER, JSON.stringify(payload));
-                this.toastService.showSuccess("User signed in successfully.",{data: {url: '/'}});
+                router.navigate(['']);
+                this.appService.showToast(Consts.SUCCESS,"User signed in successfully.");
             }
             , (err) => {
                 this.errorService.handleError(JSON.parse(err._body));

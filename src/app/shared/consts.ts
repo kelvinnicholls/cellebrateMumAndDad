@@ -19,4 +19,11 @@ export class Consts {
   public static UPDATE_USER = 'Update User';
   public static UPDATE_CURRENT_USER = 'Update Current User';
   public static DEFAULT_PROFILE_PIC_FILE = 'systemImages/no-profile-pic.jpg';
+  public static SUCCESS = "Success";
+  public static ERROR = "Success";
+  public static WARNING = "Warning";
+  public static INFO = "Info";
+  public static CUSTOM = "Custom";
+
+
 }

@@ -2,6 +2,9 @@ import { ViewContainerRef } from "@angular/core";
 import { ToastsManager } from 'ng2-toastr/ng2-toastr';
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { Toast } from "./toast.model";
+import { Consts } from "../../shared/consts";
+
 
 @Injectable()
 export class ToastService {
@@ -9,18 +12,10 @@ export class ToastService {
 
     constructor(public toast: ToastsManager, vcr: ViewContainerRef, private router: Router) {
         this.toast.setRootViewContainerRef(vcr);
-
-        this.toast.onClickToast()
-            .subscribe((toast : any) => {
-                if (toast.data && toast.data.url) {
-                    // navigate to
-                    this.router.navigate([toast.data.url]);
-                }
-            });
     }
 
 
-//this.toastr.success('You are awesome! Click to view details.', 'Success!', {data: {url: '/path/to/successUrl'}});
+    //this.toastr.success('You are awesome! Click to view details.', 'Success!', {data: {url: '/path/to/successUrl'}});
 
     showSuccess(msg: string, options?: any, inTitle?: string) {
         let title = inTitle ? inTitle : 'Success';
@@ -46,4 +41,25 @@ export class ToastService {
         this.toast.custom(msg, inTitle, options);
         //this.toast.custom('<span style="color: red">Message in red.</span>', null, {enableHTML: true});
     }
+
+    showToast(toast: Toast) {
+        switch (toast.toastType) {
+            case Consts.SUCCESS:
+                this.showSuccess(toast.msg);
+                break;
+            case Consts.ERROR:
+                this.showError(toast.msg);
+                break;
+            case Consts.WARNING:
+                this.showWarning(toast.msg);
+                break;
+            case Consts.INFO:
+                this.showInfo(toast.msg);
+                break;
+            case Consts.CUSTOM:
+                this.showCustom(toast.msg);
+                break;
+        }
+    }
+
 }

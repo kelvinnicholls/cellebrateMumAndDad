@@ -205,7 +205,6 @@ export class UserService {
         let userService = this;
         return this.http.patch(Consts.API_URL_USERS_ROOT + '/change-password', body, { headers: headers })
             .map((response: Response) => {
-                this.router.navigate(['']);
                 response.json();
             })
             .catch((error: Response) => {

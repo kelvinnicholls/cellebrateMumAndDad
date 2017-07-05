@@ -23,7 +23,7 @@ https://blog.brunoscopelliti.com/angularjs-directive-to-test-the-strength-of-a-p
 X11) add validation messages 
 https://scotch.io/tutorials/angular-2-form-validation
 
-12) check toast is still working (especially after of before navigation)
+X12) check toast is still working (especially after of before navigation)
 
 X13) add routes to edit user similar to recipe app so that active link works (use similar styling as well)
   decided against this
