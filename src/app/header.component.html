@@ -36,7 +36,7 @@
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer" aria-expanded="false">
-                    <img [src]="authService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 30px;">
+                    <img [src]="authService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;">
                     {{authService.getLoggedInUserName()}}
                     </a>
         <div class="dropdown-menu" aria-labelledby="dropdown01">

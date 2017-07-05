@@ -44,7 +44,7 @@
         <p *ngIf="myForm.get('password').errors.required">Password is required</p>
         <p *ngIf="myForm.get('password').errors.oneLowercase">At least one lowercase<br> letter is required.</p>
         <p *ngIf="myForm.get('password').errors.oneUppercase">At least one uppercase<br> letter is required.</p>
-        <p *ngIf="myForm.get('password').errors.minlength">Password must be at least<br> 5 characters in length.</p>
+        <p *ngIf="myForm.get('password').errors.minlength">Password must be at least<br> 6 characters in length.</p>
       </div>
       <small *ngIf="myForm.get('password').invalid" class="form-text text-muted">Enter a password. Min 6 chars at least one upper and lower case letter.</small>
     </div>

@@ -9,11 +9,11 @@ X4) Add route guards
 Y5) check expiring tokens and how to expire. log out should always delete local mem.
   Y) leave tokens with no expiry date
 
-6) async validations to check if unique values (eg name and email) already exist;
+X6) async validations to check if unique values (eg name and email) already exist;
 
-7) errors should be returned to screen.
+X7) errors should be returned to screen.
 
-8) add some bootstrap css to error screen
+X8) add some bootstrap css to error screen
 
 9) add toasts elsewhere
 
@@ -25,13 +25,16 @@ https://scotch.io/tutorials/angular-2-form-validation
 
 12) check toast is still working (especially after of before navigation)
 
-13) add routes to edit user similar to recipe app so that active link works (use similar styling as well)
+X13) add routes to edit user similar to recipe app so that active link works (use similar styling as well)
+  decided against this
 
 14) Confirm delete
 
 15) Jumbotron on page not found
 
 16) upload files to db
+
+Still need to implement getting photos from facebook
 
 https://scotch.io/tutorials/build-a-mean-stack-file-uploader-app-with-filestack
 
@@ -43,11 +46,11 @@ https://www.youtube.com/watch?v=w2pw8eVq_Qk
 
 18) Only sent cols to update that have actually changed.
 
-19) Add profile pic to logged in user
+X19) Add profile pic to logged in user
 
 20) Only update profile pic if it has changed
 
-21) password min length 6 is not working
+21) password min length 6 is not working - not in change password, must be something to do with .clearValidators
 
 22) Use events to trigger toast after navigation.
 
