@@ -30,9 +30,9 @@ X13) add routes to edit user similar to recipe app so that active link works (us
 
 14) Confirm delete
 
-15) Jumbotron on page not found
+X15) Jumbotron on page not found
 
-16) upload files to db
+X16) upload files to db
 
 Still need to implement getting photos from facebook
 
@@ -52,7 +52,7 @@ X19) Add profile pic to logged in user
 
 21) password min length 6 is not working - not in change password, must be something to do with .clearValidators
 
-22) Use events to trigger toast after navigation.
+X22) Use events to trigger toast after navigation.
 
 23) Exit when creating/editing a user should navigate back to /users
 
