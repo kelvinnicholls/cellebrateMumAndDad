@@ -120,6 +120,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.myForm.reset();
     }
 
+
     clear() {
         this.submitType = Consts.CREATE_USER;
         this.user = null;
@@ -138,12 +139,20 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.userService.selectedUserIndex.emit(-1);
     }
 
+    private getCreatorRef() {
+        let _creatorRef = null;
+        if (this.user && this.user._creatorRef) {
+            _creatorRef = this.user._creatorRef;
+        };
+        return _creatorRef;
+    }
+
     forbiddenEmails = (control: FormControl): Promise<any> | Observable<any> => {
-        return this.userService.emailExists(control.value,this.user._creatorRef);
+        return this.userService.emailExists(control.value, this.getCreatorRef());
     }
 
     forbiddenNames = (control: FormControl): Promise<any> | Observable<any> => {
-        return this.userService.nameExists(control.value,this.user._creatorRef);
+        return this.userService.nameExists(control.value, this.getCreatorRef());
     }
 
     ngOnInit() {

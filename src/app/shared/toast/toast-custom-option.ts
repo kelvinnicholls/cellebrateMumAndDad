@@ -5,5 +5,5 @@ export class ToastCustomOption extends ToastOptions {
   newestOnTop = false;
   showCloseButton = true;
   positionClass = 'toast-top-center';
-  dismiss = 'click';
+  //dismiss = 'click';
 }
