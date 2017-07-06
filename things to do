@@ -50,7 +50,7 @@ X19) Add profile pic to logged in user
 
 20) Only update profile pic if it has changed
 
-21) password min length 6 is not working - not in change password, must be something to do with .clearValidators
+X21) password min length 6 is not working - not in change password, must be something to do with .clearValidators
 
 X22) Use events to trigger toast after navigation.
 

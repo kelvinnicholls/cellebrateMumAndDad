@@ -43,10 +43,11 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
     onImageChange(files: FileList) {
+        let userInputComponent = this;
         if (files.length > 0) {
-            this.profilePicFile = files[0];
-            if (this.profilePicFile && this.profilePicFile.name) {
-                let fileExtension = this.profilePicFile.name.split('.').pop().toLowerCase();
+            userInputComponent.profilePicFile = files[0];
+            if (userInputComponent.profilePicFile && this.profilePicFile.name) {
+                let fileExtension = userInputComponent.profilePicFile.name.split('.').pop().toLowerCase();
                 const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif'];
                 if (allowedExtensions.indexOf(fileExtension) > -1) {
                     let userInputComponent = this;
@@ -54,6 +55,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     fileReader.readAsDataURL(this.profilePicFile);
                     fileReader.onloadend = function (e) {
                         userInputComponent.profilePicData = fileReader.result;
+                        userInputComponent.myForm.markAsDirty();
                     }
                 }
             }
@@ -232,7 +234,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
     isFormValid() {
-        return this.myForm.valid;
+        return this.myForm.valid && this.myForm.dirty;
+        
     }
 
     onExit() {
