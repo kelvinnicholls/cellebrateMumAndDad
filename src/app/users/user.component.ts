@@ -1,8 +1,11 @@
 import { Component, Input, OnInit } from "@angular/core";
-
+import { EventEmitter } from "@angular/core";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
+import { DialogService } from "../dialog/dialog.service";
 import { Consts } from "../shared/consts";
+import { DialogRetEnum } from "../dialog/dialog-ret.enum";
+import { Dialog } from "../dialog/dialog.model";
 
 @Component({
     selector: 'app-user',
@@ -32,7 +35,7 @@ export class UserComponent implements OnInit {
     selectedIndex: Number;
     private selectedUserIndexSub: any;
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService, private dialogService: DialogService) { }
 
     onEdit() {
         this.userService.selectUser(this.index);
@@ -40,10 +43,20 @@ export class UserComponent implements OnInit {
     }
 
     onDelete() {
-        this.userService.deleteUser(this.user)
-            .subscribe(
-            result => console.log(result)
-            );
+
+        let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+        retDialogSub.subscribe(
+            (buttonPressed: DialogRetEnum) => {
+                if (buttonPressed === DialogRetEnum.ButtonOne) {
+                    this.userService.deleteUser(this.user)
+                        .subscribe(
+                        result => console.log(result)
+                        );
+                }
+            });
+
+        this.dialogService.showDialog("Warning", "Do you really wish to delete this user?", "Yes", "No", retDialogSub);
     }
 
     ngOnInit() {
