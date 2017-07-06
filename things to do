@@ -42,13 +42,13 @@ https://www.youtube.com/watch?v=wdl59LAe4M8
 
 https://www.youtube.com/watch?v=w2pw8eVq_Qk
 
-17) Only allow update if something has actually changed
+X17) Only allow update if something has actually changed
 
-18) Only send cols to update that have actually changed.
+X18) Only send cols to update that have actually changed. (not implementing)
 
 X19) Add profile pic to logged in user
 
-20) Only update profile pic if it has changed
+X20) Only update profile pic if it has changed
 
 X21) password min length 6 is not working - not in change password, must be something to do with .clearValidators
 
@@ -60,7 +60,7 @@ X22) Use events to trigger toast after navigation.
 
 25) Add socket messaging
 
-26) favicon
+X26) favicon
 
 X27) Users meu option -> Users (List,Create)
 
