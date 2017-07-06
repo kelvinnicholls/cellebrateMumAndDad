@@ -1,16 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-
+import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
+import { PasswordValidationService } from '../shared/password-validation.service';
 
 import { UserService } from "./user.service";
 import { ToastService } from "../shared/toast/toast.service";
+import { DialogService } from "../dialog/dialog.service";
 import { User } from "./user.model";
+import { DialogRetEnum } from "../dialog/dialog-ret.enum";
+import { Dialog } from "../dialog/dialog.model";
 import { Consts } from "../shared/consts";
 
-import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
-import { PasswordValidationService } from '../shared/password-validation.service';
+
 
 
 @Component({
@@ -38,7 +41,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
 
 
-    constructor(private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService) {
+    constructor(private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService, private dialogService: DialogService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -68,63 +71,71 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
     onSubmit() {
-        if (this.user) {
-            // Edit
-            this.user = new User(
-                this.myForm.value.email,
-                null,
-                this.myForm.value.name,
-                this.myForm.value.adminUser == 'Yes' ? true : false,
-                this.myForm.value.relationship,
-                this.myForm.value.dob,
-                this.myForm.value.twitterId,
-                this.myForm.value.facebookId,
-                this._creatorRef,
-                this.profilePicFile);
-            this.userService.updateUser(this.user)
-                .subscribe(
-                result => {
-                    this.toastService.showSuccess("User updated.");
-                    console.log(result);
-                    this.userService.showUserInput.emit(false);
-                    this.userService.selectedUserIndex.emit(-1);
+        let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+        retDialogSub.subscribe(
+            (buttonPressed: DialogRetEnum) => {
+                if (buttonPressed === DialogRetEnum.ButtonOne) {
+                    if (this.user) {
+                        // Edit
+                        this.user = new User(
+                            this.myForm.value.email,
+                            null,
+                            this.myForm.value.name,
+                            this.myForm.value.adminUser == 'Yes' ? true : false,
+                            this.myForm.value.relationship,
+                            this.myForm.value.dob,
+                            this.myForm.value.twitterId,
+                            this.myForm.value.facebookId,
+                            this._creatorRef,
+                            this.profilePicFile);
+                        this.userService.updateUser(this.user)
+                            .subscribe(
+                            result => {
+                                this.toastService.showSuccess("User updated.");
+                                console.log(result);
+                                this.userService.showUserInput.emit(false);
+                                this.userService.selectedUserIndex.emit(-1);
+                            }
+                            );
+                        this.user = null;
+                        this._creatorRef = null;
+                        this.profilePicData = null;
+                        this.profilePicFile = null;
+                    } else {
+                        // Create
+                        this.user = new User(
+                            this.myForm.value.email,
+                            this.myForm.value.password,
+                            this.myForm.value.name,
+                            this.myForm.value.adminUser == 'Yes' ? true : false,
+                            this.myForm.value.relationship,
+                            this.myForm.value.dob,
+                            this.myForm.value.twitterId,
+                            this.myForm.value.facebookId,
+                            null,
+                            this.profilePicFile);
+                        this.userService.addUser(this.user)
+                            .subscribe(
+                            data => {
+                                this.toastService.showSuccess("User created.");
+                                this.userService.showUserInput.emit(false);
+                                this.userService.selectedUserIndex.emit(-1);
+                            },
+                            error => console.error("UserComponent userService.newUser error", error)
+                            );
+                        this.user = null;
+                        this._creatorRef = null;
+                        this.profilePicData = null;
+                        this.profilePicFile = null;
+                    }
+                    this.myForm.reset();
                 }
-                );
-            this.user = null;
-            this._creatorRef = null;
-            this.profilePicData = null;
-            this.profilePicFile = null;
-        } else {
-            // Create
-            this.user = new User(
-                this.myForm.value.email,
-                this.myForm.value.password,
-                this.myForm.value.name,
-                this.myForm.value.adminUser == 'Yes' ? true : false,
-                this.myForm.value.relationship,
-                this.myForm.value.dob,
-                this.myForm.value.twitterId,
-                this.myForm.value.facebookId,
-                null,
-                this.profilePicFile);
-            this.userService.addUser(this.user)
-                .subscribe(
-                data => {
-                    this.toastService.showSuccess("User created.");
-                    this.userService.showUserInput.emit(false);
-                    this.userService.selectedUserIndex.emit(-1);
-                },
-                error => console.error("UserComponent userService.newUser error", error)
-                );
-            this.user = null;
-            this._creatorRef = null;
-            this.profilePicData = null;
-            this.profilePicFile = null;
-        }
-        this.myForm.reset();
+            });
+
+        this.dialogService.showDialog("Warning", "Do you really wish to " + this.submitType + "?", "Yes", "No", retDialogSub);
+
     }
-
-
 
     clear() {
         this.submitType = Consts.CREATE_USER;
@@ -197,7 +208,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
                     };
-                    this.myForm.get('password').clearValidators();                    
+                    this.myForm.get('password').clearValidators();
                     this.myForm.get('password').updateValueAndValidity();
                     this.myForm.get('adminUser').disable();
                     this.myForm.get('adminUser').updateValueAndValidity();
@@ -235,7 +246,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     isFormValid() {
         return this.myForm.valid && this.myForm.dirty;
-        
+
     }
 
     onExit() {

@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { EventEmitter } from "@angular/core";
+import { Component, Input, OnInit, EventEmitter } from "@angular/core";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
 import { DialogService } from "../dialog/dialog.service";

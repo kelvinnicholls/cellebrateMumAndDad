@@ -1,8 +1,12 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { UserService } from "../user.service";
 import { AppService } from "../../app.service";
 import { Router } from "@angular/router";
+import { DialogService } from "../../dialog/dialog.service";
+import { DialogRetEnum } from "../../dialog/dialog-ret.enum";
+import { Dialog } from "../../dialog/dialog.model";
+
 
 import { User } from "../user.model";
 import { Consts } from "../../shared/consts";
@@ -17,21 +21,27 @@ export class ChangePasswordComponent implements OnInit {
     user: User;
     myForm: FormGroup;
 
-    constructor(private userService: UserService, private appService: AppService, private router: Router) {
+    constructor(private userService: UserService, private appService: AppService, private router: Router, private dialogService: DialogService) {
     }
 
 
     onSubmit() {
+        let retDialogSub = new EventEmitter<DialogRetEnum>();
 
-        this.userService.changePassword(this.myForm.value.oldPassword, this.myForm.value.newPassword).subscribe(
-            result => {
-                this.router.navigate(['']);
-                this.appService.showToast(Consts.SUCCESS,"Password updated.");
-                console.log(result);
-            }
-        );
-
-        this.myForm.reset();
+        retDialogSub.subscribe(
+            (buttonPressed: DialogRetEnum) => {
+                if (buttonPressed === DialogRetEnum.ButtonOne) {
+                    this.userService.changePassword(this.myForm.value.oldPassword, this.myForm.value.newPassword).subscribe(
+                        result => {
+                            this.router.navigate(['']);
+                            this.appService.showToast(Consts.SUCCESS, "Password updated.");
+                            console.log(result);
+                            this.myForm.reset();
+                        }
+                    );
+                }
+            });
+        this.dialogService.showDialog("Warning", "Do you really wish to change your password?", "Yes", "No", retDialogSub);
     }
 
     onClear() {
