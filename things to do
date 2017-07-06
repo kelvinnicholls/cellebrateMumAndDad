@@ -54,7 +54,7 @@ X19) Add profile pic to logged in user
 
 X22) Use events to trigger toast after navigation.
 
-23) Exit when creating/editing a user should navigate back to /users
+?23) Exit when creating/editing a user should navigate back to /users  ???
 
 24) Add percentage complete for picture upload
 
@@ -62,6 +62,6 @@ X22) Use events to trigger toast after navigation.
 
 26) favicon
 
-27) Users meu option -> Users (List,Create)
+X27) Users meu option -> Users (List,Create)
 
 28) Add tooltips

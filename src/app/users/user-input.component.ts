@@ -34,6 +34,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
     profilePicData = null;
     profilePicFile: File = null;
 
+    passwordValidators = [Validators.required, Validators.minLength(6), PasswordValidationService.oneLowercase, PasswordValidationService.oneUppercase];
+
 
 
     constructor(private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService) {
@@ -121,6 +123,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
 
+
     clear() {
         this.submitType = Consts.CREATE_USER;
         this.user = null;
@@ -128,7 +131,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.profilePicData = null;
         this.profilePicFile = null;
         this.myForm.reset();
-        this.myForm.get('password').setValidators(Validators.required);
+        this.myForm.get('password').setValidators(this.passwordValidators);
         this.myForm.get('password').updateValueAndValidity();
         this.myForm.get('adminUser').enable();
         this.myForm.get('adminUser').updateValueAndValidity();
@@ -176,7 +179,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                 Validators.pattern(Consts.EMAIL_PATTERN)],
                 this.forbiddenEmails
             ),
-            password: new FormControl(null, [Validators.required, Validators.minLength(6), PasswordValidationService.oneLowercase, PasswordValidationService.oneUppercase]),
+            password: new FormControl(null, this.passwordValidators),
             dob: new FormControl(null, null),
             twitterId: new FormControl(null, null),
             facebookId: new FormControl(null, null)
@@ -192,7 +195,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
                     };
-                    this.myForm.get('password').clearValidators();
+                    this.myForm.get('password').clearValidators();                    
                     this.myForm.get('password').updateValueAndValidity();
                     this.myForm.get('adminUser').disable();
                     this.myForm.get('adminUser').updateValueAndValidity();
