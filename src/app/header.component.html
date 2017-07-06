@@ -20,8 +20,16 @@
         <a class="nav-link" routerLink="/photos">Photos</a>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authService.isLoggedIn() && authService.isAdminUser()">
-        <a class="nav-link" routerLink="/users">Users</a>
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authService.isLoggedIn() && authService.isAdminUser()">
+        <a class="nav-link dropdown-toggle" id="usersDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
+          aria-expanded="false">Users</a>
+        <div class="dropdown-menu" aria-labelledby="usersDropdown">
+          <a class="dropdown-item" routerLink="/users">User List</a>
+          <div *ngIf="!userService.showUserInputForm()">
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" routerLink="/users" (click)="userService.createUser()">Create User</a>
+          </div>
+        </div>
       </li>
 
       <li class="nav-item" routerLinkActive="active" *ngIf="authService.isLoggedIn() && authService.isAdminUser()">
@@ -35,11 +43,12 @@
       </li>
 
       <li *ngIf="authService.isLoggedIn()" class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" id="loggedInUserDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
+          aria-expanded="false">
                     <img [src]="authService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;">
                     {{authService.getLoggedInUserName()}}
                     </a>
-        <div class="dropdown-menu" aria-labelledby="dropdown01">
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loggedInUserDropdown">
           <a class="dropdown-item" [routerLink]="['/user','edit-me']">Edit</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" [routerLink]="['/user','change-password']">Change<br>Password</a>

@@ -28,13 +28,13 @@ X12) check toast is still working (especially after of before navigation)
 X13) add routes to edit user similar to recipe app so that active link works (use similar styling as well)
   decided against this
 
-14) Confirm delete
+X14) Confirm delete
 
 X15) Jumbotron on page not found
 
 X16) upload files to db
 
-Still need to implement getting photos from facebook
+**Still need to implement getting photos from facebook
 
 https://scotch.io/tutorials/build-a-mean-stack-file-uploader-app-with-filestack
 
@@ -44,7 +44,7 @@ https://www.youtube.com/watch?v=w2pw8eVq_Qk
 
 17) Only allow update if something has actually changed
 
-18) Only sent cols to update that have actually changed.
+18) Only send cols to update that have actually changed.
 
 X19) Add profile pic to logged in user
 

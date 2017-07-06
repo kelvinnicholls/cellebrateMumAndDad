@@ -17,6 +17,19 @@ export class UserService {
     selectedUserIndex = new EventEmitter<Number>();
     constructor(private http: Http, private errorService: ErrorService, private router: Router) { }
 
+
+
+    showUserEdit: Boolean = false;
+
+    showUserInputForm(): Boolean {
+        return this.showUserEdit;
+    }
+    createUser() {
+        this.showUserInput.emit(true);
+        this.clearUserInput.emit(true);
+    }
+
+
     addUser(user: User) {
         var fd = new FormData();
         const headers: Headers = new Headers();
@@ -227,7 +240,7 @@ export class UserService {
                         resolve(null);
                     }
                 }
-            );  
+            );
         });
     }
 
@@ -244,7 +257,7 @@ export class UserService {
                         resolve(null);
                     }
                 }
-            );  
+            );
         });
     }
 

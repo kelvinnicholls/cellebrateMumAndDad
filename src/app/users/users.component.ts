@@ -10,24 +10,15 @@ export class UsersComponent implements OnInit {
 
     constructor(private userService: UserService) { }
 
-    show: Boolean = false;
-
-    showUserInput(): Boolean {
-        return this.show;
-    }
-
     ngOnInit() {
         this.userService.showUserInput.subscribe(
             (show: Boolean) => {
-                this.show = show;
+                this.userService.showUserEdit = show;
             }
         );
     }
 
-    createUser() {
-        this.userService.showUserInput.emit(true);
-        this.userService.clearUserInput.emit(true);
-    }
+
 }
 
 // `

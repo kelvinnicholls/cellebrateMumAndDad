@@ -1,5 +1,4 @@
-<app-user-input [hidden]="!showUserInput()">
+<app-user-input [hidden]="!userService.showUserInputForm()">
 </app-user-input>
-<button [hidden]="showUserInput()" class="btn btn-md btn-primary offset-sm-5" type="button" (click)="createUser()">Create User</button>
-<hr *ngIf="showUserInput()">
+<hr *ngIf="userService.showUserInputForm()">
 <app-user-list></app-user-list>
