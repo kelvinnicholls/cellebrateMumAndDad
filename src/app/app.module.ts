@@ -30,12 +30,12 @@ import { UserService } from "./users/user.service";
 import { ErrorService } from "./errors/error.service";
 import { DialogService } from "./dialog/dialog.service";
 import { AppService } from "./app.service";
-import { DropdownDirective } from './shared/dropdown.directive';
 import { HomeComponent } from "./home.component";
 import { AuthGuard } from './auth/auth-guard.service';
 import { ToastCustomOption } from './shared/toast/toast-custom-option';
 import { PasswordStrengthBarComponent } from './shared/password-strength-bar/password-strength-bar.component';
-
+//https://www.npmjs.com/package/angular2-tooltip
+import {ToolTipModule} from 'angular2-tooltip'
 
 
 @NgModule({
@@ -50,7 +50,6 @@ import { PasswordStrengthBarComponent } from './shared/password-strength-bar/pas
         ChangePasswordComponent,
         UserListComponent,
         ErrorComponent,
-        DropdownDirective,
         PageNotFoundComponent,
         HomeComponent,
         PasswordStrengthBarComponent,
@@ -63,7 +62,8 @@ import { PasswordStrengthBarComponent } from './shared/password-strength-bar/pas
         routing,
         ReactiveFormsModule,
         HttpModule,
-        ToastModule.forRoot()
+        ToastModule.forRoot(),
+        ToolTipModule
     ],
     providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService],
     bootstrap: [AppComponent]

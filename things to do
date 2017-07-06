@@ -56,7 +56,7 @@ X22) Use events to trigger toast after navigation.
 
 ?23) Exit when creating/editing a user should navigate back to /users  ???
 
-24) Add percentage complete for picture upload
+X24) Add percentage complete for picture upload (decided against)
 
 25) Add socket messaging
 
@@ -65,3 +65,5 @@ X26) favicon
 X27) Users meu option -> Users (List,Create)
 
 28) Add tooltips
+
+29) Check encrypted password get the same encryption for the same string
