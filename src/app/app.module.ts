@@ -29,6 +29,10 @@ import { AuthService } from "./auth/auth.service";
 import { UserService } from "./users/user.service";
 import { ErrorService } from "./errors/error.service";
 import { DialogService } from "./dialog/dialog.service";
+import { ChatService } from "./chat/chat.service";
+import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
+
+
 import { AppService } from "./app.service";
 import { HomeComponent } from "./home.component";
 import { AuthGuard } from './auth/auth-guard.service';
@@ -55,7 +59,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         PageNotFoundComponent,
         HomeComponent,
         PasswordStrengthBarComponent,
-        DialogComponent
+        DialogComponent,
+        ChatUsersComponent
     ],
     imports: [
         BrowserModule,
@@ -67,7 +72,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ToastModule.forRoot(),
         NgbModule.forRoot()
     ],
-    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService],
+    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
