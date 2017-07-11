@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
 import { PasswordValidationService } from '../shared/password-validation.service';
@@ -8,6 +8,7 @@ import { PasswordValidationService } from '../shared/password-validation.service
 import { UserService } from "./user.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { DialogService } from "../dialog/dialog.service";
+import { AppService } from "../app.service";
 import { User } from "./user.model";
 import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
@@ -41,7 +42,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
 
 
-    constructor(private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService, private dialogService: DialogService) {
+    constructor(private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService, private dialogService: DialogService, private router: Router,, private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -70,6 +71,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
+    
+
     onSubmit() {
         let retDialogSub = new EventEmitter<DialogRetEnum>();
 
@@ -77,12 +80,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
             (buttonPressed: DialogRetEnum) => {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     if (this.user) {
-                        // Edit
+                        // Edit                    
                         this.user = new User(
                             this.myForm.value.email,
                             null,
                             this.myForm.value.name,
-                            this.myForm.value.adminUser == 'Yes' ? true : false,
+                            this.myForm.value.adminUser || this.user.adminUser == 'Yes' ? true : false,
                             this.myForm.value.relationship,
                             this.myForm.value.dob,
                             this.myForm.value.twitterId,
@@ -92,10 +95,15 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this.userService.updateUser(this.user)
                             .subscribe(
                             result => {
-                                this.toastService.showSuccess("User updated.");
                                 console.log(result);
                                 this.userService.showUserInput.emit(false);
                                 this.userService.selectedUserIndex.emit(-1);
+                                if (this.submitType == Consts.UPDATE_CURRENT_USER) {
+                                    this.router.navigate(['']);
+                                    this.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
+                                } else {
+                                    this.toastService.showSuccess("User updated.");
+                                };
                             }
                             );
                         this.user = null;
@@ -210,7 +218,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     };
                     this.myForm.get('password').clearValidators();
                     this.myForm.get('password').updateValueAndValidity();
-                    this.myForm.get('adminUser').disable();
+                    this.myForm.get('adminUser').disable(); 
                     this.myForm.get('adminUser').updateValueAndValidity();
                 }
             );
@@ -250,8 +258,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
     onExit() {
+        if (this.submitType == Consts.UPDATE_CURRENT_USER) {
+            this.router.navigate(['']);
+        };
         this.clear();
         this.userService.selectedUserIndex.emit(-1);
         this.userService.showUserInput.emit(false);
+
     }
 }

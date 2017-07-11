@@ -67,3 +67,5 @@ X27) Users menu option -> Users (List,Create)
 X28) Add tooltips
 
 29) Check encrypted password get the same encryption for the same string
+
+30) Add check if want to exit of form has changed

@@ -14,7 +14,7 @@
       }">
         <label class="col-sm-2 col-form-label">Email</label>
         <div class="col-sm-6">
-            <input type="email" class="form-control" id="email" placeholder="Email address" autofocus formControlName="email">
+            <input placement="bottom" ngbTooltip="Enter email address." type="email" class="form-control" id="email" placeholder="Email address" autofocus formControlName="email">
             <div class="form-control-feedback" *ngIf="myForm.get('email').errors && (myForm.get('email').dirty || myForm.get('email').touched)">
                 <p *ngIf="myForm.get('email').errors.required">Email address is required.</p>
                 <p *ngIf="myForm.get('email').errors.pattern">A valid Email address is required.</p>
@@ -28,7 +28,7 @@
       }">
         <label for="password" class="col-sm-2 col-form-label">Password</label>
         <div class="col-sm-6">
-            <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
+            <input placement="bottom" ngbTooltip="Enter password." type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
             <div class="form-control-feedback" *ngIf="myForm.get('password').errors && (myForm.get('password').dirty || myForm.get('password').touched)">
                 <p *ngIf="myForm.get('password').errors.required">Password is required.</p>
             </div>
@@ -36,6 +36,6 @@
         </div>
     </div>
     <div class="form-group row">
-        <button class="btn btn-md btn-primary offset-sm-4" type="submit" [disabled]="!isFormValid()">Sign in</button>
+        <button placement="bottom" ngbTooltip="Press to sign in with entered credentials." class="btn btn-md btn-primary offset-sm-4" type="submit" [disabled]="!isFormValid()">Sign in</button>
     </div>
 </form>
