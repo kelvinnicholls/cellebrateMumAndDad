@@ -35,7 +35,9 @@ import { AuthGuard } from './auth/auth-guard.service';
 import { ToastCustomOption } from './shared/toast/toast-custom-option';
 import { PasswordStrengthBarComponent } from './shared/password-strength-bar/password-strength-bar.component';
 //https://www.npmjs.com/package/angular2-tooltip
-import {ToolTipModule} from 'angular2-tooltip'
+//import {ToolTipModule} from 'angular2-tooltip'
+//https://ng-bootstrap.github.io/#/getting-started
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -63,7 +65,7 @@ import {ToolTipModule} from 'angular2-tooltip'
         ReactiveFormsModule,
         HttpModule,
         ToastModule.forRoot(),
-        ToolTipModule
+        NgbModule.forRoot()
     ],
     providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService],
     bootstrap: [AppComponent]

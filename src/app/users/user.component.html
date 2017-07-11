@@ -1,9 +1,9 @@
 <li class="list-group-item justify-content-between" [ngClass]="{'active': isSelected()}">
     <img [src]="user?.profilePicLocation || defaultProfilePicFile" class="img-responsive" style="max-height: 30px;">
     <div class="author">
-        <a tooltip content="Click to edit this user." (click)="onEdit()">{{ user.name }} ({{ user.relationship }} - {{ user.email }})</a>
+        <a placement="bottom" ngbTooltip="Click to edit this user." (click)="onEdit()">{{ user.name }} ({{ user.relationship }} - {{ user.email }})</a>
     </div>
     <div class="config">
-        <a tooltip content="Click to delete this user." (click)="onDelete()">Delete</a>
+        <a placement="bottom" ngbTooltip="Click to delete this user." (click)="onDelete()">Delete</a>
     </div>
 </li>
