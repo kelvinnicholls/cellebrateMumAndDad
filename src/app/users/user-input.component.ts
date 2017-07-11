@@ -71,7 +71,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
-    
+
 
     onSubmit() {
         let retDialogSub = new EventEmitter<DialogRetEnum>();
@@ -158,9 +158,25 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.myForm.get('adminUser').updateValueAndValidity();
     }
 
-    onClear() {
+    doClear() {
         this.clear();
         this.userService.selectedUserIndex.emit(-1);
+    }
+
+    onClear() {
+        if (this.myForm.dirty) {
+            let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+            retDialogSub.subscribe(
+                (buttonPressed: DialogRetEnum) => {
+                    if (buttonPressed === DialogRetEnum.ButtonOne) {
+                        this.doClear();
+                    }
+                });
+            this.dialogService.showDialog("Warning", "Do you really wish to Clear the form without saving your changes?", "Yes", "No", retDialogSub);
+        } else {
+            this.doClear();
+        }
     }
 
     private getCreatorRef() {
@@ -218,7 +234,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     };
                     this.myForm.get('password').clearValidators();
                     this.myForm.get('password').updateValueAndValidity();
-                    this.myForm.get('adminUser').disable(); 
+                    this.myForm.get('adminUser').disable();
                     this.myForm.get('adminUser').updateValueAndValidity();
                 }
             );
@@ -257,7 +273,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     }
 
-    onExit() {
+    doExit() {
         if (this.submitType == Consts.UPDATE_CURRENT_USER) {
             this.router.navigate(['']);
         };
@@ -266,4 +282,25 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.userService.showUserInput.emit(false);
 
     }
+
+    onExit() {
+
+        if (this.myForm.dirty) {
+            let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+            retDialogSub.subscribe(
+                (buttonPressed: DialogRetEnum) => {
+                    if (buttonPressed === DialogRetEnum.ButtonOne) {
+                        this.doExit();
+                    }
+                });
+            this.dialogService.showDialog("Warning", "Do you really wish to Exit without saving your changes?", "Yes", "No", retDialogSub);
+        } else {
+            this.doExit();
+        }
+    }
+    isCreateUser() {
+        return this.submitType === Consts.CREATE_USER;
+    }
+
 }
