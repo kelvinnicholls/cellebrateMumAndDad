@@ -31,6 +31,8 @@ import { ErrorService } from "./errors/error.service";
 import { DialogService } from "./dialog/dialog.service";
 import { ChatService } from "./chat/chat.service";
 import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
+import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messages-list.component";
+import { ChatMessageComponent } from "./chat/chat-messages-list/chat-message/chat-message.component";
 
 
 import { AppService } from "./app.service";
@@ -60,7 +62,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         HomeComponent,
         PasswordStrengthBarComponent,
         DialogComponent,
-        ChatUsersComponent
+        ChatUsersComponent,
+        ChatMessagesListComponent,
+        ChatMessageComponent
     ],
     imports: [
         BrowserModule,

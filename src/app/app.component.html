@@ -1,8 +1,20 @@
-<div class="container">
+<div class="container-fluid">
+  <div class="row">
     <app-header></app-header>
-    <hr>
-    <router-outlet></router-outlet>
-    <app-chat-users></app-chat-users>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-2 blog-sidebar">
+      <app-chat-users></app-chat-users>
+      <br>
+      <br>
+      <br>
+      <app-chat-messages-list></app-chat-messages-list>
+    </div>
+    <div class="col-md-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
 <app-error></app-error>
 <app-dialog></app-dialog>

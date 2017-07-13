@@ -68,4 +68,10 @@ X28) Add tooltips
 
 29) Check encrypted password get the same encryption for the same string
 
-30) Add check if want to exit of form has changed
+X30) Add check if want to exit if form has changed
+
+31) scroll bar on users and messages
+32) messages to have newest at top
+33) Only display list of users and messages if logged in
+34) clicking a user should allow you to send a message to a particular user (both in user list and message)
+35) add send message menu option

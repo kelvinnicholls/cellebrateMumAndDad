@@ -1,2 +1,6 @@
-
-    <h1>chat users!</h1>
+<h2 class="blog-post-title">Users</h2>
+<br>
+<div class="sidebar-module sidebar-module-inset">
+  <br>
+  <h6 class="blog-post-meta" *ngFor="let user of chatService.chatUsers"><strong>{{user}}</strong></h6>
+</div>

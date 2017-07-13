@@ -1,4 +1,4 @@
-<form class="form-signin col-sm-8 offset-sm-3" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
+<form class="form-signin col-sm-8 offset-sm-2" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
@@ -36,6 +36,6 @@
         </div>
     </div>
     <div class="form-group row">
-        <button placement="bottom" ngbTooltip="Press to sign in with entered credentials." class="btn btn-md btn-primary offset-sm-4" type="submit" [disabled]="!isFormValid()">Sign in</button>
+        <button placement="bottom" ngbTooltip="Press to sign in with entered credentials." class="btn btn-md btn-primary offset-sm-3" type="submit" [disabled]="!isFormValid()">Sign in</button>
     </div>
 </form>

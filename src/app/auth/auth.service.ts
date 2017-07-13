@@ -5,13 +5,18 @@ import 'rxjs/Rx';
 import { Observable } from "rxjs";
 
 import { AppService } from "../app.service";
+import { ChatService } from "../chat/chat.service";
 import { SignInUser } from "../auth/sign-in-user.model";
 import { Consts } from "../shared/consts";
 
 @Injectable()
 export class AuthService {
     private static Consts: Consts;
-    constructor(private http: Http, private router: Router, private appService: AppService) { }
+    constructor(private http: Http, private router: Router, private appService: AppService, private chatService: ChatService) {
+        if (this.isLoggedIn()) {
+            this.chatService.connect();
+        }
+    }
 
     //response.json() removes header etc and returns only data in JSON format and returns an observable
     // Observable.throw(error.json()) is needed because catch does not automatically return an observable
@@ -52,7 +57,8 @@ export class AuthService {
                 localStorage.clear();
                 console.log("logOut() response", response);
                 router.navigate(['']);
-                this.appService.showToast(Consts.SUCCESS,"User logged out.");
+                this.appService.showToast(Consts.SUCCESS, "User logged out.");
+                this.chatService.disconnect();
             }, (err) => {
                 console.log("logOut() err", err);
             }

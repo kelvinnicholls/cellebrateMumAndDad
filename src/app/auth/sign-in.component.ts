@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -6,6 +6,7 @@ import { SignInUser } from "./sign-in-user.model";
 import { AuthService } from "./auth.service";
 import { ErrorService } from "../errors/error.service";
 import { AppService } from "../app.service";
+import { ChatService } from "../chat/chat.service";
 
 
 import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
@@ -17,10 +18,10 @@ import { Consts } from "../shared/consts";
     templateUrl: './sign-in.component.html',
     styleUrls : ['./sign-in.component.css']
 })
-export class SignInComponent {
+export class SignInComponent  implements OnInit {
     myForm: FormGroup;
 
-    constructor(private authService: AuthService, private router: Router, private errorService: ErrorService, private appService: AppService) { 
+    constructor(private authService: AuthService, private router: Router, private errorService: ErrorService, private appService: AppService, private chatService: ChatService) { 
     }
 
     onSubmit() {
@@ -34,6 +35,7 @@ export class SignInComponent {
                 localStorage.setItem(Consts.LOGGED_IN_USER, JSON.stringify(payload));
                 router.navigate(['']);
                 this.appService.showToast(Consts.SUCCESS,"User signed in successfully.");
+                this.chatService.connect();
             }
             , (err) => {
                 this.errorService.handleError(JSON.parse(err._body));

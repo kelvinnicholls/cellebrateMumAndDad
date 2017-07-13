@@ -4,7 +4,7 @@
       }">
 
 
-  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('email').invalid && (myForm.get('email').dirty || myForm.get('email').touched),
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty || myForm.get('email').touched)
       }">
@@ -26,7 +26,7 @@
   </div>
 
 
-  <div *ngIf="isNewUser()" class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
+  <div *ngIf="isNewUser()" class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('password').invalid && (myForm.get('password').dirty || myForm.get('password').touched),
         'has-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
@@ -50,7 +50,7 @@
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('name').invalid && (myForm.get('name').dirty || myForm.get('name').touched),
         'has-success': myForm.get('name').valid && (myForm.get('name').dirty || myForm.get('name').touched)
       }">
@@ -69,7 +69,7 @@
   </div>
 
 
-  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('adminUser').invalid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched),
         'has-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched)
       }">
@@ -90,7 +90,7 @@
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('relationship').invalid && (myForm.get('relationship').dirty || myForm.get('relationship').touched),
         'has-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty || myForm.get('relationship').touched)
       }">
@@ -114,7 +114,7 @@
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-3">
+  <div class="form-group row col col-sm-8 offset-sm-2">
     <label for="dob" class="col-sm-4 col-form-label">Date Of Birth</label>
     <div class="col-sm-5">
       <input placement="bottom" ngbTooltip="The user's date of birth." type="date" id="dob" class="form-control" placeholder="dob" [ngModel]="user?.dob" formControlName="dob">
@@ -123,14 +123,14 @@
   </div>
 
 
-  <div class="form-group row col col-sm-8 offset-sm-3">
+  <div class="form-group row col col-sm-8 offset-sm-2">
     <label class="col-sm-4 col-form-label">Twitter ID</label>
     <div class="col-sm-5">
       <input placement="bottom" ngbTooltip="The user's Twitter ID." type="text" id="twitterId" class="form-control" placeholder="Twitter ID" [ngModel]="user?.twitterId" formControlName="twitterId">
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-3">
+  <div class="form-group row col col-sm-8 offset-sm-2">
     <label class="col-sm-4 col-form-label">Facebook ID</label>
     <div class="col-sm-5">
       <input placement="bottom" ngbTooltip="The user's Facebook ID." type="text" id="facebookId" class="form-control" placeholder="Facebook ID" [ngModel]="user?.facebookId" formControlName="facebookId">
@@ -138,7 +138,7 @@
   </div>
 
 
-  <div class="form-group row col col-sm-8 offset-sm-3">
+  <div class="form-group row col col-sm-8 offset-sm-2">
     <label for="profilePic" class="col-sm-4 col-form-label">Profile picture</label>
     <div class="col col-sm-2">
       <span class="pull-right">
