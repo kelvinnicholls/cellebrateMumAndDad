@@ -1,41 +1,75 @@
-import { EventEmitter } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import * as moment from 'moment';
 import { ChatMessage } from "./chat-message.model";
-
+import { ChatUser } from "./chat-user.model";
+import { AuthUserService } from "../auth/auth-user.service";
 
 import { Consts } from "../shared/consts";
 //https://stackoverflow.com/questions/37090031/how-to-import-socket-io-client-in-a-angular-2-application
 import * as io from "socket.io-client";
 
+@Injectable()
 export class ChatService {
-    public chatUsers: string[] = new Array();
-    public chatUserMessages: ChatMessage[] = new Array();
+    public chatUsers: ChatUser[] = [];
+    public chatUserMessages: ChatMessage[] = [];
     socket: any;
+    name: string = "";
 
 
     addSocketCallbacks() {
-        this.socket.on('newMessage', function (msg) {
+        this.socket.on('newMessage', (msg) => {
             let formattedDate = moment(msg.createdAt).format('h:mm a');
             let chatMessage = new ChatMessage(msg.text, msg.from, formattedDate);
             this.chatUserMessages.push(chatMessage);
         });
 
-        this.socket.on('addUser', function (userName) {
-            this.chatUsers.push(userName);
+        this.socket.on('addUser', (user) => {
+            this.chatUsers.push(new ChatUser(user.id, user.name));
         });
 
-        this.socket.on('removeUser', function (userName) {
-            this.chatUsers.splice(this.users.indexOf(userName), 1);
-        })
+        this.socket.on('removeUser', (user) => {
+            this.chatUsers.splice(this.chatUsers.indexOf(new ChatUser(user.id, user.name)), 1);
+        });
+
+        this.socket.on('connect', () => {
+            console.log("Connected to server");
+        });
+
+        this.socket.on('disconnect', () => {
+            console.log("Disconnected from server");
+        });
+
+        this.socket.on('updateUserList', (users) => {
+            console.log('updateUserList', users);
+            let chatUsers: ChatUser[] = [];
+            users.forEach(function (user) {
+                chatUsers.push(new ChatUser(user.id, user.name));
+            });
+            this.chatUsers = chatUsers;
+        });
+
     }
 
-    public connect() {
+    public connect(name: string) {
+        this.name = name;
         this.socket = io(Consts.API_URL_ROOT);
         this.addSocketCallbacks();
+        this.socket.emit('join', this.name, function (err) {
+            if (err) {
+                console.log("join Error", err);
+                // alert(err);
+                // window.location.href = '/';
+            } else {
+                console.log("join No Error");
+            }
+        });
     }
 
-    public disconnect() {
+    public logOut() {
+        this.socket.emit('logOut');
         this.socket = null;
+        this.chatUsers = [];
+        this.chatUserMessages = [];
     }
 
     public createMessage(from: string, text: string) {
@@ -45,134 +79,35 @@ export class ChatService {
         });
     }
 
-    constructor() {
-        let chatMessage1 = new ChatMessage("Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum", "Kelvin", "August 5th 2017");
-        let chatMessage2 = new ChatMessage("Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.", "Sharon", "August 5th 2017");
-        let chatMessage3 = new ChatMessage("Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", "Kelvin", "August 5th 2017");
+    public showName(name) {
+        // add to user list
+    }
+
+    public generateMessage = function (from, text) {
+        return {
+            from,
+            text,
+            createdAt: moment().valueOf()
+        };
+    };
+
+    constructor(private authUserService: AuthUserService) {
+
+        if (this.authUserService.isLoggedIn()) {
+            this.connect(this.authUserService.getLoggedInUserName());
+        }
+        let chatMessage1 = new ChatMessage("1 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum", "Kelvin", "August 5th 2017");
+        let chatMessage2 = new ChatMessage("2 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.", "Sharon", "August 5th 2017");
+        let chatMessage3 = new ChatMessage("3 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", "Kelvin", "August 5th 2017");
         this.chatUserMessages.push(chatMessage1);
         this.chatUserMessages.push(chatMessage2);
         this.chatUserMessages.push(chatMessage3);
-
-        let user1 = "Kelvin";
-        let user2 = "Sharon";
-        let user3 = "Geoffrey";
-        this.chatUsers.push(user1);
-        this.chatUsers.push(user2);
-        this.chatUsers.push(user3);
 
         if (this.socket) {
             this.addSocketCallbacks();
         }
     }
 }
-
-// socket.on('newMessage', function (msg) {
-//     let formattedDate = moment(msg.createdAt).format('h:mm a');
-//     // console.log("New Message", msg);
-//     // let li = $('<li></li>');
-//     // li.text(`${msg.from} ${formattedDate}: ${msg.text}`);
-//     // $('#messages').append(li);
-//     let template = $('#message-template').html();
-//     let html = Mustache.render(template, {
-//         text: msg.text,
-//         from: msg.from,
-//         createdAt: formattedDate
-//     });
-//     $('#messages').append(html);
-//     scrollToBottom();
-// });
-
-// let socket = io(); // initiates request
-
-// function scrollToBottom() {
-//     // Selectors
-//     let messages = $('#messages');
-//     let newMessage = messages.children('li:last-child');
-
-
-//     //Heights
-
-//     let clientHeight = messages.prop('clientHeight');
-//     let scrollTop = messages.prop('scrollTop');
-//     let scrollHeight = messages.prop('scrollHeight');
-//     let newMessageHeight = newMessage.innerHeight();
-//     let lastMessageHeight = newMessage.prev().innerHeight();
-
-//     if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
-//         messages.scrollTop(scrollHeight);
-//     }
-// };
-
-// socket.on('connect', function () {
-//     console.log("Connected to server");
-//     let params = $.deparam(window.location.search);
-//     socket.emit('join', params, function (err) {
-//         if (err) {
-//             alert(err);
-//             window.location.href = '/';
-//         } else {
-//             console.log("No Error");
-//         }
-//     });
-
-//     // socket.emit('createEmail',{
-//     //     from: 'kelv@kelv.com',
-//     //     text: "Hey up",
-//     //     createdAt: 13355
-//     // })
-// });
-
-// socket.on('disconnect', function () {
-//     console.log("Disconnected from server");
-// });
-
-// // socket.on('newEmail', function (email) {
-// //     console.log("New Email",email);
-// // });
-
-
-// // function showName(name) {
-// //     let template = $('#people-template').html();
-// //     let html = Mustache.render(template, {
-// //         name: name
-// //     });
-// //     $('#users').append(html);
-// // }
-
-// socket.on('updateUserList', function (users, user) {
-//     console.log('newUser',users,user);
-
-//     let ol = $('<ol></ol>')
-
-//     if (users) {
-//         users.forEach(function (user) {
-//             ol.append($('<li></li>').text(user));
-//         });
-//         $('#users').html(ol);
-//     };
-
-// });
-
-// // socket.emit('createMessage', (generateMessage('John', 'Hi There!')), function (msg) {
-// //     console.log("Got it", msg);
-// // });
-
-// // socket.emit('createMessage', {
-// //     from: "Bob",
-// //     text: "How Do"
-// // });
-
-// let msgTextBox = $('[name=message]');
-// let sendLocationButton = $('#sendlocation');
-
-
-// let generateMessage = function (from, text) {
-//     return {
-//         from,
-//         text,
-//         createdAt: moment().valueOf()
-//     };
-// };
 
 
 // $('#msg-form').on('submit', function (e) {

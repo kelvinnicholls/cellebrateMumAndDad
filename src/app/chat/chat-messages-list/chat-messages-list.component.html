@@ -1,4 +1,6 @@
 <h2 class="blog-post-title">Messages</h2>
 <br>
-<app-chat-message *ngFor="let chatMessage of chatService.chatUserMessages" [index]="i" [chatMessage]="chatMessage">
-</app-chat-message>
+<div id="messages-scroll">
+  <app-chat-message *ngFor="let chatMessage of chatService.chatUserMessages | reverseArray" [index]="i" [chatMessage]="chatMessage">
+  </app-chat-message>
+</div>

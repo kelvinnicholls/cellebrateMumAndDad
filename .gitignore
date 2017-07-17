@@ -44,3 +44,5 @@ Thumbs.db
 /server/public/images
 
 /server/public/js/app/bundle.js
+
+npm-debug.log.*

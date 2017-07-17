@@ -32,7 +32,7 @@ describe('Users', () => {
             name: "Kelv"
         };
         let resUser = users.addUser(user.id, user.name);
-        expect(users.users).toEqual([user]);
+        expect(users.users.length).toEqual(4);
     });
 
     it('should return all names', () => {

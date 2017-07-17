@@ -2,6 +2,7 @@ import { Component, ViewContainerRef } from '@angular/core';
 import { ToastService } from "./shared/toast/toast.service";
 import { AppService } from "./app.service";
 import { Toast } from "./shared/toast/toast.model";
+import { AuthUserService } from "./auth/auth-user.service";
 
 @Component({
     selector: 'my-app',
@@ -13,7 +14,7 @@ export class AppComponent {
 
     private toastOccurredSub: any;
 
-    constructor(private vcr: ViewContainerRef, private toastService: ToastService, private appService: AppService) {
+    constructor(private vcr: ViewContainerRef, private toastService: ToastService, private appService: AppService, private authUserService: AuthUserService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 

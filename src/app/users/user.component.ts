@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter } from "@angular/core";
+import { Component, Input, OnInit, EventEmitter, OnDestroy } from "@angular/core";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
 import { DialogService } from "../dialog/dialog.service";
@@ -28,7 +28,7 @@ import { Dialog } from "../dialog/dialog.model";
         }
     `]
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit,OnDestroy {
     @Input() user: User;
     @Input() index: Number;
     selectedIndex: Number;

@@ -12,15 +12,15 @@
       </li>
 
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authService.isLoggedIn()">
+      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
         <a class="nav-link" routerLink="/memories">Memories</a>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authService.isLoggedIn()">
+      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
         <a class="nav-link" routerLink="/photos">Photos</a>
       </li>
 
-      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authService.isLoggedIn() && authService.isAdminUser()">
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()">
         <a class="nav-link dropdown-toggle" id="usersDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">Users</a>
         <div class="dropdown-menu" aria-labelledby="usersDropdown">
@@ -32,21 +32,21 @@
         </div>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authService.isLoggedIn() && authService.isAdminUser()">
+      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()">
         <a class="nav-link" routerLink="/auth/get-encrypted-password">Encrypted Password</a>
       </li>
     </ul>
 
     <ul class="navbar-nav ml-auto">
-      <li *ngIf="!authService.isLoggedIn()" class="nav-item" routerLinkActive="active">
+      <li *ngIf="!authUserService.isLoggedIn()" class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="auth/sign-in">Sign In</a>
       </li>
 
-      <li *ngIf="authService.isLoggedIn()" class="nav-item dropdown">
+      <li *ngIf="authUserService.isLoggedIn()" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="loggedInUserDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">
-                    <img [src]="authService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;">
-                    {{authService.getLoggedInUserName()}}
+                    <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;">
+                    {{authUserService.getLoggedInUserName()}}
                     </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loggedInUserDropdown">
           <a class="dropdown-item" [routerLink]="['/user','edit-me']">Edit</a>

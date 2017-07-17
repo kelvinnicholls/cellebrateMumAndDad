@@ -46,22 +46,23 @@ io.on('connection', (socket) => {
   console.log('New user connected');
   socket.on('disconnect', () => {
     console.log("Client Disconnected");
+    disconnectUser(socket.id);
   });
 
-  socket.on('join', (params, callback) => {
-    if (!isRealString(params.name) || !isRealString(params.room)) {
-      return callback("Name and room are required");
+  socket.on('join', (name, callback) => {
+    console.log("join  name:", name);
+    if (!isRealString(name)) {
+      return callback("Name is required");
     };
-    socket.join(params.room);
     users.removeUser(socket.id);
-    let user = users.addUser(socket.id, params.name, params.room);
+    let user = users.addUser(socket.id, name);
     console.log("User added :", user, users);
     //socket.leave(params.room);
 
     // io.emit // every connected user 
     // io.to(params.room).emit
 
-    // socket.broadcast.emit // every connected user  other thsn current user
+    // socket.broadcast.emit // every connected user  other than current user
     // socket.broadcast.to(params.room).emit
 
     // socket.emit // single user
@@ -71,13 +72,13 @@ io.on('connection', (socket) => {
 
 
 
-    socket.emit('newMessage', generateMessage('Admin', "Welcome to the chat app"));
+    socket.emit('newMessage', generateMessage('Admin', "Welcome to Celebrate Mum and Dad"));
 
     // socket.broadcast.emit from admin new user joined
 
-    socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined the ${params.room} room.`));
+    socket.broadcast.emit('newMessage', generateMessage('Admin', `${name} has joined Celebrate Mum and Dad`));
 
-    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+    io.emit('updateUserList', users.getUserList());
 
     callback();
   });
@@ -110,14 +111,26 @@ io.on('connection', (socket) => {
 
 
   socket.on('disconnect', () => {
+    console.log("disconnect");
     let user = users.removeUser(socket.id);
-    if (user) {
-      io.emit('updateUserList', users.getUserList());
-      io.emit('newMessage', generateMessage('Admin', `${user.name} has left.`));
-    }
+    disconnectUser(socket.id);
+  });
+
+  socket.on('logOut', () => {
+    console.log("logOut");
+    disconnectUser(socket.id);
   });
 
 });
+
+disconnectUser = function (socketId) {
+  let user = users.removeUser(socketId);
+  console.log("disconnect user: ", user);
+  if (user) {
+    io.emit('updateUserList', users.getUserList());
+    io.emit('newMessage', generateMessage('Admin', `${user.name} has left.`));
+  }
+}
 
 /**
  * Listen on provided port, on all network interfaces.

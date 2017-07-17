@@ -1,6 +1,6 @@
 <h2 class="blog-post-title">Users</h2>
 <br>
-<div class="sidebar-module sidebar-module-inset">
+<div class="sidebar-module sidebar-module-inset" id="users-scroll" >
   <br>
-  <h6 class="blog-post-meta" *ngFor="let user of chatService.chatUsers"><strong>{{user}}</strong></h6>
+  <h6 class="blog-post-meta" *ngFor="let chatUser of chatService.chatUsers"><strong>{{chatUser.name}}</strong></h6>
 </div>

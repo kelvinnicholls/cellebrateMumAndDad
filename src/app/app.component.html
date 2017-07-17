@@ -5,11 +5,13 @@
   <hr>
   <div class="row">
     <div class="col-md-2 blog-sidebar">
-      <app-chat-users></app-chat-users>
-      <br>
-      <br>
-      <br>
-      <app-chat-messages-list></app-chat-messages-list>
+      <div [hidden]="!authUserService.isLoggedIn()">
+        <app-chat-users></app-chat-users>
+        <br>
+        <br>
+        <br>
+        <app-chat-messages-list></app-chat-messages-list>
+      </div>
     </div>
     <div class="col-md-10">
       <router-outlet></router-outlet>

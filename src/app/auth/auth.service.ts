@@ -6,16 +6,15 @@ import { Observable } from "rxjs";
 
 import { AppService } from "../app.service";
 import { ChatService } from "../chat/chat.service";
+import { AuthUserService } from "./auth-user.service";
 import { SignInUser } from "../auth/sign-in-user.model";
 import { Consts } from "../shared/consts";
 
 @Injectable()
 export class AuthService {
     private static Consts: Consts;
-    constructor(private http: Http, private router: Router, private appService: AppService, private chatService: ChatService) {
-        if (this.isLoggedIn()) {
-            this.chatService.connect();
-        }
+    constructor(private http: Http, private router: Router, private appService: AppService, private authUserService: AuthUserService, private chatService: ChatService) {
+
     }
 
     //response.json() removes header etc and returns only data in JSON format and returns an observable
@@ -27,7 +26,6 @@ export class AuthService {
         localStorage.clear();
         const body = JSON.stringify(user);
         return this.http.post(Consts.API_URL_USERS_ROOT + '/login', body, { headers: headers });
-
     }
 
     getEncryptedPassword(password: string) {
@@ -58,43 +56,13 @@ export class AuthService {
                 console.log("logOut() response", response);
                 router.navigate(['']);
                 this.appService.showToast(Consts.SUCCESS, "User logged out.");
-                this.chatService.disconnect();
+                this.chatService.logOut();
             }, (err) => {
                 console.log("logOut() err", err);
             }
             );
     }
 
-    isLoggedIn(): boolean {
-        return localStorage.getItem('token') !== null;
-    }
-
-    isAdminUser(): boolean {
-        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER)).adminUser;
-    }
-
-    getLoggedInUserName() {
-        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER)).name;
-    }
-
-    getLoggedInUserProfilePicLocation() {
-        let location = Consts.DEFAULT_PROFILE_PIC_FILE;
-        let loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
-
-        if (loggedInUser) {
-            if (loggedInUser.profilePicLocation) {
-                location = loggedInUser.profilePicLocation;
-            } else if (loggedInUser._profileMediaId && loggedInUser._profileMediaId.location) {
-                location = loggedInUser._profileMediaId.location.substring(14);
-            }
-        }
-
-        return location;
-    }
-
-    getLoggedInCreatorRef() {
-        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER))._creatorRef;
-    }
     isAdminRoute(route: ActivatedRouteSnapshot): boolean {
         let ret = false;
         if (route.url.length == 1 && route.url[0].path === "users") {
@@ -108,8 +76,8 @@ export class AuthService {
 
     isAuthorised(route: ActivatedRouteSnapshot): boolean {
         let ret: boolean = true;
-        if (this.isLoggedIn()) {
-            if (!this.isAdminUser() && (this.isAdminRoute(route))) {
+        if (this.authUserService.isLoggedIn()) {
+            if (!this.authUserService.isAdminUser() && (this.isAdminRoute(route))) {
                 ret = false;
             }
         } else {

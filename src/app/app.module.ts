@@ -13,6 +13,9 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 //import { DatepickerModule } from 'ngx-bootstrap/datepicker'
 // http://valor-software.com/ngx-bootstrap/#/datepicker
 
+// https://github.com/danrevah/ngx-pipes#reverse-1
+import {NgPipesModule} from 'ngx-pipes';
+
 import { HeaderComponent } from "./header.component";
 import { routing } from "./app.routing";
 import { UserComponent } from "./users/user.component";
@@ -26,6 +29,7 @@ import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
 import { GetEncryptedPasswordComponent } from "./auth/get-encrypted-password.component";
 import { AuthService } from "./auth/auth.service";
+import { AuthUserService } from "./auth/auth-user.service";
 import { UserService } from "./users/user.service";
 import { ErrorService } from "./errors/error.service";
 import { DialogService } from "./dialog/dialog.service";
@@ -33,7 +37,7 @@ import { ChatService } from "./chat/chat.service";
 import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
 import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messages-list.component";
 import { ChatMessageComponent } from "./chat/chat-messages-list/chat-message/chat-message.component";
-
+import { ReversePipe } from "./shared/pipes/reverse-pipe";
 
 import { AppService } from "./app.service";
 import { HomeComponent } from "./home.component";
@@ -64,7 +68,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         DialogComponent,
         ChatUsersComponent,
         ChatMessagesListComponent,
-        ChatMessageComponent
+        ChatMessageComponent,
+        ReversePipe
     ],
     imports: [
         BrowserModule,
@@ -74,9 +79,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ReactiveFormsModule,
         HttpModule,
         ToastModule.forRoot(),
-        NgbModule.forRoot()
+        NgbModule.forRoot(),
+        NgPipesModule
     ],
-    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService],
+    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService,AuthUserService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
