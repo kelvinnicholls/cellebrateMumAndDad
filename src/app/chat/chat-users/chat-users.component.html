@@ -2,5 +2,5 @@
 <br>
 <div class="sidebar-module sidebar-module-inset" id="users-scroll" >
   <br>
-  <h6 class="blog-post-meta" *ngFor="let chatUser of chatService.chatUsers"><strong>{{chatUser.name}}</strong></h6>
+  <h6 class="blog-post-meta" *ngFor="let chatUser of chatService.chatUsers | reverseArray"><strong>{{chatUser.name}}</strong></h6>
 </div>
