@@ -1,5 +1,6 @@
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
+import { Subject } from 'rxjs/Subject';
 import { Router } from "@angular/router";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
@@ -17,7 +18,7 @@ export class UserService {
     selectedUserIndex = new EventEmitter<Number>();
     constructor(private http: Http, private errorService: ErrorService, private router: Router) { }
 
-
+    usersChanged = new Subject<User[]>();
 
     showUserEdit: Boolean = false;
 
@@ -64,6 +65,7 @@ export class UserService {
                     null,
                     location);
                 userService.users.push(user);
+                userService.usersChanged.next(this.users);
                 return user;
             })
             .catch((error: Response) => {
@@ -182,7 +184,7 @@ export class UserService {
                 if (loggedInUser._creatorRef === user._creatorRef) {
                     localStorage.setItem(Consts.LOGGED_IN_USER, JSON.stringify(user));
                 }
-
+                userService.usersChanged.next(userService.users);
                 return response.json();
             })
             .catch((error: Response) => {
@@ -198,7 +200,8 @@ export class UserService {
         let userService = this;
         return this.http.delete(Consts.API_URL_USERS_ROOT + '/' + user._creatorRef, { headers: headers })
             .map((response: Response) => {
-                userService.users.splice(this.users.indexOf(user), 1);
+                userService.users.splice(user.index, 1);
+                userService.usersChanged.next(userService.users);
                 return response.json();
             })
             .catch((error: Response) => {

@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { ToastOptions } from 'ng2-toastr';
-
+import { PaginationModule } from 'ngx-bootstrap';
 import { AppComponent } from "./app.component";
 //https://www.npmjs.com/package/ng2-toastr
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
@@ -80,6 +80,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         HttpModule,
         ToastModule.forRoot(),
         NgbModule.forRoot(),
+        PaginationModule.forRoot(),
         NgPipesModule
     ],
     providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService,AuthUserService],

@@ -80,12 +80,18 @@ export class UserInputComponent implements OnInit, OnDestroy {
             (buttonPressed: DialogRetEnum) => {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     if (this.user) {
-                        // Edit                    
+                        // Edit       
+                        let adminUser = this.myForm.value.adminUser;
+                        if (adminUser && adminUser === 'string') {
+                              adminUser = adminUser == 'Yes' ? true : false;                           
+                        } else {
+                            adminUser = this.user.adminUser;
+                        };
                         this.user = new User(
                             this.myForm.value.email,
                             null,
                             this.myForm.value.name,
-                            this.myForm.value.adminUser || this.user.adminUser == 'Yes' ? true : false,
+                            adminUser,
                             this.myForm.value.relationship,
                             this.myForm.value.dob,
                             this.myForm.value.twitterId,

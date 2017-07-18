@@ -1,6 +1,11 @@
 <div class="col-md-6 offset-md-2">
-    <ul class="list-group">
-        <app-user *ngFor="let user of users; let i=index" [index]="i" [user]="user">
-        </app-user>
-    </ul>
+  <ul class="list-group">
+    <app-user class="kgn-border-pad" *ngFor="let user of pagedUsers; let i=index" [index]="i" [user]="user">
+    </app-user>
+  </ul>
+</div>
+
+<div class="col-md-6 offset-md-4 text-center kgn-border-pad">
+  <pagination [totalItems]="bigTotalItems" [(ngModel)]="bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
+    [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
 </div>

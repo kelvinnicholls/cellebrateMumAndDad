@@ -1,6 +1,6 @@
-import { Consts } from "../shared/consts";
-
 export class User {
+
+    public index;
 
     constructor(public email: string,
         public password: string,

@@ -70,14 +70,14 @@ X28) Add tooltips
 
 X30) Add check if want to exit if form has changed
 
-31) scroll bar on users and messages
-32) messages to have newest at top
+X31) scroll bar on users and messages
+X32) messages to have newest at top
 need to user stateless pipe
 see https://stackoverflow.com/questions/34456430/ngfor-doesnt-update-data-with-pipe-in-angular2
 
 
-33) Only display list of users and messages if logged in
+X33) Only display list of users and messages if logged in
 34) clicking a user should allow you to send a message to a particular user (both in user list and message)
 35) add send message menu option
 36) search pop up
-37) Add pagination
+X37) Add pagination
