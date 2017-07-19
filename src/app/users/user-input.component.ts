@@ -16,7 +16,6 @@ import { Consts } from "../shared/consts";
 
 
 
-
 @Component({
     selector: 'app-user-input',
     templateUrl: './user-input.component.html',

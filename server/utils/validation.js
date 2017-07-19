@@ -1,5 +1,8 @@
 let isRealString =  (str) => {
-  return typeof str === 'string' && str.trim().length > 0;
+  
+  let ret = typeof str === 'string' && str.trim().length > 0;
+  console.log("isRealString",str,ret);
+  return ret;
 }
 
 module.exports.isRealString = isRealString;

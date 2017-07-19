@@ -1,0 +1,29 @@
+<form class="col-sm-10 offset-sm-2" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
+        'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
+        'has-success': myForm.valid && (myForm.dirty || myForm.touched)
+      }">
+  <div class="form-group row" [ngClass]="{
+        'has-danger': myForm.get('message').invalid && (myForm.get('message').dirty || myForm.get('message').touched),
+        'has-success': myForm.get('message').valid && (myForm.get('message').dirty || myForm.get('message').touched)
+      }">
+    <label for="message" class="col-sm-2 col-form-label">Message</label>
+    <div class="col-sm-5">
+      <!-- <input  placement="bottom" ngbTooltip="The message to be sent." type="text" class="form-control" id="message" placeholder="Message" formControlName="message"> -->
+      <textarea placement="bottom" ngbTooltip="The message to be sent." type="text" class="form-control" id="message" placeholder="Message"
+        formControlName="message"></textarea>
+      <small *ngIf="myForm.get('message').invalid" class="form-text text-muted">Enter the message to be sent.</small>
+    </div>
+    <div *ngIf="chatService.authUserService.isAdminUser()" class="col-sm-1">
+      <label class="form-check-label">
+        <input class="form-check-input" type="checkbox" name="sendAsAdmin" [(ngModel)]="sendAsAdmin" [ngModelOptions]="{standalone: true}">
+        Send as "Admin"?
+    </label>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <button *ngIf="chatService.geolocationSupported" placement="bottom" ngbTooltip="Press to send current location as a message."
+      type="button" class="btn btn-md btn-danger offset-sm-3" (click)="onSendLocation()">Send Location</button>
+    <button placement="bottom" ngbTooltip="Press to send message." class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Send Message</button>
+  </div>
+</form>

@@ -58,18 +58,12 @@ io.on('connection', (socket) => {
     let user = users.addUser(socket.id, name);
     console.log("User added :", user, users);
     //socket.leave(params.room);
-
     // io.emit // every connected user 
     // io.to(params.room).emit
-
     // socket.broadcast.emit // every connected user  other than current user
     // socket.broadcast.to(params.room).emit
-
     // socket.emit // single user
-
-
     // socket.emit from admin text welcome to the chat app
-
 
 
     socket.emit('newMessage', generateMessage('Admin', "Welcome to Celebrate Mum and Dad"));
@@ -83,30 +77,37 @@ io.on('connection', (socket) => {
     callback();
   });
 
-  socket.on('createMessage', (msg, callback) => {
 
-    let user = null;
-    if (isRealString(msg.from)) {
-      user = users.getUser(msg.from);
-    }
+  socket.on('createMessage', (msg, callback) => {
+    console.log("Create Message1", msg, socket.id);
+    let user = {name: "Admin"};
+    if (!msg.sendAsAdmin) {
+      user = users.getUser(socket.id);
+    };
+
+    console.log("Create Message user", user);
+
     if (user && isRealString(msg.text)) {
       msg.from = user.name;
       msg.createdAt = new Date().getTime();
 
-      console.log("Create Message", msg);
+      console.log("Create Message2", msg);
       //io.emit emits an event to a every single connection
-      io.emit('newMessage', msg);
-    }
+      socket.broadcast.emit('newMessage', msg, user);
+    };
 
     callback();
     //socket.broadcast.emit('newMessage', msg); // emits to everyone but whoever initiated the event
   });
 
-  socket.on('CreateLocationMessage', (coords) => {
+  socket.on('createLocationMessage', (coords, callback) => {
+    console.log("CreateLocationMessage1", coords, socket.id);
     let user = users.getUser(socket.id);
     if (user) {
-      io.emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
-    }
+      console.log("createLocationMessage2", coords, user);
+      socket.broadcast.emit('newMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+    };
+    callback();
   });
 
 

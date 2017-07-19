@@ -1,4 +1,6 @@
 <div class="sidebar-module sidebar-module-inset">
   <h6 class="blog-post-meta">{{chatMessage.createdAt}}, <strong>{{chatMessage.from}}</strong></h6>
-  <p>{{chatMessage.text}}</p>
+  <p *ngIf="chatMessage.text">{{chatMessage.text}}</p>
+
+  <a *ngIf="chatMessage.url" target="_blank" href="{{chatMessage.url}}">My Current Location</a>
 </div>

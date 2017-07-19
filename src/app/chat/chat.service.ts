@@ -14,12 +14,28 @@ export class ChatService {
     public chatUserMessages: ChatMessage[] = [];
     socket: any;
     name: string = "";
+    public geolocationSupported = false;
 
+    location = { latitude: 0, longitude: 0 };
+
+    setPosition(position) {
+        this.location = position.coords;
+        console.log(position.coords);
+    }
 
     addSocketCallbacks() {
+        this.socket.removeAllListeners();
         this.socket.on('newMessage', (msg) => {
             let formattedDate = moment(msg.createdAt).format('h:mm a');
-            let chatMessage = new ChatMessage(msg.text, msg.from, formattedDate);
+            let text = null;
+            let url = null;
+            if (msg.text) {
+                text = msg.text;
+            };
+            if (msg.url) {
+                url = msg.url;
+            };
+            let chatMessage = new ChatMessage(text, msg.from, formattedDate, url);
             this.chatUserMessages.push(chatMessage);
         });
 
@@ -72,41 +88,56 @@ export class ChatService {
         this.chatUserMessages = [];
     }
 
-    public createMessage(from: string, text: string) {
-        this.socket.emit('createMessage', {
-            from,
-            text
-        });
+
+
+    public createMessage(text: string, sendAsAdmin: boolean, callback) {
+        this.socket.emit('createMessage', this.generateMessage(text,sendAsAdmin), callback)
     }
+
+    public createLocationMessage(callback) {
+        navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
+
+        this.socket.emit('createLocationMessage', {
+            latitude: this.location.latitude,
+            longitude: this.location.longitude
+        }, callback);
+    }
+
+
 
     public showName(name) {
         // add to user list
     }
 
-    public generateMessage = function (from, text) {
+    public generateMessage = function (text,sendAsAdmin) {
         return {
-            from,
             text,
-            createdAt: moment().valueOf()
+            sendAsAdmin
         };
     };
 
-    constructor(private authUserService: AuthUserService) {
+    constructor(public authUserService: AuthUserService) {
 
         if (this.authUserService.isLoggedIn()) {
             this.connect(this.authUserService.getLoggedInUserName());
         }
-        let chatMessage1 = new ChatMessage("1 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum", "Kelvin", "August 5th 2017");
-        let chatMessage2 = new ChatMessage("2 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.", "Sharon", "August 5th 2017");
-        let chatMessage3 = new ChatMessage("3 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", "Kelvin", "August 5th 2017");
-        this.chatUserMessages.push(chatMessage1);
-        this.chatUserMessages.push(chatMessage2);
-        this.chatUserMessages.push(chatMessage3);
+        // let chatMessage1 = new ChatMessage("1 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum", "Kelvin", "August 5th 2017");
+        // let chatMessage2 = new ChatMessage("2 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.", "Sharon", "August 5th 2017");
+        // let chatMessage3 = new ChatMessage("3 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.", "Kelvin", "August 5th 2017");
+        // this.chatUserMessages.push(chatMessage1);
+        // this.chatUserMessages.push(chatMessage2);
+        // this.chatUserMessages.push(chatMessage3);
 
         if (this.socket) {
             this.addSocketCallbacks();
-        }
+        };
+
+
+        if (navigator.geolocation) {
+            this.geolocationSupported = true;
+        };
     }
+
 }
 
 

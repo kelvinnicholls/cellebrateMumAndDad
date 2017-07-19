@@ -37,6 +37,7 @@ import { ChatService } from "./chat/chat.service";
 import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
 import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messages-list.component";
 import { ChatMessageComponent } from "./chat/chat-messages-list/chat-message/chat-message.component";
+import { ChatSendMessageComponent } from "./chat/chat-send-message/chat-send-message.component";
 import { ReversePipe } from "./shared/pipes/reverse-pipe";
 
 import { AppService } from "./app.service";
@@ -69,6 +70,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ChatUsersComponent,
         ChatMessagesListComponent,
         ChatMessageComponent,
+        ChatSendMessageComponent,
         ReversePipe
     ],
     imports: [
