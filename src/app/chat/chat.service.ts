@@ -35,7 +35,7 @@ export class ChatService {
             if (msg.url) {
                 url = msg.url;
             };
-            let chatMessage = new ChatMessage(text, msg.from, formattedDate, url);
+            let chatMessage = new ChatMessage(text, new ChatUser(msg.from.id, msg.from.name) , formattedDate, url);
             this.chatUserMessages.push(chatMessage);
         });
 
@@ -90,8 +90,8 @@ export class ChatService {
 
 
 
-    public createMessage(text: string, sendAsAdmin: boolean, callback) {
-        this.socket.emit('createMessage', this.generateMessage(text,sendAsAdmin), callback)
+    public createMessage(text: string, sendAsAdmin: boolean, socketId:any, callback) {
+        this.socket.emit('createMessage', this.generateMessage(text,sendAsAdmin,socketId), callback)
     }
 
     public createLocationMessage(callback) {
@@ -109,9 +109,10 @@ export class ChatService {
         // add to user list
     }
 
-    public generateMessage = function (text,sendAsAdmin) {
+    public generateMessage = function (text,sendAsAdmin,socketId) {
         return {
             text,
+            socketId,
             sendAsAdmin
         };
     };

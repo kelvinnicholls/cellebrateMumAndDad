@@ -14,7 +14,7 @@ const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
   { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
   { path: 'chat', component: ChatSendMessageComponent, canActivate: [AuthGuard] },
-  { path: 'chat/:user', component: ChatSendMessageComponent, canActivate: [AuthGuard] },
+  { path: 'chat/:socketId', component: ChatSendMessageComponent, canActivate: [AuthGuard] },
   { path: 'user/change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/edit-me', component: UserInputComponent, canActivate: [AuthGuard] },
   { path: 'auth/sign-in', component: SignInComponent },

@@ -1,6 +1,7 @@
 <div class="sidebar-module sidebar-module-inset">
-  <h6 class="blog-post-meta">{{chatMessage.createdAt}}, <strong>{{chatMessage.from}}</strong></h6>
-  <p *ngIf="chatMessage.text">{{chatMessage.text}}</p>
+  <h6 *ngIf="chatMessage.from.id != chatMessage.from.name" class="blog-post-meta">{{chatMessage.createdAt}}, <a placement="bottom" ngbTooltip="Press to send chat message to this user." class="blog-post-meta" style="cursor: pointer" routerLinkActive="active" [routerLink]="['chat',chatMessage.from.id]"><strong>{{chatMessage.from.name}}</strong></a></h6>
+  <h6 *ngIf="chatMessage.from.id == chatMessage.from.name" class="blog-post-meta">{{chatMessage.createdAt}}, <strong>{{chatMessage.from.name}}</strong></h6>
 
+  <p *ngIf="chatMessage.text">{{chatMessage.text}}</p>
   <a *ngIf="chatMessage.url" target="_blank" href="{{chatMessage.url}}">My Current Location</a>
 </div>
