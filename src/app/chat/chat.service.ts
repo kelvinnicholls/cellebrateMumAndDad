@@ -23,6 +23,12 @@ export class ChatService {
         console.log(position.coords);
     }
 
+    findChatUser(socketId: any) : ChatUser {
+        return this.chatUsers.find((chatUser: ChatUser) => {
+            return chatUser.id === socketId;
+        });
+    }
+
     addSocketCallbacks() {
         this.socket.removeAllListeners();
         this.socket.on('newMessage', (msg) => {
@@ -35,17 +41,17 @@ export class ChatService {
             if (msg.url) {
                 url = msg.url;
             };
-            let chatMessage = new ChatMessage(text, new ChatUser(msg.from.id, msg.from.name) , formattedDate, url);
+            let chatMessage = new ChatMessage(text, new ChatUser(msg.from.id, msg.from.name), formattedDate, url);
             this.chatUserMessages.push(chatMessage);
         });
 
-        this.socket.on('addUser', (user) => {
-            this.chatUsers.push(new ChatUser(user.id, user.name));
-        });
+        // this.socket.on('addUser', (user) => {
+        //     this.chatUsers.push(new ChatUser(user.id, user.name));
+        // });
 
-        this.socket.on('removeUser', (user) => {
-            this.chatUsers.splice(this.chatUsers.indexOf(new ChatUser(user.id, user.name)), 1);
-        });
+        // this.socket.on('removeUser', (user) => {
+        //     this.chatUsers.splice(this.chatUsers.indexOf(new ChatUser(user.id, user.name)), 1);
+        // });
 
         this.socket.on('connect', () => {
             console.log("Connected to server");
@@ -56,10 +62,13 @@ export class ChatService {
         });
 
         this.socket.on('updateUserList', (users) => {
+            let socketId = this.socket.io.engine.id;
             console.log('updateUserList', users);
             let chatUsers: ChatUser[] = [];
             users.forEach(function (user) {
-                chatUsers.push(new ChatUser(user.id, user.name));
+                if (user.id != socketId) {
+                    chatUsers.push(new ChatUser(user.id, user.name));
+                }
             });
             this.chatUsers = chatUsers;
         });
@@ -90,16 +99,17 @@ export class ChatService {
 
 
 
-    public createMessage(text: string, sendAsAdmin: boolean, socketId:any, callback) {
-        this.socket.emit('createMessage', this.generateMessage(text,sendAsAdmin,socketId), callback)
+    public createMessage(text: string, sendAsAdmin: boolean, socketId: any, callback) {
+        this.socket.emit('createMessage', this.generateMessage(text, sendAsAdmin, socketId), callback)
     }
 
-    public createLocationMessage(callback) {
+    public createLocationMessage(socketId: any,callback) {
         navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
 
         this.socket.emit('createLocationMessage', {
             latitude: this.location.latitude,
-            longitude: this.location.longitude
+            longitude: this.location.longitude,
+            socketId : socketId
         }, callback);
     }
 
@@ -109,7 +119,7 @@ export class ChatService {
         // add to user list
     }
 
-    public generateMessage = function (text,sendAsAdmin,socketId) {
+    public generateMessage = function (text, sendAsAdmin, socketId) {
         return {
             text,
             socketId,

@@ -113,7 +113,14 @@ io.on('connection', (socket) => {
     let user = users.getUser(socket.id);
     if (user) {
       console.log("createLocationMessage2", coords, user);
-      socket.broadcast.emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id), coords.latitude, coords.longitude));
+
+      if (coords.socketId && isRealString(coords.socketId)) {
+        io.to(coords.socketId).emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id), coords.latitude, coords.longitude));
+        //socket(msg.socketId).emit('newMessage', generateMessage(toChatUser(user.name, socket.id), msg.text));
+      } else {
+        socket.broadcast.emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id), coords.latitude, coords.longitude));
+      }
+
     };
     callback();
   });

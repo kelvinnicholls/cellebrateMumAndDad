@@ -77,7 +77,7 @@ see https://stackoverflow.com/questions/34456430/ngfor-doesnt-update-data-with-p
 
 
 X33) Only display list of users and messages if logged in
-34) clicking a user should allow you to send a message to a particular user (both in user list and message)
+X34) clicking a user should allow you to send a message to a particular user (both in user list and message)
 X35) add send message menu option
 36) search pop up
 X37) Add pagination
@@ -85,7 +85,8 @@ X37) Add pagination
 
 39) Option for user's to receive email updates
 
-40) Don't show current user in list
+X40) Don't show current user in list
 
-41) Hide send as admin if sending message for user
-42) Show username that you are sending message to on screen, button and confirm
+X41) Hide send as admin if sending message for user
+X42) Show username that you are sending message to on screen, button and confirm
+43) Sort out location (works second time)

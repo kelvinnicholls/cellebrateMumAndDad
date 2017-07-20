@@ -2,6 +2,7 @@
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
+  <h4 class="col-sm-5 offset-sm-2">{{heading}}</h4>
   <div class="form-group row" [ngClass]="{
         'has-danger': myForm.get('message').invalid && (myForm.get('message').dirty || myForm.get('message').touched),
         'has-success': myForm.get('message').valid && (myForm.get('message').dirty || myForm.get('message').touched)
@@ -13,7 +14,7 @@
         formControlName="message"></textarea>
       <small *ngIf="myForm.get('message').invalid" class="form-text text-muted">Enter the message to be sent.</small>
     </div>
-    <div *ngIf="chatService.authUserService.isAdminUser()" class="col-sm-1">
+    <div *ngIf="chatService.authUserService.isAdminUser() && !socketId" class="col-sm-1">
       <label class="form-check-label">
         <input class="form-check-input" type="checkbox" name="sendAsAdmin" [(ngModel)]="sendAsAdmin" [ngModelOptions]="{standalone: true}">
         Send as "Admin"?

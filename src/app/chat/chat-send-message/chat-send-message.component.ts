@@ -6,6 +6,7 @@ import { Dialog } from "../../dialog/dialog.model";
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ChatService } from "../chat.service";
+import { ChatUser } from "../chat-user.model";
 import { AppService } from "../../app.service";
 import { Consts } from "../../shared/consts";
 
@@ -19,6 +20,9 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
   paramsSubscription: Subscription;
   public sendAsAdmin: boolean = false;
   public socketId: any;
+
+  public heading = "";
+  private chatUser: ChatUser = null;
 
   constructor(private chatService: ChatService, private dialogService: DialogService, private appService: AppService, private router: Router
     , private route: ActivatedRoute) {
@@ -38,7 +42,12 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
           });
         };
       });
-    this.dialogService.showDialog("Warning", "Do you really wish to send this message?", "Yes", "No", retDialogSub);
+
+    let message = "Do you really wish to send this message to all logged in users?";
+    if (this.chatUser && this.chatUser.name) {
+      message = "Do you really wish to send this message to " + this.chatUser.name + "?";
+    }
+    this.dialogService.showDialog("Warning", message, "Yes", "No", retDialogSub);
   }
 
   onSendLocation() {
@@ -47,13 +56,18 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
     retDialogSub.subscribe(
       (buttonPressed: DialogRetEnum) => {
         if (buttonPressed === DialogRetEnum.ButtonOne) {
-          this.chatService.createLocationMessage(() => {
+          this.chatService.createLocationMessage(this.socketId, () => {
             this.appService.showToast(Consts.SUCCESS, "Location sent.");
             this.myForm.reset();
           });
         }
       });
-    this.dialogService.showDialog("Warning", "Do you really wish to send your location?", "Yes", "No", retDialogSub);
+
+    let message = "Do you really wish to send your location to all logged in users?";
+    if (this.chatUser && this.chatUser.name) {
+      message = "Do you really wish to send your location to " + this.chatUser.name + "?";
+    }
+    this.dialogService.showDialog("Warning", message, "Yes", "No", retDialogSub);
   }
 
 
@@ -68,6 +82,14 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
     this.paramsSubscription = this.route.params.subscribe(
       (queryParams: Params) => {
         this.socketId = queryParams['socketId'];
+        this.chatUser = this.chatService.findChatUser(this.socketId);
+        if (this.chatUser && this.chatUser.name && this.socketId) {
+          this.heading = "Send message to user " + this.chatUser.name;
+
+        } else {
+          this.heading = "Send message to all users";
+        }
+
       }
     );
   }
