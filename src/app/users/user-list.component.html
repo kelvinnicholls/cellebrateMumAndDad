@@ -9,3 +9,8 @@
   <pagination [totalItems]="bigTotalItems" [(ngModel)]="bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
     [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
 </div>
+
+
+<div class="row col col-sm-4 offset-sm-5">
+  <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+</div>

@@ -2,12 +2,16 @@ import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
 import { Subject } from 'rxjs/Subject';
 import { Router } from "@angular/router";
+import * as moment from 'moment';
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { Consts } from "../shared/consts";
 import { User } from "./user.model";
+import { AppService } from "../app.service";
 import { ErrorService } from "../errors/error.service";
-import * as moment from 'moment';
+import { SearchService } from "../shared/search/search.service";
+import { SearchRetEnum } from "../shared/search/search-ret.enum";
+
 
 @Injectable()
 export class UserService {
@@ -16,7 +20,7 @@ export class UserService {
     showUserInput = new EventEmitter<Boolean>();
     clearUserInput = new EventEmitter<Boolean>();
     selectedUserIndex = new EventEmitter<Number>();
-    constructor(private http: Http, private errorService: ErrorService, private router: Router) { }
+    constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
 
     usersChanged = new Subject<User[]>();
 
@@ -264,4 +268,23 @@ export class UserService {
         });
     }
 
+    search() {
+        let retSearchSub = new EventEmitter<SearchRetEnum>();
+
+        retSearchSub.subscribe(
+            (buttonPressed: SearchRetEnum) => {
+                if (buttonPressed === SearchRetEnum.ButtonOne) {
+                    this.getUsers()
+                        .subscribe(
+                        (users: User[]) => {
+                            this.users = users;
+                            this.appService.showToast(Consts.SUCCESS, "User list updated.");
+                        }
+                        );
+                } else {
+                    this.appService.showToast(Consts.WARNING, "Search cancelled.");
+                }
+            });
+        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub);
+    }
 }

@@ -27,12 +27,14 @@ import { UserListComponent } from "./users/user-list.component";
 import { SignInComponent } from "./auth/sign-in.component";
 import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
+import { SearchComponent } from "./shared/search/search.component";
 import { GetEncryptedPasswordComponent } from "./auth/get-encrypted-password.component";
 import { AuthService } from "./auth/auth.service";
 import { AuthUserService } from "./auth/auth-user.service";
 import { UserService } from "./users/user.service";
 import { ErrorService } from "./errors/error.service";
 import { DialogService } from "./dialog/dialog.service";
+import { SearchService } from "./shared/search/search.service";
 import { ChatService } from "./chat/chat.service";
 import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
 import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messages-list.component";
@@ -71,6 +73,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         ChatMessagesListComponent,
         ChatMessageComponent,
         ChatSendMessageComponent,
+        SearchComponent,
         ReversePipe
     ],
     imports: [
@@ -85,7 +88,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         PaginationModule.forRoot(),
         NgPipesModule
     ],
-    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService,AuthUserService],
+    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService,AuthUserService,SearchService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
