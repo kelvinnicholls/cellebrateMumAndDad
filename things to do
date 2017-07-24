@@ -90,4 +90,14 @@ X40) Don't show current user in list
 X41) Hide send as admin if sending message for user
 X42) Show username that you are sending message to on screen, button and confirm
 43) Sort out location (works second time)
-45) Add clear messages button
+44) Add clear messages button
+45) Check in to github
+46) Add picture above messages
+47) Add sockets to indicate when a record is updated/deleted/inserted + send chat message to other users indicating change and link to record
+48) Make sure that allUsers as well as users is updated when local updates are made 
+49) Ass clear button to search
+50) Add show/hide search criteria
+51) defaults for search criteria
+52) Add option to delete a message
+53) Add option to clear messages
+54) Add option to clear search (Hover shows search criteria)

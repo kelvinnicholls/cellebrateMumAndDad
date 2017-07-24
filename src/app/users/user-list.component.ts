@@ -54,7 +54,10 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     onSearch() {
         this.userService.search();
+    }
 
+    onClearSearch() {
+        this.userService.clearSearch();
     }
 
     ngOnInit() {

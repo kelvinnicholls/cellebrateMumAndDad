@@ -211,6 +211,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
             }
         );
 
+    
         this.myForm = new FormGroup({
             name: new FormControl(null, Validators.required,
                 this.forbiddenNames),

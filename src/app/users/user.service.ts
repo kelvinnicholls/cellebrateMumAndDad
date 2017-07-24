@@ -11,11 +11,14 @@ import { AppService } from "../app.service";
 import { ErrorService } from "../errors/error.service";
 import { SearchService } from "../shared/search/search.service";
 import { SearchRetEnum } from "../shared/search/search-ret.enum";
-
+import { SearchRet } from "../shared/search/search-ret.model";
+import { Search } from "../shared/search/search.model";
+import { SearchTypeEnum } from "../shared/search/search-type.enum";
 
 @Injectable()
 export class UserService {
     private users: User[] = [];
+    private allUsers: User[] = [];
     userIsEdit = new EventEmitter<User>();
     showUserInput = new EventEmitter<Boolean>();
     clearUserInput = new EventEmitter<Boolean>();
@@ -25,6 +28,8 @@ export class UserService {
     usersChanged = new Subject<User[]>();
 
     showUserEdit: Boolean = false;
+
+    public searchRet: SearchRet;
 
     showUserInputForm(): Boolean {
         return this.showUserEdit;
@@ -104,7 +109,8 @@ export class UserService {
                         null,
                         location));
                 }
-                this.users = transformedUsers;
+                this.allUsers = transformedUsers;
+                this.users = this.allUsers.slice(0);
                 return transformedUsers;
             })
             .catch((error: Response) => {
@@ -268,23 +274,36 @@ export class UserService {
         });
     }
 
+    clearSearch() {
+        this.users = this.allUsers;
+        this.searchRet = null;
+        this.usersChanged.next(this.users);
+    }
+
+    showSearchCriteria() {
+        let retVal: String = "";
+        if (this.searchRet) {
+            retVal = this.searchRet.getSearchCriteria();
+        };
+        return retVal;
+    }
+    
     search() {
-        let retSearchSub = new EventEmitter<SearchRetEnum>();
+        let retSearchSub = new EventEmitter<SearchRet>();
 
         retSearchSub.subscribe(
-            (buttonPressed: SearchRetEnum) => {
+            (searchRet: SearchRet) => {
+
+                let buttonPressed = searchRet.searchRetEnum;
                 if (buttonPressed === SearchRetEnum.ButtonOne) {
-                    this.getUsers()
-                        .subscribe(
-                        (users: User[]) => {
-                            this.users = users;
-                            this.appService.showToast(Consts.SUCCESS, "User list updated.");
-                        }
-                        );
+                    this.users = Search.restrict(this.allUsers, searchRet);
+                    this.searchRet = searchRet;
+                    this.usersChanged.next(this.users);
+                    this.appService.showToast(Consts.SUCCESS, "User list updated.");
                 } else {
                     this.appService.showToast(Consts.WARNING, "Search cancelled.");
                 }
             });
-        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub);
+        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub, SearchTypeEnum.Users);
     }
 }

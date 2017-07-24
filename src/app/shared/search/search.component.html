@@ -1,18 +1,74 @@
 <div class="backdrop" [ngStyle]="{'display': display}"></div>
 <div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">{{ search?.title }}</h4>
-                <button type="button" class="close" aria-label="Close" (click)="onClose()"><span aria-hidden="true">&times;</span></button>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ search?.title }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="onClose()"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          <p>{{ search?.message }}</p>
+          <div class="form-group row col col-sm-12">
+            <label placement="bottom" ngbTooltip="Should the search match on case?" class="custom-control custom-checkbox offset-sm-4">
+              <input checked="" type="checkbox" class="custom-control-input form-control checkbox-inline" id="caseSensitive" formControlName="caseSensitive">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Case Sensitive</span>
+            </label>
+          </div>
+
+          <div class="form-group row col col-sm-12">
+            <label placement="bottom" ngbTooltip="Should the search match all search fields?" class="custom-control custom-checkbox offset-sm-4">
+              <input checked="" type="checkbox" class="custom-control-input form-control checkbox-inline" id="matchAll" formControlName="matchAll">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Match All</span>
+            </label>
+          </div>
+
+          <div class="form-group row col col-sm-12">
+            <label placement="bottom" ngbTooltip="What should the matching criteria be?" for="matchCriteria" class="col-sm-4 col-form-label">Match Criteria</label>
+            <div id="matchCriteria">
+              <label placement="bottom" ngbTooltip="Find where entered search criteria is at the begining of any matching text." class="custom-control custom-radio">
+                <input  checked="checked" id="startsWith" name="matchCriteria" type="radio" value="3" class="custom-control-input" formControlName="matchCriteria">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Starts With</span>
+              </label>
+              <label placement="bottom" ngbTooltip="Find where entered search criteria matches the text exactly." class="custom-control custom-radio">
+                <input  id="exact" name="matchCriteria" type="radio" value="1" class="custom-control-input" formControlName="matchCriteria">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Exact</span>
+              </label>
+              <label placement="bottom" ngbTooltip="Find where entered search criteria is contained within the matching text." class="custom-control custom-radio">
+                <input id="contains" name="matchCriteria" type="radio" value="2" class="custom-control-input" formControlName="matchCriteria">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Contains</span>
+              </label>
             </div>
-            <div class="modal-body">
-                <p>{{ search?.message }}</p>
+          </div>
+
+          <div class="form-group row col col-sm-12">
+            <label for="email" class="col-sm-4 col-form-label">Email address</label>
+            <div class="col-sm-8">
+              <input placement="bottom" ngbTooltip="The user's Email address" type="text" class="form-control" id="email" placeholder="Email address"
+                formControlName="email">
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" (click)="onButtonOne()">{{ search?.buttonOneTitle }}</button>
-                <button type="button" class="btn btn-warning" (click)="onButtonTwo()">{{ search?.buttonTwoTitle }}</button>
+          </div>
+
+          <div class="form-group row col col-sm-12">
+            <label for="name" class="col-sm-4 col-form-label">Name</label>
+            <div class="col-sm-8">
+              <input placement="bottom" ngbTooltip="The user's Name" type="text" class="form-control" id="name" placeholder="Name" formControlName="name">
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" type="submit" [disabled]="!isFormValid()">{{ search?.buttonOneTitle }}</button>
+          <button type="button" class="btn btn-warning" (click)="onButtonTwo()">{{ search?.buttonTwoTitle }}</button>
+        </div>
+      </form>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

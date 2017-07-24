@@ -1,5 +1,6 @@
 import { EventEmitter } from "@angular/core";
-import { SearchRetEnum } from "./search-ret.enum";
+import { SearchRet } from "./search-ret.model";
+import { SearchTypeEnum } from "./search-type.enum";
 import { Search } from "./search.model";
 
 export class SearchService {
@@ -7,9 +8,9 @@ export class SearchService {
 
     showSearchSub = new EventEmitter<Search>();
 
-    showSearch(title: string, message: string, buttonOneTitle: string, buttonTwoTitle: string, retSearchSub: EventEmitter<SearchRetEnum>) {
+    showSearch(title: string, message: string, buttonOneTitle: string, buttonTwoTitle: string, retSearchSub: EventEmitter<SearchRet>, searchType : SearchTypeEnum) {
 
-        const search = new Search(title, message, buttonOneTitle, buttonTwoTitle, retSearchSub);
+        const search = new Search(title, message, buttonOneTitle, buttonTwoTitle, retSearchSub,searchType);
         this.showSearchSub.emit(search);
     }
 }

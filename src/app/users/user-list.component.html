@@ -5,12 +5,23 @@
   </ul>
 </div>
 
+
+
+
 <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
   <pagination [totalItems]="bigTotalItems" [(ngModel)]="bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
     [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
 </div>
 
+<ng-template #popContent> <span [innerHTML]="userService.showSearchCriteria()"></span></ng-template>
 
-<div class="row col col-sm-4 offset-sm-5">
+<div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-4" placement="left" [ngbPopover]="popContent" popoverTitle="Existing Search Criteria">
+  <button  placement="bottom" ngbTooltip="Press to clear search. Click space between buttons to toggle display of search criteria." type="button" class="btn btn-md btn-primary" (click)="onClearSearch()">Clear Search</button>
+ <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+</div>
+
+<div *ngIf="!userService.searchRet" class="row col col-sm-4 offset-sm-5">
   <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
 </div>
+
+
