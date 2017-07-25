@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
+import * as moment from 'moment';
 import { EventEmitter } from "@angular/core";
 import { Search } from "./search.model";
 import { SearchRetEnum } from "./search-ret.enum";
@@ -68,7 +69,7 @@ export class SearchComponent implements OnInit {
     };
 
     if (this.isDirty(this.myForm.value.relationship, 'relationship')) {
-      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array'  });
+      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array' });
     };
 
 
@@ -95,6 +96,9 @@ export class SearchComponent implements OnInit {
   isFormValid() {
     return this.myForm.valid && this.myForm.dirty;
   }
+
+//https://blog.johanneshoppe.de/2016/10/angular-2-how-to-use-date-input-controls-with-angular-forms/
+
   ngOnInit() {
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
@@ -105,7 +109,9 @@ export class SearchComponent implements OnInit {
       twitterId: new FormControl(null, null),
       facebookId: new FormControl(null, null),
       adminUser: new FormControl(null, null),
-      relationship: new FormControl(null, null)
+      relationship: new FormControl(null, null),
+      from_date_dob: new FormControl('1970-01-01', null),
+      to_date_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
     });
 
     this.showSearchSub = this.searchService.showSearchSub
@@ -124,7 +130,9 @@ export class SearchComponent implements OnInit {
               twitterId: new FormControl(null, null),
               facebookId: new FormControl(null, null),
               adminUser: new FormControl(null, null),
-              relationship: new FormControl(null, null)
+              relationship: new FormControl(null, null),
+              from_date_dob: new FormControl('1970-01-01', null),
+              to_date_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
             });
             break;
           case SearchTypeEnum.Photos:
