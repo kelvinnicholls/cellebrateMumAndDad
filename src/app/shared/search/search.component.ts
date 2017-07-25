@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 import { EventEmitter } from "@angular/core";
 import { Search } from "./search.model";
 import { SearchRetEnum } from "./search-ret.enum";
@@ -22,7 +22,7 @@ export class SearchComponent implements OnInit {
   private retSearchSub: EventEmitter<SearchRet>;
   private searchRet: SearchRet = new SearchRet();
 
-  constructor(private searchService: SearchService) { }
+  constructor(private searchService: SearchService, private formBuilder: FormBuilder) { }
 
   onClose() {
     this.display = 'none';
@@ -38,18 +38,52 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  isDirty(val: string, name: string) {
+    return (val && this.myForm.controls[name] && this.myForm.controls[name].dirty);
+  }
+
+
   onSubmit() {
     this.display = 'none';
-    this.searchRet.searchElements.push({ name: 'email', value: this.populate(this.myForm.value.email) });
-    this.searchRet.searchElements.push({ name: 'name', value: this.populate(this.myForm.value.name) });
+
+    if (this.isDirty(this.myForm.value.email, 'email')) {
+      this.searchRet.searchElements.push({ name: 'email', value: this.populate(this.myForm.value.email) });
+    };
+
+    if (this.isDirty(this.myForm.value.name, 'name')) {
+      this.searchRet.searchElements.push({ name: 'name', value: this.populate(this.myForm.value.name) });
+    };
+
+
+    if (this.isDirty(this.myForm.value.adminUser, 'adminUser')) {
+      this.searchRet.searchElements.push({ name: 'adminUser', value: this.populate(this.myForm.value.adminUser), type: 'y_n_both' });
+    };
+
+    if (this.isDirty(this.myForm.value.twitterId, 'twitterId')) {
+      this.searchRet.searchElements.push({ name: 'twitterId', value: this.populate(this.myForm.value.twitterId) });
+    };
+
+    if (this.isDirty(this.myForm.value.facebookId, 'facebookId')) {
+      this.searchRet.searchElements.push({ name: 'facebookId', value: this.populate(this.myForm.value.facebookId) });
+    };
+
+    if (this.isDirty(this.myForm.value.relationship, 'relationship')) {
+      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array'  });
+    };
+
+
     this.searchRet.caseSensitive = this.populate(this.myForm.value.caseSensitive);
     this.searchRet.matchAll = this.populate(this.myForm.value.matchAll);
-    this.searchRet.matchCriteria = this.populate(this.myForm.value.matchCriteria);
+    this.searchRet.matchCriteria = this.populate(this.myForm.value.matchCriteria * 1);
 
 
     this.searchRet.searchRetEnum = SearchRetEnum.ButtonOne;
     // add search criteria to searchRet, this may need to be onSubmit
     this.search.retSearchSub.emit(this.searchRet);
+  }
+
+  onCaseSensitive(event) {
+    console.log(event);
   }
 
   onButtonTwo() {
@@ -62,12 +96,16 @@ export class SearchComponent implements OnInit {
     return this.myForm.valid && this.myForm.dirty;
   }
   ngOnInit() {
-    this.myForm = new FormGroup({
+    this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
       matchAll: new FormControl(null, null),
-      matchCriteria: new FormControl(null, null),
+      matchCriteria: new FormControl('Starts With', null),
       email: new FormControl(null, null),
-      name: new FormControl(null, null)
+      name: new FormControl(null, null),
+      twitterId: new FormControl(null, null),
+      facebookId: new FormControl(null, null),
+      adminUser: new FormControl(null, null),
+      relationship: new FormControl(null, null)
     });
 
     this.showSearchSub = this.searchService.showSearchSub
@@ -77,39 +115,21 @@ export class SearchComponent implements OnInit {
         this.display = 'block';
         switch (this.search.searchType) {
           case SearchTypeEnum.Users:
-            this.myForm = new FormGroup({
+            this.myForm = this.formBuilder.group({
               caseSensitive: new FormControl(null, null),
               matchAll: new FormControl(null, null),
-              matchCriteria: new FormControl(null, null),
+              matchCriteria: new FormControl('Starts With', null),
               email: new FormControl(null, null),
-              name: new FormControl(null, null)
-              // name: new FormControl(null, null),
-              // adminUser: new FormControl(null, null),
-              // relationship: new FormControl(null, null),
-              // email: new FormControl(null, null),
-              // password: new FormControl(null, null),
-              // dob: new FormControl(null, null),
-              // twitterId: new FormControl(null, null),
-              // facebookId: new FormControl(null, null)
+              name: new FormControl(null, null),
+              twitterId: new FormControl(null, null),
+              facebookId: new FormControl(null, null),
+              adminUser: new FormControl(null, null),
+              relationship: new FormControl(null, null)
             });
             break;
           case SearchTypeEnum.Photos:
-            this.myForm = new FormGroup({
-              caseSensitive: new FormControl(null, null),
-              matchAll: new FormControl(null, null),
-              matchCriteria: new FormControl(null, null),
-              email: new FormControl(null, null),
-              name: new FormControl(null, null)
-            });
             break;
           case SearchTypeEnum.Memories:
-            this.myForm = new FormGroup({
-              caseSensitive: new FormControl(null, null),
-              matchAll: new FormControl(null, null),
-              matchCriteria: new FormControl(null, null),
-              email: new FormControl(null, null),
-              name: new FormControl(null, null)
-            });
             break;
 
         }

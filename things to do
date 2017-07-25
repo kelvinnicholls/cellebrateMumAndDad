@@ -95,9 +95,11 @@ X42) Show username that you are sending message to on screen, button and confirm
 46) Add picture above messages
 47) Add sockets to indicate when a record is updated/deleted/inserted + send chat message to other users indicating change and link to record
 48) Make sure that allUsers as well as users is updated when local updates are made 
-49) Ass clear button to search
+X49) Add clear button to search
 50) Add show/hide search criteria
 51) defaults for search criteria
 52) Add option to delete a message
 53) Add option to clear messages
-54) Add option to clear search (Hover shows search criteria)
+X54) Add option to clear search (Hover shows search criteria)
+55) Highlight fields that have search criteria
+56) prompts in bold (strong)
