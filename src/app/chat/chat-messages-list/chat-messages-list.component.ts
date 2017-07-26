@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ChatService } from "../chat.service";
-
+import { DialogService } from "../../dialog/dialog.service";
+import { DialogRetEnum } from "../../dialog/dialog-ret.enum";
+import { Dialog } from "../../dialog/dialog.model";
 
 @Component({
   selector: 'app-chat-messages-list',
@@ -9,9 +11,22 @@ import { ChatService } from "../chat.service";
 })
 export class ChatMessagesListComponent implements OnInit {
 
-  constructor(private chatService: ChatService) { }
+  constructor(private chatService: ChatService, private dialogService: DialogService) { }
 
   ngOnInit() {
   }
+
+  onClearMessages() {
+    let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+    retDialogSub.subscribe(
+      (buttonPressed: DialogRetEnum) => {
+        if (buttonPressed === DialogRetEnum.ButtonOne) {
+          this.chatService.clearMessages();
+        }
+      });
+    this.dialogService.showDialog("Warning", "Do you really wish to clear all chat messages?", "Yes", "No", retDialogSub);
+  }
+
 
 }

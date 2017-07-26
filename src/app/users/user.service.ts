@@ -31,6 +31,7 @@ export class UserService {
 
     public searchRet: SearchRet;
 
+
     showUserInputForm(): Boolean {
         return this.showUserEdit;
     }

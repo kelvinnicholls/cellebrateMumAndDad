@@ -23,6 +23,31 @@ export class SearchComponent implements OnInit {
   private retSearchSub: EventEmitter<SearchRet>;
   private searchRet: SearchRet = new SearchRet();
 
+  private hideMatchCriteriaText: String = "Hide Match Criteria";
+  public showMatchCriteriaText: String = "Show Match Criteria";
+  public toggleShowHideMatchCriteriaText = this.showMatchCriteriaText;
+
+  toggleShowHideMatchCriteria() {
+    if (this.toggleShowHideMatchCriteriaText === this.hideMatchCriteriaText) {
+      this.toggleShowHideMatchCriteriaText = this.showMatchCriteriaText;
+    } else {
+      this.toggleShowHideMatchCriteriaText = this.hideMatchCriteriaText;
+    }
+  }
+
+  private hideSearchFieldsText: String = "Hide Search Fields";
+  public showSearchFieldsText: String = "Show Search Fields";
+  public toggleShowHideSearchFieldsText = this.hideSearchFieldsText;
+
+  toggleShowHideSearchFields() {
+    if (this.toggleShowHideSearchFieldsText === this.hideSearchFieldsText) {
+      this.toggleShowHideSearchFieldsText = this.showSearchFieldsText;
+    } else {
+      this.toggleShowHideSearchFieldsText = this.hideSearchFieldsText;
+    }
+  }
+
+
   constructor(private searchService: SearchService, private formBuilder: FormBuilder) { }
 
   onClose() {
@@ -40,7 +65,7 @@ export class SearchComponent implements OnInit {
   }
 
   isDirty(val: string, name: string) {
-    return (val && this.myForm.controls[name] && this.myForm.controls[name].dirty);
+    return (val && val.length > 0 && this.myForm.controls[name] && this.myForm.controls[name].dirty);
   }
 
 
@@ -72,6 +97,13 @@ export class SearchComponent implements OnInit {
       this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array' });
     };
 
+    if (this.isDirty(this.myForm.value.from_dob, 'from_dob')) {
+      this.searchRet.searchElements.push({ name: 'from_dob', value: this.populate(this.myForm.value.from_dob), type: 'from' });
+    };
+
+    if (this.isDirty(this.myForm.value.to_dob, 'to_dob')) {
+      this.searchRet.searchElements.push({ name: 'to_dob', value: this.populate(this.myForm.value.to_dob), type: 'to' });
+    };
 
     this.searchRet.caseSensitive = this.populate(this.myForm.value.caseSensitive);
     this.searchRet.matchAll = this.populate(this.myForm.value.matchAll);
@@ -97,12 +129,12 @@ export class SearchComponent implements OnInit {
     return this.myForm.valid && this.myForm.dirty;
   }
 
-//https://blog.johanneshoppe.de/2016/10/angular-2-how-to-use-date-input-controls-with-angular-forms/
+  //https://blog.johanneshoppe.de/2016/10/angular-2-how-to-use-date-input-controls-with-angular-forms/
 
   ngOnInit() {
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
-      matchAll: new FormControl(null, null),
+      matchAll: new FormControl('true', null),
       matchCriteria: new FormControl('Starts With', null),
       email: new FormControl(null, null),
       name: new FormControl(null, null),
@@ -110,8 +142,8 @@ export class SearchComponent implements OnInit {
       facebookId: new FormControl(null, null),
       adminUser: new FormControl(null, null),
       relationship: new FormControl(null, null),
-      from_date_dob: new FormControl('1970-01-01', null),
-      to_date_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
+      from_dob: new FormControl('1900-01-01', null),
+      to_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
     });
 
     this.showSearchSub = this.searchService.showSearchSub
@@ -123,7 +155,7 @@ export class SearchComponent implements OnInit {
           case SearchTypeEnum.Users:
             this.myForm = this.formBuilder.group({
               caseSensitive: new FormControl(null, null),
-              matchAll: new FormControl(null, null),
+              matchAll: new FormControl('true', null),
               matchCriteria: new FormControl('Starts With', null),
               email: new FormControl(null, null),
               name: new FormControl(null, null),
@@ -131,8 +163,8 @@ export class SearchComponent implements OnInit {
               facebookId: new FormControl(null, null),
               adminUser: new FormControl(null, null),
               relationship: new FormControl(null, null),
-              from_date_dob: new FormControl('1970-01-01', null),
-              to_date_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
+              from_dob: new FormControl('1900-01-01', null),
+              to_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
             });
             break;
           case SearchTypeEnum.Photos:
@@ -141,14 +173,10 @@ export class SearchComponent implements OnInit {
             break;
 
         }
-
-
-
-
-
         this.searchRet = new SearchRet();
       }
       );
+    
   }
 
   destroy(sub: any) {

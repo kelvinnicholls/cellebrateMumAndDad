@@ -1,4 +1,5 @@
 import { EventEmitter } from "@angular/core";
+import * as moment from 'moment';
 import { SearchRetEnum } from "./search-ret.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
 
@@ -11,15 +12,19 @@ export class SearchRet {
 
     public getSearchCriteria() {
         let retVal: string = "";
-        retVal += this._caseSensitive ? "Case <strong>sensitive</strong>" : "Case <strong>insensitive</strong>";
+        retVal += this._caseSensitive ? "Case: <strong>sensitive</strong>" : "Case: <strong>insensitive</strong>";
         retVal += SearchRet.lineBreak;
-        retVal += this._matchAll ? "Match <strong>all fields</strong>" : "Match <strong>any field</strong>";
+        retVal += this._matchAll ? "Match: <strong>all fields</strong>" : "Match <strong>any field</strong>";
         retVal += SearchRet.lineBreak;
         retVal += "Match Criteria: <strong>" + this._matchCriteria.toString() + "</strong>";
         retVal += SearchRet.lineBreak;
         this.searchElements.forEach((element) => {
             if (element.value) {
-                retVal += element.name + " : <strong>'" + element.value + "'</strong>";
+                let value: String = element.value;
+                if (element.type === 'from' || (element.type === 'to') {
+                    value = moment(element.value, 'YYYY-MM-DD').format('DD-MM-YYYY');
+                };
+                retVal += element.name.replace(/_/g,' ') + " : <strong>'" + value + "'</strong>";
                 retVal += SearchRet.lineBreak;
             };
         });

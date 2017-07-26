@@ -5,13 +5,13 @@ body {
 
 a {
   color: #00B7FF;
+  cursor: pointer;
 }
 
 button {
   cursor:pointer;
   margin: 10px;
 }
-
 
 /*
  * Blog name and description

@@ -1,6 +1,9 @@
 <div *ngIf="chatService.chatUserMessages && chatService.chatUserMessages.length > 0">
   <h2 class="blog-post-title">Messages</h2>
   <br>
+  <a placement="bottom" ngbTooltip="Click to clear chat messages list." target="_blank" href="javascript:void(0)" (click)="onClearMessages()">Clear Messages</a>
+  <br>
+  <br>
   <div id="messages-scroll">
     <app-chat-message *ngFor="let chatMessage of chatService.chatUserMessages | reverseArray" [index]="i" [chatMessage]="chatMessage">
     </app-chat-message>

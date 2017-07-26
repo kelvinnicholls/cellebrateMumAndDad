@@ -15,7 +15,7 @@ X7) errors should be returned to screen.
 
 X8) add some bootstrap css to error screen
 
-9) add toasts elsewhere
+X9) add toasts elsewhere
 
 X10) add password strength indicator
 https://blog.brunoscopelliti.com/angularjs-directive-to-test-the-strength-of-a-password/
@@ -32,7 +32,7 @@ X14) Confirm delete
 
 X15) Jumbotron on page not found
 
-X16) upload files to db
+16) upload files to db
 
 **Still need to implement getting photos from facebook
 
@@ -58,7 +58,7 @@ X22) Use events to trigger toast after navigation.
 
 X24) Add percentage complete for picture upload (decided against)
 
-25) Add socket messaging
+X25) Add socket messaging
 
 X26) favicon
 
@@ -79,7 +79,7 @@ see https://stackoverflow.com/questions/34456430/ngfor-doesnt-update-data-with-p
 X33) Only display list of users and messages if logged in
 X34) clicking a user should allow you to send a message to a particular user (both in user list and message)
 X35) add send message menu option
-36) search pop up
+X36) search pop up
 X37) Add pagination
 38) Get This email is already in use!  for kgn1@gmail.com on firefox but not chrome
 
@@ -90,16 +90,16 @@ X40) Don't show current user in list
 X41) Hide send as admin if sending message for user
 X42) Show username that you are sending message to on screen, button and confirm
 43) Sort out location (works second time)
-44) Add clear messages button
+X44) Add clear messages button
 45) Check in to github
 46) Add picture above messages
 47) Add sockets to indicate when a record is updated/deleted/inserted + send chat message to other users indicating change and link to record
 48) Make sure that allUsers as well as users is updated when local updates are made 
 X49) Add clear button to search
-50) Add show/hide search criteria
-51) defaults for search criteria
-52) Add option to delete a message
-53) Add option to clear messages
+X50) Add show/hide search criteria
+X51) defaults for search criteria
+X52) Add option to delete a message
+X53) Add option to clear messages
 X54) Add option to clear search (Hover shows search criteria)
-55) Highlight fields that have search criteria
-56) prompts in bold (strong)
+X55) Highlight fields that have search criteria
+X56) prompts in bold (strong)

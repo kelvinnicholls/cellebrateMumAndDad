@@ -25,6 +25,17 @@ export class UserListComponent implements OnInit, OnDestroy {
     private eventItemsPerPage: number = 5;
     private eventPage: number = 1;
 
+    private hideSearchCriteriaText: String = "Hide Search Criteria";
+    public showSearchCriteriaText: String = "Show Search Criteria";
+    public toggleShowHideSearchCriteriaText = this.showSearchCriteriaText;
+
+    toggleShowHideSearchCriteria() {
+        if (this.toggleShowHideSearchCriteriaText === this.hideSearchCriteriaText) {
+            this.toggleShowHideSearchCriteriaText = this.showSearchCriteriaText;
+        } else {
+            this.toggleShowHideSearchCriteriaText = this.hideSearchCriteriaText;
+        }
+    }
 
     private setUsersIndex() {
         let userListComponent = this;

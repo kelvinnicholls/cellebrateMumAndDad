@@ -1,4 +1,5 @@
 import { EventEmitter } from "@angular/core";
+import * as moment from 'moment';
 import { SearchRet } from "./search-ret.model";
 import { SearchTypeEnum } from "./search-type.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
@@ -21,8 +22,14 @@ export class Search {
     let nonMatchingElementFound: Boolean = false;
     searchRet.searchElements.forEach((searchElement) => {
       if (searchElement.value) {
-        if (arrayElement[searchElement.name]) {
-          let attributeValue = arrayElement[searchElement.name];
+        let elementName = searchElement.name;
+        if (searchElement.type === 'from') {
+          elementName = String(searchElement.name).substr('from_'.length);
+        } else if (searchElement.type === 'to') {
+          elementName = String(searchElement.name).substr('to_'.length);
+        };
+        if (arrayElement[elementName]) {
+          let attributeValue = arrayElement[elementName];
           switch (typeof attributeValue) {
             case 'string':
               if (searchElement.type === 'y_n_both') {
@@ -47,6 +54,18 @@ export class Search {
                   };
                 });
                 nonMatchingElementFound = !matchingElementFound;
+              } else if (searchElement.type === 'from') {
+                if (moment(searchElement.value, 'YYYY-MM-DD') <= moment(attributeValue, 'YYYY-MM-DD')) {
+                  matchingElementFound = true;
+                } else {
+                  nonMatchingElementFound = true;
+                }
+              } else if (searchElement.type === 'to') {
+                if (moment(searchElement.value, 'YYYY-MM-DD') >= moment(attributeValue, 'YYYY-MM-DD')) {
+                  matchingElementFound = true;
+                } else {
+                  nonMatchingElementFound = true;
+                }
               } else {
                 switch (searchRet.matchCriteria) {
                   case SearchMatchCriteriaEnum.Contains:

@@ -18,12 +18,20 @@ export class ChatService {
 
     location = { latitude: 0, longitude: 0 };
 
+    clearMessages() {
+        this.chatUserMessages = [];
+    }
+
+    removeMessage(index) {
+        this.chatUserMessages.splice(index, 1);
+    };
+
     setPosition(position) {
         this.location = position.coords;
         console.log(position.coords);
     }
 
-    findChatUser(socketId: any) : ChatUser {
+    findChatUser(socketId: any): ChatUser {
         return this.chatUsers.find((chatUser: ChatUser) => {
             return chatUser.id === socketId;
         });
@@ -103,13 +111,13 @@ export class ChatService {
         this.socket.emit('createMessage', this.generateMessage(text, sendAsAdmin, socketId), callback)
     }
 
-    public createLocationMessage(socketId: any,callback) {
+    public createLocationMessage(socketId: any, callback) {
         navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
 
         this.socket.emit('createLocationMessage', {
             latitude: this.location.latitude,
             longitude: this.location.longitude,
-            socketId : socketId
+            socketId: socketId
         }, callback);
     }
 

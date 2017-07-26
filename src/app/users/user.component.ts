@@ -22,7 +22,6 @@ import { Dialog } from "../dialog/dialog.model";
             font-size: 12px;
             color : #0275d8;
         }
-        a { cursor: pointer;}
         .list-group-item.active {
             background-color: #eceeef;
         }
