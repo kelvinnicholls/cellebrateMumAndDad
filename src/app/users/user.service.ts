@@ -19,26 +19,17 @@ import { SearchTypeEnum } from "../shared/search/search-type.enum";
 export class UserService {
     private users: User[] = [];
     private allUsers: User[] = [];
-    userIsEdit = new EventEmitter<User>();
-    showUserInput = new EventEmitter<Boolean>();
-    clearUserInput = new EventEmitter<Boolean>();
-    selectedUserIndex = new EventEmitter<Number>();
     constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
 
     usersChanged = new Subject<User[]>();
 
-    showUserEdit: Boolean = false;
 
     public searchRet: SearchRet;
 
+    findUser(index: any): User {
+        return this.users[index];
+    }
 
-    showUserInputForm(): Boolean {
-        return this.showUserEdit;
-    }
-    createUser() {
-        this.showUserInput.emit(true);
-        this.clearUserInput.emit(true);
-    }
 
 
     addUser(user: User) {
@@ -47,9 +38,7 @@ export class UserService {
         if (user.profilePicData) {
             fd.append('file', user.profilePicData, user.profilePicData.name);
         };
-        //else {
-        //     headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
-        // }
+
         user.profilePicData = null;
         const userJsonString = JSON.stringify(user);
         fd.append('user', userJsonString);
@@ -152,14 +141,6 @@ export class UserService {
             });
     }
 
-    editUser(user: User) {
-        this.showUserInput.emit(true);
-        this.userIsEdit.emit(user);
-    }
-
-    selectUser(index: Number) {
-        this.selectedUserIndex.emit(index);
-    }
 
     updateUser(user: User) {
         var fd = new FormData();
@@ -167,15 +148,11 @@ export class UserService {
         if (user.profilePicData) {
             fd.append('file', user.profilePicData, user.profilePicData.name);
         };
-        //else {
-        //     headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
-        // }
 
         user.profilePicData = null;
         const userJsonString = JSON.stringify(user);
         fd.append('user', userJsonString);
 
-        //headers.append(Consts.CONTENT_TYPE, Consts.MULTIPART_FORM_DATA);
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
         let userService = this;
         return this.http.patch(Consts.API_URL_USERS_ROOT + '/' + user._creatorRef, fd, { headers: headers })
@@ -288,7 +265,7 @@ export class UserService {
         };
         return retVal;
     }
-    
+
     search() {
         let retSearchSub = new EventEmitter<SearchRet>();
 

@@ -22,23 +22,13 @@ import { Dialog } from "../dialog/dialog.model";
             font-size: 12px;
             color : #0275d8;
         }
-        .list-group-item.active {
-            background-color: #eceeef;
-        }
     `]
 })
 export class UserComponent implements OnInit,OnDestroy {
     @Input() user: User;
     @Input() index: Number;
-    selectedIndex: Number;
-    private selectedUserIndexSub: any;
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
     constructor(private userService: UserService, private dialogService: DialogService) { }
-
-    onEdit() {
-        this.userService.selectUser(this.index);
-        this.userService.editUser(this.user);
-    }
 
     onDelete() {
 
@@ -58,21 +48,8 @@ export class UserComponent implements OnInit,OnDestroy {
     }
 
     ngOnInit() {
-        this.selectedUserIndexSub = this.userService.selectedUserIndex.subscribe(
-            (index: number) => {
-                this.selectedIndex = index;
-            }
-        );
-    }
 
-    isSelected(): boolean {
-        let ret = false;
-        if (this.index === this.selectedIndex) {
-            ret = true;
-        }
-        return ret;
     }
-
 
     destroy(sub: any) {
         if (sub) {
@@ -82,6 +59,5 @@ export class UserComponent implements OnInit,OnDestroy {
     }
 
     ngOnDestroy() {
-        this.destroy(this.selectedUserIndexSub);
     }
 }

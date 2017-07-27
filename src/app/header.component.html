@@ -28,11 +28,9 @@
         <a class="nav-link dropdown-toggle" id="usersDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">Users</a>
         <div class="dropdown-menu" aria-labelledby="usersDropdown">
-          <a class="dropdown-item" routerLink="/users">User List</a>
-          <div *ngIf="!userService.showUserInputForm()">
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" routerLink="/users" (click)="userService.createUser()">Create User</a>
-          </div>
+          <a routerLinkActive="active" class="dropdown-item" routerLink="/users">User List</a>
+          <div class="dropdown-divider"></div>
+          <a routerLinkActive="active" class="dropdown-item" routerLink="/user/create">Create User</a>
         </div>
       </li>
 

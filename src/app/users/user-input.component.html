@@ -156,7 +156,6 @@
   </div>
   <div class="form-group row col col-sm-4 offset-sm-4">
     <button *ngIf="isCreateUser()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger" (click)="onClear()">Clear</button>
-    <button placement="bottom" ngbTooltip="Press to exit creating/updating a user."  type="button" class="btn btn-md btn-info" (click)="onExit()">Exit</button>
     <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">{{submitType}}</button>
   </div>
 

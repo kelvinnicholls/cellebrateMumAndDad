@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { UsersComponent } from "./users/users.component";
+import { UserListComponent } from "./users/user-list.component";
 import { UserInputComponent } from "./users/user-input.component";
 import { ChangePasswordComponent } from "./users/change-password/change-password.component";
 import { HomeComponent } from "./home.component";
@@ -12,11 +12,13 @@ import { ChatSendMessageComponent } from "./chat/chat-send-message/chat-send-mes
 
 const APP_ROUTES: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'users', component: UsersComponent, canActivate: [AuthGuard] },
+  { path: 'users', component: UserListComponent, canActivate: [AuthGuard] },
   { path: 'chat', component: ChatSendMessageComponent, canActivate: [AuthGuard] },
   { path: 'chat/:socketId', component: ChatSendMessageComponent, canActivate: [AuthGuard] },
   { path: 'user/change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/edit-me', component: UserInputComponent, canActivate: [AuthGuard] },
+  { path: 'user/create', component: UserInputComponent, canActivate: [AuthGuard] },
+  { path: 'user/:index', component: UserInputComponent, canActivate: [AuthGuard] },
   { path: 'auth/sign-in', component: SignInComponent },
   { path: 'auth/get-encrypted-password', component: GetEncryptedPasswordComponent, canActivate: [AuthGuard] },
   { path: 'not-found', component: PageNotFoundComponent },

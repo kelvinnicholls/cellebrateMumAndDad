@@ -19,7 +19,6 @@ import {NgPipesModule} from 'ngx-pipes';
 import { HeaderComponent } from "./header.component";
 import { routing } from "./app.routing";
 import { UserComponent } from "./users/user.component";
-import { UsersComponent } from "./users/users.component";
 import { UserInputComponent } from "./users/user-input.component";
 import { ChangePasswordComponent } from "./users/change-password/change-password.component";
 import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
@@ -60,7 +59,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         SignInComponent,
         GetEncryptedPasswordComponent,
         UserComponent,
-        UsersComponent,
         UserInputComponent,
         ChangePasswordComponent,
         UserListComponent,

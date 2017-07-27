@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
 import { PasswordValidationService } from '../shared/password-validation.service';
 
@@ -25,8 +26,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
     user: User;
     _creatorRef: string;
     myForm: FormGroup;
-    private clearUserInputSub: any;
-    private userIsEditSub: any;
+    private paramsSubscription: Subscription;
+    private index: any;
 
     password = "";
     email = "";
@@ -82,7 +83,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         // Edit       
                         let adminUser = this.myForm.value.adminUser;
                         if (adminUser && adminUser === 'string') {
-                              adminUser = adminUser == 'Yes' ? true : false;                           
+                            adminUser = adminUser == 'Yes' ? true : false;
                         } else {
                             adminUser = this.user.adminUser;
                         };
@@ -101,8 +102,6 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             .subscribe(
                             result => {
                                 console.log(result);
-                                this.userService.showUserInput.emit(false);
-                                this.userService.selectedUserIndex.emit(-1);
                                 if (this.submitType == Consts.UPDATE_CURRENT_USER) {
                                     this.router.navigate(['']);
                                     this.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
@@ -132,8 +131,6 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             .subscribe(
                             data => {
                                 this.toastService.showSuccess("User created.");
-                                this.userService.showUserInput.emit(false);
-                                this.userService.selectedUserIndex.emit(-1);
                             },
                             error => console.error("UserComponent userService.newUser error", error)
                             );
@@ -163,10 +160,6 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this.myForm.get('adminUser').updateValueAndValidity();
     }
 
-    doClear() {
-        this.clear();
-        this.userService.selectedUserIndex.emit(-1);
-    }
 
     onClear() {
         if (this.myForm.dirty) {
@@ -175,12 +168,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
             retDialogSub.subscribe(
                 (buttonPressed: DialogRetEnum) => {
                     if (buttonPressed === DialogRetEnum.ButtonOne) {
-                        this.doClear();
+                        this.clear();
                     }
                 });
             this.dialogService.showDialog("Warning", "Do you really wish to Clear the form without saving your changes?", "Yes", "No", retDialogSub);
         } else {
-            this.doClear();
+            this.clear();
         }
     }
 
@@ -202,16 +195,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-        this.clearUserInputSub = this.userService.clearUserInput.subscribe(
-            (clear: Boolean) => {
-                if (clear) {
-                    this.clear();
-                }
 
-            }
-        );
-
-    
         this.myForm = new FormGroup({
             name: new FormControl(null, Validators.required,
                 this.forbiddenNames),
@@ -244,12 +228,16 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     this.myForm.get('adminUser').updateValueAndValidity();
                 }
             );
+        } else  if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'user' && this.route.snapshot.url[1].path === 'create') {
+            this.submitType = Consts.CREATE_USER;
+
         } else {
-            this.userIsEditSub = this.userService.userIsEdit.subscribe(
-                (user: User) => {
+            this.paramsSubscription = this.route.params.subscribe(
+                (queryParams: Params) => {
+                    this.index = queryParams['index'];
+                    this.user = this.userService.findUser(this.index);
                     this.submitType = Consts.UPDATE_USER;
-                    this.user = user;
-                    this._creatorRef = user._creatorRef;
+                    this._creatorRef = this.user._creatorRef;
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
                     };
@@ -270,8 +258,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.destroy(this.clearUserInputSub);
-        this.destroy(this.userIsEditSub);
+        this.destroy(this.paramsSubscription);
     }
 
     isFormValid() {
@@ -279,32 +266,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     }
 
-    doExit() {
-        if (this.submitType == Consts.UPDATE_CURRENT_USER) {
-            this.router.navigate(['']);
-        };
-        this.clear();
-        this.userService.selectedUserIndex.emit(-1);
-        this.userService.showUserInput.emit(false);
 
-    }
-
-    onExit() {
-
-        if (this.myForm.dirty) {
-            let retDialogSub = new EventEmitter<DialogRetEnum>();
-
-            retDialogSub.subscribe(
-                (buttonPressed: DialogRetEnum) => {
-                    if (buttonPressed === DialogRetEnum.ButtonOne) {
-                        this.doExit();
-                    }
-                });
-            this.dialogService.showDialog("Warning", "Do you really wish to Exit without saving your changes?", "Yes", "No", retDialogSub);
-        } else {
-            this.doExit();
-        }
-    }
     isCreateUser() {
         return this.submitType === Consts.CREATE_USER;
     }
