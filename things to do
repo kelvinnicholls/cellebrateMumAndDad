@@ -81,7 +81,7 @@ X34) clicking a user should allow you to send a message to a particular user (bo
 X35) add send message menu option
 X36) search pop up
 X37) Add pagination
-38) Get This email is already in use!  for kgn1@gmail.com on firefox but not chrome
+X38) Get This email is already in use!  for kgn1@gmail.com on firefox but not chrome Seems to have corrected itself!
 
 39) Option for user's to receive email updates
 
@@ -93,8 +93,8 @@ X42) Show username that you are sending message to on screen, button and confirm
 X44) Add clear messages button
 45) Check in to github
 46) Add picture above messages
-47) Add sockets to indicate when a record is updated/deleted/inserted + send chat message to other users indicating change and link to record
-48) Make sure that allUsers as well as users is updated when local updates are made 
+X47) Add sockets to indicate when a record is updated/deleted/inserted + send chat message to other users indicating change and link to record
+X48) Make sure that allUsers as well as users is updated when local updates are made 
 X49) Add clear button to search
 X50) Add show/hide search criteria
 X51) defaults for search criteria
@@ -108,3 +108,6 @@ X57) Move user list and create into separate routes
  -- date input not working
  -- some issues with bootstrap css
 X57) Update admin user to false not working
+X58) Create not working in ie when profile pic selected. keep getting open file dialog.
+    // this is a bug in edge https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8282613/
+x59) Update of user profile not being propagated by socket.io

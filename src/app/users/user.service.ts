@@ -60,7 +60,7 @@ export class UserService {
         }
     }
 
-    updateThisUser(user) {
+    updateThisUser(user) : any {
         const updateUser = this.createUser(user, null);
         if (user._profileMediaId) {
             updateUser.profilePicLocation = user._profileMediaId.location.substring(14);
@@ -70,9 +70,11 @@ export class UserService {
             if (element._creatorRef === updateUser._creatorRef) {
                 this.users[index] = updateUser;
                 this.updateLocalStorage(updateUser);
-                return this.usersChanged.next(this.users);
+                this.usersChanged.next(this.users);
+                return updateUser;
             };
         });
+        return updateUser;
     }
 
     addCallbacks(socket: any) {
@@ -90,9 +92,9 @@ export class UserService {
         });
 
         this.socket.on('updatedUser', (user, changedBy) => {
-            this.updateThisUser(user);
-            this.appService.showToast(Consts.INFO, "User  : " + user.name + " updated by " + changedBy);
-            console.log(Consts.INFO, "User  : " + user.name + " updated by " + changedBy);
+            let updatedUser = this.updateThisUser(user);
+            this.appService.showToast(Consts.INFO, "User  : " + updatedUser.name + " updated by " + changedBy);
+            console.log(Consts.INFO, "User  : " + updatedUser.name + " updated by " + changedBy);
         });
 
 
@@ -234,9 +236,9 @@ export class UserService {
         return this.http.patch(Consts.API_URL_USERS_ROOT + '/' + user._creatorRef, fd, { headers: headers })
             .map((response: any) => {
                 let body = JSON.parse(response._body);
-                this.updateThisUser(body);
+                let updatedUser = this.updateThisUser(body);
 
-                this.socket.emit('userUpdated', user, function (err) {
+                this.socket.emit('userUpdated', updatedUser, function (err) {
                     if (err) {
                         console.log("userUpdated err: ", err);
                     } else {

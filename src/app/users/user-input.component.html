@@ -165,7 +165,7 @@
         </span>
     </div>
     <div class="col offset-sm-1 col-sm-1">
-      <label placement="right" ngbTooltip="Press to select the user's profile picture." class="btn btn-success">
+      <label placement="right" ngbTooltip="Press to select the user's profile picture." class="btn btn-success" for='profilePicPath'>
           Browse
         <input  type="file" #file id="profilePicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
         </label>
