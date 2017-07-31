@@ -82,8 +82,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     if (this.user) {
                         // Edit       
                         let adminUser = this.myForm.value.adminUser;
-                        if (adminUser && adminUser === 'string') {
-                            adminUser = adminUser == 'Yes' ? true : false;
+                        if (adminUser && typeof adminUser === 'string') {
+                            adminUser = adminUser === 'Yes' ? true : false;
                         } else {
                             adminUser = this.user.adminUser;
                         };
@@ -230,12 +230,13 @@ export class UserInputComponent implements OnInit, OnDestroy {
             );
         } else  if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'user' && this.route.snapshot.url[1].path === 'create') {
             this.submitType = Consts.CREATE_USER;
+            this.clear();
 
         } else {
             this.paramsSubscription = this.route.params.subscribe(
                 (queryParams: Params) => {
                     this.index = queryParams['index'];
-                    this.user = this.userService.findUser(this.index);
+                    this.user = this.userService.findUserByIndex(this.index);
                     this.submitType = Consts.UPDATE_USER;
                     this._creatorRef = this.user._creatorRef;
                     if (typeof this.user.adminUser === 'boolean') {

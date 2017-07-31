@@ -4,6 +4,7 @@ export class AuthUserService {
     private static Consts: Consts;
 
 
+
     isLoggedIn(): boolean {
         return localStorage.getItem('token') !== null;
     }

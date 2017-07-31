@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { ChatMessage } from "./chat-message.model";
 import { ChatUser } from "./chat-user.model";
 import { AuthUserService } from "../auth/auth-user.service";
+import { UserService } from "../users/user.service";
 
 import { Consts } from "../shared/consts";
 //https://stackoverflow.com/questions/37090031/how-to-import-socket-io-client-in-a-angular-2-application
@@ -81,7 +82,11 @@ export class ChatService {
             this.chatUsers = chatUsers;
         });
 
+
+        this.userService.addCallbacks(this.socket);
+
     }
+
 
     public connect(name: string) {
         this.name = name;
@@ -122,11 +127,6 @@ export class ChatService {
     }
 
 
-
-    public showName(name) {
-        // add to user list
-    }
-
     public generateMessage = function (text, sendAsAdmin, socketId) {
         return {
             text,
@@ -135,7 +135,7 @@ export class ChatService {
         };
     };
 
-    constructor(public authUserService: AuthUserService) {
+    constructor(public authUserService: AuthUserService, public userService: UserService) {
 
         if (this.authUserService.isLoggedIn()) {
             this.connect(this.authUserService.getLoggedInUserName());
@@ -158,55 +158,3 @@ export class ChatService {
     }
 
 }
-
-
-// $('#msg-form').on('submit', function (e) {
-//     e.preventDefault();
-//     socket.emit('createMessage', (generateMessage(socket.id, msgTextBox.val())), function (msg) {
-//         msgTextBox.val('');
-//     });
-// })
-
-
-
-// sendLocationButton.on('click', function () {
-//     if (!navigator.geolocation) {
-//         return alert("Geolocation not supported by your browser");
-//     }
-//     sendLocationButton.attr('disabled', 'disabled').text('Sending Location...');
-//     navigator.geolocation.getCurrentPosition(function (position) {
-//         sendLocationButton.removeAttr('disabled').text('Send Location');
-//         socket.emit('CreateLocationMessage', {
-//             latitude: position.coords.latitude,
-//             longitude: position.coords.longitude
-//         })
-//     }, function () {
-//         alert("Unable to fetch location");
-//         sendLocationButton.removeAttr('disabled').text('Send Location');
-//         msgTextBox.val('');
-//     });
-// });
-
-// socket.on('newLocationMessage', function (msg) {
-//     // console.log("New Location Message", msg);
-//     // let formattedDate = moment().format('h:mm a');
-//     // let li = $('<li></li>');
-//     // let a = $('<a target="_blank">My Current Location<\a>');
-//     // li.text(`${msg.from}: ${formattedDate} `);
-//     // a.attr('href', msg.url);
-//     // li.append(a);
-//     // $('#messages').append(li);
-
-
-
-//     let formattedDate = moment(msg.createdAt).format('h:mm a');
-//     let template = $('#location-message-template').html();
-//     let html = Mustache.render(template, {
-//         url: msg.url,
-//         from: msg.from,
-//         createdAt: formattedDate
-//     });
-//     $('#messages').append(html);
-
-//     scrollToBottom();
-// });

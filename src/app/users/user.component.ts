@@ -26,7 +26,7 @@ import { Dialog } from "../dialog/dialog.model";
 })
 export class UserComponent implements OnInit,OnDestroy {
     @Input() user: User;
-    @Input() index: Number;
+    //@Input() index: Number;
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
     constructor(private userService: UserService, private dialogService: DialogService) { }
 

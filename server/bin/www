@@ -42,6 +42,17 @@ const {
 
 let users = new Users();
 
+let getUserName = (id) => {
+  let name = "";
+  let user = users.getUser(id);
+  if (user && user.name) {
+    name = user.name;
+  };
+
+  return name;
+
+}
+
 io.on('connection', (socket) => {
   console.log('New user connected');
   socket.on('disconnect', () => {
@@ -124,6 +135,36 @@ io.on('connection', (socket) => {
     };
     callback();
   });
+
+
+
+  socket.on('userCreated', (user, callback) => {
+
+    console.log("userCreated", user, socket.id);
+
+    socket.broadcast.emit('createdUser', user, getUserName(socket.id));
+    callback();
+  });
+
+  socket.on('userDeleted', (user, callback) => {
+
+    console.log("userDeleted", user, socket.id);
+
+    socket.broadcast.emit('deletedUser', user._creatorRef, getUserName(socket.id));
+    callback();
+  });
+
+
+
+  socket.on('userUpdated', (user, callback) => {
+
+    console.log("userUpdated", user, socket.id);
+
+
+    socket.broadcast.emit('updatedUser', user, getUserName(socket.id));
+    callback();
+  });
+
 
 
   socket.on('disconnect', () => {

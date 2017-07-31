@@ -115,26 +115,44 @@
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-2">
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+        'has-danger': myForm.get('dob').invalid,
+        'has-success': myForm.get('dob').valid
+      }">
     <label for="dob" class="col-sm-4 col-form-label"><strong>Date Of Birth</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's date of birth." type="date" id="dob" class="form-control" placeholder="dob" [ngModel]="user?.dob" formControlName="dob">
+      <input placement="bottom" ngbTooltip="The user's date of birth." type="date" id="dob" class="form-control" placeholder="dob" [ngModel]="user?.dob" formControlName="dob" [ngClass]="{
+        'form-control-danger': myForm.get('dob').invalid,
+        'form-control-success': myForm.get('dob').valid
+      }">
     </div>
     <small *ngIf="myForm.get('dob').invalid" class="form-text text-muted">Enter the user's date of birth.</small>
   </div>
 
 
-  <div class="form-group row col col-sm-8 offset-sm-2">
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+        'has-danger': myForm.get('twitterId').invalid,
+        'has-success': myForm.get('twitterId').valid
+      }">
     <label class="col-sm-4 col-form-label"><strong>Twitter ID</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's Twitter ID." type="text" id="twitterId" class="form-control" placeholder="Twitter ID" [ngModel]="user?.twitterId" formControlName="twitterId">
+      <input placement="bottom" ngbTooltip="The user's Twitter ID." type="text" id="twitterId" class="form-control" placeholder="Twitter ID" [ngModel]="user?.twitterId" formControlName="twitterId" [ngClass]="{
+        'form-control-danger': myForm.get('twitterId').invalid ,
+        'form-control-success': myForm.get('twitterId').valid 
+      }">
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-2">
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+        'has-danger': myForm.get('facebookId').invalid,
+        'has-success': myForm.get('facebookId').valid
+      }">
     <label class="col-sm-4 col-form-label"><strong>Facebook ID</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's Facebook ID." type="text" id="facebookId" class="form-control" placeholder="Facebook ID" [ngModel]="user?.facebookId" formControlName="facebookId">
+      <input placement="bottom" ngbTooltip="The user's Facebook ID." type="text" id="facebookId" class="form-control" placeholder="Facebook ID" [ngModel]="user?.facebookId" formControlName="facebookId" [ngClass]="{
+        'form-control-danger': myForm.get('facebookId').invalid,
+        'form-control-success': myForm.get('facebookId').valid
+      }">
     </div>
   </div>
 
