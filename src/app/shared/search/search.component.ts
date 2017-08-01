@@ -7,6 +7,7 @@ import { SearchRetEnum } from "./search-ret.enum";
 import { SearchTypeEnum } from "./search-type.enum";
 import { SearchRet } from "./search-ret.model";
 import { SearchService } from "./search.service";
+import { Consts } from "../../shared/consts";
 
 
 
@@ -143,7 +144,7 @@ export class SearchComponent implements OnInit {
       adminUser: new FormControl(null, null),
       relationship: new FormControl(null, null),
       from_dob: new FormControl('1900-01-01', null),
-      to_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
+      to_dob: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
     });
 
     this.showSearchSub = this.searchService.showSearchSub
@@ -164,7 +165,7 @@ export class SearchComponent implements OnInit {
               adminUser: new FormControl(null, null),
               relationship: new FormControl(null, null),
               from_dob: new FormControl('1900-01-01', null),
-              to_dob: new FormControl(moment().format('YYYY-MM-DD'), null)
+              to_dob: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
             });
             break;
           case SearchTypeEnum.Photos:

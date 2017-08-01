@@ -2,6 +2,8 @@ import { EventEmitter } from "@angular/core";
 import * as moment from 'moment';
 import { SearchRetEnum } from "./search-ret.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
+import { Consts } from "../../shared/consts";
+
 
 export class SearchRet {
     public searchElements: any[] = [];
@@ -22,7 +24,7 @@ export class SearchRet {
             if (element.value) {
                 let value: String = element.value;
                 if (element.type === 'from' || (element.type === 'to') {
-                    value = moment(element.value, 'YYYY-MM-DD').format('DD-MM-YYYY');
+                    value = moment(element.value, Consts.DATE_DB_FORMAT).format(Consts.DATE_DISPLAY_FORMAT);
                 };
                 retVal += element.name.replace(/_/g,' ') + " : <strong>'" + value + "'</strong>";
                 retVal += SearchRet.lineBreak;

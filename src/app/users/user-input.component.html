@@ -11,8 +11,8 @@
       }">
     <label for="email" class="col-sm-4 col-form-label"><strong>Email address</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's Email address" type="email" class="form-control" id="email" placeholder="Email address" [ngModel]="user?.email" formControlName="email"
-        [ngClass]="{
+      <input placement="bottom" ngbTooltip="The user's Email address" type="email" class="form-control" id="email" placeholder="Email address"
+        [ngModel]="user?.email" formControlName="email" [ngClass]="{
         'form-control-danger': myForm.get('email').invalid && (myForm.get('email').dirty || myForm.get('email').touched),
         'form-control-success': myForm.get('email').valid && (myForm.get('email').dirty || myForm.get('email').touched)
       }">
@@ -33,8 +33,8 @@
       }">
     <label for="password" class="col-sm-4 col-form-label"><strong>Password</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="Enter a password.<br>Min 6 chars at least one upper and lower case letter."  type="password" class="form-control" id="password" placeholder="Password" [ngModel]="user?.password" formControlName="password"
-        [ngClass]="{
+      <input placement="bottom" ngbTooltip="Enter a password.<br>Min 6 chars at least one upper and lower case letter." type="password"
+        class="form-control" id="password" placeholder="Password" [ngModel]="user?.password" formControlName="password" [ngClass]="{
         'form-control-danger': myForm.get('password').invalid && (myForm.get('password').dirty || myForm.get('password').touched),
         'form-control-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
@@ -57,7 +57,8 @@
       }">
     <label for="name" class="col-sm-4 col-form-label"><strong>Name</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The name of this user." type="text" class="form-control" id="name" placeholder="Name" [ngModel]="user?.name" formControlName="name" [ngClass]="{
+      <input placement="bottom" ngbTooltip="The name of this user." type="text" class="form-control" id="name" placeholder="Name"
+        [ngModel]="user?.name" formControlName="name" [ngClass]="{
         'form-control-danger': myForm.get('name').invalid && (myForm.get('name').dirty || myForm.get('name').touched),
         'form-control-success': myForm.get('name').valid && (myForm.get('name').dirty || myForm.get('name').touched)
       }">
@@ -76,7 +77,8 @@
       }">
     <label for="adminUser" class="col-sm-4 col-form-label"><strong>Admin?</strong></label>
     <div class="col-sm-5">
-      <select placement="bottom" ngbTooltip="Is this user an admin user? Y or N?" class="form-control dropdown" [ngModel]="user?.adminUser" formControlName="adminUser" [ngClass]="{
+      <select placement="bottom" ngbTooltip="Is this user an admin user? Y or N?" class="form-control dropdown" [ngModel]="user?.adminUser"
+        formControlName="adminUser" [ngClass]="{
         'form-control-danger': myForm.get('adminUser').invalid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched),
         'form-control-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched)
       }">
@@ -97,7 +99,8 @@
       }">
     <label for="relationship" class="col-sm-4 col-form-label"><strong>Relationship</strong></label>
     <div class="col-sm-5">
-      <select placement="bottom" ngbTooltip="The user's relationship to Mum and Dad." class="form-control dropdown" [ngModel]="user?.relationship" formControlName="relationship" [ngClass]="{
+      <select placement="bottom" ngbTooltip="The user's relationship to Mum and Dad." class="form-control dropdown" [ngModel]="user?.relationship"
+        formControlName="relationship" [ngClass]="{
         'form-control-danger': myForm.get('relationship').invalid && (myForm.get('relationship').dirty || myForm.get('relationship').touched),
         'form-control-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty || myForm.get('relationship').touched)
       }">
@@ -121,10 +124,22 @@
       }">
     <label for="dob" class="col-sm-4 col-form-label"><strong>Date Of Birth</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's date of birth." type="date" id="dob" class="form-control" placeholder="dob" [ngModel]="user?.dob" formControlName="dob" [ngClass]="{
+      <div class="input-group">
+        <input class="form-control" placeholder="dd-mm-yyyy" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()" ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="dob" [ngClass]="{
         'form-control-danger': myForm.get('dob').invalid,
         'form-control-success': myForm.get('dob').valid
       }">
+        <div class="input-group-addon" (click)="d.toggle()">
+          <img src="/systemImages/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+        </div>
+      </div>
+
+
+      <!-- <input placement="bottom" ngbTooltip="The user's date of birth." type="date" id="dob" class="form-control" placeholder="dob"
+        [ngModel]="user?.dob" formControlName="dob" [ngClass]="{
+        'form-control-danger': myForm.get('dob').invalid,
+        'form-control-success': myForm.get('dob').valid
+      }"> -->
     </div>
     <small *ngIf="myForm.get('dob').invalid" class="form-text text-muted">Enter the user's date of birth.</small>
   </div>
@@ -136,7 +151,8 @@
       }">
     <label class="col-sm-4 col-form-label"><strong>Twitter ID</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's Twitter ID." type="text" id="twitterId" class="form-control" placeholder="Twitter ID" [ngModel]="user?.twitterId" formControlName="twitterId" [ngClass]="{
+      <input placement="bottom" ngbTooltip="The user's Twitter ID." type="text" id="twitterId" class="form-control" placeholder="Twitter ID"
+        [ngModel]="user?.twitterId" formControlName="twitterId" [ngClass]="{
         'form-control-danger': myForm.get('twitterId').invalid ,
         'form-control-success': myForm.get('twitterId').valid 
       }">
@@ -149,7 +165,8 @@
       }">
     <label class="col-sm-4 col-form-label"><strong>Facebook ID</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The user's Facebook ID." type="text" id="facebookId" class="form-control" placeholder="Facebook ID" [ngModel]="user?.facebookId" formControlName="facebookId" [ngClass]="{
+      <input placement="bottom" ngbTooltip="The user's Facebook ID." type="text" id="facebookId" class="form-control" placeholder="Facebook ID"
+        [ngModel]="user?.facebookId" formControlName="facebookId" [ngClass]="{
         'form-control-danger': myForm.get('facebookId').invalid,
         'form-control-success': myForm.get('facebookId').valid
       }">
@@ -173,8 +190,10 @@
     </div>
   </div>
   <div class="form-group row col col-sm-4 offset-sm-4">
-    <button *ngIf="isCreateUser()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger" (click)="onClear()">Clear</button>
-    <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">{{submitType}}</button>
+    <button *ngIf="isCreateUser()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger"
+      (click)="onClear()">Clear</button>
+    <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit"
+      [disabled]="!isFormValid()">{{submitType}}</button>
   </div>
 
 </form>

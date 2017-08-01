@@ -15,6 +15,8 @@ import { SearchRet } from "../shared/search/search-ret.model";
 import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
 
+
+
 @Injectable()
 export class UserService {
     private users: User[] = [];
@@ -45,7 +47,7 @@ export class UserService {
             user.name,
             user.adminUser ? 'Yes' : 'No',
             user.relationship,
-            moment(user.dob).format('YYYY-MM-DD'),
+            moment(user.dob).format(Consts.DATE_DB_FORMAT),
             user.twitterId,
             user.facebookId,
             user._creatorRef,
@@ -168,7 +170,7 @@ export class UserService {
                         user.name,
                         user.adminUser ? 'Yes' : 'No',
                         user.relationship,
-                        moment(user.dob).format('YYYY-MM-DD'),
+                        moment(user.dob).format(Consts.DATE_DB_FORMAT),
                         user.twitterId,
                         user.facebookId,
                         user._creatorRef,
@@ -205,7 +207,7 @@ export class UserService {
                     user.name,
                     user.adminUser ? 'Yes' : 'No',
                     user.relationship,
-                    moment(user.dob).format('YYYY-MM-DD'),
+                    moment(user.dob).format(Consts.DATE_DB_FORMAT),
                     user.twitterId,
                     user.facebookId,
                     user._creatorRef,

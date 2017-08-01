@@ -104,10 +104,11 @@ X54) Add option to clear search (Hover shows search criteria)
 X55) Highlight fields that have search criteria
 X56) prompts in bold (strong)
 X57) Move user list and create into separate routes
-56) test in firefox
+X56) test in firefox
  -- date input not working
  -- some issues with bootstrap css
 X57) Update admin user to false not working
-X58) Create not working in ie when profile pic selected. keep getting open file dialog.
+58) Create not working in ie when profile pic selected. keep getting open file dialog.
     // this is a bug in edge https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8282613/
+    consider using bootstrap file picker
 x59) Update of user profile not being propagated by socket.io

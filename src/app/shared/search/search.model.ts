@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { SearchRet } from "./search-ret.model";
 import { SearchTypeEnum } from "./search-type.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
+import { Consts } from "../../shared/consts";
 
 
 export class Search {
@@ -55,13 +56,13 @@ export class Search {
                 });
                 nonMatchingElementFound = !matchingElementFound;
               } else if (searchElement.type === 'from') {
-                if (moment(searchElement.value, 'YYYY-MM-DD') <= moment(attributeValue, 'YYYY-MM-DD')) {
+                if (moment(searchElement.value, Consts.DATE_DB_FORMAT) <= moment(attributeValue, Consts.DATE_DB_FORMAT)) {
                   matchingElementFound = true;
                 } else {
                   nonMatchingElementFound = true;
                 }
               } else if (searchElement.type === 'to') {
-                if (moment(searchElement.value, 'YYYY-MM-DD') >= moment(attributeValue, 'YYYY-MM-DD')) {
+                if (moment(searchElement.value, Consts.DATE_DB_FORMAT) >= moment(attributeValue, Consts.DATE_DB_FORMAT)) {
                   matchingElementFound = true;
                 } else {
                   nonMatchingElementFound = true;

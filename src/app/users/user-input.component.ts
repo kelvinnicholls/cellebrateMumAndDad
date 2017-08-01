@@ -1,11 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, Params } from '@angular/router';
+import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import * as moment from 'moment';
+import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+
 import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
 import { PasswordValidationService } from '../shared/password-validation.service';
-
 import { UserService } from "./user.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { DialogService } from "../dialog/dialog.service";
@@ -14,7 +17,6 @@ import { User } from "./user.model";
 import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
 import { Consts } from "../shared/consts";
-
 
 
 @Component({
@@ -42,8 +44,39 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
 
 
-    constructor(private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService, private dialogService: DialogService, private router: Router,, private appService: AppService) {
+    constructor(private ngbDateParserFormatter: NgbDateParserFormatter, private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService, private dialogService: DialogService, private router: Router,, private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
+    }
+
+    getMaxDate() {
+        let d = moment();
+        return d.isValid() ? {
+            year: d.year(),
+            month: d.month() + 1,
+            day: d.date()
+        } : null;
+    }
+
+
+    getMinDate() {
+        let d = moment();
+        d.subtract(100, 'years');
+        return d.isValid() ? {
+            year: d.year(),
+            month: d.month() + 1,
+            day: d.date()
+        } : null;
+    }
+
+    modelDob: NgbDateStruct;
+
+    getDob() {
+        let d = moment(this.user && this.user.dob);
+        return d.isValid() ? {
+            year: d.year(),
+            month: d.month() + 1,
+            day: d.date()
+        } : null;
     }
 
     onImageChange(files: FileList) {
@@ -93,7 +126,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.name,
                             adminUser,
                             this.myForm.value.relationship,
-                            this.myForm.value.dob,
+                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
                             this.myForm.value.twitterId,
                             this.myForm.value.facebookId,
                             this._creatorRef,
@@ -122,7 +155,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.name,
                             this.myForm.value.adminUser == 'Yes' ? true : false,
                             this.myForm.value.relationship,
-                            this.myForm.value.dob,
+                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
                             this.myForm.value.twitterId,
                             this.myForm.value.facebookId,
                             null,
@@ -195,7 +228,6 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
 
-
         this.myForm = new FormGroup({
             name: new FormControl(null, Validators.required,
                 this.forbiddenNames),
@@ -218,6 +250,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
             this.userService.getMe().subscribe(
                 (user: User) => {
                     this.user = user;
+                    this.modelDob = this.getDob();
                     this._creatorRef = user._creatorRef;
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
@@ -228,7 +261,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     this.myForm.get('adminUser').updateValueAndValidity();
                 }
             );
-        } else  if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'user' && this.route.snapshot.url[1].path === 'create') {
+        } else if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'user' && this.route.snapshot.url[1].path === 'create') {
             this.submitType = Consts.CREATE_USER;
             this.clear();
 
@@ -237,6 +270,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                 (queryParams: Params) => {
                     this.index = queryParams['index'];
                     this.user = this.userService.findUserByIndex(this.index);
+                    this.modelDob = this.getDob();
                     this.submitType = Consts.UPDATE_USER;
                     this._creatorRef = this.user._creatorRef;
                     if (typeof this.user.adminUser === 'boolean') {

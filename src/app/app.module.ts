@@ -14,7 +14,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 // http://valor-software.com/ngx-bootstrap/#/datepicker
 
 // https://github.com/danrevah/ngx-pipes#reverse-1
-import {NgPipesModule} from 'ngx-pipes';
+import { NgPipesModule } from 'ngx-pipes';
 
 import { HeaderComponent } from "./header.component";
 import { routing } from "./app.routing";
@@ -40,7 +40,7 @@ import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messag
 import { ChatMessageComponent } from "./chat/chat-messages-list/chat-message/chat-message.component";
 import { ChatSendMessageComponent } from "./chat/chat-send-message/chat-send-message.component";
 import { ReversePipe } from "./shared/pipes/reverse-pipe";
-
+import { Consts } from "./shared/consts";
 import { AppService } from "./app.service";
 import { HomeComponent } from "./home.component";
 import { AuthGuard } from './auth/auth-guard.service';
@@ -49,7 +49,8 @@ import { PasswordStrengthBarComponent } from './shared/password-strength-bar/pas
 //https://www.npmjs.com/package/angular2-tooltip
 //import {ToolTipModule} from 'angular2-tooltip'
 //https://ng-bootstrap.github.io/#/getting-started
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateMomentParserFormatter } from './shared/ngb-date-moment-parser-formatter';
 
 
 @NgModule({
@@ -86,7 +87,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
         PaginationModule.forRoot(),
         NgPipesModule
     ],
-    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService,ChatService,AuthUserService,SearchService],
+    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, {
+        provide: NgbDateParserFormatter,
+        useFactory: () => { return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT,Consts.DATE_DB_FORMAT) }
+    }],
     bootstrap: [AppComponent]
 })
 export class AppModule {
