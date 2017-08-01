@@ -100,6 +100,32 @@
             </div>
 
             <div class="form-group row col col-sm-12" [ngClass]="{
+        'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty && myForm.get('emailUpdates').value.length > 0)
+      }">
+
+              <label for="emailUpdates" class="col-sm-4 col-form-label"><strong>Email Updates?</strong></label>
+              <div id="emailUpdates" [ngClass]="{
+        'form-control-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty && myForm.get('emailUpdates').value.length > 0)
+      }">
+                <label placement="bottom" ngbTooltip="Match user's registered for email updates." class="custom-control custom-radio">
+                <input id="emailUpdatesYes" name="emailUpdates" type="radio" value="Yes" class="custom-control-input" formControlName="emailUpdates">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Yes</span>
+              </label>
+                <label placement="bottom" ngbTooltip="Match user's not registered for email updates." class="custom-control custom-radio">
+                <input  id="emailUpdatesNo" name="emailUpdates" type="radio" value="No" class="custom-control-input" formControlName="emailUpdates">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">No</span>
+              </label>
+                <label placement="bottom" ngbTooltip="Match both." class="custom-control custom-radio">
+                <input id="emailUpdatesBoth" name="emailUpdates" type="radio" value="Both" class="custom-control-input" formControlName="emailUpdates">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Both</span>
+              </label>
+              </div>
+            </div>
+
+            <div class="form-group row col col-sm-12" [ngClass]="{
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty && myForm.get('email').value.length > 0)
       }">
               <label for="email" class="col-sm-4 col-form-label"><strong>Email address</strong></label>

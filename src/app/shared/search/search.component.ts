@@ -86,6 +86,11 @@ export class SearchComponent implements OnInit {
       this.searchRet.searchElements.push({ name: 'adminUser', value: this.populate(this.myForm.value.adminUser), type: 'y_n_both' });
     };
 
+    if (this.isDirty(this.myForm.value.emailUpdates, 'emailUpdates')) {
+      this.searchRet.searchElements.push({ name: 'emailUpdates', value: this.populate(this.myForm.value.emailUpdates), type: 'y_n_both' });
+    };
+
+
     if (this.isDirty(this.myForm.value.twitterId, 'twitterId')) {
       this.searchRet.searchElements.push({ name: 'twitterId', value: this.populate(this.myForm.value.twitterId) });
     };
@@ -142,6 +147,7 @@ export class SearchComponent implements OnInit {
       twitterId: new FormControl(null, null),
       facebookId: new FormControl(null, null),
       adminUser: new FormControl(null, null),
+      emailUpdates: new FormControl(null, null),
       relationship: new FormControl(null, null),
       from_dob: new FormControl('1900-01-01', null),
       to_dob: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
@@ -163,6 +169,7 @@ export class SearchComponent implements OnInit {
               twitterId: new FormControl(null, null),
               facebookId: new FormControl(null, null),
               adminUser: new FormControl(null, null),
+              emailUpdates: new FormControl(null, null),
               relationship: new FormControl(null, null),
               from_dob: new FormControl('1900-01-01', null),
               to_dob: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
@@ -177,7 +184,7 @@ export class SearchComponent implements OnInit {
         this.searchRet = new SearchRet();
       }
       );
-    
+
   }
 
   destroy(sub: any) {

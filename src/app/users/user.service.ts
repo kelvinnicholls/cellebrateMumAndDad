@@ -46,6 +46,7 @@ export class UserService {
             null,
             user.name,
             user.adminUser ? 'Yes' : 'No',
+            user.emailUpdates ? 'Yes' : 'No',
             user.relationship,
             moment(user.dob).format(Consts.DATE_DB_FORMAT),
             user.twitterId,
@@ -62,7 +63,7 @@ export class UserService {
         }
     }
 
-    updateThisUser(user) : any {
+    updateThisUser(user): any {
         const updateUser = this.createUser(user, null);
         if (user._profileMediaId) {
             updateUser.profilePicLocation = user._profileMediaId.location.substring(14);
@@ -100,7 +101,7 @@ export class UserService {
         });
 
 
-        this.socket.on('deletedUser', (creatorRef, changedBy) =>  {
+        this.socket.on('deletedUser', (creatorRef, changedBy) => {
             let userToBeDeleted = this.findUserByCreatorRef(creatorRef);
             if (userToBeDeleted) {
                 this.users.splice(this.users.indexOf(userToBeDeleted), 1);
@@ -169,6 +170,7 @@ export class UserService {
                         null,
                         user.name,
                         user.adminUser ? 'Yes' : 'No',
+                        user.emailUpdates ? 'Yes' : 'No',
                         user.relationship,
                         moment(user.dob).format(Consts.DATE_DB_FORMAT),
                         user.twitterId,
@@ -206,6 +208,7 @@ export class UserService {
                     null,
                     user.name,
                     user.adminUser ? 'Yes' : 'No',
+                    user.emailUpdates ? 'Yes' : 'No',
                     user.relationship,
                     moment(user.dob).format(Consts.DATE_DB_FORMAT),
                     user.twitterId,

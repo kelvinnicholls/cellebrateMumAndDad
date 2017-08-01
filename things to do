@@ -83,13 +83,13 @@ X36) search pop up
 X37) Add pagination
 X38) Get This email is already in use!  for kgn1@gmail.com on firefox but not chrome Seems to have corrected itself!
 
-39) Option for user's to receive email updates
+X39) Option for user's to receive email updates
 
 X40) Don't show current user in list
 
 X41) Hide send as admin if sending message for user
 X42) Show username that you are sending message to on screen, button and confirm
-43) Sort out location (works second time)
+X43) Sort out location (works second time)
 X44) Add clear messages button
 45) Check in to github
 46) Add picture above messages
@@ -112,3 +112,4 @@ X57) Update admin user to false not working
     // this is a bug in edge https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8282613/
     consider using bootstrap file picker
 x59) Update of user profile not being propagated by socket.io
+60) Implement email updates

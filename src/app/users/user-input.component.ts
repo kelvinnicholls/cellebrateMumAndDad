@@ -120,11 +120,18 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         } else {
                             adminUser = this.user.adminUser;
                         };
+                        let emailUpdates = this.myForm.value.emailUpdates;
+                        if (emailUpdates && typeof emailUpdates === 'string') {
+                            emailUpdates = emailUpdates === 'Yes' ? true : false;
+                        } else {
+                            emailUpdates = this.user.emailUpdates;
+                        };
                         this.user = new User(
                             this.myForm.value.email,
                             null,
                             this.myForm.value.name,
                             adminUser,
+                            emailUpdates,
                             this.myForm.value.relationship,
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
                             this.myForm.value.twitterId,
@@ -154,6 +161,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.password,
                             this.myForm.value.name,
                             this.myForm.value.adminUser == 'Yes' ? true : false,
+                            this.myForm.value.emailUpdates == 'Yes' ? true : false,
                             this.myForm.value.relationship,
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
                             this.myForm.value.twitterId,
@@ -232,6 +240,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
             name: new FormControl(null, Validators.required,
                 this.forbiddenNames),
             adminUser: new FormControl(null, Validators.required),
+            emailUpdates: new FormControl(null, Validators.required),
             relationship: new FormControl(null, Validators.required),
             email: new FormControl(null, [
                 Validators.required,
@@ -255,6 +264,9 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
                     };
+                    if (typeof this.user.emailUpdates === 'boolean') {
+                        this.user.emailUpdates = this.user.emailUpdates ? 'Yes' : 'No';
+                    };
                     this.myForm.get('password').clearValidators();
                     this.myForm.get('password').updateValueAndValidity();
                     this.myForm.get('adminUser').disable();
@@ -276,6 +288,11 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
                     };
+                    if (typeof this.user.emailUpdates === 'boolean') {
+                        this.user.emailUpdates = this.user.emailUpdates ? 'Yes' : 'No';
+                    };
+
+
                     this.myForm.get('password').clearValidators();
                     this.myForm.get('password').updateValueAndValidity();
                     this.myForm.get('adminUser').enable();

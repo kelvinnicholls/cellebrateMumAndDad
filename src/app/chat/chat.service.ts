@@ -27,8 +27,13 @@ export class ChatService {
         this.chatUserMessages.splice(index, 1);
     };
 
-    setPosition(position) {
+    setPosition(position, socketId, callback) {
         this.location = position.coords;
+        this.socket.emit('createLocationMessage', {
+            latitude: this.location.latitude,
+            longitude: this.location.longitude,
+            socketId: socketId
+        }, callback);
         console.log(position.coords);
     }
 
@@ -117,13 +122,13 @@ export class ChatService {
     }
 
     public createLocationMessage(socketId: any, callback) {
-        navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
+        navigator.geolocation.getCurrentPosition((position) => {
+            this.setPosition(position, socketId, callback);
+        }, () => {
+            console.log("There was an error getting position");
+        });
 
-        this.socket.emit('createLocationMessage', {
-            latitude: this.location.latitude,
-            longitude: this.location.longitude,
-            socketId: socketId
-        }, callback);
+
     }
 
 

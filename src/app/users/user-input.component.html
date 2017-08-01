@@ -94,6 +94,28 @@
   </div>
 
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+        'has-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
+        'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)
+      }">
+    <label for="emailUpdates" class="col-sm-4 col-form-label"><strong>Email Updates?</strong></label>
+    <div class="col-sm-5">
+      <select placement="bottom" ngbTooltip="Is this user registered for email updates? Y or N?" class="form-control dropdown" [ngModel]="user?.emailUpdates"
+        formControlName="emailUpdates" [ngClass]="{
+        'form-control-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
+        'form-control-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)
+      }">
+              <option value="Yes" >Yes</option>
+              <option value="No" selected>No</option>
+            </select>
+      <div class="form-control-feedback" *ngIf="myForm.get('emailUpdates').errors && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)">
+        <p *ngIf="myForm.get('emailUpdates').errors.required">Email Updates flag is required</p>
+
+      </div>
+      <small *ngIf="myForm.get('emailUpdates').invalid" class="form-text text-muted">Is this user registered for email updates? Y or N?</small>
+    </div>
+  </div>
+
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('relationship').invalid && (myForm.get('relationship').dirty || myForm.get('relationship').touched),
         'has-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty || myForm.get('relationship').touched)
       }">
@@ -125,7 +147,8 @@
     <label for="dob" class="col-sm-4 col-form-label"><strong>Date Of Birth</strong></label>
     <div class="col-sm-5">
       <div class="input-group">
-        <input class="form-control" placeholder="dd-mm-yyyy" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()" ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="dob" [ngClass]="{
+        <input class="form-control" placeholder="dd-mm-yyyy" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()"
+          ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="dob" [ngClass]="{
         'form-control-danger': myForm.get('dob').invalid,
         'form-control-success': myForm.get('dob').valid
       }">

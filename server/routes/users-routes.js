@@ -31,9 +31,9 @@ const {
 } = require('../shared/consts');
 
 const utils = require('../utils/utils.js');
-const userOutFields = ['email', 'name', 'adminUser', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location'];
-const userInsertFields = ['email', 'password', 'name', 'adminUser', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId'];
-const userUpdateFields = ['email', 'name', 'adminUser', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId'];
+const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location'];
+const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId'];
+const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId'];
 
 
 

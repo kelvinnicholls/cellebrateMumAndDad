@@ -3,6 +3,7 @@
     "password" : "$2a$10$SO3Ye078P4xCpyh3hjVrcuBA5sJqH4/DsZPjuBS8KwMV4RhTGBLt6",
     "name" : "kelvin",
     "adminUser" : true,
+    "emailUpdates" : true,
     "relationship" : "Son",
     "dob" : ISODate("1964-08-18T00:00:00.000Z"),
     "_creator" : ObjectId("594294a6d764c22df8155c88"),

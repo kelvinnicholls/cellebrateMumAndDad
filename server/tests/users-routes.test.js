@@ -240,6 +240,7 @@ describe('POST /users', () => {
 
     let name = "Kelvin";
     let adminUser = true;
+    let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
     let user = {
@@ -247,6 +248,7 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      emailUpdates,
       relationship,
       dob
     };
@@ -292,6 +294,7 @@ describe('POST /users', () => {
 
     let name = "Kelvin";
     let adminUser = true;
+    let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
     let user = {
@@ -299,6 +302,8 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      emailUpdates,
+
       relationship,
       dob
     };
@@ -352,6 +357,7 @@ describe('POST /users', () => {
 
     let name = users[0].name;
     let adminUser = true;
+    let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
     let user = {
@@ -359,6 +365,8 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      emailUpdates,
+
       relationship,
       dob
     };
@@ -396,6 +404,7 @@ describe('POST /users', () => {
 
     let name = "Kelvin";
     let adminUser = true;
+    let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
     let user = {
@@ -403,6 +412,7 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      emailUpdates,
       relationship,
       dob
     };
@@ -439,6 +449,7 @@ describe('POST /users', () => {
 
     let name = "Kelvin";
     let adminUser = true;
+    let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
     let user = {
@@ -446,6 +457,7 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      emailUpdates,
       relationship,
       dob
     };
