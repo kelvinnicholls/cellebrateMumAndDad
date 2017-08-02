@@ -147,7 +147,7 @@
     <label for="dob" class="col-sm-4 col-form-label"><strong>Date Of Birth</strong></label>
     <div class="col-sm-5">
       <div class="input-group">
-        <input class="form-control" placeholder="dd-mm-yyyy" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()"
+        <input class="form-control" placeholder="DD-MM-YYYY" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()"
           ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="dob" [ngClass]="{
         'form-control-danger': myForm.get('dob').invalid,
         'form-control-success': myForm.get('dob').valid
@@ -163,9 +163,9 @@
         'form-control-danger': myForm.get('dob').invalid,
         'form-control-success': myForm.get('dob').valid
       }"> -->
-    </div>
     <small *ngIf="myForm.get('dob').invalid" class="form-text text-muted">Enter the user's date of birth.</small>
-  </div>
+   </div>
+   </div>
 
 
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{

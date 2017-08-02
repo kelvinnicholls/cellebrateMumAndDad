@@ -1,5 +1,16 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+server/public/js/app/bundle.js
+server/public/images
+
+npm-debug.log.*
+
+server/config/config.json
+server/config/encryptedPasswords
+server/config/seedUser
+
+
+
 # compiled output
 /dist
 /tmp
@@ -41,8 +52,3 @@ testem.log
 .DS_Store
 Thumbs.db
 
-/server/public/images
-
-/server/public/js/app/bundle.js
-
-npm-debug.log.*
