@@ -2,15 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from "@angular/forms";
 
-import { SignInComponent } from "./sign-in.component";
 import { GetEncryptedPasswordComponent } from "./get-encrypted-password.component";
 import { authRouting } from "./auth.routing";
 
 
 @NgModule({
     declarations: [
-        SignInComponent,
-        GetEncryptedPasswordComponent,
+        GetEncryptedPasswordComponent
     ],
     exports: [],
     imports: [CommonModule,

@@ -3,15 +3,15 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 
 import { SignInUser } from "./sign-in-user.model";
-import { AuthService } from "./auth.service";
-import { ErrorService } from "../shared/errors/error.service";
-import { AppService } from "../app.service";
-import { ChatService } from "../chat/chat.service";
+import { AuthService } from "../../auth/auth.service";
+import { ErrorService } from "../errors/error.service";
+import { AppService } from "../../app.service";
+import { ChatService } from "../../chat/chat.service";
 
 
-import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
-import { PasswordValidationService } from '../shared/password-validation.service';
-import { Consts } from "../shared/consts";
+import { PasswordStrengthBarComponent } from '../password-strength-bar/password-strength-bar.component';
+import { PasswordValidationService } from '../password-validation.service';
+import { Consts } from "../consts";
 
 @Component({
     selector: 'app-sign-in',

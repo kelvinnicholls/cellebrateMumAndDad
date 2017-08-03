@@ -32,8 +32,6 @@ import { AuthService } from "./auth/auth.service";
 import { AuthUserService } from "./auth/auth-user.service";
 import { AuthGuard } from './auth/auth-guard.service';
 import { ToastCustomOption } from './shared/toast/toast-custom-option';
-import { UsersModule } from "./users/users.module";
-import { AuthModule } from "./auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { ChatModule } from "./chat/chat.module";
 import { UserService } from "./users/user.service";
@@ -47,23 +45,16 @@ import { UserService } from "./users/user.service";
     declarations: [
         AppComponent,
         HeaderComponent,
-        HomeComponent,
-        ChatUsersComponent,
-        ChatMessagesListComponent,
-        ChatMessageComponent,
-        ChatSendMessageComponent
+        HomeComponent
     ],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
-        FormsModule,
         appRouting,
         ReactiveFormsModule,
         HttpModule,
         ToastModule.forRoot(),
         NgPipesModule,
-        UsersModule,
-        AuthModule,
         ChatModule,
         SharedModule
     ],

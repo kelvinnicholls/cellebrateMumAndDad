@@ -1,7 +1,7 @@
 <li class="list-group-item justify-content-between">
     <img [src]="user?.profilePicLocation || defaultProfilePicFile" class="img-responsive" style="max-height: 30px;">
     <div class="author">
-         <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this user." routerLink="/user/{{user.index}}">{{ user.name }} ({{ user.relationship }} - {{ user.email }})</a>
+         <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this user." routerLink="/users/user/{{user.index}}">{{ user.name }} ({{ user.relationship }} - {{ user.email }})</a>
     </div>
     <div class="config">
         <a placement="bottom" ngbTooltip="Click to delete this user." (click)="onDelete()">Delete</a>

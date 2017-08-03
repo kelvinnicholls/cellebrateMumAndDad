@@ -7,7 +7,7 @@ import { Observable } from "rxjs";
 import { AppService } from "../app.service";
 import { ChatService } from "../chat/chat.service";
 import { AuthUserService } from "./auth-user.service";
-import { SignInUser } from "../auth/sign-in-user.model";
+import { SignInUser } from "../shared/sign-in/sign-in-user.model";
 import { Consts } from "../shared/consts";
 
 @Injectable()

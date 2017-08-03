@@ -30,7 +30,7 @@
         <div class="dropdown-menu" aria-labelledby="usersDropdown">
           <a routerLinkActive="active" class="dropdown-item" routerLink="/users">User List</a>
           <div class="dropdown-divider"></div>
-          <a routerLinkActive="active" class="dropdown-item" routerLink="/user/create">Create User</a>
+          <a routerLinkActive="active" class="dropdown-item" routerLink="/users/user/create">Create User</a>
         </div>
       </li>
 
@@ -41,7 +41,7 @@
 
     <ul class="navbar-nav ml-auto">
       <li *ngIf="!authUserService.isLoggedIn()" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="auth/sign-in">Sign In</a>
+        <a class="nav-link" routerLink="sign-in">Sign In</a>
       </li>
 
       <li *ngIf="authUserService.isLoggedIn()" class="nav-item dropdown">
@@ -51,9 +51,9 @@
                     {{authUserService.getLoggedInUserName()}}
                     </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loggedInUserDropdown">
-          <a class="dropdown-item" [routerLink]="['/user','edit-me']">Edit</a>
+          <a class="dropdown-item" [routerLink]="['/users','user','edit-me']">Edit</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" [routerLink]="['/user','change-password']">Change<br>Password</a>
+          <a class="dropdown-item" [routerLink]="['/users','user','change-password']">Change<br>Password</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="authService.logOut()" style="cursor: pointer">Log Out</a>
         </div>

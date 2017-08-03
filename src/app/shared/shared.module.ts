@@ -12,6 +12,7 @@ import { PaginationModule } from 'ngx-bootstrap';
 import { NgbDateMomentParserFormatter } from './ngb-date-moment-parser-formatter';
 import { Consts } from "./consts";
 import { sharedRouting } from "./shared.routing";
+import { SignInComponent } from "./sign-in/sign-in.component";
 
 @NgModule({
     declarations: [
@@ -21,6 +22,7 @@ import { sharedRouting } from "./shared.routing";
         ErrorComponent,
         DialogComponent,
         PageNotFoundComponent,
+        SignInComponent
     ],
     exports: [PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule,ErrorComponent,DialogComponent,PageNotFoundComponent],
     imports: [CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(),sharedRouting],

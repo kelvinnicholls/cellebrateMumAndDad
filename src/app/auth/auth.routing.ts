@@ -5,8 +5,7 @@ import { GetEncryptedPasswordComponent } from "./get-encrypted-password.componen
 import { AuthGuard } from './auth-guard.service';
 
 const AUTH_ROUTES: Routes = [
-  { path: 'auth/sign-in', component: SignInComponent },
-  { path: 'auth/get-encrypted-password', component: GetEncryptedPasswordComponent, canActivate: [AuthGuard] },
+  { path: 'get-encrypted-password', component: GetEncryptedPasswordComponent, canActivate: [AuthGuard] }
  ];
 
 export const authRouting = RouterModule.forChild(AUTH_ROUTES);

@@ -11,7 +11,12 @@ export class AuthUserService {
 
 
     isAdminUser(): boolean {
-        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER)).adminUser;
+        let adminUser =  JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER)).adminUser;
+        let ret = false;
+        if ((typeof adminUser === 'string' && adminUser.toLowerCase() === 'yes') || (typeof adminUser === 'boolean' && adminUser)) {
+            ret = true;
+        };
+        return ret;
     }
 
     getLoggedInUserName() {

@@ -110,7 +110,10 @@ X56) test in firefox
 X57) Update admin user to false not working
 58) Create not working in ie when profile pic selected. keep getting open file dialog.
     // this is a bug in edge https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8282613/
-    consider using bootstrap file picker
+    consider using bootstrap file picker  
 x59) Update of user profile not being propagated by socket.io
 60) Implement email updates
 61) before go live delete repository from github and change config settings and make sure they aren't committed.
+62) issue with create and list router links active 
+63) sort out issues with can-load (may need to split admin auth stuff and non-admin auth stuff) eg have sign-in at root ***
+    diff results if lazy loading or already loaded
