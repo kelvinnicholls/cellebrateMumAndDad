@@ -18,12 +18,8 @@ import { NgPipesModule } from 'ngx-pipes';
 import { HeaderComponent } from "./header.component";
 import { appRouting } from "./app.routing";
 import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
-import { SignInComponent } from "./auth/sign-in.component";
 import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
-import { GetEncryptedPasswordComponent } from "./auth/get-encrypted-password.component";
-import { AuthService } from "./auth/auth.service";
-import { AuthUserService } from "./auth/auth-user.service";
 import { ErrorService } from "./errors/error.service";
 import { DialogService } from "./dialog/dialog.service";
 import { SearchService } from "./shared/search/search.service";
@@ -34,9 +30,12 @@ import { ChatMessageComponent } from "./chat/chat-messages-list/chat-message/cha
 import { ChatSendMessageComponent } from "./chat/chat-send-message/chat-send-message.component";
 import { AppService } from "./app.service";
 import { HomeComponent } from "./home.component";
+import { AuthService } from "./auth/auth.service";
+import { AuthUserService } from "./auth/auth-user.service";
 import { AuthGuard } from './auth/auth-guard.service';
 import { ToastCustomOption } from './shared/toast/toast-custom-option';
 import { UsersModule } from "./users/users.module";
+import { AuthModule } from "./auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
 import { UserService } from "./users/user.service";
 //https://www.npmjs.com/package/angular2-tooltip
@@ -49,8 +48,6 @@ import { UserService } from "./users/user.service";
     declarations: [
         AppComponent,
         HeaderComponent,
-        SignInComponent,
-        GetEncryptedPasswordComponent,
         ErrorComponent,
         PageNotFoundComponent,
         HomeComponent,
@@ -70,6 +67,7 @@ import { UserService } from "./users/user.service";
         ToastModule.forRoot(),
         NgPipesModule,
         UsersModule,
+        AuthModule,
         SharedModule
     ],
     providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService],

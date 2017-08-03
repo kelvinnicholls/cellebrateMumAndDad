@@ -76,15 +76,17 @@ export class ChatService {
         });
 
         this.socket.on('updateUserList', (users) => {
-            let socketId = this.socket.io.engine.id;
-            console.log('updateUserList', users);
-            let chatUsers: ChatUser[] = [];
-            users.forEach(function (user) {
-                if (user.id != socketId) {
-                    chatUsers.push(new ChatUser(user.id, user.name));
-                }
-            });
-            this.chatUsers = chatUsers;
+            if (this.socket && this.socket.io) {
+                let socketId = this.socket.io.engine.id;
+                console.log('updateUserList', users);
+                let chatUsers: ChatUser[] = [];
+                users.forEach(function (user) {
+                    if (user.id != socketId) {
+                        chatUsers.push(new ChatUser(user.id, user.name));
+                    }
+                });
+                this.chatUsers = chatUsers;
+            }
         });
 
 
