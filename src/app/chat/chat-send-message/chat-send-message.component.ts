@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import { DialogService } from "../../dialog/dialog.service";
-import { DialogRetEnum } from "../../dialog/dialog-ret.enum";
-import { Dialog } from "../../dialog/dialog.model";
+import { DialogService } from "../../shared/dialog/dialog.service";
+import { DialogRetEnum } from "../../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../../shared/dialog/dialog.model";
 import { Subscription } from 'rxjs/Subscription';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ChatService } from "../chat.service";

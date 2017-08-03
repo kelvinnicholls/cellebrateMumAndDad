@@ -3,9 +3,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { UserService } from "../user.service";
 import { AppService } from "../../app.service";
 import { Router } from "@angular/router";
-import { DialogService } from "../../dialog/dialog.service";
-import { DialogRetEnum } from "../../dialog/dialog-ret.enum";
-import { Dialog } from "../../dialog/dialog.model";
+import { DialogService } from "../../shared/dialog/dialog.service";
+import { DialogRetEnum } from "../../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../../shared/dialog/dialog.model";
 
 
 import { User } from "../user.model";

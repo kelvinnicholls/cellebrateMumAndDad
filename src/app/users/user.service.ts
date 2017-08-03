@@ -8,7 +8,7 @@ import { Observable } from "rxjs";
 import { Consts } from "../shared/consts";
 import { User } from "./user.model";
 import { AppService } from "../app.service";
-import { ErrorService } from "../errors/error.service";
+import { ErrorService } from "../shared/errors/error.service";
 import { SearchService } from "../shared/search/search.service";
 import { SearchRetEnum } from "../shared/search/search-ret.enum";
 import { SearchRet } from "../shared/search/search-ret.model";

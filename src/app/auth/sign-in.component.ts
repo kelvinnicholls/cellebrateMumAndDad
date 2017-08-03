@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 
 import { SignInUser } from "./sign-in-user.model";
 import { AuthService } from "./auth.service";
-import { ErrorService } from "../errors/error.service";
+import { ErrorService } from "../shared/errors/error.service";
 import { AppService } from "../app.service";
 import { ChatService } from "../chat/chat.service";
 

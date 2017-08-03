@@ -1,10 +1,10 @@
 import { Component, Input, OnInit, EventEmitter, OnDestroy } from "@angular/core";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
-import { DialogService } from "../dialog/dialog.service";
+import { DialogService } from "../shared/dialog/dialog.service";
 import { Consts } from "../shared/consts";
-import { DialogRetEnum } from "../dialog/dialog-ret.enum";
-import { Dialog } from "../dialog/dialog.model";
+import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../shared/dialog/dialog.model";
 
 @Component({
     selector: 'app-user',

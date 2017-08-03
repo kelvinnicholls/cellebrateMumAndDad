@@ -10,11 +10,11 @@ import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/pa
 import { PasswordValidationService } from '../shared/password-validation.service';
 import { UserService } from "./user.service";
 import { ToastService } from "../shared/toast/toast.service";
-import { DialogService } from "../dialog/dialog.service";
+import { DialogService } from "../shared/dialog/dialog.service";
 import { AppService } from "../app.service";
 import { User } from "./user.model";
-import { DialogRetEnum } from "../dialog/dialog-ret.enum";
-import { Dialog } from "../dialog/dialog.model";
+import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 
 

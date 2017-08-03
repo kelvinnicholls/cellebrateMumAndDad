@@ -1,8 +1,8 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ChatService } from "../chat.service";
-import { DialogService } from "../../dialog/dialog.service";
-import { DialogRetEnum } from "../../dialog/dialog-ret.enum";
-import { Dialog } from "../../dialog/dialog.model";
+import { DialogService } from "../../shared/dialog/dialog.service";
+import { DialogRetEnum } from "../../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../../shared/dialog/dialog.model";
 
 @Component({
   selector: 'app-chat-messages-list',

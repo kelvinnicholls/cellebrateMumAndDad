@@ -17,13 +17,11 @@ import { NgPipesModule } from 'ngx-pipes';
 
 import { HeaderComponent } from "./header.component";
 import { appRouting } from "./app.routing";
-import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
-import { ErrorComponent } from "./errors/error.component";
-import { DialogComponent } from "./dialog/dialog.component";
-import { ErrorService } from "./errors/error.service";
-import { DialogService } from "./dialog/dialog.service";
+
 import { SearchService } from "./shared/search/search.service";
 import { ChatService } from "./chat/chat.service";
+import { ErrorService } from "./shared/errors/error.service";
+import { DialogService } from "./shared/dialog/dialog.service";
 import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
 import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messages-list.component";
 import { ChatMessageComponent } from "./chat/chat-messages-list/chat-message/chat-message.component";
@@ -48,10 +46,7 @@ import { UserService } from "./users/user.service";
     declarations: [
         AppComponent,
         HeaderComponent,
-        ErrorComponent,
-        PageNotFoundComponent,
         HomeComponent,
-        DialogComponent,
         ChatUsersComponent,
         ChatMessagesListComponent,
         ChatMessageComponent,
