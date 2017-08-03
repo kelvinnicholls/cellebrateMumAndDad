@@ -35,6 +35,7 @@ import { ToastCustomOption } from './shared/toast/toast-custom-option';
 import { UsersModule } from "./users/users.module";
 import { AuthModule } from "./auth/auth.module";
 import { SharedModule } from "./shared/shared.module";
+import { ChatModule } from "./chat/chat.module";
 import { UserService } from "./users/user.service";
 //https://www.npmjs.com/package/angular2-tooltip
 //import {ToolTipModule} from 'angular2-tooltip'
@@ -63,6 +64,7 @@ import { UserService } from "./users/user.service";
         NgPipesModule,
         UsersModule,
         AuthModule,
+        ChatModule,
         SharedModule
     ],
     providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService],
