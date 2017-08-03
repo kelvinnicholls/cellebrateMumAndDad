@@ -5,7 +5,6 @@ import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstra
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import * as moment from 'moment';
-import { NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
 
 import { PasswordStrengthBarComponent } from '../shared/password-strength-bar/password-strength-bar.component';
 import { PasswordValidationService } from '../shared/password-validation.service';

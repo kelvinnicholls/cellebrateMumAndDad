@@ -113,3 +113,4 @@ X57) Update admin user to false not working
     consider using bootstrap file picker
 x59) Update of user profile not being propagated by socket.io
 60) Implement email updates
+61) before go live delete repository from github and change config settings and make sure they aren't committed.

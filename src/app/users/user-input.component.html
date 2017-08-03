@@ -39,7 +39,7 @@
         'form-control-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
       <div *ngIf="myForm.get('password').dirty || myForm.get('password').touched">
-        <password-strength-bar [passwordToCheck]="myForm.get('password').value"></password-strength-bar>
+         <password-strength-bar [passwordToCheck]="myForm.get('password').value"></password-strength-bar> 
       </div>
       <div class="form-control-feedback" *ngIf="myForm.get('password').errors && (myForm.get('password').dirty || myForm.get('password').touched)">
         <p *ngIf="myForm.get('password').errors.required">Password is required</p>
