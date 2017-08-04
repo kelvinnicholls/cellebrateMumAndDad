@@ -28,9 +28,9 @@
         <a class="nav-link dropdown-toggle" id="usersDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">Users</a>
         <div class="dropdown-menu" aria-labelledby="usersDropdown">
-          <a routerLinkActive="active" class="dropdown-item" routerLink="/users">User List</a>
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/users">User List</a>
           <div class="dropdown-divider"></div>
-          <a routerLinkActive="active" class="dropdown-item" routerLink="/users/user/create">Create User</a>
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/users/user/create">Create User</a>
         </div>
       </li>
 

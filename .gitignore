@@ -8,7 +8,9 @@ npm-debug.log.*
 server/config/config.json
 server/config/encryptedPasswords
 server/config/seedUser
+server/public/js/app/*.chunk.js
 
+git rm --cached server/public/js/app/1.chunk.js
 
 
 # compiled output

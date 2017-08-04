@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate, CanLoad {
 
     if (this.authService.isAuthorised(route)) {
       return true;
-    }
+    };
     this.router.navigate(['not-found']);
     return false;
   }
@@ -28,6 +28,11 @@ export class AuthGuard implements CanActivate, CanLoad {
 
   // Import CanLoad from '@angular/router' and implement CanLoad
   canLoad(route: Route) {
-    return this.authUserService.isLoggedIn();
+    if (this.authUserService.isLoggedIn()) {
+      return true;
+    };
+    this.router.navigate(['not-found']);
+    return false;
+
   }
 }

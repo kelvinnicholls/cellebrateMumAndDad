@@ -1,6 +1,5 @@
 import { Routes, RouterModule } from "@angular/router";
 
-import { SignInComponent } from "./sign-in.component";
 import { GetEncryptedPasswordComponent } from "./get-encrypted-password.component";
 import { AuthGuard } from './auth-guard.service';
 

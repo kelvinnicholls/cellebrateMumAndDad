@@ -65,12 +65,15 @@ export class AuthService {
 
     isAdminRoute(route: ActivatedRouteSnapshot): boolean {
         let ret = false;
-        if (route.url.length == 1 && route.url[0].path === "users") {
+        if (route.url.length == 0) {
             ret = true;
         } else
-            if (route.url.length == 2 && route.url[0].path === "auth" && route.url[1].path === "get-encrypted-password") {
+            if (route.url.length == 1 && route.url[0].path === "users") {
                 ret = true;
-            }
+            } else
+                if (route.url.length == 2 && route.url[0].path === "auth" && route.url[1].path === "get-encrypted-password") {
+                    ret = true;
+                }
         return ret;
     }
 

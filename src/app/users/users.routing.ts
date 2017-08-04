@@ -5,7 +5,7 @@ import { UserInputComponent } from "./user-input.component";
 import { ChangePasswordComponent } from "./change-password/change-password.component";
 import { AuthGuard } from '../auth/auth-guard.service';
 const USERS_ROUTES: Routes = [
-  { path: '', component: UserListComponent, canActivate: [AuthGuard] },
+  { path: '', component: UserListComponent, canActivate: [AuthGuard], pathMatch: 'full' },
   { path: 'user/change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
   { path: 'user/edit-me', component: UserInputComponent, canActivate: [AuthGuard] },
   { path: 'user/create', component: UserInputComponent, canActivate: [AuthGuard] },
