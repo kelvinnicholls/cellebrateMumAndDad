@@ -38,6 +38,7 @@
     "crypto-js": "^3.1.9-1",
     "debug": "^2.6.8",
     "express": "^4.15.3",
+    "filestack-js": "^0.8.1",
     "hbs": "^4.0.1",
     "jsonwebtoken": "^7.4.1",
     "lodash": "^4.17.4",

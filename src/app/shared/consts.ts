@@ -28,5 +28,23 @@ export class Consts {
   public static DATE_DISPLAY_FORMAT = "DD-MM-YYYY";
   public static DATE_DB_FORMAT = "YYYY-MM-DD";
 
+  public static FILE_PICKER_API_KEY = "A0KaiilMGRAavl1oJwvn3z";
+
+  public static FILE_PICKER_SOURCES = ['url',
+    'imagesearch',
+    'facebook',
+    'instagram',
+    'googledrive',
+    'dropbox',
+    'evernote',
+    'flickr',
+    'box',
+    'github',
+    'gmail',
+    'picasa',
+    'onedrive',
+    'clouddrive'];
+  public static FILE_SYSTEM = 'File System';
+  public static WEB = 'Web';
 
 }

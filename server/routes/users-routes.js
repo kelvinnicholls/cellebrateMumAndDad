@@ -32,8 +32,8 @@ const {
 
 const utils = require('../utils/utils.js');
 const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location'];
-const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId'];
-const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId'];
+const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicUrl'];
+const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicUrl'];
 
 
 
@@ -130,6 +130,22 @@ router.post('/', authenticate, upload, (req, res) => {
   if (req.loggedInUser.adminUser) {
     let body = _.pick(req.passedUser, userInsertFields);
     //body._profileMediaId = req.body._profileMediaId;
+
+    if (body.profilePicUrl) {
+      let media = new Media();
+      media.location = body.profilePicUrl;
+      media.isUrl = true;
+      media.description = 'Profile picture for ' + req.loggedInUser.name;
+      media._creator = req.loggedInUser._creatorRef;
+      media.addedDate = new Date();
+      media.save().then((media) => {
+        body._profileMediaId = media._id;
+        req.body.location = media.location;
+      }).catch((e) => {
+        console.log("body.profilePicUrl media.save e", e);
+      });
+    };
+
     var user = new User(body);
     user._creatorRef = new ObjectID();
     user._creator = req.loggedInUser._creatorRef;
@@ -255,6 +271,21 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
     if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
       let body = _.pick(req.passedUser, userUpdateFields);
       //body._profileMediaId = req.body._profileMediaId;
+
+      if (body.profilePicUrl) {
+        let media = new Media();
+        media.location = body.profilePicUrl;
+        media.isUrl = true;
+        media.description = 'Profile picture for ' + req.loggedInUser.name;
+        media._creator = req.loggedInUser._creatorRef;
+        media.addedDate = new Date();
+        media.save().then((media) => {
+          body._profileMediaId = media._id;
+          req.body.location = media.location;
+        }).catch((e) => {
+          console.log("body.profilePicUrl media.save e", e);
+        });
+      };
 
       console.log('body', body);
       let userObj = {

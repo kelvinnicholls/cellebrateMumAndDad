@@ -16,7 +16,7 @@ import { User } from "./user.model";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
-
+import { FileStackService } from "../shared/file-stack/file-stack.service";
 
 @Component({
     selector: 'app-user-input',
@@ -33,17 +33,68 @@ export class UserInputComponent implements OnInit, OnDestroy {
     password = "";
     email = "";
 
+    fileSource: String = Consts.FILE_SYSTEM;
+
     submitType = Consts.CREATE_USER;
 
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;
     profilePicData = null;
     profilePicFile: File = null;
 
+    profilePicUrl: string = "";
+
     passwordValidators = [Validators.required, Validators.minLength(6), PasswordValidationService.oneLowercase, PasswordValidationService.oneUppercase];
 
+    setFileSource(fileSource: String) {
+        this.fileSource = fileSource;
+    }
+
+    getConsts() {
+        return Consts;
+    }
+
+    // http://blogs.microsoft.co.il/gilf/2013/07/22/quick-tip-typescript-declare-keyword/
+    // declare const filestack: {
+    //     init(apiKey: string): {
+    //         pick({ maxFiles }: { maxFiles: number }):
+    //             Promise<{ filesUploaded: { url: string }[] }>
+    //     }
+    // };
+
+    // uploadedFileUrls: string[] = [];
+
+    // async showPicker() {
+    //     const client = filestack.init(Consts.FILE_PICKER_API_KEY);
+    //     const result = await client.pick({ maxFiles: 1 });
+    //     const url = result.filesUploaded[0].url;
+    //     this.uploadedFileUrls.push(url);
+    // }
+
+    showFileStackPicker() {
+        if (this.fileSource === Consts.WEB) {
+            let promise = this.fileStackService.showFilePicker({
+                maxFiles: 1, fromSources: Consts.FILE_PICKER_SOURCES
+            });
+            promise.then((retObj) => {
+                if (retObj.filesUploaded.length > 0) {
+                    const url = retObj.filesUploaded[0].url;
+                    this.profilePicUrl = url;
+                    this.profilePicData = null;
+                };
+            });
+        };
+    }
 
 
-    constructor(private ngbDateParserFormatter: NgbDateParserFormatter, private userService: UserService, private route: ActivatedRoute, private vcr: ViewContainerRef, private toastService: ToastService, private dialogService: DialogService, private router: Router,, private appService: AppService) {
+    constructor(private ngbDateParserFormatter: NgbDateParserFormatter
+        , private userService: UserService
+        , private route: ActivatedRoute
+        , private vcr: ViewContainerRef
+        , private toastService: ToastService
+        , private dialogService: DialogService
+        , private router: Router
+        , private fileStackService: FileStackService
+        , private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -91,6 +142,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     fileReader.readAsDataURL(this.profilePicFile);
                     fileReader.onloadend = function (e) {
                         userInputComponent.profilePicData = fileReader.result;
+                        userInputComponent.profilePicUrl = "";
                         userInputComponent.myForm.markAsDirty();
                     }
                 }
@@ -136,7 +188,9 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.twitterId,
                             this.myForm.value.facebookId,
                             this._creatorRef,
-                            this.profilePicFile);
+                            this.profilePicFile,
+                            null,
+                            this.profilePicUrl);
                         this.userService.updateUser(this.user)
                             .subscribe(
                             result => {
@@ -153,6 +207,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this._creatorRef = null;
                         this.profilePicData = null;
                         this.profilePicFile = null;
+                        this.profilePicUrl = null;
+
                     } else {
                         // Create
                         this.user = new User(
@@ -166,7 +222,9 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.twitterId,
                             this.myForm.value.facebookId,
                             null,
-                            this.profilePicFile);
+                            this.profilePicFile,
+                            null,
+                            this.profilePicUrl);
                         this.userService.addUser(this.user)
                             .subscribe(
                             data => {
@@ -178,6 +236,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this._creatorRef = null;
                         this.profilePicData = null;
                         this.profilePicFile = null;
+                        this.profilePicUrl = null;
+
                     }
                     this.myForm.reset();
                 }
@@ -193,6 +253,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this._creatorRef = null;
         this.profilePicData = null;
         this.profilePicFile = null;
+        this.profilePicUrl = null;
+
         this.myForm.reset();
         this.myForm.get('password').setValidators(this.passwordValidators);
         this.myForm.get('password').updateValueAndValidity();

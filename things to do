@@ -117,3 +117,5 @@ x59) Update of user profile not being propagated by socket.io
 X62) issue with create and list router links active  (, pathMatch: 'full' ) ?? ([routerLinkActiveOptions]="{ exact: true }")
 X63) sort out issues with can-load (may need to split admin auth stuff and non-admin auth stuff) eg have sign-in at root ***
     diff results if lazy loading or already loaded
+64) Contact page
+65) Use free mongodb hosting https://mlab.com/

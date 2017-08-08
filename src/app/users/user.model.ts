@@ -13,7 +13,8 @@ export class User {
         public facebookId?: string,
         public _creatorRef?: string,
         public profilePicData?: File,
-        public profilePicLocation?: string
+        public profilePicLocation?: string,
+        public profilePicUrl?: string
     ) {
         if (profilePicLocation) {
             this.profilePicLocation = profilePicLocation.substring(14);

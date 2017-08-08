@@ -39,7 +39,7 @@
         'form-control-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
       <div *ngIf="myForm.get('password').dirty || myForm.get('password').touched">
-         <password-strength-bar [passwordToCheck]="myForm.get('password').value"></password-strength-bar> 
+        <password-strength-bar [passwordToCheck]="myForm.get('password').value"></password-strength-bar>
       </div>
       <div class="form-control-feedback" *ngIf="myForm.get('password').errors && (myForm.get('password').dirty || myForm.get('password').touched)">
         <p *ngIf="myForm.get('password').errors.required">Password is required</p>
@@ -99,8 +99,8 @@
       }">
     <label for="emailUpdates" class="col-sm-4 col-form-label"><strong>Email Updates?</strong></label>
     <div class="col-sm-5">
-      <select placement="bottom" ngbTooltip="Is this user registered for email updates? Y or N?" class="form-control dropdown" [ngModel]="user?.emailUpdates"
-        formControlName="emailUpdates" [ngClass]="{
+      <select placement="bottom" ngbTooltip="Is this user registered for email updates? Y or N?" class="form-control dropdown"
+        [ngModel]="user?.emailUpdates" formControlName="emailUpdates" [ngClass]="{
         'form-control-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
         'form-control-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)
       }">
@@ -163,9 +163,9 @@
         'form-control-danger': myForm.get('dob').invalid,
         'form-control-success': myForm.get('dob').valid
       }"> -->
-    <small *ngIf="myForm.get('dob').invalid" class="form-text text-muted">Enter the user's date of birth.</small>
-   </div>
-   </div>
+      <small *ngIf="myForm.get('dob').invalid" class="form-text text-muted">Enter the user's date of birth.</small>
+    </div>
+  </div>
 
 
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
@@ -201,17 +201,38 @@
     <label for="profilePic" class="col-sm-4 col-form-label"><strong>Profile picture</strong></label>
     <div class="col col-sm-2">
       <span class="pull-right">
-        <img placement="bottom" ngbTooltip="The user's profile picture." [src]="profilePicData || user?.profilePicLocation  || defaultProfilePicFile" class="img-responsive" style="max-height: 50px;">
+        <img placement="bottom" ngbTooltip="The user's profile picture." [src]="fileStackUrl || profilePicData || user?.profilePicLocation  || defaultProfilePicFile" class="img-responsive" style="max-height: 50px;">
         </span>
     </div>
-    <div class="col offset-sm-1 col-sm-1">
-      <label placement="right" ngbTooltip="Press to select the user's profile picture." class="btn btn-success" for='profilePicPath'>
+
+
+    <div class="col col-sm-2">
+      <div id="fileSource">
+        <label placement="bottom" ngbTooltip="Look for the file on the file system of local computer." class="custom-control custom-radio">
+                <input (click)="setFileSource(getConsts().FILE_SYSTEM)" id="fileSystem" name="fileSource" type="radio" value="File System" class="custom-control-input" checked>
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">File<br />System</span>
+              </label>
+        <label placement="bottom" ngbTooltip="Look for the file on the web." class="custom-control custom-radio">
+                <input (click)="setFileSource(getConsts().WEB)" id="web" name="fileSource" type="radio" value="Web" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Web</span>
+              </label>
+      </div>
+    </div>
+    <div class="col col-sm-1">
+      <label placement="right" ngbTooltip="Press to select the user's profile picture." class="btn btn-success" for='profilePicPath' (click)="showFileStackPicker()">
           Browse
-        <input  type="file" #file id="profilePicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
+        <input *ngIf="fileSource === getConsts().FILE_SYSTEM" type="file" #file id="profilePicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
+        <input *ngIf="fileSource === getConsts().WEB" type="button" class="form-control" style="display: none;">
+        <!-- <input *ngIf="fileSource === getConsts().WEB" type="button" value="Upload" (click)="showFileStackPicker()" /> -->
         </label>
 
     </div>
   </div>
+
+
+
   <div class="form-group row col col-sm-4 offset-sm-4">
     <button *ngIf="isCreateUser()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger"
       (click)="onClear()">Clear</button>

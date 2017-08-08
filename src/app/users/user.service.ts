@@ -40,7 +40,7 @@ export class UserService {
 
     private socket;
 
-    createUser(user, location): User {
+    createUser(user, location, url): User {
         return new User(
             user.email,
             null,
@@ -53,7 +53,8 @@ export class UserService {
             user.facebookId,
             user._creatorRef,
             null,
-            location);
+            location,
+            url);
     }
 
     updateLocalStorage(user) {
@@ -63,10 +64,15 @@ export class UserService {
         }
     }
 
+
+
+
     updateThisUser(user): any {
-        const updateUser = this.createUser(user, null);
-        if (user._profileMediaId) {
+        const updateUser = this.createUser(user, null, null);
+        if (user._profileMediaId && !user._profileMediaId.isUrl) {
             updateUser.profilePicLocation = user._profileMediaId.location.substring(14);
+        } else if (user._profileMediaId && user._profileMediaId.isUrl) {
+            updateUser.profilePicUrl = user._profileMediaId.location;
         };
 
         this.users.forEach((element, index) => {
@@ -88,7 +94,11 @@ export class UserService {
             if (user.location) {
                 location = user.location;
             };
-            this.users.push(this.createUser(user, location));
+            let url = null;
+            if (user.url) {
+                url = user.url;
+            };
+            this.users.push(this.createUser(user, location, url));
             this.usersChanged.next(this.users);
             this.appService.showToast(Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
             console.log(Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
@@ -131,8 +141,11 @@ export class UserService {
                 if (result.location) {
                     location = result.location;
                 };
-                this.createUser(result, location);
-                const user = this.createUser(result, location);
+                let url = null;
+                if (result.url) {
+                    url = result.url;
+                };
+                const user = this.createUser(result, location, url);
                 userService.users.push(user);
 
                 this.socket.emit('userCreated', user, function (err) {
@@ -162,8 +175,11 @@ export class UserService {
                 let transformedUsers: User[] = [];
                 for (let user of users) {
                     let location = null;
-                    if (user._profileMediaId && user._profileMediaId.location) {
+                    let url = null;
+                    if (user._profileMediaId && user._profileMediaId.location && !user._profileMediaId.isUrl) {
                         location = user._profileMediaId.location;
+                    } else if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.isUrl) {
+                        url = user._profileMediaId.location;
                     };
                     let newUser = new User(
                         user.email,
@@ -177,7 +193,8 @@ export class UserService {
                         user.facebookId,
                         user._creatorRef,
                         null,
-                        location);
+                        location,
+                        url);
                     transformedUsers.push(newUser);
                     this.updateLocalStorage(newUser);
                 }
@@ -191,6 +208,9 @@ export class UserService {
             });
     }
 
+
+
+
     getMe() {
         const headers: Headers = new Headers();
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
@@ -200,8 +220,11 @@ export class UserService {
             .map((response: Response) => {
                 const user = response.json();
                 let location = null;
-                if (user._profileMediaId && user._profileMediaId.location) {
+                let url = null;
+                if (user._profileMediaId && user._profileMediaId.location && !user._profileMediaId.isUrl) {
                     location = user._profileMediaId.location;
+                } else if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.isUrl) {
+                    url = user._profileMediaId.location;
                 };
                 let transformedUser: User = new User(
                     user.email,
@@ -215,7 +238,8 @@ export class UserService {
                     user.facebookId,
                     user._creatorRef,
                     null,
-                    location);
+                    location,
+                    url);
                 return transformedUser;
             })
             .catch((error: Response) => {

@@ -35,6 +35,9 @@ import { ToastCustomOption } from './shared/toast/toast-custom-option';
 import { SharedModule } from "./shared/shared.module";
 import { ChatModule } from "./chat/chat.module";
 import { UserService } from "./users/user.service";
+import { FileStackService } from "./shared/file-stack/file-stack.service";
+
+
 //https://www.npmjs.com/package/angular2-tooltip
 //import {ToolTipModule} from 'angular2-tooltip'
 //https://ng-bootstrap.github.io/#/getting-started
@@ -58,7 +61,7 @@ import { UserService } from "./users/user.service";
         ChatModule,
         SharedModule
     ],
-    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService],
+    providers: [AuthService, UserService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, FileStackService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
