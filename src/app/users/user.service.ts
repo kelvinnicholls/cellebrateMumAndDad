@@ -40,7 +40,7 @@ export class UserService {
 
     private socket;
 
-    createUser(user, location, url): User {
+    createUser(user, profilePicInfo): User {
         return new User(
             user.email,
             null,
@@ -53,8 +53,7 @@ export class UserService {
             user.facebookId,
             user._creatorRef,
             null,
-            location,
-            url);
+            profilePicInfo);
     }
 
     updateLocalStorage(user) {
@@ -68,11 +67,14 @@ export class UserService {
 
 
     updateThisUser(user): any {
-        const updateUser = this.createUser(user, null, null);
+        const updateUser = this.createUser(user, user.profilePicInfo);
+        if (!updateUser.profilePicInfo) {
+            updateUser.profilePicInfo = {};
+        };
         if (user._profileMediaId && !user._profileMediaId.isUrl) {
-            updateUser.profilePicLocation = user._profileMediaId.location.substring(14);
+            updateUser.profilePicInfo.location = user._profileMediaId.location.substring(14);
         } else if (user._profileMediaId && user._profileMediaId.isUrl) {
-            updateUser.profilePicUrl = user._profileMediaId.location;
+            updateUser.profilePicInfo.location = user._profileMediaId.location;
         };
 
         this.users.forEach((element, index) => {
@@ -90,15 +92,7 @@ export class UserService {
         this.socket = socket;
 
         this.socket.on('createdUser', (user, changedBy) => {
-            let location = null;
-            if (user.location) {
-                location = user.location;
-            };
-            let url = null;
-            if (user.url) {
-                url = user.url;
-            };
-            this.users.push(this.createUser(user, location, url));
+            this.users.push(this.createUser(user, user.profilePicInfo));
             this.usersChanged.next(this.users);
             this.appService.showToast(Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
             console.log(Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
@@ -125,11 +119,11 @@ export class UserService {
     addUser(user: User) {
         var fd = new FormData();
         const headers: Headers = new Headers();
-        if (user.profilePicData) {
-            fd.append('file', user.profilePicData, user.profilePicData.name);
+        if (user.profilePicFile) {
+            fd.append('file', user.profilePicFile, user.profilePicFile.name);
         };
 
-        user.profilePicData = null;
+        user.profilePicFile = null;
         const userJsonString = JSON.stringify(user);
         fd.append('user', userJsonString);
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
@@ -137,15 +131,10 @@ export class UserService {
         return this.http.post(Consts.API_URL_USERS_ROOT, fd, { headers: headers })
             .map((response: Response) => {
                 const result = response.json();
-                let location = null;
-                if (result.location) {
-                    location = result.location;
-                };
-                let url = null;
-                if (result.url) {
-                    url = result.url;
-                };
-                const user = this.createUser(result, location, url);
+                let profilePicInfo: any  = {};
+                profilePicInfo.location = result.location;
+                profilePicInfo.isUrl = result.isUrl;
+                const user = this.createUser(result, profilePicInfo);
                 userService.users.push(user);
 
                 this.socket.emit('userCreated', user, function (err) {
@@ -160,8 +149,8 @@ export class UserService {
                 return user;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json());
-                return Observable.throw(error.json().error);
+                userService.errorService.handleError(error.toString());
+                return Observable.throw(error.toString());
             });
     }
 
@@ -174,13 +163,12 @@ export class UserService {
                 const users = response.json();
                 let transformedUsers: User[] = [];
                 for (let user of users) {
-                    let location = null;
-                    let url = null;
-                    if (user._profileMediaId && user._profileMediaId.location && !user._profileMediaId.isUrl) {
-                        location = user._profileMediaId.location;
-                    } else if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.isUrl) {
-                        url = user._profileMediaId.location;
+                    let profilePicInfo: any = {};
+                    if (user._profileMediaId && user._profileMediaId.location) {
+                        profilePicInfo.location = user._profileMediaId.location;
+                        profilePicInfo.isUrl = user._profileMediaId.isUrl;
                     };
+
                     let newUser = new User(
                         user.email,
                         null,
@@ -193,8 +181,7 @@ export class UserService {
                         user.facebookId,
                         user._creatorRef,
                         null,
-                        location,
-                        url);
+                        profilePicInfo);
                     transformedUsers.push(newUser);
                     this.updateLocalStorage(newUser);
                 }
@@ -203,13 +190,10 @@ export class UserService {
                 return transformedUsers;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json());
-                return Observable.throw(error.json().error);
+                userService.errorService.handleError(error.toString());
+                return Observable.throw(error.toString());
             });
     }
-
-
-
 
     getMe() {
         const headers: Headers = new Headers();
@@ -219,12 +203,10 @@ export class UserService {
         return this.http.get(Consts.API_URL_USERS_ROOT + '/me', { headers: headers })
             .map((response: Response) => {
                 const user = response.json();
-                let location = null;
-                let url = null;
-                if (user._profileMediaId && user._profileMediaId.location && !user._profileMediaId.isUrl) {
-                    location = user._profileMediaId.location;
-                } else if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.isUrl) {
-                    url = user._profileMediaId.location;
+                let profilePicInfo: any = {};
+                if (user._profileMediaId && user._profileMediaId.location) {
+                    profilePicInfo.location = user._profileMediaId.location;
+                    profilePicInfo.isUrl = user._profileMediaId.isUrl;
                 };
                 let transformedUser: User = new User(
                     user.email,
@@ -238,13 +220,12 @@ export class UserService {
                     user.facebookId,
                     user._creatorRef,
                     null,
-                    location,
-                    url);
+                    profilePicInfo);
                 return transformedUser;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json());
-                return Observable.throw(error.json().error);
+                userService.errorService.handleError(error.toString());
+                return Observable.throw(error.toString());
             });
     }
 
@@ -252,11 +233,11 @@ export class UserService {
     updateUser(user: User) {
         var fd = new FormData();
         const headers: Headers = new Headers();
-        if (user.profilePicData) {
-            fd.append('file', user.profilePicData, user.profilePicData.name);
+        if (user.profilePicFile) {
+            fd.append('file', user.profilePicFile, user.profilePicFile.name);
         };
 
-        user.profilePicData = null;
+        user.profilePicFile = null;
         const userJsonString = JSON.stringify(user);
         fd.append('user', userJsonString);
 
@@ -278,8 +259,8 @@ export class UserService {
                 return response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json());
-                return Observable.throw(error.json().error);
+                userService.errorService.handleError(error.toString());
+                return Observable.throw(error.toString());
             });
     }
 
@@ -304,8 +285,8 @@ export class UserService {
                 return response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json());
-                return Observable.throw(error.json().error);
+                userService.errorService.handleError(error.toString());
+                return Observable.throw(error.toString());
             });
     }
 
@@ -323,8 +304,8 @@ export class UserService {
                 response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json());
-                return Observable.throw(error.json().error);
+                userService.errorService.handleError(error.toString());
+                return Observable.throw(error.toString());
             })
     }
 

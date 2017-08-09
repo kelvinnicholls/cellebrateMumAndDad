@@ -31,9 +31,9 @@ const {
 } = require('../shared/consts');
 
 const utils = require('../utils/utils.js');
-const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location'];
-const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicUrl'];
-const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicUrl'];
+const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location','isUrl'];
+const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
+const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 
 
 
@@ -83,9 +83,12 @@ let multerUpload = multer({
 // };
 
 let upload = (req, res, next) => {
+  //console.log('upload',req, res);
   multerUpload(req, res, function (err) {
+    //console.log('multerUpload',err);
     req.passedUser = JSON.parse(req.body.user);
     delete req.body.user;
+    console.log('req.file', req.file);
     if (err) {
       console.log('user patch err', err);
       if (err.code === 'LIMIT_FILE_SIZE') {
@@ -131,10 +134,11 @@ router.post('/', authenticate, upload, (req, res) => {
     let body = _.pick(req.passedUser, userInsertFields);
     //body._profileMediaId = req.body._profileMediaId;
 
-    if (body.profilePicUrl) {
+    if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
       let media = new Media();
-      media.location = body.profilePicUrl;
+      media.location = body.profilePicInfo.location;
       media.isUrl = true;
+      media.mimeType = body.profilePicInfo.mimeType;
       media.description = 'Profile picture for ' + req.loggedInUser.name;
       media._creator = req.loggedInUser._creatorRef;
       media.addedDate = new Date();
@@ -142,7 +146,7 @@ router.post('/', authenticate, upload, (req, res) => {
         body._profileMediaId = media._id;
         req.body.location = media.location;
       }).catch((e) => {
-        console.log("body.profilePicUrl media.save e", e);
+        console.log("body.profilePicInfo media.save e", e);
       });
     };
 
@@ -272,10 +276,11 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
       let body = _.pick(req.passedUser, userUpdateFields);
       //body._profileMediaId = req.body._profileMediaId;
 
-      if (body.profilePicUrl) {
+      if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
         let media = new Media();
-        media.location = body.profilePicUrl;
+        media.location = body.profilePicInfo.location;
         media.isUrl = true;
+        media.mimeType = body.profilePicInfo.mimeType;
         media.description = 'Profile picture for ' + req.loggedInUser.name;
         media._creator = req.loggedInUser._creatorRef;
         media.addedDate = new Date();
@@ -283,7 +288,7 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
           body._profileMediaId = media._id;
           req.body.location = media.location;
         }).catch((e) => {
-          console.log("body.profilePicUrl media.save e", e);
+          console.log("body.profilePicInfo media.save e", e);
         });
       };
 
@@ -295,7 +300,7 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
         $set: body
       }, {
         new: true
-      }).populate('_profileMediaId', ['location']).then((user) => {
+      }).populate('_profileMediaId', ['location', 'isUrl']).then((user) => {
         if (user) {
           res.send(_.pick(user, userOutFields));
         } else {
@@ -394,7 +399,7 @@ router.get('/', authenticate, (req, res) => {
     userObj._id = req.loggedInUser._id;
   };
 
-  User.find(userObj).populate('_profileMediaId', ['location']).then((users) => {
+  User.find(userObj).populate('_profileMediaId', ['location', 'isUrl']).then((users) => {
     if (users) {
       users.forEach((user) => {
         users.user = _.pick(user, userOutFields);

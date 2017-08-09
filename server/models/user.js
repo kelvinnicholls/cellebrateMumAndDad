@@ -139,7 +139,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
   let User = this;
   return User.findOne({
     email
-  }).populate('_profileMediaId', ['location']).then((user) => {
+  }).populate('_profileMediaId', ['location','isUrl']).then((user) => {
     if (!user) {
       return Promise.reject();
     }
@@ -168,7 +168,7 @@ UserSchema.statics.findByToken = function (token) {
     '_id': decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
-  }).populate('_profileMediaId', ['location'])
+  }).populate('_profileMediaId', ['location','isUrl'])
 };
 
 

@@ -38,10 +38,10 @@ export class UserInputComponent implements OnInit, OnDestroy {
     submitType = Consts.CREATE_USER;
 
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;
+
     profilePicData = null;
     profilePicFile: File = null;
-
-    profilePicUrl: string = "";
+    profilePicInfo: any = null;
 
     passwordValidators = [Validators.required, Validators.minLength(6), PasswordValidationService.oneLowercase, PasswordValidationService.oneUppercase];
 
@@ -78,13 +78,28 @@ export class UserInputComponent implements OnInit, OnDestroy {
             promise.then((retObj) => {
                 if (retObj.filesUploaded.length > 0) {
                     const url = retObj.filesUploaded[0].url;
-                    this.profilePicUrl = url;
+                    const mimeType = retObj.filesUploaded[0].mimetype;
+                    this.profilePicInfo = { 'location': url, 'mimeType': mimeType, 'isUrl': true };
                     this.profilePicData = null;
+                    this.profilePicFile = null;
+                    this.myForm.markAsDirty();
                 };
             });
         };
     }
 
+    getSource(): any {
+        let retVal: any = this.defaultProfilePicFile;
+
+        if (this.profilePicInfo && this.profilePicInfo.location) {
+            retVal = this.profilePicInfo.location;
+        } else if (this.profilePicData) {
+            retVal = this.profilePicData;
+        } else if (this.user && this.user.profilePicInfo && this.user.profilePicInfo.location) {
+            retVal = this.user.profilePicInfo.location;
+        };
+        return retVal;
+    }
 
     constructor(private ngbDateParserFormatter: NgbDateParserFormatter
         , private userService: UserService
@@ -142,7 +157,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     fileReader.readAsDataURL(this.profilePicFile);
                     fileReader.onloadend = function (e) {
                         userInputComponent.profilePicData = fileReader.result;
-                        userInputComponent.profilePicUrl = "";
+                        userInputComponent.profilePicInfo = null;
                         userInputComponent.myForm.markAsDirty();
                     }
                 }
@@ -189,8 +204,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.facebookId,
                             this._creatorRef,
                             this.profilePicFile,
-                            null,
-                            this.profilePicUrl);
+                            this.profilePicInfo);
                         this.userService.updateUser(this.user)
                             .subscribe(
                             result => {
@@ -207,7 +221,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this._creatorRef = null;
                         this.profilePicData = null;
                         this.profilePicFile = null;
-                        this.profilePicUrl = null;
+                        this.profilePicInfo = null;
 
                     } else {
                         // Create
@@ -223,8 +237,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.facebookId,
                             null,
                             this.profilePicFile,
-                            null,
-                            this.profilePicUrl);
+                            this.profilePicInfo);
                         this.userService.addUser(this.user)
                             .subscribe(
                             data => {
@@ -236,7 +249,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this._creatorRef = null;
                         this.profilePicData = null;
                         this.profilePicFile = null;
-                        this.profilePicUrl = null;
+                        this.profilePicInfo = null;
 
                     }
                     this.myForm.reset();
@@ -253,7 +266,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
         this._creatorRef = null;
         this.profilePicData = null;
         this.profilePicFile = null;
-        this.profilePicUrl = null;
+        this.profilePicInfo = null;
 
         this.myForm.reset();
         this.myForm.get('password').setValidators(this.passwordValidators);

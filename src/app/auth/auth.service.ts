@@ -34,7 +34,7 @@ export class AuthService {
         headers.set('password', password);
         return this.http.get(Consts.API_URL_USERS_ROOT + '/getEncryptedPassword', { headers: headers })
             .map((response: Response) => response.json())
-            .catch((error: Response) => Observable.throw(error.json().error));
+            .catch((error: Response) => Observable.throw(error.toString()));
     }
 
     logOut() {
@@ -48,8 +48,8 @@ export class AuthService {
                 return response.json();
             })
             .catch((error: Response) => {
-                console.log("logOut() error", error);
-                return Observable.throw(error.json().error);
+                console.log("logOut() error", error.toString());
+                return Observable.throw(error.toString());
             }).subscribe(
             (response) => {
                 localStorage.clear();

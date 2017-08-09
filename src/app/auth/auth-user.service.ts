@@ -28,8 +28,8 @@ export class AuthUserService {
         let loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
 
         if (loggedInUser) {
-            if (loggedInUser.profilePicLocation) {
-                location = loggedInUser.profilePicLocation;
+            if (loggedInUser.profilePicInfo && loggedInUser.profilePicInfo.location) {
+                location = loggedInUser.profilePicInfo.location;
             } else if (loggedInUser._profileMediaId && loggedInUser._profileMediaId.location) {
                 location = loggedInUser._profileMediaId.location.substring(14);
             }

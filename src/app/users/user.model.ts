@@ -12,13 +12,13 @@ export class User {
         public twitterId?: string,
         public facebookId?: string,
         public _creatorRef?: string,
-        public profilePicData?: File,
-        public profilePicLocation?: string,
-        public profilePicUrl?: string
+        public profilePicFile?: File,
+        public profilePicInfo?: any // {location:string,mimeType:string,isUrl:boolean}
     ) {
-        if (profilePicLocation) {
-            this.profilePicLocation = profilePicLocation.substring(14);
+        if (profilePicInfo && profilePicInfo.location && !profilePicInfo.isUrl && profilePicInfo.location.startsWith('server')) {
+            this.profilePicInfo.location = profilePicInfo.location.substring(14);
         };
+
     }
 
 };

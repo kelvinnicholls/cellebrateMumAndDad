@@ -201,7 +201,7 @@
     <label for="profilePic" class="col-sm-4 col-form-label"><strong>Profile picture</strong></label>
     <div class="col col-sm-2">
       <span class="pull-right">
-        <img placement="bottom" ngbTooltip="The user's profile picture." [src]="fileStackUrl || profilePicData || user?.profilePicLocation  || defaultProfilePicFile" class="img-responsive" style="max-height: 50px;">
+        <img placement="bottom" ngbTooltip="The user's profile picture." [src]="getSource()" class="img-responsive" style="max-height: 50px;">
         </span>
     </div>
 
@@ -211,12 +211,12 @@
         <label placement="bottom" ngbTooltip="Look for the file on the file system of local computer." class="custom-control custom-radio">
                 <input (click)="setFileSource(getConsts().FILE_SYSTEM)" id="fileSystem" name="fileSource" type="radio" value="File System" class="custom-control-input" checked>
                   <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">File<br />System</span>
+                  <span class="custom-control-description"><strong>File<br />System</strong></span>
               </label>
         <label placement="bottom" ngbTooltip="Look for the file on the web." class="custom-control custom-radio">
                 <input (click)="setFileSource(getConsts().WEB)" id="web" name="fileSource" type="radio" value="Web" class="custom-control-input">
                   <span class="custom-control-indicator"></span>
-                  <span class="custom-control-description">Web</span>
+                  <span class="custom-control-description"><strong>Web</strong></span>
               </label>
       </div>
     </div>

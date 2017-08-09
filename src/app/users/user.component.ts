@@ -24,7 +24,7 @@ import { Dialog } from "../shared/dialog/dialog.model";
         }
     `]
 })
-export class UserComponent implements OnInit,OnDestroy {
+export class UserComponent implements OnInit, OnDestroy {
     @Input() user: User;
     //@Input() index: Number;
     defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
@@ -49,6 +49,14 @@ export class UserComponent implements OnInit,OnDestroy {
 
     ngOnInit() {
 
+    }
+
+    getSource(): string {
+        let retVal: string = this.defaultProfilePicFile;
+        if (this.user && this.user.profilePicInfo && this.user.profilePicInfo.location) {
+            retVal = this.user.profilePicInfo.location;
+        }
+        return retVal;
     }
 
     destroy(sub: any) {
