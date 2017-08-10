@@ -7,7 +7,7 @@ export class NgbDateMomentParserFormatter extends NgbDateParserFormatter {
         super();
     };
     format(date: NgbDateStruct): string {
-        if (date === null) {
+        if (date == null) {
             return '';
         }
         let d = moment({ year: date.year, 
@@ -17,7 +17,7 @@ export class NgbDateMomentParserFormatter extends NgbDateParserFormatter {
     }
 
     formatForDB(date: NgbDateStruct): string {
-        if (date === null) {
+        if (date == null) {
             return '';
         }
         let d = moment({ year: date.year, 

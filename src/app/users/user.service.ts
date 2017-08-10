@@ -149,8 +149,8 @@ export class UserService {
                 return user;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.toString());
-                return Observable.throw(error.toString());
+                userService.errorService.handleError(error.json() || error.toString());
+                return Observable.throw(error.json() || error.toString());
             });
     }
 
@@ -190,8 +190,8 @@ export class UserService {
                 return transformedUsers;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.toString());
-                return Observable.throw(error.toString());
+                userService.errorService.handleError(error.json() || error.toString());
+                return Observable.throw(error.json() || error.toString());
             });
     }
 
@@ -224,8 +224,8 @@ export class UserService {
                 return transformedUser;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.toString());
-                return Observable.throw(error.toString());
+                userService.errorService.handleError(error.json() || error.toString());
+                return Observable.throw(error.json() || error.toString());
             });
     }
 
@@ -259,8 +259,8 @@ export class UserService {
                 return response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.toString());
-                return Observable.throw(error.toString());
+                userService.errorService.handleError(error.json() || error.toString());
+                return Observable.throw(error.json() || error.toString());
             });
     }
 
@@ -285,8 +285,8 @@ export class UserService {
                 return response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.toString());
-                return Observable.throw(error.toString());
+                userService.errorService.handleError(error.json() || error.toString());
+                return Observable.throw(error.json() || error.toString());
             });
     }
 
@@ -304,8 +304,8 @@ export class UserService {
                 response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.toString());
-                return Observable.throw(error.toString());
+                userService.errorService.handleError(error.json() || error.toString());
+                return Observable.throw(error.json() || error.toString());
             })
     }
 

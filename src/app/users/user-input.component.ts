@@ -18,6 +18,8 @@ import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
 
+
+
 @Component({
     selector: 'app-user-input',
     templateUrl: './user-input.component.html',
@@ -32,6 +34,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     password = "";
     email = "";
+
 
     fileSource: String = Consts.FILE_SYSTEM;
 
@@ -174,6 +177,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     onSubmit() {
         let retDialogSub = new EventEmitter<DialogRetEnum>();
+        let userInputComponent = this;
 
         retDialogSub.subscribe(
             (buttonPressed: DialogRetEnum) => {
@@ -210,10 +214,10 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             result => {
                                 console.log(result);
                                 if (this.submitType == Consts.UPDATE_CURRENT_USER) {
-                                    this.router.navigate(['']);
-                                    this.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
+                                    userInputComponent.router.navigate(['']);
+                                    userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
                                 } else {
-                                    this.toastService.showSuccess("User updated.");
+                                    userInputComponent.toastService.showSuccess("User updated.");
                                 };
                             }
                             );
@@ -241,7 +245,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this.userService.addUser(this.user)
                             .subscribe(
                             data => {
-                                this.toastService.showSuccess("User created.");
+                                userInputComponent.toastService.showSuccess("User created.");
                             },
                             error => console.error("UserComponent userService.newUser error", error)
                             );
@@ -307,6 +311,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
     forbiddenNames = (control: FormControl): Promise<any> | Observable<any> => {
         return this.userService.nameExists(control.value, this.getCreatorRef());
     }
+
 
     ngOnInit() {
 

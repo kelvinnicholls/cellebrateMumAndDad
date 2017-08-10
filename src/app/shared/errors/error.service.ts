@@ -7,7 +7,7 @@ export class ErrorService {
 
     handleError(error: any) {
         let title = "Error";
-        let message = "";
+        let message = error;
         if (error.title) {
             title = error.title;
         };
