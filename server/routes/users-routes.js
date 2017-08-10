@@ -31,7 +31,7 @@ const {
 } = require('../shared/consts');
 
 const utils = require('../utils/utils.js');
-const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location','isUrl'];
+const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
 const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 
@@ -128,6 +128,37 @@ let upload = (req, res, next) => {
   });
 };
 
+let saveMedia = (body, req, _creatorRef, res, func) => {
+  let media = new Media();
+  media.location = body.profilePicInfo.location;
+  media.isUrl = true;
+  media.mimeType = body.profilePicInfo.mimeType;
+  media.description = 'Profile picture for ' + req.loggedInUser.name;
+  media._creator = req.loggedInUser._creatorRef;
+  media.addedDate = new Date();
+  console.log("create media for filestack media: ", media);
+  media.save().then((media) => {
+    body._profileMediaId = media._id;
+    req.body.location = media.location;
+    console.log("body.profilePicInfo media.save success", media);
+    func(body, _creatorRef, res, req);
+  }).catch((e) => {
+    console.log("body.profilePicInfo media.save e", e);
+  });
+};
+
+let createUser = (body, _creatorRef, res, req) => {
+  var user = new User(body);
+  user._creatorRef = new ObjectID();
+  user._creator = req.loggedInUser._creatorRef;
+  user.save().then((user) => {
+    user.location = req.body.location;
+    res.send(_.pick(user, userOutFields));
+  }).catch((e) => {
+    console.log("1 router.post('/' e", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+  });
+};
 
 router.post('/', authenticate, upload, (req, res) => {
   if (req.loggedInUser.adminUser) {
@@ -135,31 +166,12 @@ router.post('/', authenticate, upload, (req, res) => {
     //body._profileMediaId = req.body._profileMediaId;
 
     if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
-      let media = new Media();
-      media.location = body.profilePicInfo.location;
-      media.isUrl = true;
-      media.mimeType = body.profilePicInfo.mimeType;
-      media.description = 'Profile picture for ' + req.loggedInUser.name;
-      media._creator = req.loggedInUser._creatorRef;
-      media.addedDate = new Date();
-      media.save().then((media) => {
-        body._profileMediaId = media._id;
-        req.body.location = media.location;
-      }).catch((e) => {
-        console.log("body.profilePicInfo media.save e", e);
-      });
+      saveMedia(body, req, null, res, createUser);
+    } else {
+      createUser(body, null, res, req);
     };
 
-    var user = new User(body);
-    user._creatorRef = new ObjectID();
-    user._creator = req.loggedInUser._creatorRef;
-    user.save().then((user) => {
-      user.location = req.body.location;
-      res.send(_.pick(user, userOutFields));
-    }).catch((e) => {
-      console.log("1 router.post('/' e", e);
-      res.status(400).send(CONSTS.AN_ERROR_OCURRED);
-    });
+
   } else {
     res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_CREATE_USERS);
   };
@@ -251,7 +263,26 @@ router.patch('/change-password', authenticate, (req, res) => {
   };
 });
 
-
+let updateUser = (body, _creatorRef, res, req) => {
+  console.log('body', body);
+  let userObj = {
+    _creatorRef
+  };
+  User.findOneAndUpdate(userObj, {
+    $set: body
+  }, {
+    new: true
+  }).populate('_profileMediaId', ['location', 'isUrl']).then((user) => {
+    if (user) {
+      res.send(_.pick(user, userOutFields));
+    } else {
+      res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
+    };
+  }, (e) => {
+    console.log("3 router.patch('/:_creatorRef' e", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+  });
+};
 
 router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
   let _creatorRef = new ObjectID(req.params._creatorRef);
@@ -271,45 +302,19 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
     } catch (e) {
       return Promise.reject();
     };
+    console.log("req.passedUser1", req.passedUser);
 
     if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
+      console.log("req.passedUser2", req.passedUser);
       let body = _.pick(req.passedUser, userUpdateFields);
       //body._profileMediaId = req.body._profileMediaId;
+      console.log("body profilePicInfo", body);
 
       if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
-        let media = new Media();
-        media.location = body.profilePicInfo.location;
-        media.isUrl = true;
-        media.mimeType = body.profilePicInfo.mimeType;
-        media.description = 'Profile picture for ' + req.loggedInUser.name;
-        media._creator = req.loggedInUser._creatorRef;
-        media.addedDate = new Date();
-        media.save().then((media) => {
-          body._profileMediaId = media._id;
-          req.body.location = media.location;
-        }).catch((e) => {
-          console.log("body.profilePicInfo media.save e", e);
-        });
+        saveMedia(body, req, _creatorRef, res, updateUser);
+      } else {
+        updateUser(body, _creatorRef, res);
       };
-
-      console.log('body', body);
-      let userObj = {
-        _creatorRef
-      };
-      User.findOneAndUpdate(userObj, {
-        $set: body
-      }, {
-        new: true
-      }).populate('_profileMediaId', ['location', 'isUrl']).then((user) => {
-        if (user) {
-          res.send(_.pick(user, userOutFields));
-        } else {
-          res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
-        };
-      }, (e) => {
-        console.log("3 router.patch('/:_creatorRef' e", e);
-        res.status(400).send(CONSTS.AN_ERROR_OCURRED);
-      });
 
     } else {
       if (!req.loggedInUser.adminUser) {
