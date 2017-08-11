@@ -134,10 +134,10 @@ describe('GET /memories/byCriteria', () => {
       .end(done);
   });
 
-  it('should not get any memories for admin user for invalid user xxxxx', (done) => {
+  it('should not get any memories for admin user for invalid user', (done) => {
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
-      users: ["xxxxx"]
+      users: [new ObjectID()]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -235,8 +235,8 @@ describe('GET /memories/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.memory._id).toBe(id);
-        expect(res.body.memory.users[0]).toBe(users[0].name);
-        expect(res.body.memory.users[1]).toBe(users[1].name);
+        expect(res.body.memory.users[0]).toBe(users[0]._creatorRef.toHexString());
+        expect(res.body.memory.users[1]).toBe(users[1]._creatorRef.toHexString());
       })
       .end(done);
   });
@@ -277,7 +277,7 @@ describe('POST /memory', () => {
       description: 'Memory 3',
       memoryDate: 64567577656,
       tags: ["tag10", "tag11"],
-      users: [users[1].name],
+      users: [users[1]._creatorRef],
       memories: [memories[0]._id]
     };
 
@@ -303,7 +303,8 @@ describe('POST /memory', () => {
           expect(dbMemory.addedDate).toExist();
           expect(dbMemory._creator).toExist();
           expect(dbMemory.description).toBe(memory.description);
-          expect(new ObjectID(dbMemory.users[0])).toEqual(users[1]._id);
+          expect(new ObjectID(dbMemory._creator)).toEqual(users[0]._creatorRef);
+          expect(dbMemory.users[0]).toEqual(users[1]._creatorRef.toHexString());
           done();
         }).catch((e) => done(e));
       });
@@ -498,7 +499,7 @@ describe('UPDATE /memories/:id', () => {
   });
 
   it('should not update memory for id not owned and not admin', (done) => {
-    
+
     let memory = _.clone(memories[0]);
     let oldDescription = memory.description;
     let newDescription = memory.description + ' UPDATED';

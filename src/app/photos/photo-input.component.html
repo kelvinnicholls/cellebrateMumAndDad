@@ -1,0 +1,90 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
+        'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
+        'has-success': myForm.valid && (myForm.dirty || myForm.touched)
+      }">
+
+
+  
+
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+        'has-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
+        'has-success': myForm.get('title').valid && (myForm.get('title').dirty || myForm.get('title').touched)
+      }">
+    <label for="title" class="col-sm-4 col-form-label"><strong>Title</strong></label>
+    <div class="col-sm-5">
+      <input placement="bottom" ngbTooltip="The title of this photo." type="text" class="form-control" id="title" placeholder="Title"
+        [ngModel]="photo?.title" formControlName="title" [ngClass]="{
+        'form-control-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
+        'form-control-success': myForm.get('title').valid && (myForm.get('title').dirty || myForm.get('title').touched)
+      }">
+      <div class="form-control-feedback" *ngIf="myForm.get('title').errors && (myForm.get('title').dirty || myForm.get('title').touched)">
+        <p *ngIf="myForm.get('title').errors.required">Title is required</p>
+        <p *ngIf="myForm.get('title').errors.titleIsAlreadyUsed">This title is already in use!</p>
+      </div>
+      <small *ngIf="myForm.get('title').invalid" class="form-text text-muted">Enter a title for this photo. </small>
+    </div>
+  </div>
+
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+        'has-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
+        'has-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
+      }">
+    <label for="description" class="col-sm-4 col-form-label"><strong>Description</strong></label>
+    <div class="col-sm-5">
+      <input placement="bottom" ngbTooltip="The description of this photo." type="text" class="form-control" id="description" placeholder="Description"
+        [ngModel]="photo?.description" formControlName="description" [ngClass]="{
+        'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
+        'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
+      }">
+      <div class="form-control-feedback" *ngIf="myForm.get('description').errors && (myForm.get('description').dirty || myForm.get('description').touched)">
+        <p *ngIf="myForm.get('description').errors.required">Description is required</p>
+        <p *ngIf="myForm.get('description').errors.descriptionIsAlreadyUsed">This description is already in use!</p>
+      </div>
+      <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter a description for this photo. </small>
+    </div>
+  </div>
+  
+
+  <div class="form-group row col col-sm-8 offset-sm-2">
+    <label for="photoPic" class="col-sm-4 col-form-label"><strong>Photo</strong></label>
+    <div class="col col-sm-2">
+      <span class="pull-right">
+        <img placement="bottom" ngbTooltip="The photo." [src]="getSource()" class="img-responsive" style="max-height: 50px;">
+        </span>
+    </div>
+
+
+    <div class="col col-sm-2">
+      <div id="fileSource">
+        <label placement="bottom" ngbTooltip="Look for the file on the file system of local computer." class="custom-control custom-radio">
+                <input (click)="setFileSource(getConsts().FILE_SYSTEM)" id="fileSystem" name="fileSource" type="radio" value="File System" class="custom-control-input" checked>
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description"><strong>File<br />System</strong></span>
+              </label>
+        <label placement="bottom" ngbTooltip="Look for the file on the web." class="custom-control custom-radio">
+                <input (click)="setFileSource(getConsts().WEB)" id="web" name="fileSource" type="radio" value="Web" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description"><strong>Web</strong></span>
+              </label>
+      </div>
+    </div>
+    <div class="col col-sm-1">
+      <label placement="right" ngbTooltip="Press to select a photo to upload." class="btn btn-success" for='photoPicPath' (click)="showFileStackPicker()">
+          Browse
+        <input *ngIf="fileSource === getConsts().FILE_SYSTEM" type="file" #file id="photoPicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
+        <input *ngIf="fileSource === getConsts().WEB" type="button" class="form-control" style="display: none;">
+        </label>
+
+    </div>
+  </div>
+
+
+
+  <div class="form-group row col col-sm-4 offset-sm-4">
+    <button *ngIf="isAddPhoto()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger"
+      (click)="onClear()">Clear</button>
+    <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit"
+      [disabled]="!isFormValid()">{{submitType}}</button>
+  </div>
+
+</form>

@@ -14,8 +14,7 @@ const {
     mongoose
 } = require('../db/mongoose');
 
-const mediaInsertFields = ['location', 'isUrl', 'name', 'mimeType', 'description', 'mediaDate', 'tags', 'users'];
-
+const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'description', 'mediaDate', 'addedDate', 'tags', 'users'];
 
 router.post('/', authenticate, (req, res) => {
     let body = _.pick(req.body, mediaInsertFields);

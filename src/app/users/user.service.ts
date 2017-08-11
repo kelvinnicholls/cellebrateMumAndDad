@@ -56,8 +56,12 @@ export class UserService {
             profilePicInfo);
     }
 
+    public getLoggedInUser() {
+        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+    }
+
     updateLocalStorage(user) {
-        let loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+        let loggedInUser = this.getLoggedInUser();
         if (loggedInUser._creatorRef === user._creatorRef) {
             localStorage.setItem(Consts.LOGGED_IN_USER, JSON.stringify(user));
         }
@@ -131,7 +135,7 @@ export class UserService {
         return this.http.post(Consts.API_URL_USERS_ROOT, fd, { headers: headers })
             .map((response: Response) => {
                 const result = response.json();
-                let profilePicInfo: any  = {};
+                let profilePicInfo: any = {};
                 profilePicInfo.location = result.location;
                 profilePicInfo.isUrl = result.isUrl;
                 const user = this.createUser(result, profilePicInfo);

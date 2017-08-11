@@ -79,7 +79,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                 maxFiles: 1, fromSources: Consts.FILE_PICKER_SOURCES
             });
             promise.then((retObj) => {
-                if (retObj.filesUploaded.length > 0) {
+                if (retObj.filesUploaded.length === 1) {
                     const url = retObj.filesUploaded[0].url;
                     const mimeType = retObj.filesUploaded[0].mimetype;
                     this.profilePicInfo = { 'location': url, 'mimeType': mimeType, 'isUrl': true };
@@ -149,7 +149,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
     onImageChange(files: FileList) {
         let userInputComponent = this;
-        if (files.length > 0) {
+        if (files.length === 1) {
             userInputComponent.profilePicFile = files[0];
             if (userInputComponent.profilePicFile && this.profilePicFile.name) {
                 let fileExtension = userInputComponent.profilePicFile.name.split('.').pop().toLowerCase();

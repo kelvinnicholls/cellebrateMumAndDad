@@ -160,11 +160,64 @@ io.on('connection', (socket) => {
 
     console.log("userUpdated", user, socket.id);
 
-    
+
     socket.broadcast.emit('updatedUser', user, getUserName(socket.id));
     callback();
   });
 
+  socket.on('photoCreated', (photo, callback) => {
+
+    console.log("photoCreated", photo, socket.id);
+
+    socket.broadcast.emit('createdPhoto', photo, getUserName(socket.id));
+    callback();
+  });
+
+  socket.on('photoDeleted', (photo, callback) => {
+
+    console.log("photoDeleted", photo, socket.id);
+
+    socket.broadcast.emit('deletedPhoto', photo._creatorRef, getUserName(socket.id));
+    callback();
+  });
+
+
+
+  socket.on('photoUpdated', (photo, callback) => {
+
+    console.log("photoUpdated", photo, socket.id);
+
+
+    socket.broadcast.emit('updatedPhoto', photo, getUserName(socket.id));
+    callback();
+  });
+
+  socket.on('memoryCreated', (memory, callback) => {
+
+    console.log("memoryCreated", memory, socket.id);
+
+    socket.broadcast.emit('createdPhoto', memory, getUserName(socket.id));
+    callback();
+  });
+
+  socket.on('memoryDeleted', (memory, callback) => {
+
+    console.log("memoryDeleted", memory, socket.id);
+
+    socket.broadcast.emit('deletedPhoto', memory._creatorRef, getUserName(socket.id));
+    callback();
+  });
+
+
+
+  socket.on('memoryUpdated', (memory, callback) => {
+
+    console.log("memoryUpdated", memory, socket.id);
+
+    
+    socket.broadcast.emit('updatedPhoto', memory, getUserName(socket.id));
+    callback();
+  });
 
 
   socket.on('disconnect', () => {

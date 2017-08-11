@@ -36,7 +36,7 @@ describe('GET /medias/byCriteria', () => {
       tags: ["tag1", "tag3"],
       fromDate,
       toDate,
-      users: [users[0].name, users[1].name]
+      users: [users[0]._creatorRef, users[1]._creatorRef]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -58,7 +58,7 @@ describe('GET /medias/byCriteria', () => {
       tags: ["tag1"],
       fromDate,
       toDate,
-      users: [users[0].name, users[1].name]
+      users: [users[0]._creatorRef, users[1]._creatorRef]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -78,7 +78,7 @@ describe('GET /medias/byCriteria', () => {
     let body = {
       tags: ["tag1"],
       fromDate,
-      users: [users[0].name, users[1].name]
+      users: [users[0]._creatorRef, users[1]._creatorRef]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -98,7 +98,7 @@ describe('GET /medias/byCriteria', () => {
     let body = {
       tags: ["tag1"],
       toDate,
-      users: [users[0].name, users[1].name]
+      users: [users[0]._creatorRef, users[1]._creatorRef]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -131,10 +131,10 @@ describe('GET /medias/byCriteria', () => {
       .end(done);
   });
 
-  it('should not get any medias for admin user for invalid user xxxxx', (done) => {
+  it('should not get any medias for admin user for invalid user', (done) => {
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
-      users: ["xxxxx"]
+      users: [new ObjectID()]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -231,8 +231,8 @@ describe('GET /medias/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
-        expect(res.body.media.users).toContain(users[0].name);
-        expect(res.body.media.users).toContain(users[1].name);
+        expect(res.body.media.users).toContain(users[0]._creatorRef);
+        expect(res.body.media.users).toContain(users[1]._creatorRef);
       })
       .end(done);
   });
@@ -276,9 +276,10 @@ describe('POST /media', () => {
       isUrl: false,
       mimeType: "video/mpeg",
       description: "Movie 2",
+      title: 'New Title',
       mediaDate: 14565623,
       tags: ["tag5", "tag6"],
-      users: [users[1].name]
+      users: [users[1]._creatorRef]
     };
 
     request(app)
@@ -303,7 +304,9 @@ describe('POST /media', () => {
           expect(dbMedia.addedDate).toExist();
           expect(dbMedia._creator).toExist();
           expect(dbMedia.location).toBe(media.location);
-          expect(new ObjectID(dbMedia.users[0])).toEqual(users[1]._id);
+          expect(dbMedia.title).toBe(media.title);
+          expect(new ObjectID(dbMedia._creator).toHexString()).toEqual(users[0]._creatorRef.toHexString());
+          expect(dbMedia.users[0]).toEqual(users[1]._creatorRef.toHexString());
           done();
         }).catch((e) => done(e));
       });
@@ -471,9 +474,9 @@ describe('UPDATE /medias/:id', () => {
 
   it('should update media for id', (done) => {
     let media = _.clone(medias[0]);
-    let oldLocation = media.location;
-    let newLocation = media.location + ' UPDATED';
-    media.location = newLocation;
+    let oldDescription = media.description;
+    let newDescription = media.description + ' UPDATED';
+    media.description = newDescription;
     let id = medias[0]._id.toHexString();
     request(app)
       .patch('/medias/' + id)
@@ -484,7 +487,7 @@ describe('UPDATE /medias/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
-        expect(res.body.media.location).toBe(newLocation);
+        expect(res.body.media.description).toBe(newDescription);
       })
       .end((err, res) => {
         if (err) {
@@ -492,7 +495,7 @@ describe('UPDATE /medias/:id', () => {
         }
 
         Media.findById(id).then((media) => {
-          expect(media.location).toBe(newLocation);
+          expect(media.description).toBe(newDescription);
           done();
         }).catch((e) => done(e));
 
@@ -501,9 +504,9 @@ describe('UPDATE /medias/:id', () => {
 
   it('should not update media for id not owned and not admin', (done) => {
     let media = _.clone(medias[0]);
-    let oldLocation = media.location;
-    let newLocation = media.location + ' UPDATED';
-    media.location = newLocation;
+    let oldDescription = media.description;
+    let newDescription = media.description + ' UPDATED';
+    media.description = newDescription;
     let id = media._id.toHexString();
     request(app)
       .patch('/medias/' + id)
@@ -517,7 +520,7 @@ describe('UPDATE /medias/:id', () => {
           return done(err);
         }
         Media.findById(id).then((media) => {
-          expect(media.location).toBe(oldLocation);
+          expect(media.description).toBe(oldDescription);
           done();
         }).catch((e) => done(e));
 
@@ -526,9 +529,9 @@ describe('UPDATE /medias/:id', () => {
 
   it('should  update media for id not owned but admin', (done) => {
     let media = _.clone(medias[1]);
-    let oldLocation = media.location;
-    let newLocation = media.location + ' UPDATED';
-    media.location = newLocation;
+    let oldDescription = media.description;
+    let newDescription = media.description + ' UPDATED';
+    media.description = newDescription;
     let id = media._id.toHexString();
     request(app)
       .patch('/medias/' + id)
@@ -539,7 +542,7 @@ describe('UPDATE /medias/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
-        expect(res.body.media.location).toBe(newLocation);
+        expect(res.body.media.description).toBe(newDescription);
       })
       .end((err, res) => {
         if (err) {
@@ -547,7 +550,7 @@ describe('UPDATE /medias/:id', () => {
         }
 
         Media.findById(id).then((media) => {
-          expect(media.location).toBe(newLocation);
+          expect(media.description).toBe(newDescription);
           done();
         }).catch((e) => done(e));
 
@@ -558,9 +561,9 @@ describe('UPDATE /medias/:id', () => {
 
   it('should return 404 if media not found', (done) => {
     let media = _.clone(medias[0]);
-    let oldLocation = media.location;
-    let newLocation = media.location + ' UPDATED';
-    media.location = newLocation;
+    let oldDescription = media.description;
+    let newDescription = media.description + ' UPDATED';
+    media.description = newDescription;
     let id = new ObjectID().toHexString();
     request(app)
       .patch('/medias/' + id)
@@ -577,9 +580,9 @@ describe('UPDATE /medias/:id', () => {
 
   it('should return 404 of non ObjectID\'s', (done) => {
     let media = _.clone(medias[0]);
-    let oldLocation = media.location;
-    let newLocation = media.location + ' UPDATED';
-    media.location = newLocation;
+    let oldDescription = media.description;
+    let newDescription = media.description + ' UPDATED';
+    media.description = newDescription;
     let id = 'x';
     request(app)
       .patch('/medias/' + id)

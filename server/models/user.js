@@ -173,122 +173,122 @@ UserSchema.statics.findByToken = function (token) {
 
 
 
-UserSchema.statics.setUserIdsToNames = function (ids) {
-  return new Promise((resolve, reject) => {
-    let User = this;
-    let retArray = [];
-    let numIds = ids.length;
-    let idCount = 0;
-    if (numIds > 0) {
-      ids.forEach(function (id) {
-        User.findById(id).then((user) => {
-          if (user) {
-            retArray.push(user.name);
-          };
-          idCount++;
-          if (idCount === numIds) {
-            return resolve(retArray);
-          }
-        }, (e) => {
-          return reject(e);
-        });
-      });
-    } else {
-      return resolve(retArray);
-    };
-  });
-};
+// UserSchema.statics.setUserIdsToNames = function (ids) {
+//   return new Promise((resolve, reject) => {
+//     let User = this;
+//     let retArray = [];
+//     let numIds = ids.length;
+//     let idCount = 0;
+//     if (numIds > 0) {
+//       ids.forEach(function (id) {
+//         User.findById(id).then((user) => {
+//           if (user) {
+//             retArray.push(user.name);
+//           };
+//           idCount++;
+//           if (idCount === numIds) {
+//             return resolve(retArray);
+//           }
+//         }, (e) => {
+//           return reject(e);
+//         });
+//       });
+//     } else {
+//       return resolve(retArray);
+//     };
+//   });
+// };
 
 
-UserSchema.statics.getUserNamesToIdsPromise = function (users, mongoose) {
+// UserSchema.statics.getUserNamesToIdsPromise = function (users, mongoose) {
 
-  return new Promise((resolve, reject) => {
-    let User = this;
-    let userIds = [];
-    if (users && users.length > 0) {
-      let numUsers = users.length;
-      let userCount = 0;
-      users.forEach(function (name) {
-        User.findOne({
-          name
-        }).then((user) => {
-          if (user) {
-            //userIds.push(mongoose.Types.ObjectId(user._id));
-            userIds.push(user._id);
-          };
-          userCount++;
-          if (userCount === numUsers) {
-            resolve(userIds);
-          };
-        }, (e) => {
-          reject(e);
-        });
-      });
+//   return new Promise((resolve, reject) => {
+//     let User = this;
+//     let userIds = [];
+//     if (users && users.length > 0) {
+//       let numUsers = users.length;
+//       let userCount = 0;
+//       users.forEach(function (name) {
+//         User.findOne({
+//           name
+//         }).then((user) => {
+//           if (user) {
+//             //userIds.push(mongoose.Types.ObjectId(user._id));
+//             userIds.push(user._id);
+//           };
+//           userCount++;
+//           if (userCount === numUsers) {
+//             resolve(userIds);
+//           };
+//         }, (e) => {
+//           reject(e);
+//         });
+//       });
 
-    } else {
-      resolve(userIds);
-    };
-  });
-};
+//     } else {
+//       resolve(userIds);
+//     };
+//   });
+// };
 
-UserSchema.statics.setUserNamesToIds = function (obj, next) {
+// UserSchema.statics.setUserNamesToIds = function (obj, next) {
 
-  let User = this;
-  let users = obj.users;
-  let userIds = [];
-  let numUsers = obj.users.length;
-  let userCount = 0;
+//   let User = this;
+//   let users = obj.users;
+//   let userIds = [];
+//   let numUsers = obj.users.length;
+//   let userCount = 0;
 
-  if (numUsers > 0) {
-    users.forEach(function (name) {
-      User.findOne({
-        name
-      }).then((user) => {
-        if (user) {
-          userIds.push(user._id);
-        };
-        userCount++;
-        if (userCount === numUsers) {
-          obj.users = userIds;
-          return next();
-        }
-      }, (e) => {
-        return
-      });
-    });
-  } else {
-    return next();
-  };
-};
+//   if (numUsers > 0) {
+//     users.forEach(function (name) {
+//       User.findOne({
+//         name
+//       }).then((user) => {
+//         if (user) {
+//           userIds.push(user._id);
+//         };
+//         userCount++;
+//         if (userCount === numUsers) {
+//           obj.users = userIds;
+//           return next();
+//         }
+//       }, (e) => {
+//         return
+//       });
+//     });
+//   } else {
+//     return next();
+//   };
+// };
 
-UserSchema.statics.setObjUserIdsToNames = function (objects, res, ObjectsName) {
-  let User = this;
-  if (objects && objects.length > 0) {
-    let numObj = objects.length;
-    let objCount = 0;
-    objects.forEach(function (obj) {
-      User.setUserIdsToNames(obj.users).then((names) => {
-        obj.users = names;
-        objCount++;
-        if (objCount === numObj) {
-          let obj = {};
-          obj[ObjectsName] = objects;
-          return res.send(obj);
-        };
+// UserSchema.statics.setObjUserIdsToNames = function (objects, res, ObjectsName) {
+//   let User = this;
+//   if (objects && objects.length > 0) {
+//     let numObj = objects.length;
+//     let objCount = 0;
+//     objects.forEach(function (obj) {
+//       User.setUserIdsToNames(obj.users).then((names) => {
+//         obj.users = names;
+//         objCount++;
+//         if (objCount === numObj) {
+//           let obj = {};
+//           obj[ObjectsName] = objects;
+//           return res.send(obj);
+//         };
 
-      }).catch((e) => {
-        res.status(400).send();
-      });
-    }, (e) => {
-      res.status(400).send();
-    });
-  } else {
-    let obj = {};
-    obj[ObjectsName] = objects;
-    res.send(obj);
-  };
+//       }).catch((e) => {
+//         res.status(400).send();
+//       });
+//     }, (e) => {
+//       res.status(400).send();
+//     });
+//   } else {
+//     let obj = {};
+//     obj[ObjectsName] = objects;
+//     res.send(obj);
+//   };
 
-};
+// };
 
 
 

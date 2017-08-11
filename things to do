@@ -120,3 +120,7 @@ X63) sort out issues with can-load (may need to split admin auth stuff and non-a
 64) Contact page
 65) Use free mongodb hosting https://mlab.com/
 66) remove console.logs before go live
+X67) sort out position of Photos sub-menu
+https://stackoverflow.com/questions/35956194/bootstrap-button-dropdown-not-below-button
+X68) If not photos (or no users or memories) display message instead
+69) Add multer to photos

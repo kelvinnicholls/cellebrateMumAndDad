@@ -1,14 +1,14 @@
-<div *ngIf="pagedUsers.length > 0">
+<div *ngIf="pagedPhotos.length > 0">
   <div class="col-md-6 offset-md-2">
     <ul class="list-group">
-      <app-user class="kgn-border-pad" *ngFor="let user of pagedUsers" [user]="user">
-      </app-user>
+      <app-photo class="kgn-border-pad" *ngFor="let photo of pagedPhotos" [photo]="photo">
+      </app-photo>
     </ul>
   </div>
 
-  <ng-template #popContent> <span [innerHTML]="userService.showSearchCriteria()"></span></ng-template>
+  <ng-template #popContent> <span [innerHTML]="photoService.showSearchCriteria()"></span></ng-template>
 
-  <div *ngIf="userService.searchRet" class="row col <col-md1></col-md1>-6 offset-md-2">
+  <div *ngIf="photoService.searchRet" class="row col <col-md1></col-md1>-6 offset-md-2">
     <a placement="left" [ngbPopover]="popContent" popoverTitle="Existing Search Criteria" target="_blank" href="javascript:void(0)"
       (click)="toggleShowHideSearchCriteria()">{{toggleShowHideSearchCriteriaText}}</a>
   </div>
@@ -21,20 +21,20 @@
 
 
 
-  <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-4">
+  <div *ngIf="photoService.searchRet" class="row col col-sm-4 offset-sm-4">
     <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-    <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+    <button placement="bottom" ngbTooltip="Press to restict photo list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 
-  <div *ngIf="!userService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+  <div *ngIf="!photoService.searchRet" class="row col col-sm-4 offset-sm-5">
+    <button placement="bottom" ngbTooltip="Press to restict photo list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 </div>
 
-<div *ngIf="pagedUsers.length == 0">
+<div *ngIf="pagedPhotos.length == 0">
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-1 text-center">No Users To Display!</h1>
+      <h1 class="display-1 text-center">No Photos To Display!</h1>
     </div>
   </div>
 </div>

@@ -85,21 +85,23 @@ const medias = [{
     _id: mediaId1,
     location: "/media/media1.mpeg",
     isUrl: false,
+    title: 'Media 1',
     mimeType: "video/mpeg",
     description: "Movie 1",
     _creator: user1CreatorRef,
     mediaDate: md1,
     tags: ["tag1", "tag2"],
-    users: [users[0].name, users[1].name]
+    users: [users[0]._creatorRef, users[1]._creatorRef]
 }, {
     _id: mediaId2,
     location: "https://somesite/movie.mpeg",
     isUrl: true,
+    title: 'Media 2',
     description: "Url 1",
     _creator: user2CreatorRef,
     mediaDate: md2,
     tags: ["tag3", "tag4"],
-    users: [users[0].name, users[1].name]
+    users: [users[0]._creatorRef, users[1]._creatorRef]
 }];
 
 const memories = [{
@@ -109,7 +111,7 @@ const memories = [{
     memoryDate: md1,
     _creator: user1CreatorRef,
     tags: ["tag1", "tag4"],
-    users: [users[0].name, users[1].name],
+    users: [users[0]._creatorRef, users[1]._creatorRef],
     medias: [mediaId1]
 }, {
     _id: memoryId2,
@@ -118,7 +120,7 @@ const memories = [{
     memoryDate: md2,
     _creator: user2CreatorRef,
     tags: ["tag2", "tag3"],
-    users: [users[0].name, users[1].name],
+    users: [users[0]._creatorRef, users[1]._creatorRef],
     medias: [mediaId2]
 }];
 

@@ -303,7 +303,6 @@ describe('POST /users', () => {
       name,
       adminUser,
       emailUpdates,
-
       relationship,
       dob
     };

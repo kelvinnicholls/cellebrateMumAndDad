@@ -7,6 +7,8 @@ export class Consts {
   public static API_URL_MEMORIES_ROOT: string = Consts.API_URL_ROOT + 'memories';
   public static API_URL_MEMORY_ROOT: string = Consts.API_URL_ROOT + 'memory';
   public static API_URL_MEDIAS_ROOT: string = Consts.API_URL_ROOT + 'medias';
+  public static API_URL_MEDIAS_ROOT_TITLE: string = Consts.API_URL_MEDIAS_ROOT + '/title';
+ 
   public static CONTENT_TYPE = 'Content-Type';
   public static APP_JSON = 'application/json';
   public static MULTIPART_FORM_DATA = 'multipart/form-data';
@@ -17,8 +19,13 @@ export class Consts {
   public static EMAIL_PATTERN = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   public static CREATE_USER = 'Create User';
   public static UPDATE_USER = 'Update User';
+  public static ADD_PHOTO = 'Add Photo';
+  public static UPDATE_PHOTO = 'Update Photo';
+  public static ADD_MEMORY = 'Add Memory';
+  public static UPDATE_MEMORY = 'Update Memory';
   public static UPDATE_CURRENT_USER = 'Update Current User';
   public static DEFAULT_PROFILE_PIC_FILE = 'systemImages/no-profile-pic.jpg';
+  public static DEFAULT_PHOTO_PIC_FILE = 'systemImages/no-profile-pic.jpg';
   public static SUCCESS = "Success";
   public static ERROR = "Success";
   public static WARNING = "Warning";

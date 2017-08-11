@@ -12,13 +12,19 @@
       </li>
 
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
         <a class="nav-link" routerLink="/memories">Memories</a>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
-        <a class="nav-link" routerLink="/photos">Photos</a>
-      </li>
+        <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
+          <a class="nav-link dropdown-toggle" id="photosDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
+            aria-expanded="false">Photos</a>
+          <div class="dropdown-menu" aria-labelledby="photosDropdown">
+            <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos">Photos List</a>
+            <div class="dropdown-divider"></div>
+            <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos/photo/add">Add Photo</a>
+          </div>
+        </li>
 
       <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
         <a class="nav-link" routerLink="/chat">Chat</a>

@@ -112,7 +112,7 @@ let upload = (req, res, next) => {
         media.originalFileName = req.file.originalname;
         media.mimeType = req.file.mimetype;
         media.isUrl = false;
-        media.description = 'Profile picture for ' + req.loggedInUser.name;
+        media.title = 'Profile picture for ' + req.loggedInUser.name;
         media._creator = req.loggedInUser._creatorRef;
         media.addedDate = new Date();
         media.save().then((media) => {
@@ -133,7 +133,7 @@ let saveMedia = (body, req, _creatorRef, res, func) => {
   media.location = body.profilePicInfo.location;
   media.isUrl = true;
   media.mimeType = body.profilePicInfo.mimeType;
-  media.description = 'Profile picture for ' + req.loggedInUser.name;
+  media.title = 'Profile picture for ' + req.loggedInUser.name;
   media._creator = req.loggedInUser._creatorRef;
   media.addedDate = new Date();
   console.log("create media for filestack media: ", media);
