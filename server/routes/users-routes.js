@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
+
 var path = require('path');
 
 const _ = require('lodash');
@@ -30,6 +30,12 @@ const {
   CONSTS
 } = require('../shared/consts');
 
+
+const {
+  multerUploadSingleFile
+} = require('../shared/file-upload');
+
+
 const utils = require('../utils/utils.js');
 const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
 const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
@@ -37,55 +43,10 @@ const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relatio
 
 
 
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './server/public/images/');
-  },
-  filename: function (req, file, cb) {
-    if (!file.originalname.match(/\.(png|jpeg|jpg|gif)$/)) {
-      var err = new Error();
-      err.code = 'filetype';
-      return cb(err);
-    } else {
-      cb(null, 'file_' + Date.now() + '.' + file.originalname.split('.').pop());
-    }
-  }
-});
-let multerUpload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 10000000
-  }
-}).single('file');
-
-// let processFileName = (folder, inFileName) => {
-//     console.log("processFileName", folder, inFileName);
-//     return new Promise((resolve, reject) => {
-//         let fileName = inFileName;
-//         let location = path.join(folder, fileName);
-//         console.log("Promise", folder, fileName, location);
-//         Media.findOne({
-//             location
-//         }).then((media) => {
-//             if (media && media.location === location) {
-//                 fileName = 'x' + fileName;
-//                 console.log("media && media.location === location", fileName);
-//                 processFileName(folder, fileName);
-//             } else {
-//                 console.log("NOT media && media.location === location", fileName);
-//                 return resolve(fileName);
-//             };
-//         }, (e) => {
-//             console.log("reject", e);
-//             return reject(e);
-//         });
-//     });
-// };
-
 let upload = (req, res, next) => {
   //console.log('upload',req, res);
-  multerUpload(req, res, function (err) {
-    //console.log('multerUpload',err);
+  multerUploadSingleFile(req, res, function (err) {
+    //console.log('multerUploadSingleFile',err);
     req.passedUser = JSON.parse(req.body.user);
     delete req.body.user;
     console.log('req.file', req.file);
@@ -120,7 +81,7 @@ let upload = (req, res, next) => {
           req.body.location = location;
           next();
         }).catch((e) => {
-          console.log("multerUpload media.save e", e);
+          console.log("multerUploadSingleFile media.save e", e);
         });
 
       }

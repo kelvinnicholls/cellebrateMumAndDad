@@ -1,4 +1,4 @@
-<div *ngIf="pagedUsers.length > 0">
+<div *ngIf="users.length > 0">
   <div class="col-md-6 offset-md-2">
     <ul class="list-group">
       <app-user class="kgn-border-pad" *ngFor="let user of pagedUsers" [user]="user">
@@ -31,7 +31,7 @@
   </div>
 </div>
 
-<div *ngIf="pagedUsers.length == 0">
+<div *ngIf="users.length == 0">
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
       <h1 class="display-1 text-center">No Users To Display!</h1>
