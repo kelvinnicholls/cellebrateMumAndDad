@@ -35,7 +35,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     submitType = Consts.ADD_PHOTO;
 
-    defaultFile = Consts.DEFAULT_FILE;
+    defaultFile = Consts.DEFAULT_PHOTO_PIC_FILE;
 
     photoData: any = null;
     photoFile: File = null;
@@ -56,11 +56,12 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
         if (this.photoInfo && this.photoInfo.location) {
             retVal = this.photoInfo.location;
-        } else if (this.photoInfo) {
-            retVal = this.photoInfo;
+        } else if (this.photoData) {
+            retVal = this.photoData;
         } else if (this.photo && this.photo.photoInfo && this.photo.photoInfo.location) {
             retVal = this.photo.photoInfo.location;
         };
+
         return retVal;
     }
 
@@ -102,14 +103,14 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     onImageChange(files: FileList) {
         let photoInputComponent = this;
         if (files.length == 1) {
-            let file = files[0];
-            if (file && file.name) {
-                let fileExtension = file.name.split('.').pop().toLowerCase();
+            photoInputComponent.photoFile = files[0];
+            if (photoInputComponent.photoFile && photoInputComponent.photoFile.name) {
+                let fileExtension = photoInputComponent.photoFile.name.split('.').pop().toLowerCase();
                 const allowedExtensions = ['jpeg', 'jpg', 'png', 'gif'];
                 if (allowedExtensions.indexOf(fileExtension) > -1) {
                     let photoInputComponent = this;
                     let fileReader: FileReader = new FileReader();
-                    fileReader.readAsDataURL(file);
+                    fileReader.readAsDataURL(photoInputComponent.photoFile);
                     fileReader.onloadend = function (e) {
                         photoInputComponent.photoData = fileReader.result;
                         photoInputComponent.photoInfo = null;
@@ -163,9 +164,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         // Create
                         this.photo = new Photo(this.myForm.value.title,
                             this._creator,
-                            new Date(),
-                            this.myForm.value.description,
                             null,
+                            null,
+                            this.myForm.value.description,
                             this.photoFile,
                             this.photoInfo);
                         this.photoService.addPhoto(this.photo)
@@ -202,6 +203,13 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     }
 
+    private getId() {
+        let _id = null;
+        if (this.photo && this.photo._id) {
+            _id = this.photo._id;
+        };
+        return _id;
+    }
 
     onClear() {
         if (this.myForm.dirty) {
@@ -220,7 +228,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     }
 
     forbiddenTitles = (control: FormControl): Promise<any> | Observable<any> => {
-        return this.photoService.titleExists(control.value, this.photo._id);
+        return this.photoService.titleExists(control.value, this.getId());
     }
 
 

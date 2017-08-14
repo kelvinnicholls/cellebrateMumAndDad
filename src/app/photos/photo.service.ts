@@ -126,13 +126,13 @@ export class PhotoService {
         var fd = new FormData();
         const headers: Headers = new Headers();
         if (photo.photoFile) {
-            fd.append('file', photo.photoFile, photo.photoFile.name);
+            fd.append('file', photo.photoFile);
         };
 
         photo.photoFile = null;
         photo._creator = this.userService.getLoggedInUser()._creatorRef;
         const photoJsonString = JSON.stringify(photo);
-        fd.append('photo', photoJsonString);
+        fd.append('media', photoJsonString);
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
         let photoService = this;
         return this.http.post(Consts.API_URL_MEDIAS_ROOT, fd, { headers: headers })
@@ -156,8 +156,8 @@ export class PhotoService {
                 return photo;
             })
             .catch((error: Response) => {
-                photoService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -167,14 +167,14 @@ export class PhotoService {
         let photoService = this;
         return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
             .map((response: Response) => {
-                const photos = response.json();
+                const photos = response.json().medias;
                 let transformedPhotos: Photo[] = [];
                 for (let photo of photos) {
                     let photoInfo: any = {};
-                    if (photo._mediaId && photo._mediaId.location) {
-                        photoInfo.location = photo._mediaId.location;
-                        photoInfo.isUrl = photo._mediaId.isUrl;
-                    };
+
+                    photoInfo.location = photo.location;
+                    photoInfo.isUrl = photo.isUrl;
+                    photoInfo.mimeType = photo.mimeType;
 
                     let newPhoto = new Photo(
                         photo.title,
@@ -183,7 +183,7 @@ export class PhotoService {
                         photo._id,
                         photo.description,
                         null,
-                        photo.photoInfo);
+                        photoInfo);
                     transformedPhotos.push(newPhoto);
                 }
                 this.allPhotos = transformedPhotos;
@@ -191,8 +191,8 @@ export class PhotoService {
                 return transformedPhotos;
             })
             .catch((error: Response) => {
-                photoService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -200,12 +200,12 @@ export class PhotoService {
         var fd = new FormData();
         const headers: Headers = new Headers();
         if (photo.photoFile) {
-            fd.append('file', photo.photoFile, photo.photoFile.name);
+            fd.append('file', photo.photoFile);
         };
 
         photo.photoFile = null;
         const photoJsonString = JSON.stringify(photo);
-        fd.append('photo', photoJsonString);
+        fd.append('media', photoJsonString);
 
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
         let photoService = this;
@@ -225,8 +225,8 @@ export class PhotoService {
                 return response.json();
             })
             .catch((error: Response) => {
-                photoService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -251,8 +251,8 @@ export class PhotoService {
                 return response.json();
             })
             .catch((error: Response) => {
-                photoService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 

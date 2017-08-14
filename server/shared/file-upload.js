@@ -22,6 +22,19 @@ let multerUploadSingleFile = multer({
   }
 }).single('file');
 
+
+let processErr = (err) => {
+  console.log('media patch err', err);
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    console.log('File size is too large. Max limit is 10MB');
+  } else if (err.code === 'filetype') {
+    console.log('Filetype is invalid. Must be .png .jpeg .gif or .jpg');
+  } else {
+    console.log('Unable to upload file');
+  }
+}
+
 module.exports = {
-  multerUploadSingleFile
+  multerUploadSingleFile,
+  processErr
 }

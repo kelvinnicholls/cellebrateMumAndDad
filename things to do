@@ -124,3 +124,10 @@ X67) sort out position of Photos sub-menu
 https://stackoverflow.com/questions/35956194/bootstrap-button-dropdown-not-below-button
 X68) If not photos (or no users or memories) display message instead
 69) Add multer to photos
+70) Do not allow add photo until photo is selected
+71) Prevent update of photo when updating
+72) description should be text area
+73) add isProfilePic to media and do not return in photo list
+74) Add comments to photos (add comments on list and edit)
+75) Tidy up display of photos (add comments on hover)
+76) Make sure search works with both photos and users

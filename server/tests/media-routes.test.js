@@ -268,12 +268,12 @@ describe('GET /medias/:id', () => {
 
 //it.only()
 
-describe('POST /media', () => {
+describe('POST /medias', () => {
   it('should create a new media', (done) => {
 
     let media = {
       location: "/media/media2.mpeg",
-      isUrl: false,
+      isUrl: true,
       mimeType: "video/mpeg",
       description: "Movie 2",
       title: 'New Title',
@@ -283,11 +283,11 @@ describe('POST /media', () => {
     };
 
     request(app)
-      .post('/media')
+      .post('/medias')
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send(media)
+      .field('media', JSON.stringify(media))
       .expect(200)
       .expect((res) => {
         expect(res.body.location).toBe(media.location);
@@ -314,11 +314,11 @@ describe('POST /media', () => {
 
   it('should not create media with invalid body data', (done) => {
     request(app)
-      .post('/media')
+      .post('/medias')
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send({})
+      .field('media', JSON.stringify({}))
       .expect(400)
       .end((err, res) => {
         if (err) {

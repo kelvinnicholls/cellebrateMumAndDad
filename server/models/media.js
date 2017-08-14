@@ -44,8 +44,8 @@ let MediaSchema = new mongoose.Schema({
     minlength: 1
   },
   _creator: {
-    required: mongoose.Schema.Types.ObjectId,
-    type: String
+    required: true,
+    type: mongoose.Schema.Types.ObjectId
   },
   addedDate: {
     type: Date

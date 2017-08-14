@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
+var path = require('path');
 const {
   authenticate
 } = require('../middleware/authenticate');
@@ -22,10 +23,69 @@ const {
   mongoose
 } = require('../db/mongoose');
 
+const {
+  multerUploadSingleFile,
+  processErr
+} = require('../shared/file-upload');
 
-const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'description', 'mediaDate', 'addedDate', 'tags', 'users'];
+
+let upload = (req, res, next) => {
+  //console.log('upload',req, res);
+  multerUploadSingleFile(req, res, function (err) {
+    console.log('media-routes multerUploadSingleFile', err);
+    req.passedMedia = JSON.parse(req.body.media);
+    delete req.body.media;
+    console.log('req.file', req.file);
+    if (err) {
+      processErr(err);
+    } else {
+      if (!req.file) {
+        console.log('No file was selected');
+      } else {
+        console.log('media patch File uploaded!');
+        let fileName = req.file.filename;
+        console.log("newFileName", fileName);
+        let location = path.join(req.file.destination, fileName);
+        req.passedMedia.location = location;
+        req.passedMedia.originalFileName = req.file.originalname;
+        req.passedMedia.mimeType = req.file.mimetype;
+        req.passedMedia.isUrl = false;
+      };
+      next();
+    };
+  });
+};
+
+
+const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName','photoInfo'];
+const mediaOutFields = mediaInsertFields;
+
 const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
 const mediaUpdateFields = ['description', 'tags', 'users'];
+
+router.post('/', authenticate, upload, (req, res) => {
+  let body = _.pick(req.passedMedia, mediaInsertFields);
+  console.log('body', body);
+  let media = new Media(body);
+  console.log('body.photoInfo', body.photoInfo);
+  if (body.photoInfo && body.photoInfo.location && body.photoInfo.isUrl) {
+    media.location = body.photoInfo.location;
+    media.isUrl = true;
+    media.mimeType = body.photoInfo.mimeType;
+  };
+
+  media._creator = req.loggedInUser._creatorRef;
+  media.addedDate = new Date().getTime();
+  console.log('media', media);
+
+  media.save().then((media) => {
+    console.log('media2', media);
+    res.send(_.pick(media, mediaOutFields));
+  }, (e) => {
+    console.log('media.save() e', e);
+    res.status(400).send();
+  });
+});
 
 router.get('/', authenticate, (req, res) => {
 

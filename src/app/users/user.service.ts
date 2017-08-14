@@ -124,7 +124,7 @@ export class UserService {
         var fd = new FormData();
         const headers: Headers = new Headers();
         if (user.profilePicFile) {
-            fd.append('file', user.profilePicFile, user.profilePicFile.name);
+            fd.append('file', user.profilePicFile);
         };
 
         user.profilePicFile = null;
@@ -153,8 +153,8 @@ export class UserService {
                 return user;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -194,8 +194,8 @@ export class UserService {
                 return transformedUsers;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -228,8 +228,8 @@ export class UserService {
                 return transformedUser;
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -238,7 +238,7 @@ export class UserService {
         var fd = new FormData();
         const headers: Headers = new Headers();
         if (user.profilePicFile) {
-            fd.append('file', user.profilePicFile, user.profilePicFile.name);
+            fd.append('file', user.profilePicFile);
         };
 
         user.profilePicFile = null;
@@ -263,8 +263,8 @@ export class UserService {
                 return response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -289,8 +289,8 @@ export class UserService {
                 return response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
 
@@ -308,8 +308,8 @@ export class UserService {
                 response.json();
             })
             .catch((error: Response) => {
-                userService.errorService.handleError(error.json() || error.toString());
-                return Observable.throw(error.json() || error.toString());
+                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             })
     }
 

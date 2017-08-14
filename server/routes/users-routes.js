@@ -32,7 +32,8 @@ const {
 
 
 const {
-  multerUploadSingleFile
+  multerUploadSingleFile,
+  processErr
 } = require('../shared/file-upload');
 
 
@@ -40,7 +41,6 @@ const utils = require('../utils/utils.js');
 const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
 const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
-
 
 
 let upload = (req, res, next) => {
@@ -51,14 +51,7 @@ let upload = (req, res, next) => {
     delete req.body.user;
     console.log('req.file', req.file);
     if (err) {
-      console.log('user patch err', err);
-      if (err.code === 'LIMIT_FILE_SIZE') {
-        console.log('File size is too large. Max limit is 10MB');
-      } else if (err.code === 'filetype') {
-        console.log('Filetype is invalid. Must be .png .jpeg or .jpg');
-      } else {
-        console.log('Unable to upload file');
-      }
+      processErr(err);
     } else {
       if (!req.file) {
         console.log('No file was selected');

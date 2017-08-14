@@ -4,6 +4,7 @@ import { ChatMessage } from "./chat-message.model";
 import { ChatUser } from "./chat-user.model";
 import { AuthUserService } from "../auth/auth-user.service";
 import { UserService } from "../users/user.service";
+import { PhotoService } from "../photos/photo.service";
 
 import { Consts } from "../shared/consts";
 //https://stackoverflow.com/questions/37090031/how-to-import-socket-io-client-in-a-angular-2-application
@@ -91,6 +92,7 @@ export class ChatService {
 
 
         this.userService.addCallbacks(this.socket);
+        this.photoService.addCallbacks(this.socket);
 
     }
 
@@ -142,7 +144,7 @@ export class ChatService {
         };
     };
 
-    constructor(public authUserService: AuthUserService, public userService: UserService) {
+    constructor(public authUserService: AuthUserService, public userService: UserService, public photoService: PhotoService) {
 
         if (this.authUserService.isLoggedIn()) {
             this.connect(this.authUserService.getLoggedInUserName());
