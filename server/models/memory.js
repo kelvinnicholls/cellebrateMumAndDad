@@ -39,8 +39,10 @@ let MemorySchema = new mongoose.Schema({
     ref: 'Media'
   }],
   comments: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Comment'
+    comment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment'
+    }
   }]
 });
 
@@ -60,7 +62,7 @@ MemorySchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
   let Memory = this;
 
   let queryObj = utils.genQueryForCriteria(tags, users, fromDate, toDate, "memoryDate");
-  return Memory.find(queryObj).then((memories) => {
+  return Memory.find(queryObj).populate('comments').then((memories) => {
     return memories;
   }).catch((e) => {
     console.log("MemorySchema.statics.findByCriteria error", e);

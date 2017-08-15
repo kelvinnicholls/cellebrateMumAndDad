@@ -52,7 +52,7 @@ router.get('/', authenticate, (req, res) => {
     memoriesObj._creator = req.loggedInUser._creatorRef;
   };
 
-  Memory.find(memoriesObj).then((memories) => {
+  Memory.find(memoriesObj).populate('comments').then((memories) => {
     let obj = {};
     obj['memories'] = memories;
     res.send(obj);
@@ -93,7 +93,7 @@ router.get('/:id', authenticate, (req, res) => {
 
   Memory.findOne({
     '_id': id
-  }).then((memory) => {
+  }).populate('comments').then((memory) => {
     if (memory) {
       res.send({
         memory

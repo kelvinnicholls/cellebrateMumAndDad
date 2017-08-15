@@ -526,7 +526,7 @@ describe('UPDATE /medias/:id', () => {
           return done(err);
         }
 
-        Media.findById(id).then((media) => {
+        Media.findById(id).populate('comments').then((media) => {
           expect(media.description).toBe(newDescription);
           expect(media.comments.length).toBe(1);
           done();

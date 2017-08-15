@@ -103,7 +103,7 @@ router.get('/', authenticate, (req, res) => {
     mediasObj._creator = req.loggedInUser._creatorRef;
   };
 
-  Media.find(mediasObj).then((medias) => {
+  Media.find(mediasObj).populate('comments').then((medias) => {
     let obj = {};
     obj['medias'] = medias;
     res.send(obj);
@@ -136,7 +136,7 @@ router.get('/title/:title', authenticate, (req, res) => {
   let mediaObj = {
     title
   };
-  User.findOne(mediaObj).then((media) => {
+  User.findOne(mediaObj).populate('comments').then((media) => {
     if (media) {
       res.send({
         'titleFound': true,
@@ -168,7 +168,7 @@ router.get('/:id', authenticate, (req, res) => {
 
   Media.findOne({
     '_id': id
-  }).then((media) => {
+  }).populate('comments').then((media) => {
     if (media) {
       res.send({
         media

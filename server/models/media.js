@@ -57,7 +57,10 @@ let MediaSchema = new mongoose.Schema({
   },
   tags: [String],
   users: [mongoose.Schema.Types.ObjectId],
-  comments: [{type : mongoose.Schema.Types.ObjectId, ref : 'Comment'}]
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
+  }]
 });
 
 //console.log("MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));
@@ -80,7 +83,7 @@ MediaSchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
   let Media = this;
 
   let queryObj = utils.genQueryForCriteria(tags, users, fromDate, toDate, "mediaDate");
-  return Media.find(queryObj).then((medias) => {
+  return Media.find(queryObj).populate('comments').then((medias) => {
     return medias;
   }).catch((e) => {
     console.log("MediaSchema.statics.findByCriteria  error", e);
