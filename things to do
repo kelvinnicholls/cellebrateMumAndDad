@@ -124,8 +124,8 @@ X67) sort out position of Photos sub-menu
 https://stackoverflow.com/questions/35956194/bootstrap-button-dropdown-not-below-button
 X68) If not photos (or no users or memories) display message instead
 X69) Add multer to photos
-70) Do not allow add photo until photo is selected
-71) Prevent update of photo when updating
+X70) Do not allow add photo until photo is selected
+X71) Prevent update of photo when updating
 72) description should be text area
 73) add isProfilePic to media and do not return in photo list
 74) Add comments to photos (add comments on list and edit)

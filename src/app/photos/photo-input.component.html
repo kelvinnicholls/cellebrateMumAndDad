@@ -53,7 +53,7 @@
     </div>
 
 
-    <div class="col col-sm-2">
+    <div *ngIf="!photo" class="col col-sm-2">
       <div id="fileSource">
         <label placement="bottom" ngbTooltip="Look for the file on the file system of local computer." class="custom-control custom-radio">
                 <input (click)="setFileSource(getConsts().FILE_SYSTEM)" id="fileSystem" name="fileSource" type="radio" value="File System" class="custom-control-input" checked>
@@ -67,7 +67,7 @@
               </label>
       </div>
     </div>
-    <div class="col col-sm-1">
+    <div *ngIf="!photo" class="col col-sm-1">
       <label placement="right" ngbTooltip="Press to select a photo to upload." class="btn btn-success" for='photoPicPath' (click)="showFileStackPicker()">
           Browse
         <input *ngIf="fileSource === getConsts().FILE_SYSTEM" type="file" #file id="photoPicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
