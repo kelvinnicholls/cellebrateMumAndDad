@@ -38,8 +38,7 @@
       }">
       <div class="form-control-feedback" *ngIf="myForm.get('description').errors && (myForm.get('description').dirty || myForm.get('description').touched)">
         <p *ngIf="myForm.get('description').errors.required">Description is required</p>
-        <p *ngIf="myForm.get('description').errors.descriptionIsAlreadyUsed">This description is already in use!</p>
-      </div>
+       </div>
       <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter a description for this photo. </small>
     </div>
   </div>

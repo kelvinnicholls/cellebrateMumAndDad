@@ -269,8 +269,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     }
 
     isFormValid() {
-        return this.myForm.valid && this.myForm.dirty;
-
+        let retVal = false;
+        if (this.myForm.valid && this.myForm.dirty && (this.photo || (!this.photo && (this.photoData || this.photoInfo)))) {
+             retVal = true
+        }
+        return retVal;
     }
 
 
