@@ -65,6 +65,7 @@ let upload = (req, res, next) => {
         media.location = location;
         media.originalFileName = req.file.originalname;
         media.mimeType = req.file.mimetype;
+        media.isProfilePic = true;
         media.isUrl = false;
         media.title = 'Profile picture for ' + req.loggedInUser.name;
         media._creator = req.loggedInUser._creatorRef;
@@ -87,6 +88,7 @@ let saveMedia = (body, req, _creatorRef, res, func) => {
   media.location = body.profilePicInfo.location;
   media.isUrl = true;
   media.mimeType = body.profilePicInfo.mimeType;
+  media.isProfilePic = true;
   media.title = 'Profile picture for ' + req.loggedInUser.name;
   media._creator = req.loggedInUser._creatorRef;
   media.addedDate = new Date();

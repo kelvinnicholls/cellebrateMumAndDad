@@ -49,6 +49,7 @@ let upload = (req, res, next) => {
         req.passedMedia.location = location;
         req.passedMedia.originalFileName = req.file.originalname;
         req.passedMedia.mimeType = req.file.mimetype;
+        req.passedMedia.isProfilePic = false;
         req.passedMedia.isUrl = false;
       };
       next();
@@ -57,10 +58,10 @@ let upload = (req, res, next) => {
 };
 
 
-const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName','photoInfo'];
+const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName','photoInfo'];
 const mediaOutFields = mediaInsertFields;
 
-const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
+const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic','description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
 const mediaUpdateFields = ['description', 'tags', 'users'];
 
 router.post('/', authenticate, upload, (req, res) => {
@@ -75,6 +76,7 @@ router.post('/', authenticate, upload, (req, res) => {
   };
 
   media._creator = req.loggedInUser._creatorRef;
+  media.isProfilePic = false;
   media.addedDate = new Date().getTime();
   console.log('media', media);
 
@@ -89,7 +91,7 @@ router.post('/', authenticate, upload, (req, res) => {
 
 router.get('/', authenticate, (req, res) => {
 
-  let mediasObj = {};
+  let mediasObj = {'isProfilePic' : false};
   if (!req.loggedInUser.adminUser) {
     mediasObj._creator = req.loggedInUser._creatorRef;
   };

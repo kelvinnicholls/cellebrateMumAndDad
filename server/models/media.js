@@ -18,6 +18,10 @@ let MediaSchema = new mongoose.Schema({
     minlength: 1,
     unique: true
   },
+  isProfilePic: {
+    required: true,
+    type: Boolean
+  },
   isUrl: {
     required: true,
     type: Boolean

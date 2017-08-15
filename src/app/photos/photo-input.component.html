@@ -31,14 +31,11 @@
       }">
     <label for="description" class="col-sm-4 col-form-label"><strong>Description</strong></label>
     <div class="col-sm-5">
-      <input placement="bottom" ngbTooltip="The description of this photo." type="text" class="form-control" id="description" placeholder="Description"
-        [ngModel]="photo?.description" formControlName="description" [ngClass]="{
+   <textarea placement="bottom" ngbTooltip="The description of this photo." type="text" class="form-control" id="description" placeholder="Description"
+        formControlName="description" [ngModel]="photo?.description" formControlName="description" [ngClass]="{
         'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
-      }">
-      <div class="form-control-feedback" *ngIf="myForm.get('description').errors && (myForm.get('description').dirty || myForm.get('description').touched)">
-        <p *ngIf="myForm.get('description').errors.required">Description is required</p>
-       </div>
+      }"></textarea>
       <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter a description for this photo. </small>
     </div>
   </div>
