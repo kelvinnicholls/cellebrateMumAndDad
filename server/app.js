@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 
 const mediasRoutes = require('./routes/medias-routes');
 const memoriesRoutes = require('./routes/memories-routes.js');
-const memoryRoutes = require('./routes/memory-routes.js');
 const usersRoutes = require('./routes/users-routes.js');
 const appRoutes = require('./routes/app-routes.js');
 
@@ -41,7 +40,6 @@ app.use(function(req, res, next) {
 
 app.use('/medias', mediasRoutes);
 app.use('/memories', memoriesRoutes);
-app.use('/memory', memoryRoutes);
 app.use('/users', usersRoutes);
 app.use('/', appRoutes);
 

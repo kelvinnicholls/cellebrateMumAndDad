@@ -127,7 +127,8 @@ X69) Add multer to photos
 X70) Do not allow add photo until photo is selected
 X71) Prevent update of photo when updating
 X72) description should be text area
-73) add isProfilePic to media and do not return in photo list
+X73) add isProfilePic to media and do not return in photo list
 74) Add comments to photos (add comments on list and edit)
 75) Tidy up display of photos (add comments on hover)
 76) Make sure search works with both photos and users
+77) add tags and users to medias and memories

@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const {
-  User
-} = require('../models/user');
+
 const {
   ObjectID
 } = require('mongodb');
@@ -33,10 +31,16 @@ let MemorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId
   },
   tags: [String],
-  users: [mongoose.Schema.Types.Mixed],
+  users: [{
+    type: mongoose.Schema.Types.ObjectId
+  }],
   medias: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Media'
+  }],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
   }]
 });
 

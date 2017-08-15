@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 //const mongooseUniqueValidator = require('mongoose-unique-validator');
-const {
-  User
-} = require('../models/user');
+
 const {
   ObjectID
 } = require('mongodb');
@@ -58,7 +56,8 @@ let MediaSchema = new mongoose.Schema({
     type: Date
   },
   tags: [String],
-  users: [mongoose.Schema.Types.Mixed]
+  users: [mongoose.Schema.Types.ObjectId],
+  comments: [{type : mongoose.Schema.Types.ObjectId, ref : 'Comment'}]
 });
 
 //console.log("MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));

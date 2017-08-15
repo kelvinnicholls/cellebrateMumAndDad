@@ -18,6 +18,11 @@ const {
   User
 } = require('../models/user');
 
+
+const {
+  Comment
+} = require('../models/comment');
+
 const config = require('../config/config.js');
 const {
   mongoose
@@ -58,11 +63,11 @@ let upload = (req, res, next) => {
 };
 
 
-const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName','photoInfo'];
+const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName', 'photoInfo'];
 const mediaOutFields = mediaInsertFields;
 
-const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic','description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
-const mediaUpdateFields = ['description', 'tags', 'users'];
+const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
+const mediaUpdateFields = ['description', 'tags', 'users', 'comment'];
 
 router.post('/', authenticate, upload, (req, res) => {
   let body = _.pick(req.passedMedia, mediaInsertFields);
@@ -91,7 +96,9 @@ router.post('/', authenticate, upload, (req, res) => {
 
 router.get('/', authenticate, (req, res) => {
 
-  let mediasObj = {'isProfilePic' : false};
+  let mediasObj = {
+    'isProfilePic': false
+  };
   if (!req.loggedInUser.adminUser) {
     mediasObj._creator = req.loggedInUser._creatorRef;
   };
@@ -246,30 +253,19 @@ router.delete('/', authenticate, (req, res) => {
 });
 
 
-router.patch('/:id', authenticate, (req, res) => {
-  let {
-    id
-  } = req.params;
+let updateMedias = (res, body, medias, commentId) => {
 
-
-  let body = _.pick(req.body, mediaUpdateFields);
-
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "Media ID is invalid"
-    });
-  };
-
-  let medias = {
-    '_id': id
-  };
-  if (!req.loggedInUser.adminUser) {
-    medias._creator = req.loggedInUser._creatorRef;
-  }
-
-  Media.findOneAndUpdate(medias, {
+  let updateObj = {
     $set: body
-  }, {
+  };
+
+  if (commentId) {
+    updateObj['$push'] = {
+      "comments": commentId
+    };
+  };
+
+  Media.findOneAndUpdate(medias, updateObj, {
     new: true
   }).then((media) => {
 
@@ -286,6 +282,45 @@ router.patch('/:id', authenticate, (req, res) => {
   }, (e) => {
     res.status(400).send();
   });
+};
+
+
+router.patch('/:id', authenticate, (req, res) => {
+  let {
+    id
+  } = req.params;
+
+  let body = _.pick(req.body, mediaUpdateFields);
+
+  if (!ObjectID.isValid(id)) {
+    return res.status(404).send({
+      error: "Media ID is invalid"
+    });
+  };
+
+  let medias = {
+    '_id': id
+  };
+
+  if (!req.loggedInUser.adminUser) {
+    medias._creator = req.loggedInUser._creatorRef;
+  };
+
+  if (body.comment) {
+
+    let mediaCommentObj = {'comment' : body.comment};
+    let comment = new Comment(mediaCommentObj);
+
+    comment._creator = req.loggedInUser._creatorRef;
+    comment.commentDate = new Date().getTime();
+    console.log('comment', comment);
+
+    comment.save().then((comment) => {
+      updateMedias(res, body,medias, comment._id);
+    });
+  } else {
+    updateMedias(res, body, medias, null);
+  };
 });
 
 

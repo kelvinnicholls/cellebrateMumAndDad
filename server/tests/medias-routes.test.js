@@ -502,6 +502,39 @@ describe('UPDATE /medias/:id', () => {
       });
   });
 
+
+  it('should update media for id and save comment', (done) => {
+    let media = _.clone(medias[0]);
+    let oldDescription = media.description;
+    let newDescription = media.description + ' UPDATED';
+    media.description = newDescription;
+    media.comment = "This is a comment";
+    let id = medias[0]._id.toHexString();
+    request(app)
+      .patch('/medias/' + id)
+      .set({
+        'x-auth': users[0].tokens[0].token
+      })
+      .send(media)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.media._id).toBe(id);
+        expect(res.body.media.description).toBe(newDescription);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        Media.findById(id).then((media) => {
+          expect(media.description).toBe(newDescription);
+          expect(media.comments.length).toBe(1);
+          done();
+        }).catch((e) => done(e));
+
+      });
+  });
+
   it('should not update media for id not owned and not admin', (done) => {
     let media = _.clone(medias[0]);
     let oldDescription = media.description;

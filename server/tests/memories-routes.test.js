@@ -270,7 +270,7 @@ describe('GET /memories/:id', () => {
   });
 });
 
-describe('POST /memory', () => {
+describe('POST /memories', () => {
   it('should create a new memory', (done) => {
     let memory = {
       title: 'Memory 3',
@@ -278,11 +278,11 @@ describe('POST /memory', () => {
       memoryDate: 64567577656,
       tags: ["tag10", "tag11"],
       users: [users[1]._creatorRef],
-      memories: [memories[0]._id]
+      medias: [medias[0]._id]
     };
 
     request(app)
-      .post('/memory')
+      .post('/memories')
       .set({
         'x-auth': users[0].tokens[0].token
       })
@@ -312,7 +312,7 @@ describe('POST /memory', () => {
 
   it('should not create memory with invalid body data', (done) => {
     request(app)
-      .post('/memory')
+      .post('/memories')
       .set({
         'x-auth': users[0].tokens[0].token
       })
@@ -484,6 +484,38 @@ describe('UPDATE /memories/:id', () => {
       .expect((res) => {
         expect(res.body.memory._id).toBe(id);
         expect(res.body.memory.description).toBe(newDescription);
+      })
+      .end((err, res) => {
+        if (err) {
+          return done(err);
+        }
+
+        Memory.findById(id).then((memory) => {
+          expect(memory.description).toBe(newDescription);
+          done();
+        }).catch((e) => done(e));
+
+      });
+  });
+
+  it('should update memory for id and save comment', (done) => {
+    let memory = _.clone(memories[0]);
+    let oldDescription = memory.description;
+    let newDescription = memory.description + ' UPDATED';
+    memory.description = newDescription;
+    memory.comment = "This is a comment";
+    let id = memories[0]._id.toHexString();
+    request(app)
+      .patch('/memories/' + id)
+      .set({
+        'x-auth': users[0].tokens[0].token
+      })
+      .send(memory)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.memory._id).toBe(id);
+        expect(res.body.memory.description).toBe(newDescription);
+        expect(res.body.memory.comments.length).toBe(1);
       })
       .end((err, res) => {
         if (err) {
