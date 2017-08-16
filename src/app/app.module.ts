@@ -21,6 +21,7 @@ import { appRouting } from "./app.routing";
 import { SearchService } from "./shared/search/search.service";
 import { ChatService } from "./chat/chat.service";
 import { ErrorService } from "./shared/errors/error.service";
+import { CommentsService } from "./shared/comments/comments.service";
 import { DialogService } from "./shared/dialog/dialog.service";
 import { ChatUsersComponent } from "./chat/chat-users/chat-users.component";
 import { ChatMessagesListComponent } from "./chat/chat-messages-list/chat-messages-list.component";
@@ -35,7 +36,7 @@ import { ToastCustomOption } from './shared/toast/toast-custom-option';
 import { SharedModule } from "./shared/shared.module";
 import { ChatModule } from "./chat/chat.module";
 import { UserService } from "./users/user.service";
-import {PhotoService } from "./photos/photo.service";
+import { PhotoService } from "./photos/photo.service";
 import { FileStackService } from "./shared/file-stack/file-stack.service";
 
 
@@ -62,7 +63,7 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         ChatModule,
         SharedModule
     ],
-    providers: [AuthService, UserService, PhotoService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, FileStackService],
+    providers: [CommentsService, AuthService, UserService, PhotoService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, FileStackService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

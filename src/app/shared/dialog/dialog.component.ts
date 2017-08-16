@@ -40,7 +40,7 @@ export class DialogComponent implements OnInit {
         this.display = 'none';
         this.dialog.retDialogSub.emit(DialogRetEnum.ButtonTwo);
     }
-
+    
     ngOnInit() {
         this.showDialogSub = this.dialogService.showDialogSub
             .subscribe(

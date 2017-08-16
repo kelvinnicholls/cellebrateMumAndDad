@@ -31,7 +31,9 @@ export class Consts {
   public static WARNING = "Warning";
   public static INFO = "Info";
   public static CUSTOM = "Custom";
-
+  public static PHOTO = 'PHOTO';
+  public static MEMORY = 'MEMORY';
+ 
   public static DATE_DISPLAY_FORMAT = "DD-MM-YYYY";
   public static DATE_DB_FORMAT = "YYYY-MM-DD";
 

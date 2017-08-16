@@ -483,7 +483,9 @@ describe('UPDATE /medias/:id', () => {
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send(media)
+      .send({
+        media: JSON.stringify(media)
+      })
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
@@ -515,7 +517,9 @@ describe('UPDATE /medias/:id', () => {
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send(media)
+      .send({
+        media: JSON.stringify(media)
+      })
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
@@ -546,7 +550,9 @@ describe('UPDATE /medias/:id', () => {
       .set({
         'x-auth': users[1].tokens[0].token
       })
-      .send(media)
+      .send({
+        media: JSON.stringify(media)
+      })
       .expect(404)
       .end((err, res) => {
         if (err) {
@@ -571,7 +577,9 @@ describe('UPDATE /medias/:id', () => {
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send(media)
+      .send({
+        media: JSON.stringify(media)
+      })
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
@@ -603,7 +611,9 @@ describe('UPDATE /medias/:id', () => {
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send(media)
+      .send({
+        media: JSON.stringify(media)
+      })
       .expect(404)
       .expect((res) => {
         expect(res.body.error).toBe("media not found for id");
@@ -622,7 +632,9 @@ describe('UPDATE /medias/:id', () => {
       .set({
         'x-auth': users[0].tokens[0].token
       })
-      .send(media)
+      .send({
+        media: JSON.stringify(media)
+      })
       .expect(404)
       .expect((res) => {
         expect(res.body.error).toBe("Media ID is invalid");

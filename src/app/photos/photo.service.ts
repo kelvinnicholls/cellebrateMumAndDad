@@ -41,6 +41,16 @@ export class PhotoService {
 
     private socket;
 
+    addComment(photo: Photo, comment, callback) {
+        photo.comment = comment;
+        this.updatePhoto(photo).subscribe(
+            result => {
+                console.log(result);
+                photo.comment = null;
+                callback();
+            }
+        );
+    }
 
     createPhoto(photo, photoInfo): Photo {
         return new Photo(
@@ -183,7 +193,8 @@ export class PhotoService {
                         photo._id,
                         photo.description,
                         null,
-                        photoInfo);
+                        photoInfo,
+                        null);
                     transformedPhotos.push(newPhoto);
                 }
                 this.allPhotos = transformedPhotos;

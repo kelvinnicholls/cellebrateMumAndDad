@@ -226,6 +226,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this.profilePicData = null;
                         this.profilePicFile = null;
                         this.profilePicInfo = null;
+                        this.submitType = Consts.CREATE_USER;
 
                     } else {
                         // Create
@@ -254,7 +255,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this.profilePicData = null;
                         this.profilePicFile = null;
                         this.profilePicInfo = null;
-
+                        this.submitType = Consts.CREATE_USER;
                     }
                     this.myForm.reset();
                 }

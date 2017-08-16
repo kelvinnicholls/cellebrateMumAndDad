@@ -8,7 +8,8 @@ export class Photo {
         public _id: string,
         public description?: string,
         public photoFile?: File,
-        public photoInfo?: any // {location:string,mimeType:string,isUrl:boolean,originalFileName:string,mediaDate:date}
+        public photoInfo?: any, // {location:string,mimeType:string,isUrl:boolean,originalFileName:string,mediaDate:date}
+        public comment?: string
     ) {
         if (photoInfo && photoInfo.location && !photoInfo.isUrl && photoInfo.location.startsWith('server')) {
             this.photoInfo.location = photoInfo.location.substring(14);

@@ -9,13 +9,14 @@ import { PhotoService } from "./photo.service";
 import { UserService } from "../users/user.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { DialogService } from "../shared/dialog/dialog.service";
+import { CommentsService } from "../shared/comments/comments.service";
 import { AppService } from "../app.service";
 import { Photo } from "./photo.model";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
-
+import { Comment } from "../shared/comments/comment.model";
 
 
 @Component({
@@ -29,7 +30,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     myForm: FormGroup;
     private paramsSubscription: Subscription;
     private index: any;
-
+    private commentSub: EventEmitter<Comment>;
 
     fileSource: String = Consts.FILE_SYSTEM;
 
@@ -40,6 +41,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     photoData: any = null;
     photoFile: File = null;
     photoInfo: any = null;
+
+
 
 
     setFileSource(fileSource: String) {
@@ -88,6 +91,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     constructor(private ngbDateParserFormatter: NgbDateParserFormatter
         , private userService: UserService
+        , private commentsService: CommentsService
         , private photoService: PhotoService
         , private route: ActivatedRoute
         , private vcr: ViewContainerRef
@@ -159,6 +163,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         this.photoData = null;
                         this.photoFile = null;
                         this.photoInfo = null;
+                        this.submitType = Consts.ADD_PHOTO;
 
                     } else {
                         // Create
@@ -181,6 +186,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         this.photoData = null;
                         this.photoFile = null;
                         this.photoInfo = null;
+                        this.submitType = Consts.ADD_PHOTO;
 
                     }
                     this.myForm.reset();
@@ -233,6 +239,15 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
 
     ngOnInit() {
+
+        this.commentSub = this.commentsService.commentSub
+            .subscribe(
+            (comment: Comment) => {
+                if (comment.entity === Consts.PHOTO) {
+                   this.photoService.addComment(this.photo,comment.comment,comment.callback);
+                };
+            });
+
         this._creator = this.userService.getLoggedInUser()._creatorRef;
 
         this.myForm = new FormGroup({
@@ -266,12 +281,13 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.destroy(this.paramsSubscription);
+        this.destroy(this.commentSub);
     }
 
     isFormValid() {
         let retVal = false;
         if (this.myForm.valid && this.myForm.dirty && (this.photo || (!this.photo && (this.photoData || this.photoInfo)))) {
-             retVal = true
+            retVal = true
         }
         return retVal;
     }

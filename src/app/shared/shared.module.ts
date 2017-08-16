@@ -13,6 +13,7 @@ import { NgbDateMomentParserFormatter } from './ngb-date-moment-parser-formatter
 import { Consts } from "./consts";
 import { sharedRouting } from "./shared.routing";
 import { SignInComponent } from "./sign-in/sign-in.component";
+import { CommentAddComponent } from "./comments/comment-add/comment-add.component";
 
 @NgModule({
     declarations: [
@@ -22,9 +23,10 @@ import { SignInComponent } from "./sign-in/sign-in.component";
         ErrorComponent,
         DialogComponent,
         PageNotFoundComponent,
-        SignInComponent
+        SignInComponent,
+        CommentAddComponent
     ],
-    exports: [PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule,ErrorComponent,DialogComponent,PageNotFoundComponent],
+    exports: [CommentAddComponent,PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule,ErrorComponent,DialogComponent,PageNotFoundComponent],
     imports: [CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(),sharedRouting],
     providers: [{
         provide: NgbDateParserFormatter,

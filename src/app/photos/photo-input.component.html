@@ -2,16 +2,12 @@
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
-
-
-  
-
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
         'has-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
         'has-success': myForm.get('title').valid && (myForm.get('title').dirty || myForm.get('title').touched)
       }">
     <label for="title" class="col-sm-4 col-form-label"><strong>Title</strong></label>
-    <div class="col-sm-5">
+    <div class="col-sm-6">
       <input placement="bottom" ngbTooltip="The title of this photo." type="text" class="form-control" id="title" placeholder="Title"
         [ngModel]="photo?.title" formControlName="title" [ngClass]="{
         'form-control-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
@@ -30,7 +26,7 @@
         'has-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }">
     <label for="description" class="col-sm-4 col-form-label"><strong>Description</strong></label>
-    <div class="col-sm-5">
+    <div class="col-sm-6">
    <textarea placement="bottom" ngbTooltip="The description of this photo." type="text" class="form-control" id="description" placeholder="Description"
         formControlName="description" [ngModel]="photo?.description" formControlName="description" [ngClass]="{
         'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
@@ -76,7 +72,7 @@
 
 
 
-  <div class="form-group row col col-sm-4 offset-sm-4">
+  <div class="form-group row col col-sm-4 offset-sm-6">
     <button *ngIf="isAddPhoto()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger"
       (click)="onClear()">Clear</button>
     <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit"
@@ -84,3 +80,5 @@
   </div>
 
 </form>
+<app-comment-add *ngIf="!isNewPhoto()" [entity]="getConsts().PHOTO">
+</app-comment-add>

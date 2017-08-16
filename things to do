@@ -132,3 +132,5 @@ X73) add isProfilePic to media and do not return in photo list
 75) Tidy up display of photos (add comments on hover)
 76) Make sure search works with both photos and users
 77) add tags and users to medias and memories
+78) add "Photo Added" comment on insert
+79) Hover over photo should  resize it

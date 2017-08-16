@@ -38,6 +38,7 @@ let upload = (req, res, next) => {
   //console.log('upload',req, res);
   multerUploadSingleFile(req, res, function (err) {
     console.log('media-routes multerUploadSingleFile', err);
+    console.log('req.body.media', req.body.media);
     req.passedMedia = JSON.parse(req.body.media);
     delete req.body.media;
     console.log('req.file', req.file);
@@ -67,7 +68,7 @@ const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType',
 const mediaOutFields = mediaInsertFields;
 
 const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
-const mediaUpdateFields = ['description', 'tags', 'users', 'comment'];
+const mediaUpdateFields = ['title','description', 'tags', 'users', 'comment'];
 
 router.post('/', authenticate, upload, (req, res) => {
   let body = _.pick(req.passedMedia, mediaInsertFields);
@@ -255,6 +256,8 @@ router.delete('/', authenticate, (req, res) => {
 
 let updateMedias = (res, body, medias, commentId) => {
 
+  console.log("updateMedias",body, medias, commentId);
+
   let updateObj = {
     $set: body
   };
@@ -285,12 +288,15 @@ let updateMedias = (res, body, medias, commentId) => {
 };
 
 
-router.patch('/:id', authenticate, (req, res) => {
+router.patch('/:id', authenticate, upload, (req, res) => {
+  console.log("router.patch1",req.passedMedia);
   let {
     id
   } = req.params;
 
-  let body = _.pick(req.body, mediaUpdateFields);
+  let body = _.pick(req.passedMedia, mediaUpdateFields);
+
+  console.log("router.patch2",body);
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send({

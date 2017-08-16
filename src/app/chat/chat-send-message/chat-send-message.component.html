@@ -7,7 +7,7 @@
         'has-danger': myForm.get('message').invalid && (myForm.get('message').dirty || myForm.get('message').touched),
         'has-success': myForm.get('message').valid && (myForm.get('message').dirty || myForm.get('message').touched)
       }">
-    <label for="message" class="col-sm-2 col-form-label">Message</label>
+    <label for="message" class="col-sm-2 col-form-label"><strong>Message</strong></label>
     <div class="col-sm-5">
       <!-- <input  placement="bottom" ngbTooltip="The message to be sent." type="text" class="form-control" id="message" placeholder="Message" formControlName="message"> -->
       <textarea placement="bottom" ngbTooltip="The message to be sent." type="text" class="form-control" id="message" placeholder="Message"
