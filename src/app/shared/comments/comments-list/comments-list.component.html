@@ -1,0 +1,6 @@
+  <div class="col-md-6 offset-md-2">
+    <ul class="list-group">
+      <app-comment class="kgn-border-pad" *ngFor="let comment of comments | reverseArray" [comment]="comment">
+      </app-comment>
+    </ul>
+  </div>

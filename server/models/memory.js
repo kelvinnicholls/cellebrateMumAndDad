@@ -39,11 +39,9 @@ let MemorySchema = new mongoose.Schema({
     ref: 'Media'
   }],
   comments: [{
-    comment: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment'
-    }
-  }]
+    }]
 });
 
 // console.log("MemorySchema",utils.schemaToObject(Object.keys(MemorySchema.paths)));

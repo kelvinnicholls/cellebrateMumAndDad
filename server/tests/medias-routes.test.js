@@ -21,10 +21,13 @@ const {
   populateMedias,
   medias,
   populateUsers,
-  users
+  users,
+  populateComments,
+  comments
 } = require('./seed');
 
 beforeEach(populateUsers);
+beforeEach(populateComments);
 beforeEach(populateMedias);
 
 describe('GET /medias/byCriteria', () => {
@@ -200,6 +203,8 @@ describe('GET /medias', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.medias.length).toBe(2);
+        expect(res.body.medias[0].comments.length).toBe(1);
+        expect(res.body.medias[0].comments[0].user.name).toBe(users[0].name);
       })
       .end(done);
   });
@@ -532,7 +537,7 @@ describe('UPDATE /medias/:id', () => {
 
         Media.findById(id).populate('comments').then((media) => {
           expect(media.description).toBe(newDescription);
-          expect(media.comments.length).toBe(1);
+          expect(media.comments.length).toBe(2);
           done();
         }).catch((e) => done(e));
 

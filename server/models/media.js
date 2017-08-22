@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const _ = require('lodash');
 //const mongooseUniqueValidator = require('mongoose-unique-validator');
 
 const {
@@ -79,6 +80,14 @@ let MediaSchema = new mongoose.Schema({
 //MediaSchema.plugin(mongooseUniqueValidator);
 
 
+const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName', 'photoInfo'];
+const mediaOutFields = mediaInsertFields;
+mediaOutFields.push('comments');
+
+const mediaQueryFields = ['comments', 'title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
+const mediaUpdateFields = ['title', 'description', 'tags', 'users', 'comment'];
+
+
 MediaSchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
   let Media = this;
 
@@ -94,5 +103,9 @@ MediaSchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
 var Media = mongoose.model('Media', MediaSchema);
 
 module.exports = {
-  Media
+  Media,
+  mediaInsertFields,
+  mediaOutFields,
+  mediaQueryFields,
+  mediaUpdateFields
 };

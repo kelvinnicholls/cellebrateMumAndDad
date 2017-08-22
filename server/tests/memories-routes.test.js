@@ -515,7 +515,7 @@ describe('UPDATE /memories/:id', () => {
       .expect((res) => {
         expect(res.body.memory._id).toBe(id);
         expect(res.body.memory.description).toBe(newDescription);
-        expect(res.body.memory.comments.length).toBe(1);
+        expect(res.body.memory.comments.length).toBe(2);
       })
       .end((err, res) => {
         if (err) {

@@ -11,7 +11,11 @@ const {
 } = require('mongodb');
 
 const {
-  Media
+  Media,
+  mediaInsertFields,
+  mediaOutFields,
+  mediaQueryFields, 
+  mediaUpdateFields
 } = require('../models/media');
 
 const {
@@ -63,13 +67,6 @@ let upload = (req, res, next) => {
   });
 };
 
-
-const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName', 'photoInfo'];
-const mediaOutFields = mediaInsertFields;
-
-const mediaQueryFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
-const mediaUpdateFields = ['title','description', 'tags', 'users', 'comment'];
-
 router.post('/', authenticate, upload, (req, res) => {
   let body = _.pick(req.passedMedia, mediaInsertFields);
   console.log('body', body);
@@ -95,6 +92,48 @@ router.post('/', authenticate, upload, (req, res) => {
   });
 });
 
+
+let transformCreatorToUser = (medias) => {
+  return new Promise((resolve, reject) => {
+    let numMedias = medias ? medias.length : 0;
+    let processedMedias = 0;
+    let transformedMedias = [];
+    for (let media of medias) {
+      if (media.comments && media.comments.length > 0) {
+        let numComments = media.comments.length;
+        let processedComments = 0;
+        for (let comment of media.comments) {
+          let userObj = {
+            '_creatorRef': comment._creator
+          };
+          User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
+            if (user) {
+              delete user._id;
+              comment.user = user;
+            };
+            processedComments++;
+            if (numComments === processedComments) {
+              transformedMedias.push(media);
+              processedMedias++;
+              if (numMedias === processedMedias) {
+                return resolve(transformedMedias);
+              };
+            };
+          }, (e) => {
+            reject(e);
+          });
+        };
+      } else {
+        transformedMedias.push(media);
+        processedMedias++;
+        if (numMedias === processedMedias) {
+          return resolve(transformedMedias);
+        };
+      };
+    };
+  });
+}
+
 router.get('/', authenticate, (req, res) => {
 
   let mediasObj = {
@@ -105,9 +144,13 @@ router.get('/', authenticate, (req, res) => {
   };
 
   Media.find(mediasObj).populate('comments').then((medias) => {
-    let obj = {};
-    obj['medias'] = medias;
-    res.send(obj);
+    transformCreatorToUser(medias).then((medias) => {
+      let obj = {};
+      obj['medias'] = medias;
+      res.send(obj);
+    }, (e) => {
+      console.log("transformCreatorToUser error", e);
+    });
 
   }).catch((e) => {
     console.log("mediasApp.get('/medias/' error", e);
@@ -256,7 +299,7 @@ router.delete('/', authenticate, (req, res) => {
 
 let updateMedias = (res, body, medias, commentId) => {
 
-  console.log("updateMedias",body, medias, commentId);
+  console.log("updateMedias", body, medias, commentId);
 
   let updateObj = {
     $set: body
@@ -270,7 +313,7 @@ let updateMedias = (res, body, medias, commentId) => {
 
   Media.findOneAndUpdate(medias, updateObj, {
     new: true
-  }).then((media) => {
+  }).populate('comments').then((media) => {
 
     if (media) {
       res.send({
@@ -289,14 +332,14 @@ let updateMedias = (res, body, medias, commentId) => {
 
 
 router.patch('/:id', authenticate, upload, (req, res) => {
-  console.log("router.patch1",req.passedMedia);
+  console.log("router.patch1", req.passedMedia);
   let {
     id
   } = req.params;
 
   let body = _.pick(req.passedMedia, mediaUpdateFields);
 
-  console.log("router.patch2",body);
+  console.log("router.patch2", body);
 
   if (!ObjectID.isValid(id)) {
     return res.status(404).send({
@@ -314,7 +357,9 @@ router.patch('/:id', authenticate, upload, (req, res) => {
 
   if (body.comment) {
 
-    let mediaCommentObj = {'comment' : body.comment};
+    let mediaCommentObj = {
+      'comment': body.comment
+    };
     let comment = new Comment(mediaCommentObj);
 
     comment._creator = req.loggedInUser._creatorRef;
@@ -322,7 +367,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
     console.log('comment', comment);
 
     comment.save().then((comment) => {
-      updateMedias(res, body,medias, comment._id);
+      updateMedias(res, body, medias, comment._id);
     });
   } else {
     updateMedias(res, body, medias, null);

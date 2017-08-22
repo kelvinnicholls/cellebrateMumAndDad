@@ -19,6 +19,7 @@ export class CommentAddComponent implements OnInit, OnDestroy {
 
   @Input() entity: string;
 
+
   constructor(private commentsService: CommentsService, private dialogService: DialogService, private appService: AppService) {
 
   }

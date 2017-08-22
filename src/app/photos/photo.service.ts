@@ -15,7 +15,7 @@ import { SearchRetEnum } from "../shared/search/search-ret.enum";
 import { SearchRet } from "../shared/search/search-ret.model";
 import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
-
+import { CommentDisplay } from "../shared/comments/comment.model";
 
 
 @Injectable()
@@ -186,6 +186,27 @@ export class PhotoService {
                     photoInfo.isUrl = photo.isUrl;
                     photoInfo.mimeType = photo.mimeType;
 
+                    let comments: CommentDisplay[] = [];
+
+                    if (photo.comments && photo.comments.length > 0) {
+                        photo.comments.forEach(comment => {
+                            let userName = "";
+                            let profilePicLocation = "";
+                            if (comment.user) {
+                                if (comment.user.name) {
+                                    userName = comment.user.name;
+                                };
+                                if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
+                                    profilePicLocation = comment.user._profileMediaId.location;
+                                    if (profilePicLocation.startsWith('server')) {
+                                        profilePicLocation = profilePicLocation.substring(14);
+                                    };
+                                };                                
+                            };
+                            let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
+                            comments.push(commentDisplay);
+                        });
+                    }
                     let newPhoto = new Photo(
                         photo.title,
                         photo._creator,
@@ -194,9 +215,10 @@ export class PhotoService {
                         photo.description,
                         null,
                         photoInfo,
-                        null);
+                        null,
+                        comments);
                     transformedPhotos.push(newPhoto);
-                }
+                };
                 this.allPhotos = transformedPhotos;
                 this.photos = this.allPhotos.slice(0);
                 return transformedPhotos;

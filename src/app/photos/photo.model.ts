@@ -1,3 +1,4 @@
+import { CommentDisplay } from "../shared/comments/comment.model";
 export class Photo {
 
     public index;
@@ -9,7 +10,8 @@ export class Photo {
         public description?: string,
         public photoFile?: File,
         public photoInfo?: any, // {location:string,mimeType:string,isUrl:boolean,originalFileName:string,mediaDate:date}
-        public comment?: string
+        public comment?: string,
+        public comments?: CommentDisplay[]
     ) {
         if (photoInfo && photoInfo.location && !photoInfo.isUrl && photoInfo.location.startsWith('server')) {
             this.photoInfo.location = photoInfo.location.substring(14);

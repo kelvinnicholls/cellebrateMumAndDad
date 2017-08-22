@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
+const _ = require('lodash');
 const {
   User
 } = require('../models/user');
@@ -22,6 +23,21 @@ let CommentSchema = new mongoose.Schema({
     type: String
   }
 });
+
+
+CommentSchema.methods.toJSON  = function () {
+  let comment = this;
+  return _.pick(comment, commentOutFields);
+};
+
+
+
+const commentInsertFields = ['comment'];
+const commentOutFields = commentInsertFields;
+commentOutFields.push('commentDate');
+commentOutFields.push('_creator');
+commentOutFields.push('user');
+
 
 var Comment = mongoose.model('Comment', CommentSchema);
 

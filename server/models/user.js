@@ -11,7 +11,9 @@ const utils = require('../utils/utils.js');
 
 const seed = process.env.JWT_SECRET;
 
-const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId'];
+const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
+const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
+const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 
 
 let UserSchema = new mongoose.Schema({
@@ -311,5 +313,10 @@ var User = mongoose.model('User', UserSchema);
 
 module.exports = {
   User,
-  seed
+  seed,
+  userOutFields,
+  userInsertFields,
+  userUpdateFields
 }
+
+

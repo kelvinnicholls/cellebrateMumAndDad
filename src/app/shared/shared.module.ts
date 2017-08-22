@@ -14,6 +14,8 @@ import { Consts } from "./consts";
 import { sharedRouting } from "./shared.routing";
 import { SignInComponent } from "./sign-in/sign-in.component";
 import { CommentAddComponent } from "./comments/comment-add/comment-add.component";
+import { CommentComponent } from "./comments/comment/comment.component";
+import { CommentListComponent } from "./comments/comments-list/comments-list.component";
 
 @NgModule({
     declarations: [
@@ -24,10 +26,12 @@ import { CommentAddComponent } from "./comments/comment-add/comment-add.componen
         DialogComponent,
         PageNotFoundComponent,
         SignInComponent,
-        CommentAddComponent
+        CommentAddComponent,
+        CommentComponent,
+        CommentListComponent
     ],
-    exports: [CommentAddComponent,PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule,ErrorComponent,DialogComponent,PageNotFoundComponent],
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(),sharedRouting],
+    exports: [CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateParserFormatter,
         useFactory: () => { return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT, Consts.DATE_DB_FORMAT) }

@@ -19,7 +19,10 @@ const {
 const seed = process.env.JWT_SECRET;
 
 const {
-  User
+  User,
+  userOutFields,
+  userInsertFields,
+  userUpdateFields
 } = require('../models/user');
 
 const {
@@ -38,9 +41,6 @@ const {
 
 
 const utils = require('../utils/utils.js');
-const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
-const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
-const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 
 
 let upload = (req, res, next) => {

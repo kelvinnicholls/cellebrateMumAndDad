@@ -82,3 +82,5 @@
 </form>
 <app-comment-add *ngIf="!isNewPhoto()" [entity]="getConsts().PHOTO">
 </app-comment-add>
+<app-comments-list [comments]="photo.comments">
+</app-comments-list>
