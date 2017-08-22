@@ -6,3 +6,7 @@ export class Comment {
 export class CommentDisplay {
     constructor(public comment: string, public commentDate: string, public userName: string, public profilePicLocation : string) { }
 }
+
+export class Comments {
+    constructor(public title: string, public commentsDisplay: CommentDisplay[]) { }
+}

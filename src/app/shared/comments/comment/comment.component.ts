@@ -9,7 +9,7 @@ import { CommentDisplay } from "../comment.model";
 export class CommentComponent {
 
 
-  @Input() comment: CommentDisplay;
+  @Input() commentDisplay: CommentDisplay;
 
 
 

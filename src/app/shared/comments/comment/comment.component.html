@@ -2,18 +2,18 @@
   <div class="card-header">
     <div class="row">
       <div class="col-md-1 left">
-        <img [src]="comment.profilePicLocation" class="img-responsive" style="max-height: 30px;">
+        <img [src]="commentDisplay?.profilePicLocation" class="img-responsive" style="max-height: 30px;">
       </div>
       <div class="col">
-        <h4 class="card-title">{{comment.userName}}</h4>
+        <h4 class="card-title">{{commentDisplay?.userName}}</h4>
       </div>
       <div class="col right text-right">
-        <small> {{comment.commentDate}}</small>
+        <small> {{commentDisplay?.commentDate}}</small>
       </div>
     </div>
   </div>
   <div class="card-block">
 
-    <p class="card-text">{{comment.comment}}</p>
+    <p class="card-text">{{commentDisplay?.comment}}</p>
   </div>
 </div>

@@ -131,6 +131,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
+    showComments() {
+        this.commentsService.showComments("Comments for photo: '" + this.photo.title + "'",this.photo.comments );
+    }
 
 
     onSubmit() {

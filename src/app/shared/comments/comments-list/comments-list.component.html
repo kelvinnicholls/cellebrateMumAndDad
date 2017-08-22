@@ -1,6 +1,24 @@
-  <div class="col-md-6 offset-md-2">
-    <ul class="list-group">
-      <app-comment class="kgn-border-pad" *ngFor="let comment of comments | reverseArray" [comment]="comment">
-      </app-comment>
-    </ul>
-  </div>
+<div class="backdrop" [ngStyle]="{'display': display}"></div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{ title }}</h4>
+                <button type="button" class="close" aria-label="Close" (click)="onClose()"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12">
+                    <ul class="list-group">
+                      <app-comment class="kgn-border-pad" *ngFor="let commentDisplay of commentsDisplay | reverseArray" [commentDisplay]="commentDisplay">
+                      </app-comment>
+                    </ul>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="onClose()">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+  
+  
