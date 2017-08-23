@@ -41,12 +41,24 @@ export class PhotoService {
 
     private socket;
 
-    addComment(photo: Photo, comment, callback) {
+    addComment(photo: Photo, comment,entityIndex, callback,callback2) {
         photo.comment = comment;
         this.updatePhoto(photo).subscribe(
             result => {
                 console.log(result);
                 photo.comment = null;
+                let commentDate = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);
+                let userName = this.userService.getLoggedInUser().name;
+                let profilePicLocation = "";
+        
+                if (this.userService.getLoggedInUser().profilePicInfo && this.userService.getLoggedInUser().profilePicInfo.location) {
+                    profilePicLocation = this.userService.getLoggedInUser().profilePicInfo.location;
+                };
+        
+                let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation);
+
+                this.allPhotos[entityIndex].comments.push(commentDisplay);
+                this.photosChanged.next(this.photos);
                 callback();
             }
         );
@@ -201,7 +213,7 @@ export class PhotoService {
                                     if (profilePicLocation.startsWith('server')) {
                                         profilePicLocation = profilePicLocation.substring(14);
                                     };
-                                };                                
+                                };
                             };
                             let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
                             comments.push(commentDisplay);

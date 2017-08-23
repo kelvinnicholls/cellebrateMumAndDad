@@ -1,9 +1,12 @@
 <li class="list-group-item justify-content-between">
-    <img [src]="getSource()" class="img-responsive" style="max-height: 30px;">
-    <div class="author">
-         <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this photo." routerLink="/photos/photo/{{photo.index}}">{{ photo.title }}</a>
-    </div>
-    <div class="config">
-        <a placement="bottom" ngbTooltip="Click to delete this photo." (click)="onDelete()">Delete</a>
-    </div>
+  <img [src]="getSource()" class="img-responsive" style="max-height: 30px;">
+  <div class="author">
+    <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this photo." routerLink="/photos/photo/{{photo.index}}">{{ photo.title }}</a>
+  </div>
+  <div *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="config">
+        <a placement="bottom" ngbTooltip="Click to view comments." target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{photo.comments.length}})</a>
+  </div>
+  <div class="config">
+    <a placement="bottom" ngbTooltip="Click to delete this photo." (click)="onDelete()">Delete</a>
+  </div>
 </li>

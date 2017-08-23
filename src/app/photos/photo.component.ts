@@ -5,6 +5,7 @@ import { DialogService } from "../shared/dialog/dialog.service";
 import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
+import { CommentsService } from "../shared/comments/comments.service";
 
 @Component({
     selector: 'app-photo',
@@ -28,7 +29,13 @@ export class PhotoComponent implements OnInit, OnDestroy {
     @Input() photo: Photo;
     //@Input() index: Number;
     defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
-    constructor(private photoService: PhotoService, private dialogService: DialogService) { }
+    constructor(private photoService: PhotoService, private dialogService: DialogService, private commentsService: CommentsService) { }
+
+
+    showComments() {
+        this.commentsService.showComments("Comments for photo: '" + this.photo.title + "'", this.photo.comments);
+    }
+
 
     onDelete() {
 

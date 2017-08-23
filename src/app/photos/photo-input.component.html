@@ -47,7 +47,7 @@
     </div>
 
 
-    <div *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="form-group row col col-sm-8 offset-sm-4">
+    <div id="comments" *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="form-group row col col-sm-8 offset-sm-4">
       <a placement="bottom" ngbTooltip="Click to view comments." target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{photo.comments.length}})</a>
     </div>
 
@@ -84,5 +84,5 @@
   </div>
 
 </form>
-<app-comment-add *ngIf="!isNewPhoto()" [entity]="getConsts().PHOTO">
+<app-comment-add *ngIf="!isNewPhoto()" [entity]="getConsts().PHOTO" [entityIndex]="getIndex()">
 </app-comment-add>

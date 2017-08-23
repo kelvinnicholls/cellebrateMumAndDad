@@ -18,6 +18,7 @@ export class CommentAddComponent implements OnInit, OnDestroy {
   myForm: FormGroup;
 
   @Input() entity: string;
+  @Input() entityIndex: any;
 
 
   constructor(private commentsService: CommentsService, private dialogService: DialogService, private appService: AppService) {
@@ -34,7 +35,7 @@ export class CommentAddComponent implements OnInit, OnDestroy {
     retDialogSub.subscribe(
       (buttonPressed: DialogRetEnum) => {
         if (buttonPressed === DialogRetEnum.ButtonOne) {
-          const comment = new Comment(this.entity, this.myForm.value.comment, () => {
+          const comment = new Comment(this.entity, this.entityIndex, this.myForm.value.comment, () => {
             this.appService.showToast(Consts.SUCCESS, "Comment added.");
             this.myForm.reset();
           });

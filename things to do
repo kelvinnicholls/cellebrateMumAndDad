@@ -128,16 +128,14 @@ X70) Do not allow add photo until photo is selected
 X71) Prevent update of photo when updating
 X72) description should be text area
 X73) add isProfilePic to media and do not return in photo list
-74) Add comments to photos (add comments on list and edit)
-75) Tidy up display of photos (add comments on hover)
+X75) Tidy up display of photos (add comments on hover)
 76) Make sure search works with both photos and users
-77) add tags and users to medias and memories
+77) add tags and people to medias and memories
 78) add "Photo Added" comment on insert
 79) Hover over photo should  resize it
 80) implement password retries and lock period
 81) implement password expiry (expiry date on user and flag to indicate if this is enforced, although expiry date will still work)
 82) implement expiring tokens
 83) Add revolving set of photos below menu
-
-sort out test issues inc user object disappearing
-photo list only showing 1 of 2 photos
+84) Add comments link to photos list
+85) Make sure only admin or creator can update/delete

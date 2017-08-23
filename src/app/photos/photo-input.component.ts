@@ -22,6 +22,7 @@ import { Comment } from "../shared/comments/comment.model";
 @Component({
     selector: 'app-photo-input',
     templateUrl: './photo-input.component.html',
+    styleUrls: ['./photo-input.component.css'],
     providers: [ToastService]
 })
 export class PhotoInputComponent implements OnInit, OnDestroy {
@@ -42,7 +43,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     photoFile: File = null;
     photoInfo: any = null;
 
-
+    getIndex(): any {
+        return this.index;
+    }
 
 
     setFileSource(fileSource: String) {
@@ -132,7 +135,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     }
 
     showComments() {
-        this.commentsService.showComments("Comments for photo: '" + this.photo.title + "'",this.photo.comments );
+        this.commentsService.showComments("Comments for photo: '" + this.photo.title + "'", this.photo.comments);
     }
 
 
@@ -247,7 +250,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             .subscribe(
             (comment: Comment) => {
                 if (comment.entity === Consts.PHOTO) {
-                   this.photoService.addComment(this.photo,comment.comment,comment.callback);
+                    this.photoService.addComment(this.photo, comment.comment, comment.entityIndex, comment.callback);
                 };
             });
 
