@@ -11,7 +11,9 @@ const {
 } = require('../db/mongoose');
 
 const {
-  Memory
+  Memory,
+  memoryInsertFields,
+  memoryUpdateFields
 } = require('../models/memory');
 
 const {
@@ -28,9 +30,49 @@ const {
 
 
 
-const memoryInsertFields = ['title', 'description', 'memoryDate', 'tags', 'users', 'medias'];
-const memoryUpdateFields = ['title', 'description', 'memoryDate', 'tags', 'users', 'medias', 'comment'];
 
+
+
+let transformCreatorToUser = (memories) => {
+  return new Promise((resolve, reject) => {
+    let numMemories = memories ? memories.length : 0;
+    let processedMemories = 0;
+    let transformedMemories = [];
+    for (let memory of memories) {
+      if (memory.comments && memory.comments.length > 0) {
+        let numComments = memory.comments.length;
+        let processedComments = 0;
+        for (let comment of memory.comments) {
+          let userObj = {
+            '_creatorRef': comment._creator
+          };
+          User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
+            if (user) {
+              delete user._id;
+              comment.user = user;
+            };
+            processedComments++;
+            if (numComments === processedComments) {
+              transformedMemories.push(memory);
+              processedMemories++;
+              if (numMemories === processedMemories) {
+                return resolve(transformedMemories);
+              };
+            };
+          }, (e) => {
+            reject(e);
+          });
+        };
+      } else {
+        transformedMemories.push(memory);
+        processedMemories++;
+        if (numMemories === processedMemories) {
+          return resolve(transformedMemories);
+        };
+      };
+    };
+  });
+}
 
 router.post('/', authenticate, (req, res) => {
   let body = _.pick(req.body, memoryInsertFields);
@@ -52,10 +94,14 @@ router.get('/', authenticate, (req, res) => {
     memoriesObj._creator = req.loggedInUser._creatorRef;
   };
 
-  Memory.find(memoriesObj).populate('comments').then((memories) => {
-    let obj = {};
-    obj['memories'] = memories;
-    res.send(obj);
+  Memory.find(memoriesObj).populate('comments tags people').then((memories) => {
+    transformCreatorToUser(memories).then((memories) => {
+      let obj = {};
+      obj['memories'] = memories;
+      res.send(obj);
+    }, (e) => {
+      console.log("transformCreatorToUser error", e);
+    });
   }).catch((e) => {
     console.log("app.get('/memories/' error", e);
   });
@@ -93,7 +139,7 @@ router.get('/:id', authenticate, (req, res) => {
 
   Memory.findOne({
     '_id': id
-  }).populate('comments').then((memory) => {
+  }).populate('comments tags people').then((memory) => {
     if (memory) {
       res.send({
         memory
@@ -191,7 +237,7 @@ let updateMemories = (res, body, memories, commentId) => {
 
   Memory.findOneAndUpdate(memories, updateObj, {
     new: true
-  }).then((memory) => {
+  }).populate('comments tags people').then((memory) => {
 
     if (memory) {
       res.send({

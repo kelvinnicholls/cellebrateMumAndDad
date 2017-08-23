@@ -12,6 +12,14 @@ const {
   Comment
 } = require('../models/comment');
 
+const {
+  Tag
+} = require('../models/tag');
+
+const {
+  Person
+} = require('../models/person');
+
 
 const {
   Memory
@@ -43,12 +51,59 @@ const memoryId2 = new ObjectID();
 const commentId1 = new ObjectID();
 const commentId2 = new ObjectID();
 
+const tagId1 = new ObjectID();
+const tagId2 = new ObjectID();
+const tagId3 = new ObjectID();
+const tagId4 = new ObjectID();
+
+const personId1 = new ObjectID();
+const personId2 = new ObjectID();
+const personId3 = new ObjectID();
+const personId4 = new ObjectID();
+
 
 const md1 = new Date(moment('01/01/2016', 'DD/MM/YYYY').toISOString());
 const md2 = new Date(moment('01/01/2017', 'DD/MM/YYYY').toISOString());
+
 const kelvDob = new Date(moment('18/08/1964', 'DD/MM/YYYY').toISOString());
 const sharonDob = new Date(moment('19/04/1966', 'DD/MM/YYYY').toISOString());
 
+
+const tags = [{
+  _id: tagId1,
+  '_creator': user1CreatorRef,
+  'tag': 'tag 1'
+}, {
+  _id: tagId2,
+  '_creator': user2CreatorRef,
+  'tag': 'tag 2'
+}, {
+  _id: tagId3,
+  '_creator': user1CreatorRef,
+  'tag': 'tag 3'
+}, {
+  _id: tagId4,
+  '_creator': user2CreatorRef,
+  'tag': 'tag 4'
+}];
+
+const people = [{
+  _id: personId1,
+  '_creator': user1CreatorRef,
+  'person': 'person 1'
+}, {
+  _id: personId2,
+  '_creator': user2CreatorRef,
+  'person': 'person 2'
+}, {
+  _id: personId3,
+  '_creator': user1CreatorRef,
+  'person': 'person 3'
+}, {
+  _id: personId4,
+  '_creator': user2CreatorRef,
+  'person': 'person 4'
+}];
 
 const comments = [{
   _id: commentId1,
@@ -112,9 +167,9 @@ const medias = [{
   description: "Movie 1",
   _creator: user1CreatorRef,
   mediaDate: md1,
-  tags: ["tag1", "tag2"],
+  tags: [tagId1, tagId2],
   comments: [commentId1],
-  users: [users[0]._creatorRef, users[1]._creatorRef]
+  people: [personId1, personId2]
 }, {
   _id: mediaId2,
   location: "https://somesite/movie.mpeg",
@@ -124,9 +179,9 @@ const medias = [{
   description: "Url 1",
   _creator: user2CreatorRef,
   mediaDate: md2,
-  tags: ["tag3", "tag4"],
+  tags: [tagId3, tagId4],
   comments: [commentId2],
-  users: [users[0]._creatorRef, users[1]._creatorRef]
+  people: [personId3, personId4]
 }];
 
 const memories = [{
@@ -135,9 +190,9 @@ const memories = [{
   description: 'Memory 1',
   memoryDate: md1,
   _creator: user1CreatorRef,
-  tags: ["tag1", "tag4"],
+  tags: [tagId3, tagId4],
   comments: [commentId1],
-  users: [users[0]._creatorRef, users[1]._creatorRef],
+  people: [personId3, personId4],
   medias: [mediaId1]
 }, {
   _id: memoryId2,
@@ -145,11 +200,35 @@ const memories = [{
   description: 'Memory 2',
   memoryDate: md2,
   _creator: user2CreatorRef,
-  tags: ["tag2", "tag3"],
+  tags: [tagId1, tagId2],
   comments: [commentId2],
-  users: [users[0]._creatorRef, users[1]._creatorRef],
+  people: [personId1, personId2],
   medias: [mediaId2]
 }];
+
+const populateTags = (done) => {
+  Tag.remove({}).then(() => {
+    let tag1 = new Tag(tags[0]).save();
+    let tag2 = new Tag(tags[1]).save();
+    let tag3 = new Tag(tags[2]).save();
+    let tag4 = new Tag(tags[3]).save();
+    return Promise.all([tag1, tag2, tag3, tag4]); // returns after both passed promises finish and calls middleware
+  }).then(() => done()).catch((err) => {
+    console.log("populateTags", err);
+  });
+};
+
+const populatePeople = (done) => {
+  Person.remove({}).then(() => {
+    let person1 = new Person(people[0]).save();
+    let person2 = new Person(people[1]).save();
+    let person3 = new Person(people[2]).save();
+    let person4 = new Person(people[3]).save();
+    return Promise.all([person1, person2, person3, person4]); // returns after both passed promises finish and calls middleware
+  }).then(() => done()).catch((err) => {
+    console.log("populatePeople", err);
+  });
+};
 
 
 const populateComments = (done) => {
@@ -201,8 +280,12 @@ module.exports = {
   medias,
   users,
   comments,
+  tags,
+  people,
   populateMemories,
   populateMedias,
   populateUsers,
-  populateComments
+  populateComments,
+  populateTags,
+  populatePeople
 };

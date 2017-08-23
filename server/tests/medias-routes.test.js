@@ -23,11 +23,17 @@ const {
   populateUsers,
   users,
   populateComments,
-  comments
+  comments,
+  populatePeople,
+  people,
+  populateTags,
+  tags
 } = require('./seed');
 
 beforeEach(populateUsers);
 beforeEach(populateComments);
+beforeEach(populateTags);
+beforeEach(populatePeople);
 beforeEach(populateMedias);
 
 describe('GET /medias/byCriteria', () => {
@@ -36,10 +42,10 @@ describe('GET /medias/byCriteria', () => {
     let fromDate = moment(medias[0].mediaDate).valueOf();
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
-      tags: ["tag1", "tag3"],
+      tags: [tags[0]._id, tags[2]._id],
       fromDate,
       toDate,
-      users: [users[0]._creatorRef, users[1]._creatorRef]
+      people: [people[0]._id, people[1]._id]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -58,10 +64,10 @@ describe('GET /medias/byCriteria', () => {
     let fromDate = moment(medias[0].mediaDate).valueOf();
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
-      tags: ["tag1"],
+      tags: [tags[0]._id],
       fromDate,
       toDate,
-      users: [users[0]._creatorRef, users[1]._creatorRef]
+      people: [people[0]._id, people[1]._id]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -79,9 +85,9 @@ describe('GET /medias/byCriteria', () => {
   it('should get all medias for admin user for tag1, user1 and user2, and fromDate', (done) => {
     let fromDate = moment(medias[0].mediaDate).valueOf();
     let body = {
-      tags: ["tag1"],
+      tags: [tags[0]._id],
       fromDate,
-      users: [users[0]._creatorRef, users[1]._creatorRef]
+      people: [people[0]._id, people[1]._id]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -99,9 +105,9 @@ describe('GET /medias/byCriteria', () => {
   it('should get all medias for admin user for tag1, user1 and user2, and toDate', (done) => {
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
-      tags: ["tag1"],
+      tags: [tags[0]._id],
       toDate,
-      users: [users[0]._creatorRef, users[1]._creatorRef]
+      people: [people[0]._id, people[1]._id]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -119,7 +125,7 @@ describe('GET /medias/byCriteria', () => {
   it('should not get any medias for admin user for invalid tag tag5', (done) => {
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
-      tags: ["tag5"]
+      tags: [new ObjectID()]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -134,10 +140,10 @@ describe('GET /medias/byCriteria', () => {
       .end(done);
   });
 
-  it('should not get any medias for admin user for invalid user', (done) => {
+  it('should not get any medias for admin user for invalid tag', (done) => {
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
-      users: [new ObjectID()]
+      tags: [new ObjectID()]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -236,8 +242,8 @@ describe('GET /medias/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.media._id).toBe(id);
-        expect(res.body.media.users).toContain(users[0]._creatorRef);
-        expect(res.body.media.users).toContain(users[1]._creatorRef);
+        expect(res.body.media.people[0]._id).toBe(people[0]._id.toHexString());
+        expect(res.body.media.people[1]._id).toBe(people[1]._id.toHexString());
       })
       .end(done);
   });
@@ -283,8 +289,8 @@ describe('POST /medias', () => {
       description: "Movie 2",
       title: 'New Title',
       mediaDate: 14565623,
-      tags: ["tag5", "tag6"],
-      users: [users[1]._creatorRef]
+      tags: [tags[0]._id, tags[3]._id],
+      people: [people[1]._id]
     };
 
     request(app)
@@ -311,7 +317,7 @@ describe('POST /medias', () => {
           expect(dbMedia.location).toBe(media.location);
           expect(dbMedia.title).toBe(media.title);
           expect(new ObjectID(dbMedia._creator).toHexString()).toEqual(users[0]._creatorRef.toHexString());
-          expect(dbMedia.users[0]).toEqual(users[1]._creatorRef.toHexString());
+          expect(dbMedia.people[0]).toEqual(people[1]._id.toHexString());
           done();
         }).catch((e) => done(e));
       });
@@ -535,7 +541,7 @@ describe('UPDATE /medias/:id', () => {
           return done(err);
         }
 
-        Media.findById(id).populate('comments').then((media) => {
+        Media.findById(id).populate('comments tags people').then((media) => {
           expect(media.description).toBe(newDescription);
           expect(media.comments.length).toBe(2);
           done();

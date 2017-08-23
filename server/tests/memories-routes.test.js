@@ -23,10 +23,19 @@ const {
   populateMemories,
   memories,
   populateUsers,
-  users
+  users,
+  populateComments,
+  comments,
+  populatePeople,
+  people,
+  populateTags,
+  tags
 } = require('./seed');
 
 beforeEach(populateUsers);
+beforeEach(populateComments);
+beforeEach(populateTags);
+beforeEach(populatePeople);
 beforeEach(populateMedias);
 beforeEach(populateMemories);
 
@@ -36,10 +45,10 @@ describe('GET /memories/byCriteria', () => {
     let fromDate = moment(memories[0].memoryDate).valueOf();
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
-      tags: ["tag1", "tag3"],
+      tags: [tags[0]._id, tags[2]._id],
+      people: [people[0]._id, people[1]._id],
       fromDate,
       toDate
-      //     users: [users[0].name, users[1].name]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -58,10 +67,10 @@ describe('GET /memories/byCriteria', () => {
     let fromDate = moment(memories[0].memoryDate).valueOf();
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
-      tags: ["tag1"],
+      tags: [tags[0]._id],
+      people: [people[0]._id, people[1]._id],
       fromDate,
       toDate
-      //     users: [users[0].name, users[1].name]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -79,9 +88,8 @@ describe('GET /memories/byCriteria', () => {
   it('should get all memories for admin user for tag1, user1 and user2, and fromDate', (done) => {
     let fromDate = moment(memories[0].memoryDate).valueOf();
     let body = {
-      tags: ["tag1"],
+      tags: [tags[0]._id],
       fromDate
-      //     users: [users[0].name, users[1].name]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -99,9 +107,8 @@ describe('GET /memories/byCriteria', () => {
   it('should get all memories for admin user for tag1, user1 and user2, and toDate', (done) => {
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
-      tags: ["tag1"],
+      tags: [tags[0]._id],
       toDate
-      //     users: [users[0].name, users[1].name]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -116,10 +123,10 @@ describe('GET /memories/byCriteria', () => {
       .end(done);
   });
 
-  it('should not get any memories for admin user for invalid tag tag5', (done) => {
+  it('should not get any memories for admin user for invalid tag', (done) => {
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
-      tags: ["tag5"]
+      tags: [new ObjectID()]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -158,7 +165,6 @@ describe('GET /memories/byCriteria', () => {
     let body = {
       fromDate,
       toDate
-      //     users: [users[0].name, users[1].name]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -178,7 +184,6 @@ describe('GET /memories/byCriteria', () => {
     let body = {
       fromDate,
       toDate
-      //     users: [users[0].name, users[1].name]
     };
     request(app)
       .get('/memories/byCriteria')
@@ -205,6 +210,8 @@ describe('GET /memories', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.memories.length).toBe(2);
+        expect(res.body.memories[0].comments.length).toBe(1);
+        expect(res.body.memories[0].comments[0].user.name).toBe(users[0].name);
       })
       .end(done);
   });
@@ -235,8 +242,8 @@ describe('GET /memories/:id', () => {
       .expect(200)
       .expect((res) => {
         expect(res.body.memory._id).toBe(id);
-        expect(res.body.memory.users[0]).toBe(users[0]._creatorRef.toHexString());
-        expect(res.body.memory.users[1]).toBe(users[1]._creatorRef.toHexString());
+        expect(res.body.memory.people[0]._id).toBe(people[2]._id.toHexString());
+        expect(res.body.memory.people[1]._id).toBe(people[3]._id.toHexString());
       })
       .end(done);
   });
@@ -276,8 +283,8 @@ describe('POST /memories', () => {
       title: 'Memory 3',
       description: 'Memory 3',
       memoryDate: 64567577656,
-      tags: ["tag10", "tag11"],
-      users: [users[1]._creatorRef],
+      tags: [tags[1]._id, tags[2]._id],
+      people: [people[1]._id],
       medias: [medias[0]._id]
     };
 
@@ -304,7 +311,7 @@ describe('POST /memories', () => {
           expect(dbMemory._creator).toExist();
           expect(dbMemory.description).toBe(memory.description);
           expect(new ObjectID(dbMemory._creator)).toEqual(users[0]._creatorRef);
-          expect(dbMemory.users[0]).toEqual(users[1]._creatorRef.toHexString());
+          expect(dbMemory.people[0]).toEqual(people[1]._id.toHexString());
           done();
         }).catch((e) => done(e));
       });

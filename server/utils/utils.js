@@ -28,7 +28,7 @@ utils.getEncryptedPassword = (password, callback) => {
   });
 };
 
-utils.genQueryForCriteria = function (tags, users, fromDate, toDate, dateField) {
+utils.genQueryForCriteria = function (tags, people, fromDate, toDate, dateField) {
   let queryObj = {};
 
   if (fromDate && toDate) {
@@ -50,17 +50,21 @@ utils.genQueryForCriteria = function (tags, users, fromDate, toDate, dateField) 
 
 
   if (tags && tags.length > 0) {
+    let tagsAsObjectIds = [];
+    tags.forEach((tag) => {
+      tagsAsObjectIds.push(ObjectID(tag));
+    });
     queryObj.tags = {
-      "$in": tags
+      "$in": tagsAsObjectIds
     }
   };
-  if (users && users.length > 0) {
-    let usersAsObjectIds = [];
-    users.forEach((user) => {
-      usersAsObjectIds.push(ObjectID(user));
+  if (people && people.length > 0) {
+    let peopleAsObjectIds = [];
+    people.forEach((person) => {
+      peopleAsObjectIds.push(ObjectID(person));
     });
-    queryObj.users = {
-      "$in": usersAsObjectIds
+    queryObj.people = {
+      "$in": peopleAsObjectIds
     }
   };
   return queryObj;

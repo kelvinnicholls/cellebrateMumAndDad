@@ -67,31 +67,6 @@ let upload = (req, res, next) => {
   });
 };
 
-router.post('/', authenticate, upload, (req, res) => {
-  let body = _.pick(req.passedMedia, mediaInsertFields);
-  console.log('body', body);
-  let media = new Media(body);
-  console.log('body.photoInfo', body.photoInfo);
-  if (body.photoInfo && body.photoInfo.location && body.photoInfo.isUrl) {
-    media.location = body.photoInfo.location;
-    media.isUrl = true;
-    media.mimeType = body.photoInfo.mimeType;
-  };
-
-  media._creator = req.loggedInUser._creatorRef;
-  media.isProfilePic = false;
-  media.addedDate = new Date().getTime();
-  console.log('media', media);
-
-  media.save().then((media) => {
-    console.log('media2', media);
-    res.send(_.pick(media, mediaOutFields));
-  }, (e) => {
-    console.log('media.save() e', e);
-    res.status(400).send();
-  });
-});
-
 
 let transformCreatorToUser = (medias) => {
   return new Promise((resolve, reject) => {
@@ -134,6 +109,32 @@ let transformCreatorToUser = (medias) => {
   });
 }
 
+router.post('/', authenticate, upload, (req, res) => {
+  let body = _.pick(req.passedMedia, mediaInsertFields);
+  console.log('body', body);
+  let media = new Media(body);
+  console.log('body.photoInfo', body.photoInfo);
+  if (body.photoInfo && body.photoInfo.location && body.photoInfo.isUrl) {
+    media.location = body.photoInfo.location;
+    media.isUrl = true;
+    media.mimeType = body.photoInfo.mimeType;
+  };
+
+  media._creator = req.loggedInUser._creatorRef;
+  media.isProfilePic = false;
+  media.addedDate = new Date().getTime();
+  console.log('media', media);
+
+  media.save().then((media) => {
+    console.log('media2', media);
+    res.send(_.pick(media, mediaOutFields));
+  }, (e) => {
+    console.log('media.save() e', e);
+    res.status(400).send();
+  });
+});
+
+
 router.get('/', authenticate, (req, res) => {
 
   let mediasObj = {
@@ -143,7 +144,7 @@ router.get('/', authenticate, (req, res) => {
     mediasObj._creator = req.loggedInUser._creatorRef;
   };
 
-  Media.find(mediasObj).populate('comments').then((medias) => {
+  Media.find(mediasObj).populate('comments tags people').then((medias) => {
     transformCreatorToUser(medias).then((medias) => {
       let obj = {};
       obj['medias'] = medias;
@@ -180,7 +181,7 @@ router.get('/title/:title', authenticate, (req, res) => {
   let mediaObj = {
     title
   };
-  User.findOne(mediaObj).populate('comments').then((media) => {
+  User.findOne(mediaObj).populate('comments tags people').then((media) => {
     if (media) {
       res.send({
         'titleFound': true,
@@ -212,7 +213,7 @@ router.get('/:id', authenticate, (req, res) => {
 
   Media.findOne({
     '_id': id
-  }).populate('comments').then((media) => {
+  }).populate('comments tags people').then((media) => {
     if (media) {
       res.send({
         media
@@ -313,7 +314,7 @@ let updateMedias = (res, body, medias, commentId) => {
 
   Media.findOneAndUpdate(medias, updateObj, {
     new: true
-  }).populate('comments').then((media) => {
+  }).populate('comments tags people').then((media) => {
 
     if (media) {
       res.send({

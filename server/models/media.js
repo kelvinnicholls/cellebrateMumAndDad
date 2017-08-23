@@ -9,6 +9,14 @@ const {
 
 const utils = require('../utils/utils');
 
+const {
+  Tag
+} = require('../models/tag');
+
+const {
+  Person
+} = require('../models/person');
+
 let MediaSchema = new mongoose.Schema({
   location: {
     type: String,
@@ -56,8 +64,14 @@ let MediaSchema = new mongoose.Schema({
   mediaDate: {
     type: Date
   },
-  tags: [String],
-  users: [mongoose.Schema.Types.ObjectId],
+  tags: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tag'
+  }],
+  people: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Person'
+  }],
   comments: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment'
@@ -80,19 +94,19 @@ let MediaSchema = new mongoose.Schema({
 //MediaSchema.plugin(mongooseUniqueValidator);
 
 
-const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', 'originalFileName', 'photoInfo'];
+const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'people', 'originalFileName', 'photoInfo'];
 const mediaOutFields = mediaInsertFields;
 mediaOutFields.push('comments');
 
-const mediaQueryFields = ['comments', 'title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'users', '_id'];
-const mediaUpdateFields = ['title', 'description', 'tags', 'users', 'comment'];
+const mediaQueryFields = ['comments', 'title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'people', '_id'];
+const mediaUpdateFields = ['title', 'description', 'tags', 'people', 'comment'];
 
 
 MediaSchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
   let Media = this;
 
   let queryObj = utils.genQueryForCriteria(tags, users, fromDate, toDate, "mediaDate");
-  return Media.find(queryObj).populate('comments').then((medias) => {
+  return Media.find(queryObj).populate('comments tags people').then((medias) => {
     return medias;
   }).catch((e) => {
     console.log("MediaSchema.statics.findByCriteria  error", e);
