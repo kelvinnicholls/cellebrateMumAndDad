@@ -259,7 +259,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         this.myForm = new FormGroup({
             title: new FormControl(null, Validators.required,
                 this.forbiddenTitles),
-            description: new FormControl(null, null)
+                description: new FormControl(null, null),
+                tags: new FormControl(null, null)
         });
 
 

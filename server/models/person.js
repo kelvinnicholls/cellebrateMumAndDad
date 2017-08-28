@@ -18,11 +18,21 @@ let PersonSchema = new mongoose.Schema({
     minlength: 1,
     unique: true
   }
+,
+addedDate: {
+  type: Date
+},
 });
 
+const personInsertFields = ['person'];
+const personOutFields = ['person', '_id'];
+const personQueryFields = personOutFields;
 
 var Person = mongoose.model('Person', PersonSchema);
 
 module.exports = {
-  Person
+  Person,
+  personInsertFields,
+  personOutFields,
+  personQueryFields
 };

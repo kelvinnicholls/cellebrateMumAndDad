@@ -17,12 +17,23 @@ let TagSchema = new mongoose.Schema({
     trim: true,
     minlength: 1,
     unique: true
-  }
+  },
+  addedDate: {
+    type: Date
+  },
 });
+
+const tagInsertFields = ['tag'];
+const tagOutFields = ['tag', '_id'];
+const tagQueryFields = tagOutFields;
+
 
 
 var Tag = mongoose.model('Tag', TagSchema);
 
 module.exports = {
-  Tag
+  Tag,
+  tagInsertFields,
+  tagOutFields,
+  tagQueryFields
 };

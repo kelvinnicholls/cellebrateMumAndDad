@@ -41,7 +41,7 @@ export class PhotoService {
 
     private socket;
 
-    addComment(photo: Photo, comment,entityIndex, callback,callback2) {
+    addComment(photo: Photo, comment,entityIndex, callback) {
         photo.comment = comment;
         this.updatePhoto(photo).subscribe(
             result => {

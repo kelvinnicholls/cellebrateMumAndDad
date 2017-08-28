@@ -9,7 +9,10 @@ var bodyParser = require('body-parser');
 const mediasRoutes = require('./routes/medias-routes');
 const memoriesRoutes = require('./routes/memories-routes.js');
 const usersRoutes = require('./routes/users-routes.js');
+const tagsRoutes = require('./routes/tags-routes.js');
+const peopleRoutes = require('./routes/people-routes.js');
 const appRoutes = require('./routes/app-routes.js');
+
 
 var app = express();
 
@@ -41,6 +44,8 @@ app.use(function(req, res, next) {
 app.use('/medias', mediasRoutes);
 app.use('/memories', memoriesRoutes);
 app.use('/users', usersRoutes);
+app.use('/tags', tagsRoutes);
+app.use('/people', peopleRoutes);
 app.use('/', appRoutes);
 
 

@@ -7,8 +7,11 @@ export class Consts {
   public static API_URL_MEMORIES_ROOT: string = Consts.API_URL_ROOT + 'memories';
   public static API_URL_MEMORY_ROOT: string = Consts.API_URL_ROOT + 'memory';
   public static API_URL_MEDIAS_ROOT: string = Consts.API_URL_ROOT + 'medias';
+  public static API_URL_TAGS_ROOT: string = Consts.API_URL_ROOT + 'tags';
+  public static API_URL_PEOPLE_ROOT: string = Consts.API_URL_ROOT + 'people';
   public static API_URL_MEDIAS_ROOT_TITLE: string = Consts.API_URL_MEDIAS_ROOT + '/title';
  
+
   public static CONTENT_TYPE = 'Content-Type';
   public static APP_JSON = 'application/json';
   public static MULTIPART_FORM_DATA = 'multipart/form-data';

@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+
+
 import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
 import { SearchComponent } from "./search/search.component";
+import { MultiSelectComponent } from "./multi-select/multi-select.component";
 import { PasswordStrengthBarComponent } from './password-strength-bar/password-strength-bar.component';
 import { ReversePipe } from "./pipes/reverse-pipe";
 import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
@@ -17,6 +20,9 @@ import { CommentAddComponent } from "./comments/comment-add/comment-add.componen
 import { CommentComponent } from "./comments/comment/comment.component";
 import { CommentListComponent } from "./comments/comments-list/comments-list.component";
 
+import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
+
+
 @NgModule({
     declarations: [
         SearchComponent,
@@ -28,10 +34,11 @@ import { CommentListComponent } from "./comments/comments-list/comments-list.com
         SignInComponent,
         CommentAddComponent,
         CommentComponent,
-        CommentListComponent
+        CommentListComponent,
+        MultiSelectComponent
     ],
-    exports: [CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
+    exports: [MultiSelectComponent, CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
+    imports: [MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateParserFormatter,
         useFactory: () => { return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT, Consts.DATE_DB_FORMAT) }
