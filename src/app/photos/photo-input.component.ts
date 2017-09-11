@@ -4,10 +4,14 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+// https://www.npmjs.com/package/angular-2-dropdown-multiselect
+// http://softsimon.github.io/angular-2-dropdown-multiselect/#
 
 import { PhotoService } from "./photo.service";
 import { UserService } from "../users/user.service";
 import { ToastService } from "../shared/toast/toast.service";
+import { TagService } from "../shared/tags/tag.service";
 import { DialogService } from "../shared/dialog/dialog.service";
 import { CommentsService } from "../shared/comments/comments.service";
 import { AppService } from "../app.service";
@@ -17,7 +21,8 @@ import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
 import { Comment } from "../shared/comments/comment.model";
-
+import { Tag } from "../shared/tags/tag.model";
+import { element } from 'protractor';
 
 @Component({
     selector: 'app-photo-input',
@@ -32,6 +37,36 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     private paramsSubscription: Subscription;
     private index: any;
     private commentSub: EventEmitter<Comment>;
+
+    tag: string = "tag";
+    tagplural: string = this.tag + "'s";
+    selectedTags: string[] = [];
+
+    multiSelectTabsSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        // checkedStyle: 'fontawesome',
+        //buttonClasses: 'btn btn-default btn-block',
+        //dynamicTitleMaxItems: 3,
+        pullRight: true,
+        showCheckAll: true,
+        showUncheckAll: true,
+        closeOnSelect: true
+    };
+
+    // Text configuration 
+    multiSelectTabsTexts: IMultiSelectTexts = {
+        checkAll: 'Select all ' + this.tagplural,
+        uncheckAll: 'Unselect all ' + this.tagplural,
+        checked: this.tag + ' selected',
+        checkedPlural: this.tagplural + '  selected',
+        searchPlaceholder: 'Find ' + this.tag,
+        defaultTitle: 'Select ' + this.tagplural,
+        allSelected: 'All ' + this.tagplural + ' selected',
+    };
+
+    multiSelectTagOptions: IMultiSelectOption[] = [
+    ];
+
 
     fileSource: String = Consts.FILE_SYSTEM;
 
@@ -91,9 +126,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         };
     }
 
-
     constructor(private ngbDateParserFormatter: NgbDateParserFormatter
         , private userService: UserService
+        , private tagService: TagService
         , private commentsService: CommentsService
         , private photoService: PhotoService
         , private route: ActivatedRoute
@@ -146,60 +181,69 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         retDialogSub.subscribe(
             (buttonPressed: DialogRetEnum) => {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
+
                     if (this.photo) {
                         // Edit       
-
-                        this.photo = new Photo(
-                            this.myForm.value.title,
-                            this._creator,
+                        photoInputComponent.photo = new Photo(
+                            photoInputComponent.myForm.value.title,
+                            photoInputComponent._creator,
                             null,
-                            this.photo._id,
-                            this.myForm.value.description,
-                            this.photoFile,
-                            this.photoInfo);
-                        this.photoService.updatePhoto(this.photo)
+                            photoInputComponent.photo._id,
+                            photoInputComponent.myForm.value.description,
+                            photoInputComponent.photoFile,
+                            photoInputComponent.photoInfo,
+                            null,
+                            null,
+                            null,
+                            photoInputComponent.myForm.value.tags
+                        );
+                        photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
                             result => {
                                 console.log(result);
                                 photoInputComponent.toastService.showSuccess("Photo updated.");
                             }
                             );
-                        this.photo = null;
-                        this._creator = null;
-                        this.photoData = null;
-                        this.photoFile = null;
-                        this.photoInfo = null;
-                        this.submitType = Consts.ADD_PHOTO;
+                        photoInputComponent.photo = null;
+                        photoInputComponent._creator = null;
+                        photoInputComponent.photoData = null;
+                        photoInputComponent.photoFile = null;
+                        photoInputComponent.photoInfo = null;
+                        photoInputComponent.submitType = Consts.ADD_PHOTO;
 
                     } else {
                         // Create
-                        this.photo = new Photo(this.myForm.value.title,
-                            this._creator,
+                        photoInputComponent.photo = new Photo(photoInputComponent.myForm.value.title,
+                            photoInputComponent._creator,
                             null,
                             null,
-                            this.myForm.value.description,
-                            this.photoFile,
-                            this.photoInfo);
-                        this.photoService.addPhoto(this.photo)
+                            photoInputComponent.myForm.value.description,
+                            photoInputComponent.photoFile,
+                            photoInputComponent.photoInfo,
+                            null,
+                            null,
+                            null,
+                            photoInputComponent.myForm.value.tags);
+                        photoInputComponent.photoService.addPhoto(photoInputComponent.photo)
                             .subscribe(
                             data => {
                                 photoInputComponent.toastService.showSuccess("Photo created.");
                             },
                             error => console.error("PhotoComponent photoService.newPhoto error", error)
                             );
-                        this.photo = null;
-                        this._creator = null;
-                        this.photoData = null;
-                        this.photoFile = null;
-                        this.photoInfo = null;
-                        this.submitType = Consts.ADD_PHOTO;
+                        photoInputComponent.photo = null;
+                        photoInputComponent._creator = null;
+                        photoInputComponent.photoData = null;
+                        photoInputComponent.photoFile = null;
+                        photoInputComponent.photoInfo = null;
+                        photoInputComponent.submitType = Consts.ADD_PHOTO;
 
                     }
-                    this.myForm.reset();
+                    photoInputComponent.myForm.reset();
                 }
             });
 
-        this.dialogService.showDialog("Warning", "Do you really wish to " + this.submitType + "?", "Yes", "No", retDialogSub);
+        photoInputComponent.dialogService.showDialog("Warning", "Do you really wish to " + photoInputComponent.submitType + "?", "Yes", "No", retDialogSub);
 
     }
 
@@ -243,37 +287,56 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return this.photoService.titleExists(control.value, this.getId());
     }
 
+    private extractIdsAsArray(arr : any[]) : string[] {
+        let retArr : string[] = [];
+        for (let element of arr) {
+            retArr.push(element.id);
+        };
+        return retArr;
+    }
 
     ngOnInit() {
+        let photoInputComponent = this;
 
-        this.commentSub = this.commentsService.commentSub
+        photoInputComponent.tagService.getTags().subscribe(
+            (tags: Tag[]) => {
+                photoInputComponent.multiSelectTagOptions = [];
+                for (let tag of tags) {
+                    photoInputComponent.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+                };
+                console.log(photoInputComponent.multiSelectTagOptions);
+            }
+        );
+
+        photoInputComponent.commentSub = photoInputComponent.commentsService.commentSub
             .subscribe(
             (comment: Comment) => {
                 if (comment.entity === Consts.PHOTO) {
-                    this.photoService.addComment(this.photo, comment.comment, comment.entityIndex, comment.callback);
+                    photoInputComponent.photoService.addComment(photoInputComponent.photo, comment.comment, comment.entityIndex, comment.callback);
                 };
             });
 
-        this._creator = this.userService.getLoggedInUser()._creatorRef;
+            photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
 
-        this.myForm = new FormGroup({
+            photoInputComponent.myForm = new FormGroup({
             title: new FormControl(null, Validators.required,
-                this.forbiddenTitles),
-                description: new FormControl(null, null),
-                tags: new FormControl(null, null)
+                photoInputComponent.forbiddenTitles),
+            description: new FormControl(null, null),
+            tags: new FormControl(null, null)
         });
 
 
-        if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'photo' && this.route.snapshot.url[1].path === 'add') {
-            this.submitType = Consts.ADD_PHOTO;
-            this.clear();
+        if (photoInputComponent.route.snapshot.url.length === 2 && photoInputComponent.route.snapshot.url[0].path === 'photo' && photoInputComponent.route.snapshot.url[1].path === 'add') {
+            photoInputComponent.submitType = Consts.ADD_PHOTO;
+            photoInputComponent.clear();
 
         } else {
-            this.paramsSubscription = this.route.params.subscribe(
+            photoInputComponent.paramsSubscription = photoInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
-                    this.index = queryParams['index'];
-                    this.photo = this.photoService.findPhotoByIndex(this.index);
-                    this.submitType = Consts.UPDATE_PHOTO;
+                    photoInputComponent.index = queryParams['index'];
+                    photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
+                    photoInputComponent.submitType = Consts.UPDATE_PHOTO;
+                    photoInputComponent.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);
                 }
             );
         };
@@ -302,6 +365,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     isAddPhoto() {
         return this.submitType === Consts.ADD_PHOTO;
+    }
+
+
+    onTagsChange() {
+        //console.log(this.optionsModel);
     }
 
 }

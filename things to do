@@ -140,11 +140,9 @@ X75) Tidy up display of photos (add comments on hover)
 84) Add comments link to photos list
 85) Use scroll bars
 
-http://dbrekalo.github.io/fastselect/#section-about
+86) test adding photo with tags works
+87) add ability to add new tags
+88) hint text should show list of tags
+89) enlarge photo on hover
 
-http://valor-software.com/ng2-select/
 
-
-
-https://www.npmjs.com/package/angular-2-dropdown-multiselect
-http://softsimon.github.io/angular-2-dropdown-multiselect/#

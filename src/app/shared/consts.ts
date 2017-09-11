@@ -59,5 +59,7 @@ export class Consts {
     'clouddrive'];
   public static FILE_SYSTEM = 'File System';
   public static WEB = 'Web';
-
+  public static TAGS = 'TAGS';
+  public static PEOPLE = 'PEOPLE';
+  
 }

@@ -16,13 +16,20 @@ import { SearchRet } from "../shared/search/search-ret.model";
 import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
 import { CommentDisplay } from "../shared/comments/comment.model";
+import { Tag } from "../shared/tags/tag.model";
 
 
 @Injectable()
 export class PhotoService {
     private photos: Photo[] = [];
     private allPhotos: Photo[] = [];
-    constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private userService: UserService, private searchService: SearchService, private router: Router) { }
+    constructor(private http: Http
+        , private errorService: ErrorService
+        , private appService: AppService
+        , private userService: UserService
+        , private searchService: SearchService
+        , private router: Router) {
+    }
 
     photosChanged = new Subject<Photo[]>();
 
@@ -41,7 +48,7 @@ export class PhotoService {
 
     private socket;
 
-    addComment(photo: Photo, comment,entityIndex, callback) {
+    addComment(photo: Photo, comment, entityIndex, callback) {
         photo.comment = comment;
         this.updatePhoto(photo).subscribe(
             result => {
@@ -50,11 +57,11 @@ export class PhotoService {
                 let commentDate = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);
                 let userName = this.userService.getLoggedInUser().name;
                 let profilePicLocation = "";
-        
+
                 if (this.userService.getLoggedInUser().profilePicInfo && this.userService.getLoggedInUser().profilePicInfo.location) {
                     profilePicLocation = this.userService.getLoggedInUser().profilePicInfo.location;
                 };
-        
+
                 let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation);
 
                 this.allPhotos[entityIndex].comments.push(commentDisplay);
@@ -199,6 +206,7 @@ export class PhotoService {
                     photoInfo.mimeType = photo.mimeType;
 
                     let comments: CommentDisplay[] = [];
+                    let tags: Tag[] = [];
 
                     if (photo.comments && photo.comments.length > 0) {
                         photo.comments.forEach(comment => {
@@ -218,7 +226,15 @@ export class PhotoService {
                             let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
                             comments.push(commentDisplay);
                         });
-                    }
+                    };
+
+                    if (photo.tags && photo.tags.length > 0) {
+                        photo.tags.forEach(tag => {
+                            let newTag = new Tag(tag._id, tag.tag);
+                            tags.push(newTag);
+                        });
+                    };
+
                     let newPhoto = new Photo(
                         photo.title,
                         photo._creator,
@@ -228,7 +244,8 @@ export class PhotoService {
                         null,
                         photoInfo,
                         null,
-                        comments);
+                        comments,
+                        tags);
                     transformedPhotos.push(newPhoto);
                 };
                 this.allPhotos = transformedPhotos;
@@ -240,6 +257,7 @@ export class PhotoService {
                 return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
     }
+
 
     updatePhoto(photo: Photo) {
         var fd = new FormData();
