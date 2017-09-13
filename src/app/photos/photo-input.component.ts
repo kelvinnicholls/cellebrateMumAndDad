@@ -22,7 +22,8 @@ import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
 import { Comment } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
-import { element } from 'protractor';
+//import { element } from 'protractor';
+import { Utils } from "../shared/utils/utils";
 
 @Component({
     selector: 'app-photo-input',
@@ -44,13 +45,13 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     multiSelectTabsSettings: IMultiSelectSettings = {
         enableSearch: true,
-        // checkedStyle: 'fontawesome',
+        //checkedStyle: 'fontawesome',
         //buttonClasses: 'btn btn-default btn-block',
         //dynamicTitleMaxItems: 3,
-        pullRight: true,
-        showCheckAll: true,
-        showUncheckAll: true,
-        closeOnSelect: true
+        //pullRight: true,
+        showCheckAll: false,
+        showUncheckAll: false,
+        closeOnSelect: false
     };
 
     // Text configuration 
@@ -82,6 +83,43 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return this.index;
     }
 
+    private findTag(id: string): string {
+        let retVal = "";
+        let option = this.multiSelectTagOptions.find((tag: IMultiSelectOption) => { return id == tag.id });
+        if (option) {
+            retVal = option.name;
+        };
+        return retVal;
+    }
+
+    addTag() {
+        let retTagSub = new EventEmitter<Tag>();
+        let photoInputComponent = this;
+        retTagSub.subscribe((tag: Tag) => {
+            if (tag) {
+                photoInputComponent.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+                photoInputComponent.multiSelectTagOptions = photoInputComponent.multiSelectTagOptions.slice();
+                photoInputComponent.multiSelectTagOptions = photoInputComponent.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
+                if (tag.autoSelect) {
+                    photoInputComponent.selectedTags.push(tag.id);
+                };
+            };
+        });
+        this.tagService.showAddTag(retTagSub);
+    }
+
+    getTabs(): string {
+        let tabsArr: string[] = [];
+        let retVal = "No Tags";
+        for (let index in this.selectedTags) {
+            let tag = this.findTag(this.selectedTags[index]);
+            tabsArr.push(tag);
+        };
+        if (tabsArr.length > 0) {
+            retVal = tabsArr.join(", ");
+        };
+        return retVal;
+    }
 
     setFileSource(fileSource: String) {
         this.fileSource = fileSource;
@@ -238,9 +276,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         photoInputComponent.photoInfo = null;
                         photoInputComponent.submitType = Consts.ADD_PHOTO;
 
-                    }
+                    };
                     photoInputComponent.myForm.reset();
-                }
+                };
             });
 
         photoInputComponent.dialogService.showDialog("Warning", "Do you really wish to " + photoInputComponent.submitType + "?", "Yes", "No", retDialogSub);
@@ -287,8 +325,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return this.photoService.titleExists(control.value, this.getId());
     }
 
-    private extractIdsAsArray(arr : any[]) : string[] {
-        let retArr : string[] = [];
+    private extractIdsAsArray(arr: any[]): string[] {
+        let retArr: string[] = [];
         for (let element of arr) {
             retArr.push(element.id);
         };
@@ -316,9 +354,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 };
             });
 
-            photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
+        photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
 
-            photoInputComponent.myForm = new FormGroup({
+        photoInputComponent.myForm = new FormGroup({
             title: new FormControl(null, Validators.required,
                 photoInputComponent.forbiddenTitles),
             description: new FormControl(null, null),

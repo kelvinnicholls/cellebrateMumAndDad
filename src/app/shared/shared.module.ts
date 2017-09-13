@@ -18,6 +18,7 @@ import { SignInComponent } from "./sign-in/sign-in.component";
 import { CommentAddComponent } from "./comments/comment-add/comment-add.component";
 import { CommentComponent } from "./comments/comment/comment.component";
 import { CommentListComponent } from "./comments/comments-list/comments-list.component";
+import { AddTagComponent } from "./tags/add-tag.component";
 
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 
@@ -33,9 +34,10 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         SignInComponent,
         CommentAddComponent,
         CommentComponent,
-        CommentListComponent
+        CommentListComponent,
+        AddTagComponent
     ],
-    exports: [MultiselectDropdownModule,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
+    exports: [MultiselectDropdownModule,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
     imports: [MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateParserFormatter,

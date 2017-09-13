@@ -51,4 +51,26 @@ router.get('/', authenticate, (req, res) => {
   });
 });
 
+
+router.get('/tag/:tag', authenticate, (req, res) => {
+  let tag = req.params.tag;
+  let tagObj = {
+    tag
+  };
+  Tag.findOne(tagObj).then((tag) => {
+    if (tag) {
+      res.send({
+        'tagFound': true
+      });
+    } else {
+      res.send({
+        'tagFound': false
+      });
+    };
+  }, (e) => {
+    console.log("5a router.get('/tag/:tag' e", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+  });
+});
+
 module.exports = router;

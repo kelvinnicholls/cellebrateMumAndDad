@@ -308,7 +308,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
     forbiddenEmails = (control: FormControl): Promise<any> | Observable<any> => {
         return this.userService.emailExists(control.value, this.getCreatorRef());
     }
-
+    
     forbiddenNames = (control: FormControl): Promise<any> | Observable<any> => {
         return this.userService.nameExists(control.value, this.getCreatorRef());
     }

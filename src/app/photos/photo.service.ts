@@ -230,7 +230,7 @@ export class PhotoService {
 
                     if (photo.tags && photo.tags.length > 0) {
                         photo.tags.forEach(tag => {
-                            let newTag = new Tag(tag._id, tag.tag);
+                            let newTag = new Tag(tag.tag,tag._id);
                             tags.push(newTag);
                         });
                     };

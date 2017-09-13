@@ -24,7 +24,7 @@ let TagSchema = new mongoose.Schema({
 });
 
 const tagInsertFields = ['tag'];
-const tagOutFields = ['tag', '_id'];
+const tagOutFields = ['tag', '_id', '_creator'];
 const tagQueryFields = tagOutFields;
 
 

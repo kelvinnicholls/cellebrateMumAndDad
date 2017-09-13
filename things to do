@@ -140,9 +140,11 @@ X75) Tidy up display of photos (add comments on hover)
 84) Add comments link to photos list
 85) Use scroll bars
 
-86) test adding photo with tags works
-87) add ability to add new tags
-88) hint text should show list of tags
+x86) test adding photo with tags works
+x87) add ability to add new tags
+x88) hint text should show list of tags
 89) enlarge photo on hover
+x90) Make sure tags list and people list is in order
+91) after updating/adding photo return to photo list
 
 
