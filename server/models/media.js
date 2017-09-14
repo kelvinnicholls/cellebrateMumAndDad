@@ -99,7 +99,7 @@ const mediaOutFields = mediaInsertFields;
 mediaOutFields.push('comments');
 
 const mediaQueryFields = ['comments', 'title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'people', '_id'];
-const mediaUpdateFields = ['title', 'description', 'tags', 'people', 'comment'];
+const mediaUpdateFields = ['title', 'description', 'tags', 'people', 'comment', 'mediaDate'];
 
 
 MediaSchema.statics.findByCriteria = function (tags, people, fromDate, toDate) {

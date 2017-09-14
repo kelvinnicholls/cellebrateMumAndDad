@@ -147,4 +147,5 @@ x88) hint text should show list of tags
 x90) Make sure tags list and people list is in order
 91) after updating/adding photo return to photo list
 92) check that sockets communicate tags/people correctly
+93) Only allow alphanumeric characters in name and tag
 

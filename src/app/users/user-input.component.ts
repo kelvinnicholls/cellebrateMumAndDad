@@ -139,12 +139,16 @@ export class UserInputComponent implements OnInit, OnDestroy {
     modelDob: NgbDateStruct;
 
     getDob() {
-        let d = moment(this.user && this.user.dob);
-        return d.isValid() ? {
-            year: d.year(),
-            month: d.month() + 1,
-            day: d.date()
-        } : null;
+        if (this.user && this.user.dob) {
+            let d = moment(this.user && this.user.dob);
+            return d.isValid() ? {
+                year: d.year(),
+                month: d.month() + 1,
+                day: d.date()
+            } : null;
+        } else {
+            return null;
+        };
     }
 
     onImageChange(files: FileList) {
@@ -308,7 +312,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
     forbiddenEmails = (control: FormControl): Promise<any> | Observable<any> => {
         return this.userService.emailExists(control.value, this.getCreatorRef());
     }
-    
+
     forbiddenNames = (control: FormControl): Promise<any> | Observable<any> => {
         return this.userService.nameExists(control.value, this.getCreatorRef());
     }

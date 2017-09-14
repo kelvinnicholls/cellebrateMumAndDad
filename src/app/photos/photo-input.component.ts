@@ -4,7 +4,8 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IMultiSelectOption,IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import * as moment from 'moment';
 // https://www.npmjs.com/package/angular-2-dropdown-multiselect
 // http://softsimon.github.io/angular-2-dropdown-multiselect/#
 import { PhotoService } from "./photo.service";
@@ -236,6 +237,41 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
+    getMaxDate() {
+        let d = moment();
+        return d.isValid() ? {
+            year: d.year(),
+            month: d.month() + 1,
+            day: d.date()
+        } : null;
+    }
+
+
+    getMinDate() {
+        let d = moment();
+        d.subtract(100, 'years');
+        return d.isValid() ? {
+            year: d.year(),
+            month: d.month() + 1,
+            day: d.date()
+        } : null;
+    }
+
+    modelMediaDate: NgbDateStruct;
+
+    getMediaDate() {
+        if (this.photo && this.photo.mediaDate) {
+            let d = moment(this.photo && this.photo.mediaDate);
+            return d.isValid() ? {
+                year: d.year(),
+                month: d.month() + 1,
+                day: d.date()
+            } : null;
+        } else {
+            return null;
+        };
+    }
+
 
     onImageChange(files: FileList) {
         let photoInputComponent = this;
@@ -291,7 +327,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             null,
                             photoInputComponent.myForm.value.tags,
                             null,
-                            photoInputComponent.myForm.value.people
+                            photoInputComponent.myForm.value.people,
+                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.mediaDate)
                         );
                         photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
@@ -321,7 +358,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             null,
                             photoInputComponent.myForm.value.tags,
                             null,
-                            photoInputComponent.myForm.value.people);
+                            photoInputComponent.myForm.value.people,
+                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.mediaDate));
                         photoInputComponent.photoService.addPhoto(photoInputComponent.photo)
                             .subscribe(
                             data => {
@@ -431,6 +469,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 photoInputComponent.forbiddenTitles),
             description: new FormControl(null, null),
             tags: new FormControl(null, null),
+            mediaDate: new FormControl(null, null),
             people: new FormControl(null, null)
         });
 
@@ -444,6 +483,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 (queryParams: Params) => {
                     photoInputComponent.index = queryParams['index'];
                     photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
+                    photoInputComponent.modelMediaDate = this.getMediaDate();
                     photoInputComponent.submitType = Consts.UPDATE_PHOTO;
                     photoInputComponent.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);
                     photoInputComponent.selectedPeople = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.peopleToDisplay);

@@ -256,7 +256,10 @@ export class PhotoService {
                         comments,
                         tags,
                         null,
-                        people);
+                        people,
+                        null,
+                        moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
+                    );
                     transformedPhotos.push(newPhoto);
                 };
                 this.allPhotos = transformedPhotos;

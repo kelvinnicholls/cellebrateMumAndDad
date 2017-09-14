@@ -38,6 +38,25 @@
 
 
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+    'has-danger': myForm.get('mediaDate').invalid,
+    'has-success': myForm.get('mediaDate').valid
+  }">
+    <label for="mediaDate" class="col-sm-4 col-form-label"><strong>Date of Photo</strong></label>
+    <div class="col-sm-5">
+      <div class="input-group">
+        <input class="form-control" placeholder="DD-MM-YYYY" name="mediaDate" [(ngModel)]="modelMediaDate" [maxDate]="getMaxDate()"
+          [minDate]="getMinDate()" ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="mediaDate" [ngClass]="{
+    'form-control-danger': myForm.get('mediaDate').invalid,
+    'form-control-success': myForm.get('mediaDate').valid
+  }">
+        <div class="input-group-addon" (click)="d.toggle()">
+          <img src="/systemImages/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
     'has-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched),
     'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty || myForm.get('tags').touched)
   }">
@@ -52,7 +71,8 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary" type="button">Add New Tag</button>
+    <button (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
+      type="button">Add New Tag</button>
   </div>
 
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
@@ -70,7 +90,8 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary" type="button">Add New Person</button>
+    <button (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
+      type="button">Add New Person</button>
   </div>
 
   <div class="form-group row col col-sm-8 offset-sm-2">

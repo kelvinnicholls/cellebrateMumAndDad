@@ -17,7 +17,8 @@ export class Photo {
         public tagsToDisplay?: Tag[],
         public tags?: string[],
         public peopleToDisplay?: Person[],
-        public people?: string[]
+        public people?: string[],
+        public mediaDate?: string,
     ) {
         if (photoInfo && photoInfo.location && !photoInfo.isUrl && photoInfo.location.startsWith('server')) {
             this.photoInfo.location = photoInfo.location.substring(14);
