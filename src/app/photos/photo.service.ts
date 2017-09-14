@@ -17,6 +17,7 @@ import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
 import { CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
+import { Person } from "../shared/people/person.model";
 
 
 @Injectable()
@@ -207,6 +208,7 @@ export class PhotoService {
 
                     let comments: CommentDisplay[] = [];
                     let tags: Tag[] = [];
+                    let people: Person[] = [];
 
                     if (photo.comments && photo.comments.length > 0) {
                         photo.comments.forEach(comment => {
@@ -230,8 +232,15 @@ export class PhotoService {
 
                     if (photo.tags && photo.tags.length > 0) {
                         photo.tags.forEach(tag => {
-                            let newTag = new Tag(tag.tag,tag._id);
+                            let newTag = new Tag(tag.tag, tag._id);
                             tags.push(newTag);
+                        });
+                    };
+
+                    if (photo.people && photo.people.length > 0) {
+                        photo.people.forEach(person => {
+                            let newPerson = new Person(person.person, person._id);
+                            people.push(newPerson);
                         });
                     };
 
@@ -245,7 +254,9 @@ export class PhotoService {
                         photoInfo,
                         null,
                         comments,
-                        tags);
+                        tags,
+                        null,
+                        people);
                     transformedPhotos.push(newPhoto);
                 };
                 this.allPhotos = transformedPhotos;

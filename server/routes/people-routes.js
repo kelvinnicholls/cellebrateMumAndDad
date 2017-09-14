@@ -51,4 +51,26 @@ router.get('/', authenticate, (req, res) => {
   });
 });
 
+router.get('/person/:person', authenticate, (req, res) => {
+  let person = req.params.person;
+  let personObj = {
+    person
+  };
+  Person.findOne(personObj).then((person) => {
+    if (person) {
+      res.send({
+        'personFound': true
+      });
+    } else {
+      res.send({
+        'personFound': false
+      });
+    };
+  }, (e) => {
+    console.log("5a router.get('/person/:person' e", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+  });
+});
+
+
 module.exports = router;

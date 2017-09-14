@@ -37,9 +37,13 @@ export class AddTagComponent implements OnInit {
     this.display = 'none';
     this.tag = null;
     this.retTagSub.emit(this.tag);
-    this.myForm.reset();
+    this.reset();
   }
 
+  reset() {
+    this.myForm.reset();
+    this.myForm.get('autoSelect').setValue(true);
+  }
 
   isDirty(val: string, name: string) {
     return (val && val.length > 0 && this.myForm.controls[name] && this.myForm.controls[name].dirty);
@@ -77,7 +81,7 @@ export class AddTagComponent implements OnInit {
             }
             );
 
-          addTagComponent.myForm.reset();
+          addTagComponent.reset();
         } else {
           addTagComponent.display = 'block';
         };

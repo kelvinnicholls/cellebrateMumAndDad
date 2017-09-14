@@ -3,38 +3,38 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Add New Tag</h4>
+        <h4 class="modal-title">Add New Person</h4>
         <button type="button" class="close" aria-label="Close" (click)="onClose()"><span aria-hidden="true">&times;</span></button>
       </div>
       <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
         <div class="modal-body">
           <div class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('tag').valid && (myForm.get('tag').dirty && myForm.get('tag').value.length > 0)
+        'has-success': myForm.get('person').valid && (myForm.get('person').dirty && myForm.get('person').value.length > 0)
       }">
-            <label for="tag" class="col-sm-4 col-form-label"><strong>Tag</strong></label>
+            <label for="person" class="col-sm-4 col-form-label"><strong>Person</strong></label>
             <div class="col-sm-8">
-              <input placement="bottom" ngbTooltip="Enter a new tag that can be associated with photos and/or memories" type="text" class="form-control"
-                id="tag" placeholder="New Tag" formControlName="tag" [ngClass]="{
-        'form-control-success': myForm.get('tag').valid && (myForm.get('tag').dirty && myForm.get('tag').value.length > 0)
+              <input placement="bottom" ngbTooltip="Enter a new person that can be associated with photos and/or memories" type="text" class="form-control"
+                id="person" placeholder="New Person" formControlName="person" [ngClass]="{
+        'form-control-success': myForm.get('person').valid && (myForm.get('person').dirty && myForm.get('person').value.length > 0)
       }">
-              <div class="form-control-feedback" *ngIf="myForm.get('tag').errors && (myForm.get('tag').dirty || myForm.get('tag').touched)">
-                <p *ngIf="myForm.get('tag').errors.required">Tag is required</p>
-                <p *ngIf="myForm.get('tag').errors.tagIsAlreadyUsed">This tag is already in the database!</p>
+              <div class="form-control-feedback" *ngIf="myForm.get('person').errors && (myForm.get('person').dirty || myForm.get('person').touched)">
+                <p *ngIf="myForm.get('person').errors.required">Person is required</p>
+                <p *ngIf="myForm.get('person').errors.personIsAlreadyUsed">This person is already in the database!</p>
               </div>
-              <small *ngIf="myForm.get('tag').invalid" class="form-text text-muted">Enter a tag. </small>
+              <small *ngIf="myForm.get('person').invalid" class="form-text text-muted">Enter a person.</small>
             </div>
           </div>
 
           <div class="form-group row col col-sm-12" [ngClass]="{
             'has-success': myForm.get('autoSelect').valid && myForm.get('autoSelect').dirty 
           }">
-            <label placement="bottom" ngbTooltip="Should this tag be automatically selected?" class="custom-control custom-checkbox offset-sm-4"
+            <label placement="bottom" ngbTooltip="Should this person be automatically selected?" class="custom-control custom-checkbox offset-sm-4"
               [ngClass]="{
             'form-control-success': myForm.get('autoSelect').valid && myForm.get('autoSelect').dirty
           }">
                   <input type="checkbox" class="custom-control-input form-control checkbox-inline" id="autoSelect" formControlName="autoSelect"> 
                     <span class="custom-control-indicator"></span>
-                    <span class="custom-control-description">Auto Select Tag?</span>
+                    <span class="custom-control-description">Auto Select Person?</span>
                 </label>
           </div>
         </div>

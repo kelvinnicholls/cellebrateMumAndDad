@@ -4,14 +4,14 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption,IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
 // https://www.npmjs.com/package/angular-2-dropdown-multiselect
 // http://softsimon.github.io/angular-2-dropdown-multiselect/#
-
 import { PhotoService } from "./photo.service";
 import { UserService } from "../users/user.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { TagService } from "../shared/tags/tag.service";
+import { PersonService } from "../shared/people/person.service";
 import { DialogService } from "../shared/dialog/dialog.service";
 import { CommentsService } from "../shared/comments/comments.service";
 import { AppService } from "../app.service";
@@ -22,6 +22,7 @@ import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
 import { Comment } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
+import { Person } from "../shared/people/person.model";
 //import { element } from 'protractor';
 import { Utils } from "../shared/utils/utils";
 
@@ -43,7 +44,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     tagplural: string = this.tag + "'s";
     selectedTags: string[] = [];
 
-    multiSelectTabsSettings: IMultiSelectSettings = {
+    person: string = "person";
+    personplural: string = 'people';
+    selectedPeople: string[] = [];
+
+    multiSelectSettings: IMultiSelectSettings = {
         enableSearch: true,
         //checkedStyle: 'fontawesome',
         //buttonClasses: 'btn btn-default btn-block',
@@ -65,7 +70,20 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         allSelected: 'All ' + this.tagplural + ' selected',
     };
 
+    multiSelectPeopleTexts: IMultiSelectTexts = {
+        checkAll: 'Select all ' + this.personplural,
+        uncheckAll: 'Unselect all ' + this.personplural,
+        checked: this.person + ' selected',
+        checkedPlural: this.personplural + '  selected',
+        searchPlaceholder: 'Find ' + this.person,
+        defaultTitle: 'Select ' + this.personplural,
+        allSelected: 'All ' + this.personplural + ' selected',
+    };
+
     multiSelectTagOptions: IMultiSelectOption[] = [
+    ];
+
+    multiSelectPersonOptions: IMultiSelectOption[] = [
     ];
 
 
@@ -92,6 +110,15 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
+    private findPerson(id: string): string {
+        let retVal = "";
+        let option = this.multiSelectPersonOptions.find((person: IMultiSelectOption) => { return id == person.id });
+        if (option) {
+            retVal = option.name;
+        };
+        return retVal;
+    }
+
     addTag() {
         let retTagSub = new EventEmitter<Tag>();
         let photoInputComponent = this;
@@ -108,15 +135,44 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         this.tagService.showAddTag(retTagSub);
     }
 
-    getTabs(): string {
-        let tabsArr: string[] = [];
+    getTags(): string {
+        let tagsArr: string[] = [];
         let retVal = "No Tags";
         for (let index in this.selectedTags) {
             let tag = this.findTag(this.selectedTags[index]);
-            tabsArr.push(tag);
+            tagsArr.push(tag);
         };
-        if (tabsArr.length > 0) {
-            retVal = tabsArr.join(", ");
+        if (tagsArr.length > 0) {
+            retVal = tagsArr.join(", ");
+        };
+        return retVal;
+    }
+
+    addPerson() {
+        let retPersonSub = new EventEmitter<Person>();
+        let photoInputComponent = this;
+        retPersonSub.subscribe((person: Person) => {
+            if (person) {
+                photoInputComponent.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+                photoInputComponent.multiSelectPersonOptions = photoInputComponent.multiSelectPersonOptions.slice();
+                photoInputComponent.multiSelectPersonOptions = photoInputComponent.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
+                if (person.autoSelect) {
+                    photoInputComponent.selectedPeople.push(person.id);
+                };
+            };
+        });
+        this.personService.showAddPerson(retPersonSub);
+    }
+
+    getPeople(): string {
+        let peopleArr: string[] = [];
+        let retVal = "No People";
+        for (let index in this.selectedPeople) {
+            let person = this.findPerson(this.selectedPeople[index]);
+            peopleArr.push(person);
+        };
+        if (peopleArr.length > 0) {
+            retVal = peopleArr.join(", ");
         };
         return retVal;
     }
@@ -167,6 +223,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     constructor(private ngbDateParserFormatter: NgbDateParserFormatter
         , private userService: UserService
         , private tagService: TagService
+        , private personService: PersonService
         , private commentsService: CommentsService
         , private photoService: PhotoService
         , private route: ActivatedRoute
@@ -219,7 +276,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         retDialogSub.subscribe(
             (buttonPressed: DialogRetEnum) => {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
-
                     if (this.photo) {
                         // Edit       
                         photoInputComponent.photo = new Photo(
@@ -233,7 +289,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             null,
                             null,
                             null,
-                            photoInputComponent.myForm.value.tags
+                            photoInputComponent.myForm.value.tags,
+                            null,
+                            photoInputComponent.myForm.value.people
                         );
                         photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
@@ -261,7 +319,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             null,
                             null,
                             null,
-                            photoInputComponent.myForm.value.tags);
+                            photoInputComponent.myForm.value.tags,
+                            null,
+                            photoInputComponent.myForm.value.people);
                         photoInputComponent.photoService.addPhoto(photoInputComponent.photo)
                             .subscribe(
                             data => {
@@ -346,6 +406,16 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             }
         );
 
+        photoInputComponent.personService.getPeople().subscribe(
+            (people: Person[]) => {
+                photoInputComponent.multiSelectPersonOptions = [];
+                for (let person of people) {
+                    photoInputComponent.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+                };
+                console.log(photoInputComponent.multiSelectPersonOptions);
+            }
+        );
+
         photoInputComponent.commentSub = photoInputComponent.commentsService.commentSub
             .subscribe(
             (comment: Comment) => {
@@ -360,7 +430,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             title: new FormControl(null, Validators.required,
                 photoInputComponent.forbiddenTitles),
             description: new FormControl(null, null),
-            tags: new FormControl(null, null)
+            tags: new FormControl(null, null),
+            people: new FormControl(null, null)
         });
 
 
@@ -375,6 +446,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                     photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
                     photoInputComponent.submitType = Consts.UPDATE_PHOTO;
                     photoInputComponent.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);
+                    photoInputComponent.selectedPeople = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.peopleToDisplay);
                 }
             );
         };
@@ -407,6 +479,10 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
 
     onTagsChange() {
+        //console.log(this.optionsModel);
+    }
+
+    onPeopleChange() {
         //console.log(this.optionsModel);
     }
 

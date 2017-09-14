@@ -102,10 +102,10 @@ const mediaQueryFields = ['comments', 'title', '_creator', 'location', 'isUrl', 
 const mediaUpdateFields = ['title', 'description', 'tags', 'people', 'comment'];
 
 
-MediaSchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
+MediaSchema.statics.findByCriteria = function (tags, people, fromDate, toDate) {
   let Media = this;
 
-  let queryObj = utils.genQueryForCriteria(tags, users, fromDate, toDate, "mediaDate");
+  let queryObj = utils.genQueryForCriteria(tags, people, fromDate, toDate, "mediaDate");
   return Media.find(queryObj).populate('comments tags people').then((medias) => {
     return medias;
   }).catch((e) => {

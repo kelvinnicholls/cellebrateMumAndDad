@@ -161,12 +161,12 @@ router.get('/', authenticate, (req, res) => {
 router.get('/byCriteria', authenticate, (req, res) => {
   let {
     tags,
-    users,
+    people,
     fromDate,
     toDate
   } = req.body;
 
-  Media.findByCriteria(tags, users, fromDate, toDate).then((medias) => {
+  Media.findByCriteria(tags, people, fromDate, toDate).then((medias) => {
     let obj = {};
     obj['medias'] = medias;
     res.send(obj);

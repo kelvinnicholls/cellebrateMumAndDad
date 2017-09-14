@@ -41,7 +41,7 @@ beforeEach(populateMemories);
 
 describe('GET /memories/byCriteria', () => {
 
-  it('should get all memories for admin user for tag1 and tag3, user1 and user2, and between 2 dates', (done) => {
+  it('should get all memories for admin user for tag1 and tag3, person1 and person2, and between 2 dates', (done) => {
     let fromDate = moment(memories[0].memoryDate).valueOf();
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
@@ -63,7 +63,7 @@ describe('GET /memories/byCriteria', () => {
       .end(done);
   });
 
-  it('should get all memories for admin user for tag1, user1 and user2, and between 2 dates', (done) => {
+  it('should get all memories for admin user for tag1, person1 and person2, and between 2 dates', (done) => {
     let fromDate = moment(memories[0].memoryDate).valueOf();
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
@@ -85,7 +85,7 @@ describe('GET /memories/byCriteria', () => {
       .end(done);
   });
 
-  it('should get all memories for admin user for tag1, user1 and user2, and fromDate', (done) => {
+  it('should get all memories for admin user for tag1, person1 and person2, and fromDate', (done) => {
     let fromDate = moment(memories[0].memoryDate).valueOf();
     let body = {
       tags: [tags[0]._id],
@@ -104,7 +104,7 @@ describe('GET /memories/byCriteria', () => {
       .end(done);
   });
 
-  it('should get all memories for admin user for tag1, user1 and user2, and toDate', (done) => {
+  it('should get all memories for admin user for tag1, person1 and person2, and toDate', (done) => {
     let toDate = moment(memories[1].memoryDate).valueOf();
     let body = {
       tags: [tags[0]._id],

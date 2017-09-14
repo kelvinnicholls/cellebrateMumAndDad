@@ -42,9 +42,9 @@
     'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty || myForm.get('tags').touched)
   }">
     <label for="tags" class="col-sm-4 col-form-label"><strong>Tags</strong></label>
-    <div placement="left" [ngbTooltip]="getTabs()" class="col-sm-4">
+    <div placement="left" [ngbTooltip]="getTags()" class="col-sm-4">
 
-      <ss-multiselect-dropdown [texts]="multiSelectTabsTexts" [settings]="multiSelectTabsSettings" [(options)]="multiSelectTagOptions"
+      <ss-multiselect-dropdown [texts]="multiSelectTabsTexts" [settings]="multiSelectSettings" [(options)]="multiSelectTagOptions"
         placement="top" ngbTooltip="The tags associated with this photo." formControlName="tags" [(ngModel)]="selectedTags"
         (ngModelChange)="onTagsChange($event)" class="form-control" [ngClass]="{
     'form-control-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched),
@@ -53,6 +53,24 @@
 
     </div>
     <button (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary" type="button">Add New Tag</button>
+  </div>
+
+  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+    'has-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched),
+    'has-success': myForm.get('people').valid && (myForm.get('people').dirty || myForm.get('people').touched)
+  }">
+    <label for="people" class="col-sm-4 col-form-label"><strong>People</strong></label>
+    <div placement="left" [ngbTooltip]="getPeople()" class="col-sm-4">
+
+      <ss-multiselect-dropdown [texts]="multiSelectPeopleTexts" [settings]="multiSelectSettings" [(options)]="multiSelectPersonOptions"
+        placement="top" ngbTooltip="The people associated with this photo." formControlName="people" [(ngModel)]="selectedPeople"
+        (ngModelChange)="onPeopleChange($event)" class="form-control" [ngClass]="{
+    'form-control-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched),
+    'form-control-success': myForm.get('people').valid && (myForm.get('people').dirty || myForm.get('people').touched)
+  }"></ss-multiselect-dropdown>
+
+    </div>
+    <button (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary" type="button">Add New Person</button>
   </div>
 
   <div class="form-group row col col-sm-8 offset-sm-2">

@@ -25,7 +25,7 @@ addedDate: {
 });
 
 const personInsertFields = ['person'];
-const personOutFields = ['person', '_id'];
+const personOutFields = ['person', '_id', '_creator'];
 const personQueryFields = personOutFields;
 
 var Person = mongoose.model('Person', PersonSchema);

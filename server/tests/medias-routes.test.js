@@ -38,14 +38,14 @@ beforeEach(populateMedias);
 
 describe('GET /medias/byCriteria', () => {
 
-  it('should get all medias for admin user for tag1 and tag3, user1 and user2, and between 2 dates', (done) => {
+  it('should get all medias for admin user for tag1 and tag3, person1 and person3, and between 2 dates', (done) => {
     let fromDate = moment(medias[0].mediaDate).valueOf();
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
       tags: [tags[0]._id, tags[2]._id],
       fromDate,
       toDate,
-      people: [people[0]._id, people[1]._id]
+      people: [people[0]._id, people[2]._id]
     };
     request(app)
       .get('/medias/byCriteria')
@@ -60,7 +60,7 @@ describe('GET /medias/byCriteria', () => {
       .end(done);
   });
 
-  it('should get all medias for admin user for tag1, user1 and user2, and between 2 dates', (done) => {
+  it('should get all medias for admin user for tag1, person1 and person2, and between 2 dates', (done) => {
     let fromDate = moment(medias[0].mediaDate).valueOf();
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
@@ -82,7 +82,7 @@ describe('GET /medias/byCriteria', () => {
       .end(done);
   });
 
-  it('should get all medias for admin user for tag1, user1 and user2, and fromDate', (done) => {
+  it('should get all medias for admin user for tag1, person1 and person2, and fromDate', (done) => {
     let fromDate = moment(medias[0].mediaDate).valueOf();
     let body = {
       tags: [tags[0]._id],
@@ -102,7 +102,7 @@ describe('GET /medias/byCriteria', () => {
       .end(done);
   });
 
-  it('should get all medias for admin user for tag1, user1 and user2, and toDate', (done) => {
+  it('should get all medias for admin user for tag1, person1 and person2, and toDate', (done) => {
     let toDate = moment(medias[1].mediaDate).valueOf();
     let body = {
       tags: [tags[0]._id],

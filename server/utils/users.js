@@ -4,12 +4,7 @@ class Users {
   constructor() {
     this.users = [];
 
-    // let user1 = {'id': 1,'name': "Kelvin"};
-    // let user2 = {'id': 2,'name': "Sharon"};
-    // let user3 = {'id': 3, 'name': "Geoffrey"};
-    // this.users.push(user1);
-    // this.users.push(user2);
-    // this.users.push(user3);
+
   }
   addUser(id, name) {
     let user = {

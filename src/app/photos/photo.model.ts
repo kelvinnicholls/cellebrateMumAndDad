@@ -1,5 +1,6 @@
 import { CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
+import { Person } from "../shared/people/person.model";
 export class Photo {
 
     public index;
@@ -14,7 +15,9 @@ export class Photo {
         public comment?: string,
         public comments?: CommentDisplay[],
         public tagsToDisplay?: Tag[],
-        public tags?: string[]
+        public tags?: string[],
+        public peopleToDisplay?: Person[],
+        public people?: string[]
     ) {
         if (photoInfo && photoInfo.location && !photoInfo.isUrl && photoInfo.location.startsWith('server')) {
             this.photoInfo.location = photoInfo.location.substring(14);
