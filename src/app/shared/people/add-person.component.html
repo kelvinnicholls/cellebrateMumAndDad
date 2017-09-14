@@ -18,8 +18,9 @@
         'form-control-success': myForm.get('person').valid && (myForm.get('person').dirty && myForm.get('person').value.length > 0)
       }">
               <div class="form-control-feedback" *ngIf="myForm.get('person').errors && (myForm.get('person').dirty || myForm.get('person').touched)">
-                <p *ngIf="myForm.get('person').errors.required">Person is required</p>
+                <p *ngIf="myForm.get('person').errors.required">Person is required!</p>
                 <p *ngIf="myForm.get('person').errors.personIsAlreadyUsed">This person is already in the database!</p>
+                <p *ngIf="myForm.get('person').errors.pattern">Person must be alphanumeric!</p>
               </div>
               <small *ngIf="myForm.get('person').invalid" class="form-text text-muted">Enter a person.</small>
             </div>

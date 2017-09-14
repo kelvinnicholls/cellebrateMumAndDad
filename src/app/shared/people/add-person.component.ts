@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ToastService } from "../toast/toast.service";
 import { PersonService } from "./person.service";
 import { Person } from "./person.model";
-
+import { Consts } from "../consts";
 import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
 import { DialogService } from "../dialog/dialog.service";
@@ -100,7 +100,7 @@ export class AddPersonComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = this.formBuilder.group({
-      person: new FormControl(null, Validators.required, this.forbiddenPeople),
+      person: new FormControl(null, [Validators.required,Validators.pattern(Consts.ALPHANUMERIC_PATTERN)], this.forbiddenPeople),
       autoSelect: new FormControl('false', null)
     });
 

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { ToastService } from "../toast/toast.service";
 import { TagService } from "./tag.service";
 import { Tag } from "./tag.model";
-
+import { Consts } from "../consts";
 import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
 import { DialogService } from "../dialog/dialog.service";
@@ -98,7 +98,7 @@ export class AddTagComponent implements OnInit {
 
   ngOnInit() {
     this.myForm = this.formBuilder.group({
-      tag: new FormControl(null, Validators.required, this.forbiddenTags),
+      tag: new FormControl(null, [Validators.required,Validators.pattern(Consts.ALPHANUMERIC_PATTERN)], this.forbiddenTags),
       autoSelect: new FormControl('false', null)
     });
 
