@@ -334,7 +334,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             .subscribe(
                             result => {
                                 console.log(result);
-                                photoInputComponent.toastService.showSuccess("Photo updated.");
+                                photoInputComponent.router.navigate(['photos']).then((ok) => {
+                                    if (ok) {
+                                        photoInputComponent.photoService.showSuccessToast.next("Photo updated.");
+                                    };
+                                });
                             }
                             );
                         photoInputComponent.photo = null;
@@ -363,7 +367,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         photoInputComponent.photoService.addPhoto(photoInputComponent.photo)
                             .subscribe(
                             data => {
-                                photoInputComponent.toastService.showSuccess("Photo created.");
+                                photoInputComponent.router.navigate(['photos']).then((ok) => {
+                                    if (ok) {
+                                        photoInputComponent.photoService.showSuccessToast.next("Photo created.");
+                                    };
+                                });
                             },
                             error => console.error("PhotoComponent photoService.newPhoto error", error)
                             );
@@ -468,7 +476,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             title: new FormControl(null, Validators.required,
                 photoInputComponent.forbiddenTitles),
             description: new FormControl(null, null),
-            tags: new FormControl(null,null),
+            tags: new FormControl(null, null),
             mediaDate: new FormControl(null, null),
             people: new FormControl(null, null)
         });

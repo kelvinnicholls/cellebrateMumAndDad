@@ -34,6 +34,8 @@ export class PhotoService {
 
     photosChanged = new Subject<Photo[]>();
 
+    showSuccessToast = new Subject<string>();
+
 
     public searchRet: SearchRet;
 
@@ -42,7 +44,7 @@ export class PhotoService {
     }
 
     findPhotoById(id: any): Photo {
-        return this.photos.find((photo) => {
+        return this.allPhotos.find((photo) => {
             return photo._id === id;
         });
     }
@@ -66,7 +68,12 @@ export class PhotoService {
                 let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation);
 
                 this.allPhotos[entityIndex].comments.push(commentDisplay);
-                this.photosChanged.next(this.photos);
+                this.photos.forEach((element, index) => {
+                    if (element.index === entityIndex) {
+                        this.photos[index].comments.push(commentDisplay);
+                        this.photosChanged.next(this.photos);
+                    };
+                });
                 callback();
             }
         );
@@ -118,9 +125,16 @@ export class PhotoService {
             if (element._id === updatePhoto._id) {
                 this.photos[index] = updatePhoto;
                 this.photosChanged.next(this.photos);
+            };
+        });
+
+        this.allPhotos.forEach((element, index) => {
+            if (element._id === updatePhoto._id) {
+                this.allPhotos[index] = updatePhoto;;
                 return updatePhoto;
             };
         });
+
         return updatePhoto;
     }
 
@@ -128,8 +142,8 @@ export class PhotoService {
         this.socket = socket;
 
         this.socket.on('createdPhoto', (photo, changedBy) => {
-            this.photos.push(this.createPhoto(photo, photo.photoInfo));
-            this.photosChanged.next(this.photos);
+            this.allPhotos.push(this.createPhoto(photo, photo.photoInfo));
+            //this.photosChanged.next(this.allPhotos);
             this.appService.showToast(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
             console.log(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
         });
@@ -144,8 +158,8 @@ export class PhotoService {
         this.socket.on('deletedPhoto', (id, changedBy) => {
             let photoToBeDeleted = this.findPhotoById(id);
             if (photoToBeDeleted) {
-                this.photos.splice(this.photos.indexOf(photoToBeDeleted), 1);
-                this.photosChanged.next(this.photos);
+                this.allPhotos.splice(this.allPhotos.indexOf(photoToBeDeleted), 1);
+                //this.photosChanged.next(this.allPhotos);
                 this.appService.showToast(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
                 console.log(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
             };
@@ -172,8 +186,7 @@ export class PhotoService {
                 photoInfo.location = result.location;
                 photoInfo.isUrl = result.isUrl;
                 const photo = this.createPhoto(result, photoInfo);
-                photoService.photos.push(photo);
-
+                photoService.allPhotos.push(photo);
                 this.socket.emit('photoCreated', photo, function (err) {
                     if (err) {
                         console.log("photoCreated err: ", err);
@@ -182,7 +195,7 @@ export class PhotoService {
                     }
                 });
 
-                photoService.photosChanged.next(this.photos);
+                //photoService.photosChanged.next(this.allPhotos);
                 return photo;
             })
             .catch((error: Response) => {
@@ -314,7 +327,7 @@ export class PhotoService {
         let photoService = this;
         return this.http.delete(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, { headers: headers })
             .map((response: Response) => {
-                photoService.photos.splice(photo.index, 1);
+                photoService.allPhotos.splice(photo.index, 1);
 
                 this.socket.emit('photoDeleted', photo, function (err) {
                     if (err) {
@@ -324,7 +337,7 @@ export class PhotoService {
                     }
                 });
 
-                photoService.photosChanged.next(photoService.photos);
+                //photoService.photosChanged.next(photoService.allPhotos);
                 return response.json();
             })
             .catch((error: Response) => {

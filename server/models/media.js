@@ -97,6 +97,7 @@ let MediaSchema = new mongoose.Schema({
 const mediaInsertFields = ['title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'people', 'originalFileName', 'photoInfo'];
 const mediaOutFields = mediaInsertFields;
 mediaOutFields.push('comments');
+mediaOutFields.push('_id');
 
 const mediaQueryFields = ['comments', 'title', '_creator', 'location', 'isUrl', 'mimeType', 'isProfilePic', 'description', 'mediaDate', 'addedDate', 'tags', 'people', '_id'];
 const mediaUpdateFields = ['title', 'description', 'tags', 'people', 'comment', 'mediaDate'];

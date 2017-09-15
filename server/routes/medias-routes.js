@@ -123,11 +123,12 @@ router.post('/', authenticate, upload, (req, res) => {
   media._creator = req.loggedInUser._creatorRef;
   media.isProfilePic = false;
   media.addedDate = new Date().getTime();
+  //media._id = new ObjectID();
   console.log('media', media);
 
-  media.save().then((media) => {
-    console.log('media2', media);
-    res.send(_.pick(media, mediaOutFields));
+  media.save().then((newMedia) => {
+    console.log('media2', newMedia);
+    res.send(_.pick(newMedia, mediaOutFields));
   }, (e) => {
     console.log('media.save() e', e);
     res.status(400).send();

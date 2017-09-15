@@ -130,8 +130,8 @@ X72) description should be text area
 X73) add isProfilePic to media and do not return in photo list
 X75) Tidy up display of photos (add comments on hover)
 76) Make sure search works with both photos and users
-77) add tags and people to medias and memories
-78) add "Photo Added" comment on insert
+x77) add tags and people to medias and memories
+x78) add "Photo Added" comment on insert **Don't Bother**
 79) Hover over photo should  resize it
 80) implement password retries and lock period
 81) implement password expiry (expiry date on user and flag to indicate if this is enforced, although expiry date will still work)
@@ -145,7 +145,7 @@ x87) add ability to add new tags
 x88) hint text should show list of tags
 89) enlarge photo on hover
 x90) Make sure tags list and people list is in order
-91) after updating/adding photo return to photo list
+x91) after updating/adding photo return to photo list
 92) check that sockets communicate tags/people correctly
-93) Only allow alphanumeric characters in name and tag
+x93) Only allow alphanumeric characters in name and tag
 

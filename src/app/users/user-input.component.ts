@@ -217,11 +217,25 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             .subscribe(
                             result => {
                                 console.log(result);
+                                
                                 if (this.submitType == Consts.UPDATE_CURRENT_USER) {
-                                    userInputComponent.router.navigate(['']);
-                                    userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
-                                } else {
-                                    userInputComponent.toastService.showSuccess("User updated.");
+                                    userInputComponent.router.navigate(['']).then((ok) => {
+                                        if (ok) {
+                                            userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
+                                        };
+                                    });
+
+
+                                    //userInputComponent.router.navigate(['']);
+                                    //userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
+                                } else {       
+                                    userInputComponent.router.navigate(['users']).then((ok) => {
+                                        if (ok) {
+                                            userInputComponent.userService.showSuccessToast.next("User updated");
+                                        };
+                                    });                             
+                                    //userInputComponent.toastService.showSuccess("User updated.");
+                                    //userInputComponent.router.navigate(['users']);
                                 };
                             }
                             );
@@ -250,7 +264,13 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         this.userService.addUser(this.user)
                             .subscribe(
                             data => {
-                                userInputComponent.toastService.showSuccess("User created.");
+                                userInputComponent.router.navigate(['users']).then((ok) => {
+                                    if (ok) {
+                                        userInputComponent.userService.showSuccessToast.next("User created");
+                                    };
+                                });  
+                                // userInputComponent.toastService.showSuccess("User created.");
+                                // userInputComponent.router.navigate(['users']);
                             },
                             error => console.error("UserComponent userService.newUser error", error)
                             );

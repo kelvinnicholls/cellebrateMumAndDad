@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
 import { Subscription } from 'rxjs/Subscription';
 import { User } from "./user.model";
 import { UserService } from "./user.service";
+import { ToastService } from "../shared/toast/toast.service";
 
 @Component({
     selector: 'app-user-list',
@@ -61,7 +62,9 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.updatePagedUsers(this.eventItemsPerPage, this.eventPage);
     }
 
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef) {
+        toastService.toast.setRootViewContainerRef(vcr);
+    }
 
     onSearch() {
         this.userService.search();
@@ -72,13 +75,17 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.userService.getUsers()
+        let userListComponent = this;
+        userListComponent.userService.showSuccessToast.subscribe((msg) => {
+            userListComponent.toastService.showSuccess(msg);
+        });
+        userListComponent.userService.getUsers()
             .subscribe(
             (users: User[]) => {
                 this.newUserList(users)
             }
             );
-        this.subscription = this.userService.usersChanged.subscribe((users: User[]) => this.newUserList(users));
+        userListComponent.subscription = userListComponent.userService.usersChanged.subscribe((users: User[]) => userListComponent.newUserList(users));
     }
 
     newUserList(users: User[]) {

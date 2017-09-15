@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
 import { Subscription } from 'rxjs/Subscription';
 import { Photo } from "./photo.model";
 import { PhotoService } from "./photo.service";
+import { ToastService } from "../shared/toast/toast.service";
 
 @Component({
     selector: 'app-photo-list',
@@ -14,6 +15,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     pagedPhotos: Photo[] = [];
 
     subscription: Subscription;
+
 
     public maxSize: number = 5;
     public bigTotalItems: number = this.photos.length;
@@ -61,7 +63,9 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.eventItemsPerPage, this.eventPage);
     }
 
-    constructor(private photoService: PhotoService) { }
+    constructor(private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
+        toastService.toast.setRootViewContainerRef(vcr);
+    }
 
     onSearch() {
         this.photoService.search();
@@ -72,13 +76,17 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.photoService.getPhotos()
+        let photoListComponent = this;
+        photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
+            photoListComponent.toastService.showSuccess(msg);
+        });
+        photoListComponent.photoService.getPhotos()
             .subscribe(
             (photos: Photo[]) => {
-                this.newPhotoList(photos)
+                photoListComponent.newPhotoList(photos)
             }
             );
-        this.subscription = this.photoService.photosChanged.subscribe((photos: Photo[]) => this.newPhotoList(photos));
+            photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe((photos: Photo[]) => photoListComponent.newPhotoList(photos));
     }
 
     newPhotoList(photos: Photo[]) {

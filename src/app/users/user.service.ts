@@ -24,7 +24,7 @@ export class UserService {
     constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
 
     usersChanged = new Subject<User[]>();
-
+    showSuccessToast = new Subject<string>();
 
     public searchRet: SearchRet;
 
