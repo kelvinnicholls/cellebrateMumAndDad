@@ -378,6 +378,16 @@ export class UserService {
                     this.appService.showToast(Consts.WARNING, "Search cancelled.");
                 }
             });
-        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub, SearchTypeEnum.Users);
+        let searchFields: string[] = [];
+        searchFields.push('adminUser');
+        searchFields.push('emailUpdates');
+        searchFields.push('email');
+        searchFields.push('name');
+        searchFields.push('twitterId');
+        searchFields.push('facebookId');
+        searchFields.push('relationship');
+        searchFields.push('from_date');
+        searchFields.push('to_date');
+        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub, SearchTypeEnum.Users, searchFields);
     }
 }

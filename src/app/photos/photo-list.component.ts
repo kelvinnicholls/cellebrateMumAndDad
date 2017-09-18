@@ -86,7 +86,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
                 photoListComponent.newPhotoList(photos)
             }
             );
-            photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe((photos: Photo[]) => photoListComponent.newPhotoList(photos));
+        photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe((photos: Photo[]) => photoListComponent.newPhotoList(photos));
     }
 
     newPhotoList(photos: Photo[]) {
@@ -98,4 +98,13 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+
+    getNoPhotosText(): string {
+        let retVal = "No Photos To Display!";
+        if (this.photoService.searchRet) {
+            retVal = "Search returned no results!";
+        };
+        return retVal;
+    }
+
 }

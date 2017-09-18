@@ -148,4 +148,9 @@ x90) Make sure tags list and people list is in order
 x91) after updating/adding photo return to photo list
 92) check that sockets communicate tags/people correctly
 x93) Only allow alphanumeric characters in name and tag
+94) Add clear search when search brings back nothing
+95) populate search tags and people (+ change multiselect relations ship to same?)
+
+
+CHECK TESCO MONEY
 

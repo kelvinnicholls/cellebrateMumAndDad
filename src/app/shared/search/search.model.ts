@@ -7,7 +7,7 @@ import { Consts } from "../../shared/consts";
 
 
 export class Search {
-  constructor(public title: string, public message: string, public buttonOneTitle: string, public buttonTwoTitle: string, public retSearchSub: EventEmitter<SearchRet>, public searchType: SearchTypeEnum) { }
+  constructor(public title: string, public message: string, public buttonOneTitle: string, public buttonTwoTitle: string, public retSearchSub: EventEmitter<SearchRet>, public searchType: SearchTypeEnum, public searchFields: string[]) { }
 
   static convertCase(val: String, convert: Boolean) {
     let retVal: String = val;
@@ -24,11 +24,11 @@ export class Search {
     searchRet.searchElements.forEach((searchElement) => {
       if (searchElement.value) {
         let elementName = searchElement.name;
-        if (searchElement.type === 'from') {
-          elementName = String(searchElement.name).substr('from_'.length);
-        } else if (searchElement.type === 'to') {
-          elementName = String(searchElement.name).substr('to_'.length);
-        };
+        // if (searchElement.type === 'from') {
+        //   elementName = String(searchElement.name).substr('from_'.length);
+        // } else if (searchElement.type === 'to') {
+        //   elementName = String(searchElement.name).substr('to_'.length);
+        // };
         if (arrayElement[elementName]) {
           let attributeValue = arrayElement[elementName];
           switch (typeof attributeValue) {

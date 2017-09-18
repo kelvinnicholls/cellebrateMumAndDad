@@ -66,9 +66,26 @@ export class SearchComponent implements OnInit {
   }
 
   isDirty(val: string, name: string) {
-    return (val && val.length > 0 && this.myForm.controls[name] && this.myForm.controls[name].dirty);
+    if (!this.canShow(name)) {
+      return false;
+    } else {
+      return (val && val.length > 0 && this.myForm.controls[name] && this.myForm.controls[name].dirty);
+    };
   }
 
+  getDateField() : string {
+    let retField = "";
+    
+    if (this.search.searchType === SearchTypeEnum.Users) {
+      retField = 'dob';
+    } else if (this.search.searchType === SearchTypeEnum.Photos) {
+      retField = 'mediaDate';
+    } else if (this.search.searchType === SearchTypeEnum.Memories) {
+      retField = 'memoryDate';
+    };
+
+    return retField;
+  }
 
   onSubmit() {
     this.display = 'none';
@@ -100,15 +117,31 @@ export class SearchComponent implements OnInit {
     };
 
     if (this.isDirty(this.myForm.value.relationship, 'relationship')) {
-      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array' });
+      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array'});
     };
 
-    if (this.isDirty(this.myForm.value.from_dob, 'from_dob')) {
-      this.searchRet.searchElements.push({ name: 'from_dob', value: this.populate(this.myForm.value.from_dob), type: 'from' });
+    if (this.isDirty(this.myForm.value.from_dob, 'from_date')) {
+      this.searchRet.searchElements.push({ name: this.getDateField(), value: this.populate(this.myForm.value.from_date), type: 'from'});
     };
 
-    if (this.isDirty(this.myForm.value.to_dob, 'to_dob')) {
-      this.searchRet.searchElements.push({ name: 'to_dob', value: this.populate(this.myForm.value.to_dob), type: 'to' });
+    if (this.isDirty(this.myForm.value.to_dob, 'to_date')) {
+      this.searchRet.searchElements.push({ name: this.getDateField(), value: this.populate(this.myForm.value.to_date), type: 'to'});
+    };
+
+    if (this.isDirty(this.myForm.value.title, 'title')) {
+      this.searchRet.searchElements.push({ name: 'title', value: this.populate(this.myForm.value.title) });
+    };
+
+    if (this.isDirty(this.myForm.value.description, 'description')) {
+      this.searchRet.searchElements.push({ name: 'description', value: this.populate(this.myForm.value.description) });
+    };
+
+    if (this.isDirty(this.myForm.value.tags, 'tags')) {
+      this.searchRet.searchElements.push({ name: 'tags', value: this.populate(this.myForm.value.tags), type: 'array' });
+    };
+
+    if (this.isDirty(this.myForm.value.people, 'people')) {
+      this.searchRet.searchElements.push({ name: 'people', value: this.populate(this.myForm.value.people), type: 'array' });
     };
 
     this.searchRet.caseSensitive = this.populate(this.myForm.value.caseSensitive);
@@ -135,6 +168,16 @@ export class SearchComponent implements OnInit {
     return this.myForm.valid && this.myForm.dirty;
   }
 
+  canShow(field: string): boolean {
+    let retVal: boolean = false;
+
+    if (this.search && this.search.searchFields && this.search.searchFields.indexOf(field) > -1) {
+      retVal = true;
+    };
+
+    return retVal;
+  }
+
   //https://blog.johanneshoppe.de/2016/10/angular-2-how-to-use-date-input-controls-with-angular-forms/
 
   ngOnInit() {
@@ -149,8 +192,12 @@ export class SearchComponent implements OnInit {
       adminUser: new FormControl(null, null),
       emailUpdates: new FormControl(null, null),
       relationship: new FormControl(null, null),
-      from_dob: new FormControl('1900-01-01', null),
-      to_dob: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+      title: new FormControl(null, null),
+      description: new FormControl(null, null),
+      tags: new FormControl(null, null),
+      people: new FormControl(null, null),
+      from_date: new FormControl('1900-01-01', null),
+      to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
     });
 
     this.showSearchSub = this.searchService.showSearchSub
@@ -171,11 +218,22 @@ export class SearchComponent implements OnInit {
               adminUser: new FormControl(null, null),
               emailUpdates: new FormControl(null, null),
               relationship: new FormControl(null, null),
-              from_dob: new FormControl('1900-01-01', null),
-              to_dob: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+              from_date: new FormControl('1900-01-01', null),
+              to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
             });
             break;
           case SearchTypeEnum.Photos:
+            this.myForm = this.formBuilder.group({
+              caseSensitive: new FormControl(null, null),
+              matchAll: new FormControl('true', null),
+              matchCriteria: new FormControl('Starts With', null),
+              title: new FormControl(null, null),
+              description: new FormControl(null, null),
+              tags: new FormControl(null, null),
+              people: new FormControl(null, null),
+              from_date: new FormControl('1900-01-01', null),
+              to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+            });
             break;
           case SearchTypeEnum.Memories:
             break;

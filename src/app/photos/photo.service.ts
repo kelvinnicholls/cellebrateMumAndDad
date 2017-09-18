@@ -376,6 +376,14 @@ export class PhotoService {
                     this.appService.showToast(Consts.WARNING, "Search cancelled.");
                 }
             });
-        this.searchService.showSearch("Search Photos", "Enter criteria to restrict list of photos", "Find", "Cancel", retSearchSub, SearchTypeEnum.Photos);
+        let searchFields: string[] = [];
+        searchFields.push('title');
+        searchFields.push('description');
+        searchFields.push('tags');
+        searchFields.push('people');
+        searchFields.push('from_date');
+        searchFields.push('to_date');
+        
+        this.searchService.showSearch("Search Photos", "Enter criteria to restrict list of photos", "Find", "Cancel", retSearchSub, SearchTypeEnum.Photos, searchFields);
     }
 }

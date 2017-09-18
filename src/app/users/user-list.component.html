@@ -31,10 +31,14 @@
   </div>
 </div>
 
+
 <div *ngIf="users.length == 0">
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
-      <h1 class="display-1 text-center">No Users To Display!</h1>
+      <h1 class="display-1 text-center">{{getNoUsersText()}}</h1>
     </div>
   </div>
+  <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-5">
+    <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
+   </div>
 </div>

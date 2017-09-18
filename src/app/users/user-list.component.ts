@@ -97,4 +97,13 @@ export class UserListComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.subscription.unsubscribe();
     }
+
+    getNoUsersText(): string {
+        let retVal = "No Users To Display!";
+        if (this.userService.searchRet) {
+            retVal = "Search returned no results!";
+        };
+        return retVal;
+    }
+
 }
