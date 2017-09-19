@@ -2,7 +2,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { Subject } from 'rxjs/Subject';
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
-import { IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectSettings, IMultiSelectTexts,IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 import { AppService } from "../../app.service";
 import { ErrorService } from "../errors/error.service";
@@ -16,6 +16,40 @@ export class TagService {
     public tags: Tag[] = [];
     private socket;
     tagsChanged = new Subject<Tag[]>();
+
+
+    tag: string = "tag";
+    tagplural: string = this.tag + "'s";
+    public selectedTags: string[] = [];
+
+
+    public multiSelectSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        //checkedStyle: 'fontawesome',
+        //buttonClasses: 'btn btn-default btn-block',
+        //dynamicTitleMaxItems: 3,
+        //pullRight: true,
+        showCheckAll: false,
+        showUncheckAll: false,
+        closeOnSelect: false
+    };
+  
+    // Text configuration 
+    public multiSelectTabsTexts: IMultiSelectTexts = {
+        checkAll: 'Select all ' + this.tagplural,
+        uncheckAll: 'Unselect all ' + this.tagplural,
+        checked: this.tag + ' selected',
+        checkedPlural: this.tagplural + '  selected',
+        searchPlaceholder: 'Find ' + this.tag,
+        defaultTitle: 'Select ' + this.tagplural,
+        allSelected: 'All ' + this.tagplural + ' selected',
+    };
+  
+
+    public multiSelectTagOptions: IMultiSelectOption[] = [
+    ];
+
+
 
     constructor(private http: Http
         , private errorService: ErrorService

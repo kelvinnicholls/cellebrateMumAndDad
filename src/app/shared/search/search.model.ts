@@ -31,7 +31,10 @@ export class Search {
         // };
         if (arrayElement[elementName]) {
           let attributeValue = arrayElement[elementName];
-          switch (typeof attributeValue) {
+          let typeOfAttributeValue = typeof attributeValue;
+          console.log("attributeValue", attributeValue);
+          console.log("typeOfAttributeValue", typeOfAttributeValue);
+          switch (typeOfAttributeValue) {
             case 'string':
               if (searchElement.type === 'y_n_both') {
                 switch (searchElement.value) {
@@ -95,7 +98,26 @@ export class Search {
               break;
             case 'boolean':
               break;
-          };
+            case 'object':
+              if (Object.prototype.toString.call(arrayElement[elementName]) === "[object Array]") {
+                if (searchElement.type === 'array') {
+                  console.log(attributeValue);
+                  let matchingElementsCount = 0;
+                  searchElement.value.forEach((searchElementValue) => {
+                    attributeValue.forEach(attributeValueElement => {
+                      if (searchElementValue === attributeValueElement) {
+                        matchingElementsCount++;
+                      };
+                    });
+                  });
+                  if ((matchingElementsCount === searchElement.value.length && searchRet.matchAll) || (matchingElementsCount >0 && !searchRet.matchAll)) {
+                    matchingElementFound = true;
+                  };
+                  nonMatchingElementFound = !matchingElementFound;
+                };
+              };
+              break;
+          }
           if (!searchRet.matchAll && matchingElementFound) {
             return;
           };

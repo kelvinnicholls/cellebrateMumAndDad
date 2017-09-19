@@ -2,7 +2,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { Subject } from 'rxjs/Subject';
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
-import { IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectSettings, IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 import { AppService } from "../../app.service";
 import { ErrorService } from "../errors/error.service";
@@ -16,6 +16,24 @@ export class PersonService {
     public people: Person[] = [];
     private socket;
     peopleChanged = new Subject<Person[]>();
+
+    person: string = "person";
+    personplural: string = 'people';
+    public selectedPeople: string[] = [];
+
+    public multiSelectPeopleTexts: IMultiSelectTexts = {
+        checkAll: 'Select all ' + this.personplural,
+        uncheckAll: 'Unselect all ' + this.personplural,
+        checked: this.person + ' selected',
+        checkedPlural: this.personplural + '  selected',
+        searchPlaceholder: 'Find ' + this.person,
+        defaultTitle: 'Select ' + this.personplural,
+        allSelected: 'All ' + this.personplural + ' selected',
+    };
+
+    public multiSelectPersonOptions: IMultiSelectOption[] = [
+    ];
+
 
     constructor(private http: Http
         , private errorService: ErrorService

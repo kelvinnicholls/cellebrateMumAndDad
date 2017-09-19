@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IMultiSelectOption, IMultiSelectSettings, IMultiSelectTexts } from 'angular-2-dropdown-multiselect';
+import {IMultiSelectSettings,IMultiSelectOption} from 'angular-2-dropdown-multiselect';
 import * as moment from 'moment';
 // https://www.npmjs.com/package/angular-2-dropdown-multiselect
 // http://softsimon.github.io/angular-2-dropdown-multiselect/#
@@ -41,14 +41,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     private index: any;
     private commentSub: EventEmitter<Comment>;
 
-    tag: string = "tag";
-    tagplural: string = this.tag + "'s";
-    selectedTags: string[] = [];
-
-    person: string = "person";
-    personplural: string = 'people';
-    selectedPeople: string[] = [];
-
     multiSelectSettings: IMultiSelectSettings = {
         enableSearch: true,
         //checkedStyle: 'fontawesome',
@@ -60,32 +52,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         closeOnSelect: false
     };
 
-    // Text configuration 
-    multiSelectTabsTexts: IMultiSelectTexts = {
-        checkAll: 'Select all ' + this.tagplural,
-        uncheckAll: 'Unselect all ' + this.tagplural,
-        checked: this.tag + ' selected',
-        checkedPlural: this.tagplural + '  selected',
-        searchPlaceholder: 'Find ' + this.tag,
-        defaultTitle: 'Select ' + this.tagplural,
-        allSelected: 'All ' + this.tagplural + ' selected',
-    };
-
-    multiSelectPeopleTexts: IMultiSelectTexts = {
-        checkAll: 'Select all ' + this.personplural,
-        uncheckAll: 'Unselect all ' + this.personplural,
-        checked: this.person + ' selected',
-        checkedPlural: this.personplural + '  selected',
-        searchPlaceholder: 'Find ' + this.person,
-        defaultTitle: 'Select ' + this.personplural,
-        allSelected: 'All ' + this.personplural + ' selected',
-    };
-
-    multiSelectTagOptions: IMultiSelectOption[] = [
-    ];
-
-    multiSelectPersonOptions: IMultiSelectOption[] = [
-    ];
 
 
     fileSource: String = Consts.FILE_SYSTEM;
@@ -104,7 +70,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     private findTag(id: string): string {
         let retVal = "";
-        let option = this.multiSelectTagOptions.find((tag: IMultiSelectOption) => { return id == tag.id });
+        let option = this.tagService.multiSelectTagOptions.find((tag: IMultiSelectOption) => { return id == tag.id });
         if (option) {
             retVal = option.name;
         };
@@ -113,7 +79,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     private findPerson(id: string): string {
         let retVal = "";
-        let option = this.multiSelectPersonOptions.find((person: IMultiSelectOption) => { return id == person.id });
+        let option = this.personService.multiSelectPersonOptions.find((person: IMultiSelectOption) => { return id == person.id });
         if (option) {
             retVal = option.name;
         };
@@ -125,11 +91,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         retTagSub.subscribe((tag: Tag) => {
             if (tag) {
-                photoInputComponent.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
-                photoInputComponent.multiSelectTagOptions = photoInputComponent.multiSelectTagOptions.slice();
-                photoInputComponent.multiSelectTagOptions = photoInputComponent.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
+                photoInputComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+                photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.slice();
+                photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
                 if (tag.autoSelect) {
-                    photoInputComponent.selectedTags.push(tag.id);
+                    photoInputComponent.tagService.selectedTags.push(tag.id);
                 };
             };
         });
@@ -139,8 +105,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     getTags(): string {
         let tagsArr: string[] = [];
         let retVal = "No Tags";
-        for (let index in this.selectedTags) {
-            let tag = this.findTag(this.selectedTags[index]);
+        for (let index in this.tagService.selectedTags) {
+            let tag = this.findTag(this.tagService.selectedTags[index]);
             tagsArr.push(tag);
         };
         if (tagsArr.length > 0) {
@@ -154,11 +120,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         retPersonSub.subscribe((person: Person) => {
             if (person) {
-                photoInputComponent.multiSelectPersonOptions.push({ id: person.id, name: person.person });
-                photoInputComponent.multiSelectPersonOptions = photoInputComponent.multiSelectPersonOptions.slice();
-                photoInputComponent.multiSelectPersonOptions = photoInputComponent.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
+                photoInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+                photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.slice();
+                photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
                 if (person.autoSelect) {
-                    photoInputComponent.selectedPeople.push(person.id);
+                    photoInputComponent.personService.selectedPeople.push(person.id);
                 };
             };
         });
@@ -168,8 +134,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     getPeople(): string {
         let peopleArr: string[] = [];
         let retVal = "No People";
-        for (let index in this.selectedPeople) {
-            let person = this.findPerson(this.selectedPeople[index]);
+        for (let index in this.personService.selectedPeople) {
+            let person = this.findPerson(this.personService.selectedPeople[index]);
             peopleArr.push(person);
         };
         if (peopleArr.length > 0) {
@@ -444,21 +410,21 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
         photoInputComponent.tagService.getTags().subscribe(
             (tags: Tag[]) => {
-                photoInputComponent.multiSelectTagOptions = [];
+                photoInputComponent.tagService.multiSelectTagOptions = [];
                 for (let tag of tags) {
-                    photoInputComponent.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+                    photoInputComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 };
-                console.log(photoInputComponent.multiSelectTagOptions);
+                console.log(photoInputComponent.tagService.multiSelectTagOptions);
             }
         );
 
         photoInputComponent.personService.getPeople().subscribe(
             (people: Person[]) => {
-                photoInputComponent.multiSelectPersonOptions = [];
+                photoInputComponent.personService.multiSelectPersonOptions = [];
                 for (let person of people) {
-                    photoInputComponent.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+                    photoInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 };
-                console.log(photoInputComponent.multiSelectPersonOptions);
+                console.log(photoInputComponent.personService.multiSelectPersonOptions);
             }
         );
 
@@ -493,8 +459,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                     photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
                     photoInputComponent.modelMediaDate = this.getMediaDate();
                     photoInputComponent.submitType = Consts.UPDATE_PHOTO;
-                    photoInputComponent.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);
-                    photoInputComponent.selectedPeople = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.peopleToDisplay);
+                    photoInputComponent.tagService.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);
+                    photoInputComponent.personService.selectedPeople = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.peopleToDisplay);
                 }
             );
         };

@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
+import { IMultiSelectSettings, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import * as moment from 'moment';
 import { EventEmitter } from "@angular/core";
 import { Search } from "./search.model";
@@ -8,8 +9,10 @@ import { SearchTypeEnum } from "./search-type.enum";
 import { SearchRet } from "./search-ret.model";
 import { SearchService } from "./search.service";
 import { Consts } from "../../shared/consts";
-
-
+import { TagService } from "../tags/tag.service";
+import { PersonService } from "../people/person.service";
+import { Tag } from "../tags/tag.model";
+import { Person } from "../people/person.model";
 
 @Component({
   selector: 'app-search',
@@ -48,8 +51,28 @@ export class SearchComponent implements OnInit {
     }
   }
 
+  multiSelectSettings: IMultiSelectSettings = {
+    enableSearch: true,
+    //checkedStyle: 'fontawesome',
+    //buttonClasses: 'btn btn-default btn-block',
+    //dynamicTitleMaxItems: 3,
+    //pullRight: true,
+    showCheckAll: false,
+    showUncheckAll: false,
+    closeOnSelect: false
+  };
 
-  constructor(private searchService: SearchService, private formBuilder: FormBuilder) { }
+  onTagsChange() {
+    //console.log(this.optionsModel);
+  }
+
+  onPeopleChange() {
+    //console.log(this.optionsModel);
+  }
+
+  constructor(private searchService: SearchService, private formBuilder: FormBuilder, private tagService: TagService
+    , private personService: PersonService
+  ) { }
 
   onClose() {
     this.display = 'none';
@@ -73,9 +96,9 @@ export class SearchComponent implements OnInit {
     };
   }
 
-  getDateField() : string {
+  getDateField(): string {
     let retField = "";
-    
+
     if (this.search.searchType === SearchTypeEnum.Users) {
       retField = 'dob';
     } else if (this.search.searchType === SearchTypeEnum.Photos) {
@@ -117,15 +140,15 @@ export class SearchComponent implements OnInit {
     };
 
     if (this.isDirty(this.myForm.value.relationship, 'relationship')) {
-      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array'});
+      this.searchRet.searchElements.push({ name: 'relationship', value: this.populate(this.myForm.value.relationship), type: 'array' });
     };
 
-    if (this.isDirty(this.myForm.value.from_dob, 'from_date')) {
-      this.searchRet.searchElements.push({ name: this.getDateField(), value: this.populate(this.myForm.value.from_date), type: 'from'});
+    if (this.isDirty(this.myForm.value.from_date, 'from_date')) {
+      this.searchRet.searchElements.push({ name: this.getDateField(), value: this.populate(this.myForm.value.from_date), type: 'from' });
     };
 
-    if (this.isDirty(this.myForm.value.to_dob, 'to_date')) {
-      this.searchRet.searchElements.push({ name: this.getDateField(), value: this.populate(this.myForm.value.to_date), type: 'to'});
+    if (this.isDirty(this.myForm.value.to_date, 'to_date')) {
+      this.searchRet.searchElements.push({ name: this.getDateField(), value: this.populate(this.myForm.value.to_date), type: 'to' });
     };
 
     if (this.isDirty(this.myForm.value.title, 'title')) {
@@ -181,6 +204,30 @@ export class SearchComponent implements OnInit {
   //https://blog.johanneshoppe.de/2016/10/angular-2-how-to-use-date-input-controls-with-angular-forms/
 
   ngOnInit() {
+
+    let searchComponent = this;
+
+    searchComponent.tagService.getTags().subscribe(
+      (tags: Tag[]) => {
+        searchComponent.tagService.multiSelectTagOptions = [];
+        for (let tag of tags) {
+          searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+        };
+        console.log(searchComponent.tagService.multiSelectTagOptions);
+      }
+    );
+
+    searchComponent.personService.getPeople().subscribe(
+      (people: Person[]) => {
+        searchComponent.personService.multiSelectPersonOptions = [];
+        for (let person of people) {
+          searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+        };
+        console.log(searchComponent.personService.multiSelectPersonOptions);
+      }
+    );
+
+
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
       matchAll: new FormControl('true', null),

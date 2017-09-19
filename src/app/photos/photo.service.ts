@@ -221,8 +221,9 @@ export class PhotoService {
 
                     let comments: CommentDisplay[] = [];
                     let tags: Tag[] = [];
+                    let tagIds: string[] = [];
                     let people: Person[] = [];
-
+                    let personIds: string[] = [];
                     if (photo.comments && photo.comments.length > 0) {
                         photo.comments.forEach(comment => {
                             let userName = "";
@@ -247,6 +248,7 @@ export class PhotoService {
                         photo.tags.forEach(tag => {
                             let newTag = new Tag(tag.tag, tag._id);
                             tags.push(newTag);
+                            tagIds.push(tag._id);
                         });
                     };
 
@@ -254,6 +256,7 @@ export class PhotoService {
                         photo.people.forEach(person => {
                             let newPerson = new Person(person.person, person._id);
                             people.push(newPerson);
+                            personIds.push(person._id);
                         });
                     };
 
@@ -268,9 +271,9 @@ export class PhotoService {
                         null,
                         comments,
                         tags,
-                        null,
+                        tagIds,
                         people,
-                        null,
+                        personIds,
                         moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
                     );
                     transformedPhotos.push(newPhoto);

@@ -220,12 +220,15 @@
               'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty && myForm.get('tags').value.length > 0)
             }">
               <label for="tags" class="col-sm-4 col-form-label"><strong>Tags</strong></label>
+
               <div class="col-sm-8">
-                <input placement="bottom" ngbTooltip="The tags" type="text" class="form-control" id="tags" placeholder="Tags" formControlName="tags"
-                  [ngClass]="{
-              'form-control-success': myForm.get('tags').valid && (myForm.get('tags').dirty && myForm.get('tags').value.length > 0)
-            }">
+                <ss-multiselect-dropdown [texts]="tagService.multiSelectTagsTexts" [settings]="multiSelectSettings" [(options)]="tagService.multiSelectTagOptions"
+                  placement="top" ngbTooltip="The tags associated with this photo." formControlName="tags" [(ngModel)]="tagService.selectedTags"
+                  (ngModelChange)="onTagsChange($event)" class="form-control" [ngClass]="{
+            'form-control-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched)
+          }"></ss-multiselect-dropdown>
               </div>
+
             </div>
 
             <div *ngIf="canShow('people')" class="form-group row col col-sm-12" [ngClass]="{
@@ -233,10 +236,11 @@
             }">
               <label for="people" class="col-sm-4 col-form-label"><strong>People</strong></label>
               <div class="col-sm-8">
-                <input placement="bottom" ngbTooltip="The people" type="text" class="form-control" id="people" placeholder="People" formControlName="people"
-                  [ngClass]="{
-              'form-control-success': myForm.get('people').valid && (myForm.get('people').dirty && myForm.get('people').value.length > 0)
-            }">
+                <ss-multiselect-dropdown [texts]="personService.multiSelectPeopleTexts" [settings]="multiSelectSettings" [(options)]="personService.multiSelectPersonOptions"
+                  placement="top" ngbTooltip="The people associated with this photo." formControlName="people" [(ngModel)]="personService.selectedPeople"
+                  (ngModelChange)="onPeopleChange($event)" class="form-control" [ngClass]="{
+            'form-control-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched)
+          }"></ss-multiselect-dropdown>
               </div>
             </div>
 
