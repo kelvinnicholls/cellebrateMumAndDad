@@ -18,7 +18,8 @@ import { SearchTypeEnum } from "../shared/search/search-type.enum";
 import { CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
-
+import { TagService } from "../shared/tags/tag.service";
+import { PersonService } from "../shared/people/person.service";
 
 @Injectable()
 export class PhotoService {
@@ -29,6 +30,8 @@ export class PhotoService {
         , private appService: AppService
         , private userService: UserService
         , private searchService: SearchService
+        , private tagService: TagService
+        , private personService: PersonService
         , private router: Router) {
     }
 
@@ -358,7 +361,7 @@ export class PhotoService {
     showSearchCriteria() {
         let retVal: String = "";
         if (this.searchRet) {
-            retVal = this.searchRet.getSearchCriteria();
+            retVal = this.searchRet.getSearchCriteria(this.tagService,this.personService);
         };
         return retVal;
     }
@@ -386,7 +389,7 @@ export class PhotoService {
         searchFields.push('people');
         searchFields.push('from_date');
         searchFields.push('to_date');
-        
+
         this.searchService.showSearch("Search Photos", "Enter criteria to restrict list of photos", "Find", "Cancel", retSearchSub, SearchTypeEnum.Photos, searchFields);
     }
 }

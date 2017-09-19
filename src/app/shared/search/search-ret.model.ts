@@ -1,10 +1,11 @@
-import { EventEmitter } from "@angular/core";
+import { Injectable } from "@angular/core";
 import * as moment from 'moment';
 import { SearchRetEnum } from "./search-ret.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
 import { Consts } from "../../shared/consts";
 
 
+@Injectable()
 export class SearchRet {
     public searchElements: any[] = [];
     private _caseSensitive: Boolean = false;
@@ -12,7 +13,8 @@ export class SearchRet {
     private _matchCriteria: SearchMatchCriteriaEnum = SearchMatchCriteriaEnum.StartsWith;
     private static lineBreak: string = "<br />";
 
-    public getSearchCriteria() {
+    public getSearchCriteria(tagService,personService) {
+        let searchRet = this;
         let retVal: string = "";
         retVal += this._caseSensitive ? "Case: <strong>sensitive</strong>" : "Case: <strong>insensitive</strong>";
         retVal += SearchRet.lineBreak;
@@ -25,8 +27,18 @@ export class SearchRet {
                 let value: String = element.value;
                 if (element.type === 'from' || (element.type === 'to') {
                     value = moment(element.value, Consts.DATE_DB_FORMAT).format(Consts.DATE_DISPLAY_FORMAT);
+                } else if (element.type === 'array') {
+                    let valArr: string[] = [];
+                    element.value.forEach(arrVal => {
+                        if (element.name == "tags") {
+                            valArr.push(tagService.findTagNameById(arrVal));
+                        } else if (element.name == "people") {
+                            valArr.push(personService.findPersonNameById(arrVal));
+                        };
+                    });
+                    value = valArr.join(',');
                 };
-                retVal += element.name.replace(/_/g,' ') + " : <strong>'" + value + "'</strong>";
+                retVal += element.name.replace(/_/g, ' ') + " : <strong>'" + value + "'</strong>";
                 retVal += SearchRet.lineBreak;
             };
         });

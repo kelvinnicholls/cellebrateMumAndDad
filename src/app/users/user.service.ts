@@ -357,7 +357,7 @@ export class UserService {
     showSearchCriteria() {
         let retVal: String = "";
         if (this.searchRet) {
-            retVal = this.searchRet.getSearchCriteria();
+            retVal = this.searchRet.getSearchCriteria(null,null);
         };
         return retVal;
     }

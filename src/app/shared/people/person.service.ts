@@ -41,6 +41,23 @@ export class PersonService {
         , private appService: AppService) {
     }
 
+    public findPersonById(id: any): Person {
+        return this.people.find((person) => {
+            return person.id === id;
+        });
+    }
+
+
+    public findPersonNameById(id: any): string {
+        let personName = "";
+        let person: Person = this.findPersonById(id);
+        if (person) {
+            personName = person.person;
+        };
+        return personName;
+    }
+
+
     showPersonSub = new EventEmitter<EventEmitter<Person>>();
 
     showAddPerson(retPersonSub: EventEmitter<Person>) {

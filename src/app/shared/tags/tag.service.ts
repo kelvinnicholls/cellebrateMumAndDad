@@ -2,7 +2,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { Subject } from 'rxjs/Subject';
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
-import { IMultiSelectSettings, IMultiSelectTexts,IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectSettings, IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 import { AppService } from "../../app.service";
 import { ErrorService } from "../errors/error.service";
@@ -22,6 +22,21 @@ export class TagService {
     tagplural: string = this.tag + "'s";
     public selectedTags: string[] = [];
 
+    public findTagById(id: any): Tag {
+        return this.tags.find((tag) => {
+            return tag.id === id;
+        });
+    }
+
+
+    public findTagNameById(id: any): string {
+        let tagName = "";
+        let tag: Tag = this.findTagById(id);
+        if (tag) {
+            tagName = tag.tag;
+        };
+        return tagName;
+    }
 
     public multiSelectSettings: IMultiSelectSettings = {
         enableSearch: true,
@@ -33,7 +48,7 @@ export class TagService {
         showUncheckAll: false,
         closeOnSelect: false
     };
-  
+
     // Text configuration 
     public multiSelectTabsTexts: IMultiSelectTexts = {
         checkAll: 'Select all ' + this.tagplural,
@@ -44,7 +59,7 @@ export class TagService {
         defaultTitle: 'Select ' + this.tagplural,
         allSelected: 'All ' + this.tagplural + ' selected',
     };
-  
+
 
     public multiSelectTagOptions: IMultiSelectOption[] = [
     ];
