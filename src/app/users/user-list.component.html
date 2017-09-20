@@ -15,7 +15,7 @@
 
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
-    <pagination [totalItems]="bigTotalItems" [(ngModel)]="bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
+    <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
       [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
   </div>
 

@@ -23,7 +23,9 @@ import { PersonService } from "../shared/people/person.service";
 
 @Injectable()
 export class PhotoService {
-    private photos: Photo[] = [];
+    public photos: Photo[] = [];
+    public eventPage: number = 1;
+    public bigCurrentPage: number = 1;
     private allPhotos: Photo[] = [];
     constructor(private http: Http
         , private errorService: ErrorService
@@ -281,9 +283,14 @@ export class PhotoService {
                     );
                     transformedPhotos.push(newPhoto);
                 };
-                this.allPhotos = transformedPhotos;
-                this.photos = this.allPhotos.slice(0);
-                return transformedPhotos;
+                photoService.allPhotos = transformedPhotos;
+                if (photoService.searchRet) {
+                    photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
+                } else {
+                    photoService.photos = photoService.allPhotos.slice(0);
+                };
+
+                return photoService.photos;
             })
             .catch((error: Response) => {
                 photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
@@ -355,13 +362,15 @@ export class PhotoService {
     clearSearch() {
         this.photos = this.allPhotos;
         this.searchRet = null;
+        this.eventPage = 1;
+        this.bigCurrentPage = 1;
         this.photosChanged.next(this.photos);
     }
 
     showSearchCriteria() {
         let retVal: String = "";
         if (this.searchRet) {
-            retVal = this.searchRet.getSearchCriteria(this.tagService,this.personService);
+            retVal = this.searchRet.getSearchCriteria(this.tagService, this.personService);
         };
         return retVal;
     }

@@ -19,13 +19,13 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     public maxSize: number = 5;
     public bigTotalItems: number = this.photos.length;
-    public bigCurrentPage: number = 1;
+
     public numPages: number = 0;
 
     private itemsPerPage: number = 5;
 
     private eventItemsPerPage: number = 5;
-    private eventPage: number = 1;
+
 
     private hideSearchCriteriaText: String = "Hide Search Criteria";
     public showSearchCriteriaText: String = "Show Search Criteria";
@@ -57,10 +57,10 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
-        this.eventPage = event.page;
-        console.log('Page changed to: ' + this.eventPage);
+        this.photoService.eventPage = event.page;
+        console.log('Page changed to: ' + this.photoService.eventPage);
         console.log('Number items per page: ' + this.eventItemsPerPage);
-        this.updatePagedPhotos(this.eventItemsPerPage, this.eventPage);
+        this.updatePagedPhotos(this.eventItemsPerPage, this.photoService.eventPage);
     }
 
     constructor(private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
@@ -90,9 +90,10 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     }
 
     newPhotoList(photos: Photo[]) {
+
         this.photos = photos;
         this.bigTotalItems = this.photos.length;
-        this.updatePagedPhotos(this.eventItemsPerPage, this.eventPage);
+        this.updatePagedPhotos(this.eventItemsPerPage, this.photoService.eventPage);
     }
 
     ngOnDestroy() {

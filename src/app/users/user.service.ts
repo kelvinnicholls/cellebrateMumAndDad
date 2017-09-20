@@ -19,7 +19,10 @@ import { SearchTypeEnum } from "../shared/search/search-type.enum";
 
 @Injectable()
 export class UserService {
-    private users: User[] = [];
+
+    public users: User[] = [];
+    public eventPage: number = 1;
+    public bigCurrentPage: number = 1;
     private allUsers: User[] = [];
     constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
 
@@ -188,10 +191,14 @@ export class UserService {
                         profilePicInfo);
                     transformedUsers.push(newUser);
                     this.updateLocalStorage(newUser);
-                }
-                this.allUsers = transformedUsers;
-                this.users = this.allUsers.slice(0);
-                return transformedUsers;
+                };
+                userService.allUsers = transformedUsers;
+                if (userService.searchRet) {
+                    userService.users = Search.restrict(userService.allUsers, userService.searchRet);
+                } else {
+                    userService.users = userService.allUsers.slice(0);
+                };
+                return userService.users;
             })
             .catch((error: Response) => {
                 userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
@@ -351,6 +358,8 @@ export class UserService {
     clearSearch() {
         this.users = this.allUsers;
         this.searchRet = null;
+        this.eventPage = 1;
+        this.bigCurrentPage = 1;
         this.usersChanged.next(this.users);
     }
 

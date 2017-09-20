@@ -14,17 +14,18 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     pagedUsers: User[] = [];
 
+
     subscription: Subscription;
 
     public maxSize: number = 5;
     public bigTotalItems: number = this.users.length;
-    public bigCurrentPage: number = 1;
+
     public numPages: number = 0;
 
     private itemsPerPage: number = 5;
 
     private eventItemsPerPage: number = 5;
-    private eventPage: number = 1;
+
 
     private hideSearchCriteriaText: String = "Hide Search Criteria";
     public showSearchCriteriaText: String = "Show Search Criteria";
@@ -56,10 +57,10 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
-        this.eventPage = event.page;
-        console.log('Page changed to: ' + this.eventPage);
+        this.userService.eventPage = event.page;
+        console.log('Page changed to: ' + this.userService.eventPage);
         console.log('Number items per page: ' + this.eventItemsPerPage);
-        this.updatePagedUsers(this.eventItemsPerPage, this.eventPage);
+        this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
     constructor(private userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef) {
@@ -91,7 +92,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     newUserList(users: User[]) {
         this.users = users;
         this.bigTotalItems = this.users.length;
-        this.updatePagedUsers(this.eventItemsPerPage, this.eventPage);
+        this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
     ngOnDestroy() {

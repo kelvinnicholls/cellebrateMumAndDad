@@ -150,6 +150,9 @@ x91) after updating/adding photo return to photo list
 x93) Only allow alphanumeric characters in name and tag
 x94) Add clear search when search brings back nothing
 95) populate search tags and people (+ change multiselect relations ship to same?)
-96) Show actual people and names in search criteria
-97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list.
+x96) Show actual people and names in search criteria
+97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list. PhotoListComponent onInit
 98) check console errors before releasing
+
+
+Cannot read property 'tagsToDisplay' of undefined
