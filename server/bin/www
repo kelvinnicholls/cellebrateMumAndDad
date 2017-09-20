@@ -214,11 +214,27 @@ io.on('connection', (socket) => {
 
     console.log("memoryUpdated", memory, socket.id);
 
-    
+
     socket.broadcast.emit('updatedPhoto', memory, getUserName(socket.id));
     callback();
   });
 
+
+  socket.on('tagCreated', (photo, callback) => {
+
+    console.log("tagCreated", photo, socket.id);
+
+    socket.broadcast.emit('createdTag', photo, getUserName(socket.id));
+    callback();
+  });
+
+  socket.on('personCreated', (photo, callback) => {
+
+    console.log("personCreated", photo, socket.id);
+
+    socket.broadcast.emit('createdPerson', photo, getUserName(socket.id));
+    callback();
+  });
 
   socket.on('disconnect', () => {
     console.log("disconnect");

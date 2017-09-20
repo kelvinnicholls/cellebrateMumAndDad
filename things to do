@@ -151,8 +151,6 @@ x93) Only allow alphanumeric characters in name and tag
 x94) Add clear search when search brings back nothing
 95) populate search tags and people (+ change multiselect relations ship to same?)
 x96) Show actual people and names in search criteria
-97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list. PhotoListComponent onInit
+x97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list. PhotoListComponent onInit
 98) check console errors before releasing
-
-
-Cannot read property 'tagsToDisplay' of undefined
+99) issue of pagination not going back to page 1 after clear search
