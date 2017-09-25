@@ -358,8 +358,8 @@ export class UserService {
     clearSearch() {
         this.users = this.allUsers;
         this.searchRet = null;
-        this.eventPage = 1;
-        this.bigCurrentPage = 1;
+        //this.eventPage = 1;
+        //this.bigCurrentPage = 1;
         this.usersChanged.next(this.users);
     }
 

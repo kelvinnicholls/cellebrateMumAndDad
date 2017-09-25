@@ -362,8 +362,8 @@ export class PhotoService {
     clearSearch() {
         this.photos = this.allPhotos;
         this.searchRet = null;
-        this.eventPage = 1;
-        this.bigCurrentPage = 1;
+        //this.eventPage = 1;
+        //this.bigCurrentPage = 1;
         this.photosChanged.next(this.photos);
     }
 

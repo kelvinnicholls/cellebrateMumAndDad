@@ -129,7 +129,7 @@ X71) Prevent update of photo when updating
 X72) description should be text area
 X73) add isProfilePic to media and do not return in photo list
 X75) Tidy up display of photos (add comments on hover)
-76) Make sure search works with both photos and users
+x76) Make sure search works with both photos and users
 x77) add tags and people to medias and memories
 x78) add "Photo Added" comment on insert **Don't Bother**
 79) Hover over photo should  resize it
@@ -149,8 +149,8 @@ x91) after updating/adding photo return to photo list
 92) check that sockets communicate tags/people correctly
 x93) Only allow alphanumeric characters in name and tag
 x94) Add clear search when search brings back nothing
-95) populate search tags and people (+ change multiselect relations ship to same?)
+x95) populate search tags and people (+ change multiselect relations ship to same?)
 x96) Show actual people and names in search criteria
 x97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list. PhotoListComponent onInit
 98) check console errors before releasing
-99) issue of pagination not going back to page 1 after clear search - add input fields to change values
+x99) issue of pagination not going back to page 1 after clear search - add input fields to change values

@@ -73,6 +73,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     onClearSearch() {
         this.photoService.clearSearch();
+        this.updatePagedPhotos(this.eventItemsPerPage, this.photoService.eventPage);
     }
 
     ngOnInit() {
