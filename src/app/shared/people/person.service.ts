@@ -71,8 +71,8 @@ export class PersonService {
         this.socket.on('createdPerson', (person, changedBy) => {
             this.people.push(person);
             this.peopleChanged.next(this.people);
-            this.appService.showToast(Consts.INFO, "New person  : " + person.name + " added by " + changedBy);
-            console.log(Consts.INFO, "New person  : " + person.name + " added by " + changedBy);
+            this.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
+            console.log(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
         });
 
     }

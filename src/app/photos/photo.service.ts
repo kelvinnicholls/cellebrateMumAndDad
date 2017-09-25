@@ -1,6 +1,6 @@
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
-import { Subject } from 'rxjs/Subject';
+import { Subject  } from 'rxjs/Subject';
 import { Router } from "@angular/router";
 import * as moment from 'moment';
 import 'rxjs/Rx';
@@ -39,7 +39,7 @@ export class PhotoService {
 
     photosChanged = new Subject<Photo[]>();
 
-    showSuccessToast = new Subject<string>();
+    showSuccessToast = new EventEmitter<string>();
 
 
     public searchRet: SearchRet;
@@ -155,8 +155,8 @@ export class PhotoService {
 
         this.socket.on('updatedPhoto', (photo, changedBy) => {
             let updatedPhoto = this.updateThisPhoto(photo);
-            this.appService.showToast(Consts.INFO, "Photo  : " + updatedPhoto.name + " updated by " + changedBy);
-            console.log(Consts.INFO, "Photo  : " + updatedPhoto.name + " updated by " + changedBy);
+            this.appService.showToast(Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
+            console.log(Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
         });
 
 
@@ -315,9 +315,9 @@ export class PhotoService {
         return this.http.patch(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, fd, { headers: headers })
             .map((response: any) => {
                 let body = JSON.parse(response._body);
-                let updatedPhoto = this.updateThisPhoto(body);
+                let updatedPhoto = photoService.updateThisPhoto(body.media);
 
-                this.socket.emit('photoUpdated', updatedPhoto, function (err) {
+                photoService.socket.emit('photoUpdated', updatedPhoto, function (err) {
                     if (err) {
                         console.log("photoUpdated err: ", err);
                     } else {

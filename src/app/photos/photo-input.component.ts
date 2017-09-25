@@ -96,6 +96,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
                 if (tag.autoSelect) {
                     photoInputComponent.tagService.selectedTags.push(tag.id);
+                    photoInputComponent.myForm.get('tags').markAsDirty();
                 };
             };
         });
@@ -125,6 +126,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
                 if (person.autoSelect) {
                     photoInputComponent.personService.selectedPeople.push(person.id);
+                    photoInputComponent.myForm.get('people').markAsDirty();
                 };
             };
         });
@@ -302,7 +304,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                                 console.log(result);
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
-                                        photoInputComponent.photoService.showSuccessToast.next("Photo updated.");
+                                        photoInputComponent.photoService.showSuccessToast.emit("Photo updated.");
                                     };
                                 });
                             }
@@ -335,7 +337,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             data => {
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
-                                        photoInputComponent.photoService.showSuccessToast.next("Photo created.");
+                                        photoInputComponent.photoService.showSuccessToast.emit("Photo created.");
                                     };
                                 });
                             },

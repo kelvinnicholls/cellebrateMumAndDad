@@ -27,7 +27,7 @@ export class UserService {
     constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
 
     usersChanged = new Subject<User[]>();
-    showSuccessToast = new Subject<string>();
+    showSuccessToast = new EventEmitter<string>();
 
     public searchRet: SearchRet;
 
@@ -257,7 +257,7 @@ export class UserService {
         return this.http.patch(Consts.API_URL_USERS_ROOT + '/' + user._creatorRef, fd, { headers: headers })
             .map((response: any) => {
                 let body = JSON.parse(response._body);
-                let updatedUser = this.updateThisUser(body);
+                let updatedUser = userService.updateThisUser(body);
 
                 this.socket.emit('userUpdated', updatedUser, function (err) {
                     if (err) {

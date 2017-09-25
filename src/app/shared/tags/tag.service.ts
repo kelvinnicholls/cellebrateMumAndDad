@@ -85,8 +85,8 @@ export class TagService {
         this.socket.on('createdTag', (tag, changedBy) => {
             this.tags.push(tag);
             this.tagsChanged.next(this.tags);
-            this.appService.showToast(Consts.INFO, "New tag  : " + tag.name + " added by " + changedBy);
-            console.log(Consts.INFO, "New tag  : " + tag.name + " added by " + changedBy);
+            this.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
+            console.log(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
         });
 
     }

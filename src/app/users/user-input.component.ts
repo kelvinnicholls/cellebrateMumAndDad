@@ -231,7 +231,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                                 } else {       
                                     userInputComponent.router.navigate(['users']).then((ok) => {
                                         if (ok) {
-                                            userInputComponent.userService.showSuccessToast.next("User updated");
+                                            userInputComponent.userService.showSuccessToast.emit("User updated");
                                         };
                                     });                             
                                     //userInputComponent.toastService.showSuccess("User updated.");
@@ -266,7 +266,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             data => {
                                 userInputComponent.router.navigate(['users']).then((ok) => {
                                     if (ok) {
-                                        userInputComponent.userService.showSuccessToast.next("User created");
+                                        userInputComponent.userService.showSuccessToast.emit("User created");
                                     };
                                 });  
                                 // userInputComponent.toastService.showSuccess("User created.");

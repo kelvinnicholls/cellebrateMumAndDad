@@ -196,7 +196,7 @@ io.on('connection', (socket) => {
 
     console.log("memoryCreated", memory, socket.id);
 
-    socket.broadcast.emit('createdPhoto', memory, getUserName(socket.id));
+    socket.broadcast.emit('createdMemory', memory, getUserName(socket.id));
     callback();
   });
 
@@ -204,7 +204,7 @@ io.on('connection', (socket) => {
 
     console.log("memoryDeleted", memory, socket.id);
 
-    socket.broadcast.emit('deletedPhoto', memory._creatorRef, getUserName(socket.id));
+    socket.broadcast.emit('deletedMemory', memory._creatorRef, getUserName(socket.id));
     callback();
   });
 
@@ -215,7 +215,7 @@ io.on('connection', (socket) => {
     console.log("memoryUpdated", memory, socket.id);
 
 
-    socket.broadcast.emit('updatedPhoto', memory, getUserName(socket.id));
+    socket.broadcast.emit('updatedMemory', memory, getUserName(socket.id));
     callback();
   });
 
