@@ -7,7 +7,7 @@ import { Consts } from "../../shared/consts";
 
 
 export class Search {
-  constructor(public title: string, public message: string, public buttonOneTitle: string, public buttonTwoTitle: string, public retSearchSub: EventEmitter<SearchRet>, public searchType: SearchTypeEnum, public searchFields: string[]) { }
+  constructor(public title: string, public message: string, public buttonOneTitle: string, public buttonTwoTitle: string, public retSearchSub: EventEmitter<SearchRet>, public searchType: SearchTypeEnum, public searchFields: String[]) { }
 
   static convertCase(val: String, convert: Boolean) {
     let retVal: String = val;

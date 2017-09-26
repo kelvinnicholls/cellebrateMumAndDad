@@ -177,7 +177,7 @@ io.on('connection', (socket) => {
 
     console.log("photoDeleted", photo, socket.id);
 
-    socket.broadcast.emit('deletedPhoto', photo._creatorRef, getUserName(socket.id));
+    socket.broadcast.emit('deletedPhoto', photo._id, getUserName(socket.id));
     callback();
   });
 

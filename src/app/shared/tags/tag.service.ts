@@ -20,7 +20,7 @@ export class TagService {
 
     tag: string = "tag";
     tagplural: string = this.tag + "'s";
-    public selectedTags: string[] = [];
+    public selectedTags: String[] = [];
 
     public findTagById(id: any): Tag {
         return this.tags.find((tag) => {

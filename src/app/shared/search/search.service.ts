@@ -8,7 +8,7 @@ export class SearchService {
 
     showSearchSub = new EventEmitter<Search>();
 
-    showSearch(title: string, message: string, buttonOneTitle: string, buttonTwoTitle: string, retSearchSub: EventEmitter<SearchRet>, searchType : SearchTypeEnum, searchFields: string[]) {
+    showSearch(title: string, message: string, buttonOneTitle: string, buttonTwoTitle: string, retSearchSub: EventEmitter<SearchRet>, searchType : SearchTypeEnum, searchFields: String[]) {
 
         const search = new Search(title, message, buttonOneTitle, buttonTwoTitle, retSearchSub,searchType,searchFields);
         this.showSearchSub.emit(search);

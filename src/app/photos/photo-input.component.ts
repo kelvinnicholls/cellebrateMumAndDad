@@ -104,7 +104,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     }
 
     getTags(): string {
-        let tagsArr: string[] = [];
+        let tagsArr: String[] = [];
         let retVal = "No Tags";
         for (let index in this.tagService.selectedTags) {
             let tag = this.findTag(this.tagService.selectedTags[index]);
@@ -134,7 +134,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     }
 
     getPeople(): string {
-        let peopleArr: string[] = [];
+        let peopleArr: String[] = [];
         let retVal = "No People";
         for (let index in this.personService.selectedPeople) {
             let person = this.findPerson(this.personService.selectedPeople[index]);
@@ -399,8 +399,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return this.photoService.titleExists(control.value, this.getId());
     }
 
-    private extractIdsAsArray(arr: any[]): string[] {
-        let retArr: string[] = [];
+    private extractIdsAsArray(arr: any[]): String[] {
+        let retArr: String[] = [];
         for (let element of arr) {
             retArr.push(element.id);
         };

@@ -19,7 +19,7 @@ export class PersonService {
 
     person: string = "person";
     personplural: string = 'people';
-    public selectedPeople: string[] = [];
+    public selectedPeople: String[] = [];
 
     public multiSelectPeopleTexts: IMultiSelectTexts = {
         checkAll: 'Select all ' + this.personplural,

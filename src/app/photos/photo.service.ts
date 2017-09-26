@@ -1,6 +1,6 @@
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
-import { Subject  } from 'rxjs/Subject';
+import { Subject } from 'rxjs/Subject';
 import { Router } from "@angular/router";
 import * as moment from 'moment';
 import 'rxjs/Rx';
@@ -38,6 +38,7 @@ export class PhotoService {
     }
 
     photosChanged = new Subject<Photo[]>();
+    photoDeleted = new Subject<Photo>();
 
     showSuccessToast = new EventEmitter<string>();
 
@@ -92,7 +93,14 @@ export class PhotoService {
             photo._id,
             photo.description,
             null,
-            photo.photoInfo);
+            photoInfo,
+            null,
+            null,
+            photo.tagsToDisplay,
+            photo.tags,
+            photo.peopleToDisplay,
+            photo.people
+        );
     }
 
 
@@ -113,29 +121,64 @@ export class PhotoService {
         });
     }
 
-
-
     updateThisPhoto(photo): any {
-        const updatePhoto = this.createPhoto(photo, photo.photoInfo);
+        let photoService = this;
+        let photoInfo: any = {};
+
+        photoInfo.location = photo.location;
+        photoInfo.isUrl = photo.isUrl;
+        photoInfo.mimeType = photo.mimeType;
+
+        let tags: Tag[] = [];
+        let tagIds: String[] = [];
+        let people: Person[] = [];
+        let personIds: String[] = [];
+
+
+        if (photo.tags && photo.tags.length > 0) {
+            photo.tags.forEach((tag) => {
+                console.log(tag);
+                let newTag = new Tag(tag.tag, tag._id);
+                tags.push(newTag);
+                tagIds.push(tag._id);
+            });
+        };
+
+        if (photo.people && photo.people.length > 0) {
+            photo.people.forEach((person) => {
+                let newPerson = new Person(person.person, person._id);
+                people.push(newPerson);
+                personIds.push(person._id);
+            });
+        };
+
+        photo.tags = tagIds;
+        photo.tagsToDisplay = tags;
+        photo.people = personIds;
+        photo.peopleToDisplay = people;
+
+        const updatePhoto = photoService.createPhoto(photo, photoInfo);
         if (!updatePhoto.photoInfo) {
             updatePhoto.photoInfo = {};
         };
+
+
         if (photo._mediaId && !photo._mediaId.isUrl) {
             updatePhoto.photoInfo.location = photo._mediaId.location.substring(14);
         } else if (photo._mediaId && photo._mediaId.isUrl) {
             updatePhoto.photoInfo.location = photo._mediaId.location;
         };
 
-        this.photos.forEach((element, index) => {
+        photoService.photos.forEach((element, index) => {
             if (element._id === updatePhoto._id) {
-                this.photos[index] = updatePhoto;
-                this.photosChanged.next(this.photos);
+                photoService.photos[index] = updatePhoto;
+                photoService.photosChanged.next(photoService.photos);
             };
         });
 
-        this.allPhotos.forEach((element, index) => {
+        photoService.allPhotos.forEach((element, index) => {
             if (element._id === updatePhoto._id) {
-                this.allPhotos[index] = updatePhoto;;
+                photoService.allPhotos[index] = updatePhoto;
                 return updatePhoto;
             };
         });
@@ -145,27 +188,28 @@ export class PhotoService {
 
     addCallbacks(socket: any) {
         this.socket = socket;
-
-        this.socket.on('createdPhoto', (photo, changedBy) => {
-            this.allPhotos.push(this.createPhoto(photo, photo.photoInfo));
+        let photoService = this;
+        photoService.socket.on('createdPhoto', (photo, changedBy) => {
+            photoService.allPhotos.push(photoService.createPhoto(photo, photo.photoInfo));
             //this.photosChanged.next(this.allPhotos);
-            this.appService.showToast(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
+            photoService.appService.showToast(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
             console.log(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
         });
 
-        this.socket.on('updatedPhoto', (photo, changedBy) => {
-            let updatedPhoto = this.updateThisPhoto(photo);
-            this.appService.showToast(Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
+        photoService.socket.on('updatedPhoto', (photo, changedBy) => {
+            let updatedPhoto = photoService.updateThisPhoto(photo);
+            photoService.appService.showToast(Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
             console.log(Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
         });
 
 
-        this.socket.on('deletedPhoto', (id, changedBy) => {
-            let photoToBeDeleted = this.findPhotoById(id);
+        photoService.socket.on('deletedPhoto', (id, changedBy) => {
+            let photoToBeDeleted = photoService.findPhotoById(id);
             if (photoToBeDeleted) {
-                this.allPhotos.splice(this.allPhotos.indexOf(photoToBeDeleted), 1);
+                photoService.removePhoto(photoToBeDeleted);
+                //this.allPhotos.splice(this.allPhotos.indexOf(photoToBeDeleted), 1);
                 //this.photosChanged.next(this.allPhotos);
-                this.appService.showToast(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
+                photoService.appService.showToast(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
                 console.log(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
             };
         });
@@ -226,11 +270,11 @@ export class PhotoService {
 
                     let comments: CommentDisplay[] = [];
                     let tags: Tag[] = [];
-                    let tagIds: string[] = [];
+                    let tagIds: String[] = [];
                     let people: Person[] = [];
-                    let personIds: string[] = [];
+                    let personIds: String[] = [];
                     if (photo.comments && photo.comments.length > 0) {
-                        photo.comments.forEach(comment => {
+                        photo.comments.forEach((comment) => {
                             let userName = "";
                             let profilePicLocation = "";
                             if (comment.user) {
@@ -250,7 +294,7 @@ export class PhotoService {
                     };
 
                     if (photo.tags && photo.tags.length > 0) {
-                        photo.tags.forEach(tag => {
+                        photo.tags.forEach((tag) => {
                             let newTag = new Tag(tag.tag, tag._id);
                             tags.push(newTag);
                             tagIds.push(tag._id);
@@ -258,7 +302,7 @@ export class PhotoService {
                     };
 
                     if (photo.people && photo.people.length > 0) {
-                        photo.people.forEach(person => {
+                        photo.people.forEach((person) => {
                             let newPerson = new Person(person.person, person._id);
                             people.push(newPerson);
                             personIds.push(person._id);
@@ -315,9 +359,9 @@ export class PhotoService {
         return this.http.patch(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, fd, { headers: headers })
             .map((response: any) => {
                 let body = JSON.parse(response._body);
-                let updatedPhoto = photoService.updateThisPhoto(body.media);
+                //let updatedPhoto = photoService.updateThisPhoto(body.media);
 
-                photoService.socket.emit('photoUpdated', updatedPhoto, function (err) {
+                photoService.socket.emit('photoUpdated', body.media, function (err) {
                     if (err) {
                         console.log("photoUpdated err: ", err);
                     } else {
@@ -333,22 +377,36 @@ export class PhotoService {
             });
     }
 
+
+    private removePhoto(photo: Photo) {
+        let photoService = this;
+        let allPhotosIndex = photoService.allPhotos.findIndex((foundPhoto) => foundPhoto._id === photo._id);
+        if (allPhotosIndex >= 0) {
+            photoService.allPhotos.splice(allPhotosIndex, 1);
+        };
+        let photosIndex = photoService.photos.findIndex((foundPhoto) => foundPhoto._id === photo._id);
+        if (photosIndex >= 0) {
+            photoService.photos.splice(photosIndex, 1);
+        };
+        this.photoDeleted.next(photo);
+    }
+
     deletePhoto(photo: Photo) {
 
         const headers: Headers = new Headers();
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
         let photoService = this;
-        return this.http.delete(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, { headers: headers })
+        return photoService.http.delete(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, { headers: headers })
             .map((response: Response) => {
-                photoService.allPhotos.splice(photo.index, 1);
-
-                this.socket.emit('photoDeleted', photo, function (err) {
+                photoService.removePhoto(photo);
+                photoService.socket.emit('photoDeleted', photo, function (err) {
                     if (err) {
                         console.log("photoDeleted err: ", err);
                     } else {
                         console.log("photoDeleted No Error");
                     }
                 });
+                photoService.appService.showToast(Consts.INFO, "Photo deleted.");
 
                 //photoService.photosChanged.next(photoService.allPhotos);
                 return response.json();
@@ -391,7 +449,7 @@ export class PhotoService {
                     this.appService.showToast(Consts.WARNING, "Search cancelled.");
                 }
             });
-        let searchFields: string[] = [];
+        let searchFields: String[] = [];
         searchFields.push('title');
         searchFields.push('description');
         searchFields.push('tags');

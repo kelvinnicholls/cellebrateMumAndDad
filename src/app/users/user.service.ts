@@ -387,7 +387,7 @@ export class UserService {
                     this.appService.showToast(Consts.WARNING, "Search cancelled.");
                 }
             });
-        let searchFields: string[] = [];
+        let searchFields: String[] = [];
         searchFields.push('adminUser');
         searchFields.push('emailUpdates');
         searchFields.push('email');

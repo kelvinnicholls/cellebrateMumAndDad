@@ -15,9 +15,9 @@ export class Photo {
         public comment?: string,
         public comments?: CommentDisplay[],
         public tagsToDisplay?: Tag[],
-        public tags?: string[],
+        public tags?: String[],
         public peopleToDisplay?: Person[],
-        public people?: string[],
+        public people?: String[],
         public mediaDate?: string,
     ) {
         if (photoInfo && photoInfo.location && !photoInfo.isUrl && photoInfo.location.startsWith('server')) {

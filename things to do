@@ -154,3 +154,8 @@ x96) Show actual people and names in search criteria
 x97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list. PhotoListComponent onInit
 98) check console errors before releasing
 x99) issue of pagination not going back to page 1 after clear search - add input fields to change values
+100) multiple toasts on update photo
+
+
+Sort out issues with communicating photo changes via sockets (update, create and delete)
+especially tags, image and people.

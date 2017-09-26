@@ -76,6 +76,15 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.eventItemsPerPage, this.photoService.eventPage);
     }
 
+    private removePhoto(photo: Photo) {
+        let photoListComponent = this;
+        let foundPhotoIndex = photoListComponent.pagedPhotos.findIndex((foundPhoto) => foundPhoto._id === photo._id);
+        if (foundPhotoIndex >= 0) {
+            photoListComponent.pagedPhotos.splice(foundPhotoIndex, 1);
+        };
+    }
+
+
     ngOnInit() {
         let photoListComponent = this;
         photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
@@ -87,7 +96,12 @@ export class PhotoListComponent implements OnInit, OnDestroy {
                 photoListComponent.newPhotoList(photos)
             }
             );
-        photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe((photos: Photo[]) => photoListComponent.newPhotoList(photos));
+        photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe(
+            (photos: Photo[]) =>
+                photoListComponent.newPhotoList(photos));
+        photoListComponent.subscription = photoListComponent.photoService.photoDeleted.subscribe(
+            (photo: Photo) =>
+                photoListComponent.removePhoto(photo));
     }
 
     newPhotoList(photos: Photo[]) {

@@ -28,7 +28,7 @@ export class SearchRet {
                 if (element.type === 'from' || (element.type === 'to') {
                     value = moment(element.value, Consts.DATE_DB_FORMAT).format(Consts.DATE_DISPLAY_FORMAT);
                 } else if (element.type === 'array') {
-                    let valArr: string[] = [];
+                    let valArr: String[] = [];
                     element.value.forEach(arrVal => {
                         if (element.name == "tags") {
                             valArr.push(tagService.findTagNameById(arrVal));
