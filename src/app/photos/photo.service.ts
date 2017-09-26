@@ -190,10 +190,13 @@ export class PhotoService {
         this.socket = socket;
         let photoService = this;
         photoService.socket.on('createdPhoto', (photo, changedBy) => {
-            photoService.allPhotos.push(photoService.createPhoto(photo, photo.photoInfo));
+            let createdPhoto = photoService.createPhoto(photo, photo.photoInfo);
+            photoService.allPhotos.push(createdPhoto);
+            photoService.photos.push(createdPhoto);
+            photoService.photosChanged.next(photoService.photos);
             //this.photosChanged.next(this.allPhotos);
-            photoService.appService.showToast(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
-            console.log(Consts.INFO, "New photo  : " + photo.name + " added by " + changedBy);
+            photoService.appService.showToast(Consts.INFO, "New photo  : " + photo.title + " added by " + changedBy);
+            console.log(Consts.INFO, "New photo  : " + photo.title + " added by " + changedBy);
         });
 
         photoService.socket.on('updatedPhoto', (photo, changedBy) => {
