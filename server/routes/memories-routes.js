@@ -79,9 +79,12 @@ router.post('/', authenticate, (req, res) => {
   let memory = new Memory(body);
   memory._creator = req.loggedInUser._creatorRef;
   memory.addedDate = new Date().getTime();
-  memory.save().then((doc) => {
-    res.send(doc);
+  memory._id = new ObjectID();
+  memory.save().then((newMemory) => {
+    console.log('memory2', newMemory);
+    res.send(_.pick(newMemory, memoryOutFields));
   }, (e) => {
+    console.log('memory.save() e', e);
     res.status(400).send();
   });
 });

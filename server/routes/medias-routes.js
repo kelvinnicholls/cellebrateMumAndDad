@@ -14,7 +14,7 @@ const {
   Media,
   mediaInsertFields,
   mediaOutFields,
-  mediaQueryFields, 
+  mediaQueryFields,
   mediaUpdateFields
 } = require('../models/media');
 
@@ -123,7 +123,7 @@ router.post('/', authenticate, upload, (req, res) => {
   media._creator = req.loggedInUser._creatorRef;
   media.isProfilePic = false;
   media.addedDate = new Date().getTime();
-  //media._id = new ObjectID();
+  media._id = new ObjectID();
   console.log('media', media);
 
   media.save().then((newMedia) => {
@@ -182,7 +182,9 @@ router.get('/title/:title', authenticate, (req, res) => {
   let mediaObj = {
     title
   };
-  User.findOne(mediaObj).populate('comments tags people').then((media) => {
+  console.log("mediaObj",mediaObj);
+  Media.findOne(mediaObj).populate('comments tags people').then((media) => {
+    console.log("media",media);
     if (media) {
       res.send({
         'titleFound': true,

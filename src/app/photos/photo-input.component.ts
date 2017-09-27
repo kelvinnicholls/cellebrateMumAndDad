@@ -366,7 +366,9 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         this.photoData = null;
         this.photoFile = null;
         this.photoInfo = null;
-
+        this.personService.selectedPeople = [];
+        this.tagService.selectedTags = [];
+        
         this.myForm.reset();
 
     }

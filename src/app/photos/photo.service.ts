@@ -20,6 +20,7 @@ import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 import { TagService } from "../shared/tags/tag.service";
 import { PersonService } from "../shared/people/person.service";
+import { Utils } from "../shared/utils/utils";
 
 @Injectable()
 export class PhotoService {
@@ -85,7 +86,61 @@ export class PhotoService {
         );
     }
 
-    createPhoto(photo, photoInfo): Photo {
+    createPhoto(photo, inPhotoInfo): Photo {
+        let photoService = this;
+        let tags: Tag[] = [];
+        let tagIds: String[] = [];
+        let people: Person[] = [];
+        let personIds: String[] = [];
+
+        if (photo.tags && photo.tags.length > 0) {
+            photo.tags.forEach((tag) => {
+                if (tag._id) {
+                    let newTag = new Tag(tag.tag, tag._id);
+                    tags.push(newTag);
+                    tagIds.push(tag._id);
+                } else {
+                    let newTag = photoService.tagService.findTagById(tag);
+                    tags.push(newTag);
+                    tagIds.push(tag);
+                };
+            });
+        };
+
+        if (photo.people && photo.people.length > 0) {
+            photo.people.forEach((person) => {
+                if (person._id) {
+                    let newPerson = new Person(person.person, person._id);
+                    people.push(newPerson);
+                    personIds.push(person._id);
+                } else {
+                    let newPerson = photoService.personService.findPersonById(person);
+                    people.push(newPerson);
+                    personIds.push(person);
+                };
+            });
+        };
+
+        photo.tags = tagIds;
+        photo.tagsToDisplay = tags;
+        photo.people = personIds;
+        photo.peopleToDisplay = people;
+
+        let photoInfo: any = {};
+
+        if (!photo.photoInfo) {
+            photoInfo.location = photo.location;
+            photoInfo.isUrl = photo.isUrl;
+            photoInfo.mimeType = photo.mimeType;
+        } else {
+            if (inPhotoInfo) {
+                photoInfo = photo.inPhotoInfo;
+            } else {
+                photoInfo = photo.photoInfo;
+            };
+        };
+
+
         return new Photo(
             photo.title,
             photo._creator,
@@ -99,7 +154,8 @@ export class PhotoService {
             photo.tagsToDisplay,
             photo.tags,
             photo.peopleToDisplay,
-            photo.people
+            photo.people,
+            photo.mediaDate
         );
     }
 
@@ -123,41 +179,8 @@ export class PhotoService {
 
     updateThisPhoto(photo): any {
         let photoService = this;
-        let photoInfo: any = {};
 
-        photoInfo.location = photo.location;
-        photoInfo.isUrl = photo.isUrl;
-        photoInfo.mimeType = photo.mimeType;
-
-        let tags: Tag[] = [];
-        let tagIds: String[] = [];
-        let people: Person[] = [];
-        let personIds: String[] = [];
-
-
-        if (photo.tags && photo.tags.length > 0) {
-            photo.tags.forEach((tag) => {
-                console.log(tag);
-                let newTag = new Tag(tag.tag, tag._id);
-                tags.push(newTag);
-                tagIds.push(tag._id);
-            });
-        };
-
-        if (photo.people && photo.people.length > 0) {
-            photo.people.forEach((person) => {
-                let newPerson = new Person(person.person, person._id);
-                people.push(newPerson);
-                personIds.push(person._id);
-            });
-        };
-
-        photo.tags = tagIds;
-        photo.tagsToDisplay = tags;
-        photo.people = personIds;
-        photo.peopleToDisplay = people;
-
-        const updatePhoto = photoService.createPhoto(photo, photoInfo);
+        const updatePhoto = photoService.createPhoto(photo,null);
         if (!updatePhoto.photoInfo) {
             updatePhoto.photoInfo = {};
         };
@@ -190,11 +213,12 @@ export class PhotoService {
         this.socket = socket;
         let photoService = this;
         photoService.socket.on('createdPhoto', (photo, changedBy) => {
-            let createdPhoto = photoService.createPhoto(photo, photo.photoInfo);
+            let createdPhoto = photoService.createPhoto(photo,null);
             photoService.allPhotos.push(createdPhoto);
             photoService.photos.push(createdPhoto);
+            photoService.allPhotos.sort(Utils.dynamicSort('title'));
+            photoService.photos.sort(Utils.dynamicSort('title'));
             photoService.photosChanged.next(photoService.photos);
-            //this.photosChanged.next(this.allPhotos);
             photoService.appService.showToast(Consts.INFO, "New photo  : " + photo.title + " added by " + changedBy);
             console.log(Consts.INFO, "New photo  : " + photo.title + " added by " + changedBy);
         });
@@ -219,18 +243,18 @@ export class PhotoService {
     }
 
     addPhoto(photo: Photo) {
+        let photoService = this;
         var fd = new FormData();
         const headers: Headers = new Headers();
         if (photo.photoFile) {
             fd.append('file', photo.photoFile);
         };
-
         photo.photoFile = null;
         photo._creator = this.userService.getLoggedInUser()._creatorRef;
         const photoJsonString = JSON.stringify(photo);
         fd.append('media', photoJsonString);
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-        let photoService = this;
+
         return this.http.post(Consts.API_URL_MEDIAS_ROOT, fd, { headers: headers })
             .map((response: Response) => {
                 const result = response.json();
@@ -239,6 +263,10 @@ export class PhotoService {
                 photoInfo.isUrl = result.isUrl;
                 const photo = this.createPhoto(result, photoInfo);
                 photoService.allPhotos.push(photo);
+                photoService.photos.push(photo);
+                photoService.allPhotos.sort(Utils.dynamicSort('title'));
+                photoService.photos.sort(Utils.dynamicSort('title'));
+                photoService.photosChanged.next(photoService.photos);
                 this.socket.emit('photoCreated', photo, function (err) {
                     if (err) {
                         console.log("photoCreated err: ", err);
@@ -246,8 +274,6 @@ export class PhotoService {
                         console.log("photoCreated No Error");
                     }
                 });
-
-                //photoService.photosChanged.next(this.allPhotos);
                 return photo;
             })
             .catch((error: Response) => {
@@ -256,93 +282,104 @@ export class PhotoService {
             });
     }
 
-    getPhotos() {
-        const headers: Headers = new Headers();
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+    getPhotos(): Observable<any> {
         let photoService = this;
-        return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
-            .map((response: Response) => {
-                const photos = response.json().medias;
-                let transformedPhotos: Photo[] = [];
-                for (let photo of photos) {
-                    let photoInfo: any = {};
+        if (photoService.photos.length > 0) {
+            if (photoService.searchRet) {
+                photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
+            } else {
+                photoService.photos = photoService.allPhotos.slice(0);
+            };
+            return Observable.of(photoService.photos);
+        } else {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
-                    photoInfo.location = photo.location;
-                    photoInfo.isUrl = photo.isUrl;
-                    photoInfo.mimeType = photo.mimeType;
+            return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
+                .map((response: Response) => {
+                    const photos = response.json().medias;
+                    let transformedPhotos: Photo[] = [];
+                    for (let photo of photos) {
+                        let photoInfo: any = {};
 
-                    let comments: CommentDisplay[] = [];
-                    let tags: Tag[] = [];
-                    let tagIds: String[] = [];
-                    let people: Person[] = [];
-                    let personIds: String[] = [];
-                    if (photo.comments && photo.comments.length > 0) {
-                        photo.comments.forEach((comment) => {
-                            let userName = "";
-                            let profilePicLocation = "";
-                            if (comment.user) {
-                                if (comment.user.name) {
-                                    userName = comment.user.name;
-                                };
-                                if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
-                                    profilePicLocation = comment.user._profileMediaId.location;
-                                    if (profilePicLocation.startsWith('server')) {
-                                        profilePicLocation = profilePicLocation.substring(14);
+                        photoInfo.location = photo.location;
+                        photoInfo.isUrl = photo.isUrl;
+                        photoInfo.mimeType = photo.mimeType;
+
+                        let comments: CommentDisplay[] = [];
+                        let tags: Tag[] = [];
+                        let tagIds: String[] = [];
+                        let people: Person[] = [];
+                        let personIds: String[] = [];
+                        if (photo.comments && photo.comments.length > 0) {
+                            photo.comments.forEach((comment) => {
+                                let userName = "";
+                                let profilePicLocation = "";
+                                if (comment.user) {
+                                    if (comment.user.name) {
+                                        userName = comment.user.name;
+                                    };
+                                    if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
+                                        profilePicLocation = comment.user._profileMediaId.location;
+                                        if (profilePicLocation.startsWith('server')) {
+                                            profilePicLocation = profilePicLocation.substring(14);
+                                        };
                                     };
                                 };
-                            };
-                            let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
-                            comments.push(commentDisplay);
-                        });
+                                let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
+                                comments.push(commentDisplay);
+                            });
+                        };
+
+                        if (photo.tags && photo.tags.length > 0) {
+                            photo.tags.forEach((tag) => {
+                                let newTag = new Tag(tag.tag, tag._id);
+                                tags.push(newTag);
+                                tagIds.push(tag._id);
+                            });
+                        };
+
+                        if (photo.people && photo.people.length > 0) {
+                            photo.people.forEach((person) => {
+                                let newPerson = new Person(person.person, person._id);
+                                people.push(newPerson);
+                                personIds.push(person._id);
+                            });
+                        };
+
+                        let newPhoto = new Photo(
+                            photo.title,
+                            photo._creator,
+                            moment(photo.addedDate).format(Consts.DATE_DB_FORMAT),
+                            photo._id,
+                            photo.description,
+                            null,
+                            photoInfo,
+                            null,
+                            comments,
+                            tags,
+                            tagIds,
+                            people,
+                            personIds,
+                            moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
+                        );
+                        transformedPhotos.push(newPhoto);
+                    };
+                    transformedPhotos.sort(Utils.dynamicSort('title'));
+                    photoService.allPhotos = transformedPhotos;
+                    if (photoService.searchRet) {
+                        photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
+                    } else {
+                        photoService.photos = photoService.allPhotos.slice(0);
                     };
 
-                    if (photo.tags && photo.tags.length > 0) {
-                        photo.tags.forEach((tag) => {
-                            let newTag = new Tag(tag.tag, tag._id);
-                            tags.push(newTag);
-                            tagIds.push(tag._id);
-                        });
-                    };
-
-                    if (photo.people && photo.people.length > 0) {
-                        photo.people.forEach((person) => {
-                            let newPerson = new Person(person.person, person._id);
-                            people.push(newPerson);
-                            personIds.push(person._id);
-                        });
-                    };
-
-                    let newPhoto = new Photo(
-                        photo.title,
-                        photo._creator,
-                        moment(photo.addedDate).format(Consts.DATE_DB_FORMAT),
-                        photo._id,
-                        photo.description,
-                        null,
-                        photoInfo,
-                        null,
-                        comments,
-                        tags,
-                        tagIds,
-                        people,
-                        personIds,
-                        moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
-                    );
-                    transformedPhotos.push(newPhoto);
-                };
-                photoService.allPhotos = transformedPhotos;
-                if (photoService.searchRet) {
-                    photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
-                } else {
-                    photoService.photos = photoService.allPhotos.slice(0);
-                };
-
-                return photoService.photos;
-            })
-            .catch((error: Response) => {
-                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
+                    return photoService.photos;
+                })
+                .catch((error: Response) => {
+                    photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                });
+        };
     }
 
 
@@ -362,8 +399,7 @@ export class PhotoService {
         return this.http.patch(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, fd, { headers: headers })
             .map((response: any) => {
                 let body = JSON.parse(response._body);
-                //let updatedPhoto = photoService.updateThisPhoto(body.media);
-
+                photoService.updateThisPhoto(body.media);
                 photoService.socket.emit('photoUpdated', body.media, function (err) {
                     if (err) {
                         console.log("photoUpdated err: ", err);
@@ -371,7 +407,6 @@ export class PhotoService {
                         console.log("photoUpdated No Error");
                     }
                 });
-
                 return response.json();
             })
             .catch((error: Response) => {
@@ -391,7 +426,8 @@ export class PhotoService {
         if (photosIndex >= 0) {
             photoService.photos.splice(photosIndex, 1);
         };
-        this.photoDeleted.next(photo);
+        photoService.photosChanged.next(photoService.photos);
+        photoService.photoDeleted.next(photo);
     }
 
     deletePhoto(photo: Photo) {

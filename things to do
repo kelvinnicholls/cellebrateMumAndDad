@@ -156,9 +156,11 @@ x97) navigating back to list from edit after search keeps clear search but searc
 x99) issue of pagination not going back to page 1 after clear search - add input fields to change values
 100) multiple toasts on update photo
 101) add photo should clear form (tags, people etc) before data is entered (update a photo with tags and people and then create a new one)
-102) media date is not being created on insert
+xx102) media date is not being created on insert
+103) check adding of tags and people is updated via sockets
 
 
-Sort out issues with communicating photo changes via sockets (update, create and delete)
-especially tags, image and people. ONLY CREATE now
-tags and people not passed via sockets after create
+
+
+prob with IbacktheWorkersRound.JPG
+
