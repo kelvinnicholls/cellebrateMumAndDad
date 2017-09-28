@@ -68,6 +68,53 @@ let upload = (req, res, next) => {
 };
 
 
+let addUserToComments = (media) => {
+  return new Promise((resolve, reject) => {
+    let retMedia = JSON.parse(JSON.stringify(media));
+    let numComments = retMedia.comments.length;
+    let processedComments = 0;
+    let commentsArr = [];
+
+    console.log('addUserToComments', 'numComments', numComments);
+    for (let comment of retMedia.comments) {
+      console.log('addUserToComments', 'comment', comment);
+      let userObj = {
+        '_creatorRef': comment._creator
+      };
+      User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
+        console.log('addUserToComments', 'user', user);
+        console.log('addUserToComments', 'typeof user',typeof user);
+        console.log('addUserToComments', 'typeof comment',typeof comment);
+        if (user) {
+          delete user._id;
+          let newComment = JSON.parse(JSON.stringify(comment));
+          console.log('addUserToComments', 'user.name',user.name);
+          console.log('addUserToComments', 'user._profileMediaId',user._profileMediaId);
+          newComment.user = {};
+          console.log('addUserToComments', 'newComment.user',newComment.user);
+          newComment.user.name = user.name;
+          newComment.user._profileMediaId = user._profileMediaId;
+          console.log('addUserToComments', 'newComment.user2',newComment.user);
+          
+          commentsArr.push(newComment);
+          console.log('addUserToComments', 'newComment', newComment);
+        };
+
+        processedComments++;
+        if (numComments === processedComments) {
+          retMedia.comments = commentsArr;
+          console.log('addUserToComments', 'resolve', retMedia);
+          return resolve(retMedia);
+        };
+      }, (e) => {
+        reject(e);
+      });
+    };
+  });
+}
+
+
+
 let transformCreatorToUser = (medias) => {
   return new Promise((resolve, reject) => {
     let numMedias = medias ? medias.length : 0;
@@ -123,6 +170,7 @@ router.post('/', authenticate, upload, (req, res) => {
   media._creator = req.loggedInUser._creatorRef;
   media.isProfilePic = false;
   media.addedDate = new Date().getTime();
+  media.comments = [];
   media._id = new ObjectID();
   console.log('media', media);
 
@@ -182,13 +230,13 @@ router.get('/title/:title', authenticate, (req, res) => {
   let mediaObj = {
     title
   };
-  console.log("mediaObj",mediaObj);
+  console.log("mediaObj", mediaObj);
   Media.findOne(mediaObj).populate('comments tags people').then((media) => {
-    console.log("media",media);
+    console.log("media", media);
     if (media) {
       res.send({
         'titleFound': true,
-        '_creatorRef': media._id
+        '_id': media._id
       });
     } else {
       res.send({
@@ -197,7 +245,7 @@ router.get('/title/:title', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    console.log("media router.get('/media/:name' e", e);
+    console.log("media router.get('/title/:title' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -305,6 +353,10 @@ let updateMedias = (res, body, medias, commentId) => {
 
   console.log("updateMedias", body, medias, commentId);
 
+  // let mediasObj = {
+  //   _id : medias._id
+  // };
+
   let updateObj = {
     $set: body
   };
@@ -314,15 +366,27 @@ let updateMedias = (res, body, medias, commentId) => {
       "comments": commentId
     };
   };
+  console.log("updateObj", updateObj);
+  console.log("medias", medias);
 
   Media.findOneAndUpdate(medias, updateObj, {
     new: true
   }).populate('comments tags people').then((media) => {
-
     if (media) {
-      res.send({
-        media
-      });
+      if (media.comments) {
+        addUserToComments(media).then((media) => {
+          res.send({
+            media
+          });
+        }, (e) => {
+          res.status(400).send();
+          console.log(e);
+        });
+      } else {
+        res.send({
+          media
+        });
+      };
     } else {
       res.status(404).send({
         error: "media not found for id"
@@ -331,6 +395,7 @@ let updateMedias = (res, body, medias, commentId) => {
 
   }, (e) => {
     res.status(400).send();
+    console.log(e);
   });
 };
 
@@ -355,9 +420,6 @@ router.patch('/:id', authenticate, upload, (req, res) => {
     '_id': id
   };
 
-  if (!req.loggedInUser.adminUser) {
-    medias._creator = req.loggedInUser._creatorRef;
-  };
 
   if (body.comment) {
 
@@ -374,6 +436,11 @@ router.patch('/:id', authenticate, upload, (req, res) => {
       updateMedias(res, body, medias, comment._id);
     });
   } else {
+
+    if (!req.loggedInUser.adminUser) {
+      medias._creator = req.loggedInUser._creatorRef;
+    };
+
     updateMedias(res, body, medias, null);
   };
 });

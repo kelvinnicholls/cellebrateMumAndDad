@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import {IMultiSelectSettings,IMultiSelectOption} from 'angular-2-dropdown-multiselect';
+import { IMultiSelectSettings, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import * as moment from 'moment';
 // https://www.npmjs.com/package/angular-2-dropdown-multiselect
 // http://softsimon.github.io/angular-2-dropdown-multiselect/#
@@ -21,7 +21,7 @@ import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
-import { Comment } from "../shared/comments/comment.model";
+import { Comment, CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 //import { element } from 'protractor';
@@ -40,6 +40,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     private paramsSubscription: Subscription;
     private index: any;
     private commentSub: EventEmitter<Comment>;
+    private commentAddedSub: EventEmitter<Comment>;
+    
 
     multiSelectSettings: IMultiSelectSettings = {
         enableSearch: true,
@@ -68,7 +70,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return this.index;
     }
 
-    private findTag(id: string): string {
+    private findTag(id: String): String {
         let retVal = "";
         let option = this.tagService.multiSelectTagOptions.find((tag: IMultiSelectOption) => { return id == tag.id });
         if (option) {
@@ -77,7 +79,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
-    private findPerson(id: string): string {
+    private findPerson(id: String): String {
         let retVal = "";
         let option = this.personService.multiSelectPersonOptions.find((person: IMultiSelectOption) => { return id == person.id });
         if (option) {
@@ -368,7 +370,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         this.photoInfo = null;
         this.personService.selectedPeople = [];
         this.tagService.selectedTags = [];
-        
+
         this.myForm.reset();
 
     }
@@ -440,6 +442,13 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 };
             });
 
+
+        photoInputComponent.commentAddedSub = photoInputComponent.commentsService.commentAddedSub
+            .subscribe(
+            (comment: CommentDisplay) => {
+                photoInputComponent.photo.comments.push(comment);
+            });
+
         photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
 
         photoInputComponent.myForm = new FormGroup({
@@ -480,6 +489,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.destroy(this.paramsSubscription);
         this.destroy(this.commentSub);
+        this.destroy(this.commentAddedSub);
     }
 
     isFormValid() {

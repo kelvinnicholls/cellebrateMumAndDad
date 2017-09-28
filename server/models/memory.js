@@ -45,7 +45,7 @@ let MemorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Person'
   }],
-  medias: [{
+  memorys: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Media'
   }],
@@ -56,8 +56,14 @@ let MemorySchema = new mongoose.Schema({
 });
 
 
-const memoryInsertFields = ['title', 'description', 'memoryDate', 'tags', 'people', 'medias'];
-const memoryUpdateFields = ['title', 'description', 'memoryDate', 'tags', 'people', 'medias', 'comment'];
+const memoryInsertFields = ['title', '_creator', 'description', 'memoryDate', 'addedDate', 'tags', 'people','medias'];
+const memoryOutFields = memoryInsertFields;
+memoryOutFields.push('comments');
+memoryOutFields.push('_id');
+
+const memoryQueryFields = ['comments', 'title', '_creator', 'description', 'memoryDate', 'addedDate', 'tags', 'people', '_id'];
+const memoryUpdateFields = ['title', 'description', 'tags', 'people', 'comment', 'memoryDate','medias'];
+
 
 // console.log("MemorySchema",utils.schemaToObject(Object.keys(MemorySchema.paths)));
 
@@ -68,7 +74,7 @@ const memoryUpdateFields = ['title', 'description', 'memoryDate', 'tags', 'peopl
 //   _creator: '',
 //   tags: '',
 //   users: '',
-//   medias: '',
+//   memorys: '',
 //   _id: '' }
 
 MemorySchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
@@ -90,5 +96,7 @@ var Memory = mongoose.model('Memory', MemorySchema);
 module.exports = {
   Memory,
   memoryInsertFields,
+  memoryOutFields,
+  memoryQueryFields,
   memoryUpdateFields
 };

@@ -155,12 +155,20 @@ x97) navigating back to list from edit after search keeps clear search but searc
 98) check console errors before releasing
 x99) issue of pagination not going back to page 1 after clear search - add input fields to change values
 100) multiple toasts on update photo
-101) add photo should clear form (tags, people etc) before data is entered (update a photo with tags and people and then create a new one)
+x101) add photo should clear form (tags, people etc) before data is entered (update a photo with tags and people and then create a new one)
 xx102) media date is not being created on insert
 103) check adding of tags and people is updated via sockets
-
-
-
+104) Comments in firefox goes to new tab first
+105) allow non-admin or creator add comments to photos and memories
+106) prevent non-admin or non-creator to update photos/memories (other than comments) from ui
+x107) re-evaluate pagination size after insert/delete bigTotalItems
+108) comment date not formatted correctly in firefox
+109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
 
 prob with IbacktheWorkersRound.JPG
+
+
+
+
+
 

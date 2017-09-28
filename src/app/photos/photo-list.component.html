@@ -15,8 +15,8 @@
 
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
-    <pagination [totalItems]="bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
-      [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize" class="pagination-sm" [boundaryLinks]="true"
+      [itemsPerPage]="5" [rotate]="false" (numPages)="photoService.numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 

@@ -13,7 +13,10 @@ const {
 const {
   Memory,
   memoryInsertFields,
+  memoryOutFields,
+  memoryQueryFields,
   memoryUpdateFields
+
 } = require('../models/memory');
 
 const {
@@ -80,6 +83,9 @@ router.post('/', authenticate, (req, res) => {
   memory._creator = req.loggedInUser._creatorRef;
   memory.addedDate = new Date().getTime();
   memory._id = new ObjectID();
+
+  memory.comments = [];
+
   memory.save().then((newMemory) => {
     console.log('memory2', newMemory);
     res.send(_.pick(newMemory, memoryOutFields));
@@ -155,6 +161,32 @@ router.get('/:id', authenticate, (req, res) => {
 
   }, (e) => {
     res.status(400).send();
+  });
+});
+
+
+router.get('/title/:title', authenticate, (req, res) => {
+  let title = req.params.title;
+  let memoryObj = {
+    title
+  };
+  console.log("memoryObj", memoryObj);
+  Memory.findOne(memoryObj).populate('comments tags people').then((memory) => {
+    console.log("memory", memory);
+    if (memory) {
+      res.send({
+        'titleFound': true,
+        '_id': memory._id
+      });
+    } else {
+      res.send({
+        'titleFound': false
+      });
+    }
+
+  }, (e) => {
+    console.log("memory router.get('/title/:title' e", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
 
@@ -274,9 +306,7 @@ router.patch('/:id', authenticate, (req, res) => {
   let memories = {
     '_id': id
   };
-  if (!req.loggedInUser.adminUser) {
-    memories._creator = req.loggedInUser._creatorRef;
-  };
+
 
 
   if (body.comment) {
@@ -294,6 +324,9 @@ router.patch('/:id', authenticate, (req, res) => {
       updateMemories(res, body, memories, comment._id);
     });
   } else {
+    if (!req.loggedInUser.adminUser) {
+      memories._creator = req.loggedInUser._creatorRef;
+    };
     updateMemories(res, body, memories, null);
   };
 });

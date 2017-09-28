@@ -20,10 +20,18 @@ import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 import { TagService } from "../shared/tags/tag.service";
 import { PersonService } from "../shared/people/person.service";
+import { CommentsService } from "../shared/comments/comments.service";
 import { Utils } from "../shared/utils/utils";
+import { User } from "../users/user.model";
 
 @Injectable()
 export class PhotoService {
+
+    public maxSize: number = 5;
+    public bigTotalItems: number = 0;
+    public numPages: number = 0;
+    public eventItemsPerPage: number = 5;
+
     public photos: Photo[] = [];
     public eventPage: number = 1;
     public bigCurrentPage: number = 1;
@@ -32,6 +40,7 @@ export class PhotoService {
         , private errorService: ErrorService
         , private appService: AppService
         , private userService: UserService
+        , private commentsService: CommentsService
         , private searchService: SearchService
         , private tagService: TagService
         , private personService: PersonService
@@ -59,28 +68,31 @@ export class PhotoService {
     private socket;
 
     addComment(photo: Photo, comment, entityIndex, callback) {
+        let photoService = this;
         photo.comment = comment;
-        this.updatePhoto(photo).subscribe(
+        photoService.updatePhoto(photo).subscribe(
             result => {
                 console.log(result);
                 photo.comment = null;
                 let commentDate = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);
-                let userName = this.userService.getLoggedInUser().name;
+                let userName = photoService.userService.getLoggedInUser().name;
                 let profilePicLocation = "";
 
-                if (this.userService.getLoggedInUser().profilePicInfo && this.userService.getLoggedInUser().profilePicInfo.location) {
-                    profilePicLocation = this.userService.getLoggedInUser().profilePicInfo.location;
+                if (photoService.userService.getLoggedInUser().profilePicInfo && photoService.userService.getLoggedInUser().profilePicInfo.location) {
+                    profilePicLocation = photoService.userService.getLoggedInUser().profilePicInfo.location;
                 };
 
                 let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation);
 
-                this.allPhotos[entityIndex].comments.push(commentDisplay);
-                this.photos.forEach((element, index) => {
-                    if (element.index === entityIndex) {
-                        this.photos[index].comments.push(commentDisplay);
-                        this.photosChanged.next(this.photos);
-                    };
-                });
+                photoService.commentsService.commentAddedSub.emit(commentDisplay);
+
+                // photoService.allPhotos[entityIndex].comments.push(commentDisplay);
+                // photoService.photos.forEach((element, index) => {
+                //     if (element.index === entityIndex) {
+                //         photoService.photos[index].comments.push(commentDisplay);
+                //         photoService.photosChanged.next(photoService.photos);
+                //     };
+                // });
                 callback();
             }
         );
@@ -88,10 +100,38 @@ export class PhotoService {
 
     createPhoto(photo, inPhotoInfo): Photo {
         let photoService = this;
+        let comments: CommentDisplay[] = [];
+        //let commentIds: String[] = [];
+
+
+
+        if (photo.comments && photo.comments.length > 0) {
+            photo.comments.forEach((comment) => {
+                let userName = "";
+                let profilePicLocation = "";
+                if (comment.userName) {
+                    userName = comment.userName;
+                    if (comment.profilePicLocation && comment.profilePicLocation.location) {
+                        profilePicLocation = comment.profilePicLocation.location;
+                    };
+                } else {
+                    let user = photoService.userService.getLoggedInUser();
+                    userName = user.name;
+                    if (user.profilePicInfo && user.profilePicInfo.location) {
+                        profilePicLocation = user.profilePicInfo.location;
+                    };
+                };
+
+                let formattedDate = moment(comment.commentDate, Consts.DATE_DB_FORMAT).format(Consts.DATE_DISPLAY_FORMAT)
+
+                let newCommentDisplay = new CommentDisplay(comment.comment, formattedDate, userName, profilePicLocation);
+                comments.push(newCommentDisplay);
+                //commentIds.push(comment._id);
+            });
+        };
+
         let tags: Tag[] = [];
         let tagIds: String[] = [];
-        let people: Person[] = [];
-        let personIds: String[] = [];
 
         if (photo.tags && photo.tags.length > 0) {
             photo.tags.forEach((tag) => {
@@ -106,6 +146,10 @@ export class PhotoService {
                 };
             });
         };
+
+        let people: Person[] = [];
+        let personIds: String[] = [];
+
 
         if (photo.people && photo.people.length > 0) {
             photo.people.forEach((person) => {
@@ -125,6 +169,7 @@ export class PhotoService {
         photo.tagsToDisplay = tags;
         photo.people = personIds;
         photo.peopleToDisplay = people;
+        photo.comments = comments;
 
         let photoInfo: any = {};
 
@@ -150,7 +195,7 @@ export class PhotoService {
             null,
             photoInfo,
             null,
-            null,
+            photo.comments,
             photo.tagsToDisplay,
             photo.tags,
             photo.peopleToDisplay,
@@ -180,7 +225,7 @@ export class PhotoService {
     updateThisPhoto(photo): any {
         let photoService = this;
 
-        const updatePhoto = photoService.createPhoto(photo,null);
+        const updatePhoto = photoService.createPhoto(photo, null);
         if (!updatePhoto.photoInfo) {
             updatePhoto.photoInfo = {};
         };
@@ -213,7 +258,7 @@ export class PhotoService {
         this.socket = socket;
         let photoService = this;
         photoService.socket.on('createdPhoto', (photo, changedBy) => {
-            let createdPhoto = photoService.createPhoto(photo,null);
+            let createdPhoto = photoService.createPhoto(photo, null);
             photoService.allPhotos.push(createdPhoto);
             photoService.photos.push(createdPhoto);
             photoService.allPhotos.sort(Utils.dynamicSort('title'));
@@ -372,7 +417,7 @@ export class PhotoService {
                     } else {
                         photoService.photos = photoService.allPhotos.slice(0);
                     };
-
+                    photoService.bigTotalItems = photoService.photos.length;
                     return photoService.photos;
                 })
                 .catch((error: Response) => {
