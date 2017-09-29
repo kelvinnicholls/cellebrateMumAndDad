@@ -137,7 +137,7 @@ x78) add "Photo Added" comment on insert **Don't Bother**
 81) implement password expiry (expiry date on user and flag to indicate if this is enforced, although expiry date will still work)
 82) implement expiring tokens
 83) Add revolving set of photos below menu
-84) Add comments link to photos list
+x84) Add comments link to photos list
 85) Use scroll bars
 
 x86) test adding photo with tags works
@@ -156,7 +156,7 @@ x97) navigating back to list from edit after search keeps clear search but searc
 x99) issue of pagination not going back to page 1 after clear search - add input fields to change values
 100) multiple toasts on update photo
 x101) add photo should clear form (tags, people etc) before data is entered (update a photo with tags and people and then create a new one)
-xx102) media date is not being created on insert
+x102) media date is not being created on insert
 x103) check adding of tags and people is updated via sockets
 104) Comments in firefox goes to new tab first
 105) allow non-admin or creator add comments to photos and memories
@@ -166,6 +166,8 @@ x108) comment date not formatted correctly in firefox
 x109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
 110) make sure that when adding comments to photos and memories only the comments are added and the photo/memory is not updated
 112) show photos/users in grid https://stackoverflow.com/questions/19535669/ng-repeat-array-to-rows-and-columns
+x113) click on photo in list should edit it
+
 
 prob with IbacktheWorkersRound.JPG
 
