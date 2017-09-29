@@ -286,7 +286,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         // Edit       
                         photoInputComponent.photo = new Photo(
                             photoInputComponent.myForm.value.title,
-                            photoInputComponent._creator,
+                            photoInputComponent.photo._creator,
                             null,
                             photoInputComponent.photo._id,
                             photoInputComponent.myForm.value.description,

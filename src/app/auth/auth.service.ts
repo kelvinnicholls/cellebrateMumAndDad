@@ -65,6 +65,10 @@ export class AuthService {
 
     isAdminRoute(route: ActivatedRouteSnapshot): boolean {
         let ret = false;
+        //console.log("isAdminRoute",route.component.toString());
+        if (route.component.toString().startsWith("function PhotoListComponent")) {
+            ret = false;
+        } else
         if (route.url.length == 0) {
             ret = true;
         } else

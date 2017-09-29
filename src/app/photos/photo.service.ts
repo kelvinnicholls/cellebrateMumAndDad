@@ -70,6 +70,7 @@ export class PhotoService {
     addComment(photo: Photo, comment, entityIndex, callback) {
         let photoService = this;
         photo.comment = comment;
+
         photoService.updatePhoto(photo).subscribe(
             result => {
                 console.log(result);
@@ -442,37 +443,50 @@ export class PhotoService {
         };
     }
 
+    private isAllowed(changeType, photo : Photo) : boolean {
+      let retVal : boolean = true;
+      if (changeType == "U" && !photo.comment || changeType == "D") {
+        retVal = Utils.checkIsAdminOrOwner(photo._creator,this.userService.getLoggedInUser());
+      };
+      console.log("isAllowed retVal", retVal);
+      return retVal;
+    }
 
     updatePhoto(photo: Photo) {
-        var fd = new FormData();
-        const headers: Headers = new Headers();
-        if (photo.photoFile) {
-            fd.append('file', photo.photoFile);
-        };
-
-        photo.photoFile = null;
-        const photoJsonString = JSON.stringify(photo);
-        fd.append('media', photoJsonString);
-
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
         let photoService = this;
-        return this.http.patch(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, fd, { headers: headers })
-            .map((response: any) => {
-                let body = JSON.parse(response._body);
-                photoService.updateThisPhoto(body.media);
-                photoService.socket.emit('photoUpdated', body.media, function (err) {
-                    if (err) {
-                        console.log("photoUpdated err: ", err);
-                    } else {
-                        console.log("photoUpdated No Error");
-                    }
+        if (photoService.isAllowed('U', photo)) {
+            var fd = new FormData();
+            const headers: Headers = new Headers();
+            if (photo.photoFile) {
+                fd.append('file', photo.photoFile);
+            };
+
+            photo.photoFile = null;
+            const photoJsonString = JSON.stringify(photo);
+            fd.append('media', photoJsonString);
+
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            
+            return this.http.patch(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, fd, { headers: headers })
+                .map((response: any) => {
+                    let body = JSON.parse(response._body);
+                    photoService.updateThisPhoto(body.media);
+                    photoService.socket.emit('photoUpdated', body.media, function (err) {
+                        if (err) {
+                            console.log("photoUpdated err: ", err);
+                        } else {
+                            console.log("photoUpdated No Error");
+                        }
+                    });
+                    return response.json();
+                })
+                .catch((error: Response) => {
+                    photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
                 });
-                return response.json();
-            })
-            .catch((error: Response) => {
-                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
+        } else {
+            photoService.errorService.handleError({title : "There was a problem updating this photo", error: "User must either own the photo or be an admin user!"});
+        }
     }
 
 
@@ -491,10 +505,10 @@ export class PhotoService {
     }
 
     deletePhoto(photo: Photo) {
-
+        let photoService = this;
+        if (photoService.isAllowed('D', photo)) {
         const headers: Headers = new Headers();
         headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-        let photoService = this;
         return photoService.http.delete(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, { headers: headers })
             .map((response: Response) => {
                 photoService.removePhoto(photo);
@@ -514,6 +528,9 @@ export class PhotoService {
                 photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                 return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
             });
+        } else {
+            photoService.errorService.handleError({title : "There was a problem deleting this photo", error: "User must either own the photo or be an admin user!"});
+        }
     }
 
     clearSearch() {

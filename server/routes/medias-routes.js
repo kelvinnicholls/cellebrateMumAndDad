@@ -189,9 +189,9 @@ router.get('/', authenticate, (req, res) => {
   let mediasObj = {
     'isProfilePic': false
   };
-  if (!req.loggedInUser.adminUser) {
-    mediasObj._creator = req.loggedInUser._creatorRef;
-  };
+  // if (!req.loggedInUser.adminUser) {
+  //   mediasObj._creator = req.loggedInUser._creatorRef;
+  // };
 
   Media.find(mediasObj).populate('comments tags people').then((medias) => {
     transformCreatorToUser(medias).then((medias) => {

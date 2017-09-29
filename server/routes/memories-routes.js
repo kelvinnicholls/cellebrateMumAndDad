@@ -99,9 +99,9 @@ router.post('/', authenticate, (req, res) => {
 router.get('/', authenticate, (req, res) => {
 
   let memoriesObj = {};
-  if (!req.loggedInUser.adminUser) {
-    memoriesObj._creator = req.loggedInUser._creatorRef;
-  };
+  // if (!req.loggedInUser.adminUser) {
+  //   memoriesObj._creator = req.loggedInUser._creatorRef;
+  // };
 
   Memory.find(memoriesObj).populate('comments tags people').then((memories) => {
     transformCreatorToUser(memories).then((memories) => {
