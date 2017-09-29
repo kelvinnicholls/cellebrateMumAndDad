@@ -157,13 +157,15 @@ x99) issue of pagination not going back to page 1 after clear search - add input
 100) multiple toasts on update photo
 x101) add photo should clear form (tags, people etc) before data is entered (update a photo with tags and people and then create a new one)
 xx102) media date is not being created on insert
-103) check adding of tags and people is updated via sockets
+x103) check adding of tags and people is updated via sockets
 104) Comments in firefox goes to new tab first
 105) allow non-admin or creator add comments to photos and memories
 106) prevent non-admin or non-creator to update photos/memories (other than comments) from ui
 x107) re-evaluate pagination size after insert/delete bigTotalItems
-108) comment date not formatted correctly in firefox
-109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
+x108) comment date not formatted correctly in firefox
+x109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
+110) make sure that when adding comments to photos and memories only the comments are added and the photo/memory is not updated
+112) show photos/users in grid https://stackoverflow.com/questions/19535669/ng-repeat-array-to-rows-and-columns
 
 prob with IbacktheWorkersRound.JPG
 

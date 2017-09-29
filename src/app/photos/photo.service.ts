@@ -21,7 +21,7 @@ import { Person } from "../shared/people/person.model";
 import { TagService } from "../shared/tags/tag.service";
 import { PersonService } from "../shared/people/person.service";
 import { CommentsService } from "../shared/comments/comments.service";
-import { Utils } from "../shared/utils/utils";
+import { Utils, SortDataType } from "../shared/utils/utils";
 import { User } from "../users/user.model";
 
 @Injectable()
@@ -109,10 +109,25 @@ export class PhotoService {
             photo.comments.forEach((comment) => {
                 let userName = "";
                 let profilePicLocation = "";
+                let formattedDate = "";
                 if (comment.userName) {
                     userName = comment.userName;
-                    if (comment.profilePicLocation && comment.profilePicLocation.location) {
-                        profilePicLocation = comment.profilePicLocation.location;
+                    formattedDate = comment.commentDate;
+                    if (comment.profilePicLocation) {
+                        if (comment.profilePicLocation.substring(0, 6) !== "images") {
+                            profilePicLocation = comment.profilePicLocation.substring(14);
+                        } else {
+                            profilePicLocation = comment.profilePicLocation;
+                        };
+
+                    };
+                } else if (comment.user) {
+                    userName = comment.user.name;
+                    formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);
+                    if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
+                        profilePicLocation = comment.user._profileMediaId.location.substring(14);
+                    } else {
+                        profilePicLocation = comment.user._profileMediaId.location;
                     };
                 } else {
                     let user = photoService.userService.getLoggedInUser();
@@ -122,7 +137,7 @@ export class PhotoService {
                     };
                 };
 
-                let formattedDate = moment(comment.commentDate, Consts.DATE_DB_FORMAT).format(Consts.DATE_DISPLAY_FORMAT)
+                //let formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);    
 
                 let newCommentDisplay = new CommentDisplay(comment.comment, formattedDate, userName, profilePicLocation);
                 comments.push(newCommentDisplay);
@@ -169,7 +184,7 @@ export class PhotoService {
         photo.tagsToDisplay = tags;
         photo.people = personIds;
         photo.peopleToDisplay = people;
-        photo.comments = comments;
+        photo.comments = comments.sort(Utils.dynamicSort('commentDate', SortDataType.Moment, Consts.DATE_TIME_DISPLAY_FORMAT));
 
         let photoInfo: any = {};
 
