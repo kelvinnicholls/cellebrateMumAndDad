@@ -215,7 +215,7 @@ describe('GET /medias', () => {
       .end(done);
   });
 
-  it('should get only user\'s medias for non-admin user', (done) => {
+  it('should get all medias for non-admin user', (done) => {
     request(app)
       .get('/medias')
       .set({
@@ -223,7 +223,7 @@ describe('GET /medias', () => {
       })
       .expect(200)
       .expect((res) => {
-        expect(res.body.medias.length).toBe(1);
+        expect(res.body.medias.length).toBe(2);
       })
       .end(done);
   });

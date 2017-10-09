@@ -1,175 +1,29 @@
-X1) Change logged in user's name if they update their name
-
-X2) add Add button to users list and hide input until add or edit are pressed and re-hide on submit (also change to Submit button to Create and Update)
-
-X3) Add password strength indicator and make the format configurable
-
-X4) Add route guards
-
-Y5) check expiring tokens and how to expire. log out should always delete local mem.
-  Y) leave tokens with no expiry date
-
-X6) async validations to check if unique values (eg name and email) already exist;
-
-X7) errors should be returned to screen.
-
-X8) add some bootstrap css to error screen
-
-X9) add toasts elsewhere
-
-X10) add password strength indicator
-https://blog.brunoscopelliti.com/angularjs-directive-to-test-the-strength-of-a-password/
-
-X11) add validation messages 
-https://scotch.io/tutorials/angular-2-form-validation
-
-X12) check toast is still working (especially after of before navigation)
-
-X13) add routes to edit user similar to recipe app so that active link works (use similar styling as well)
-  decided against this
-
-X14) Confirm delete
-
-X15) Jumbotron on page not found
-
-16) upload files to db
-
-**Still need to implement getting photos from facebook
-
-https://scotch.io/tutorials/build-a-mean-stack-file-uploader-app-with-filestack
-
-https://www.youtube.com/watch?v=wdl59LAe4M8
-
-https://www.youtube.com/watch?v=w2pw8eVq_Qk
-
-X17) Only allow update if something has actually changed
-
-X18) Only send cols to update that have actually changed. (not implementing)
-
-X19) Add profile pic to logged in user
-
-X20) Only update profile pic if it has changed
-
-X21) password min length 6 is not working - not in change password, must be something to do with .clearValidators
-
-X22) Use events to trigger toast after navigation.
-
 ?23) Exit when creating/editing a user should navigate back to /users  ???
-
-X24) Add percentage complete for picture upload (decided against)
-
-X25) Add socket messaging
-
-X26) favicon
-
-X27) Users menu option -> Users (List,Create)
-
-X28) Add tooltips
-
 29) Check encrypted password get the same encryption for the same string
-
-X30) Add check if want to exit if form has changed
-
-X31) scroll bar on users and messages
-X32) messages to have newest at top
-need to user stateless pipe
-see https://stackoverflow.com/questions/34456430/ngfor-doesnt-update-data-with-pipe-in-angular2
-
-
-X33) Only display list of users and messages if logged in
-X34) clicking a user should allow you to send a message to a particular user (both in user list and message)
-X35) add send message menu option
-X36) search pop up
-X37) Add pagination
-X38) Get This email is already in use!  for kgn1@gmail.com on firefox but not chrome Seems to have corrected itself!
-
-X39) Option for user's to receive email updates
-
-X40) Don't show current user in list
-
-X41) Hide send as admin if sending message for user
-X42) Show username that you are sending message to on screen, button and confirm
-X43) Sort out location (works second time)
-X44) Add clear messages button
-45) Check in to github
 46) Add picture above messages
-X47) Add sockets to indicate when a record is updated/deleted/inserted + send chat message to other users indicating change and link to record
-X48) Make sure that allUsers as well as users is updated when local updates are made 
-X49) Add clear button to search
-X50) Add show/hide search criteria
-X51) defaults for search criteria
-X52) Add option to delete a message
-X53) Add option to clear messages
-X54) Add option to clear search (Hover shows search criteria)
-X55) Highlight fields that have search criteria
-X56) prompts in bold (strong)
-X57) Move user list and create into separate routes
-X56) test in firefox
- -- date input not working
- -- some issues with bootstrap css
-X57) Update admin user to false not working
 58) Create not working in ie when profile pic selected. keep getting open file dialog.
     // this is a bug in edge https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8282613/
     consider using bootstrap file picker  
-x59) Update of user profile not being propagated by socket.io
 60) Implement email updates
 61) before go live delete repository from github and change config settings and make sure they aren't committed.
-X62) issue with create and list router links active  (, pathMatch: 'full' ) ?? ([routerLinkActiveOptions]="{ exact: true }")
-X63) sort out issues with can-load (may need to split admin auth stuff and non-admin auth stuff) eg have sign-in at root ***
-    diff results if lazy loading or already loaded
 64) Contact page
 65) Use free mongodb hosting https://mlab.com/
 66) remove console.logs before go live
-X67) sort out position of Photos sub-menu
-https://stackoverflow.com/questions/35956194/bootstrap-button-dropdown-not-below-button
-X68) If not photos (or no users or memories) display message instead
-X69) Add multer to photos
-X70) Do not allow add photo until photo is selected
-X71) Prevent update of photo when updating
-X72) description should be text area
-X73) add isProfilePic to media and do not return in photo list
-X75) Tidy up display of photos (add comments on hover)
-x76) Make sure search works with both photos and users
-x77) add tags and people to medias and memories
-x78) add "Photo Added" comment on insert **Don't Bother**
 79) Hover over photo should  resize it
 80) implement password retries and lock period
 81) implement password expiry (expiry date on user and flag to indicate if this is enforced, although expiry date will still work)
 82) implement expiring tokens
 83) Add revolving set of photos below menu
-x84) Add comments link to photos list
 85) Use scroll bars
-
-x86) test adding photo with tags works
-x87) add ability to add new tags
-x88) hint text should show list of tags
 89) enlarge photo on hover
-x90) Make sure tags list and people list is in order
-x91) after updating/adding photo return to photo list
 92) check that sockets communicate tags/people correctly
-x93) Only allow alphanumeric characters in name and tag
-x94) Add clear search when search brings back nothing
-x95) populate search tags and people (+ change multiselect relations ship to same?)
-x96) Show actual people and names in search criteria
-x97) navigating back to list from edit after search keeps clear search but search has been removed. List should still be search list. PhotoListComponent onInit
 98) check console errors before releasing
-x99) issue of pagination not going back to page 1 after clear search - add input fields to change values
 100) multiple toasts on update photo
-x101) add photo should clear form (tags, people etc) before data is entered (update a photo with tags and people and then create a new one)
-x102) media date is not being created on insert
-x103) check adding of tags and people is updated via sockets
 104) Comments in firefox goes to new tab first
-x105) allow non-admin or creator add comments to photos and memories
-x106) prevent non-admin or non-creator to update photos/memories (other than comments) from ui
-x107) re-evaluate pagination size after insert/delete bigTotalItems
-x108) comment date not formatted correctly in firefox
-x109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
 110) make sure that when adding comments to photos and memories only the comments are added and the photo/memory is not updated
 112) show photos/users in grid https://stackoverflow.com/questions/19535669/ng-repeat-array-to-rows-and-columns
-x113) click on photo in list should edit it
 114) test with non-admin user
-
-prob with IbacktheWorkersRound.JPG
+115) prob with IbacktheWorkersRound.JPG
 
 
 

@@ -216,7 +216,7 @@ describe('GET /memories', () => {
       .end(done);
   });
 
-  it('should get only user\'s memories for non-admin user', (done) => {
+  it('should get all memories for non-admin user', (done) => {
     request(app)
       .get('/memories')
       .set({
@@ -224,7 +224,7 @@ describe('GET /memories', () => {
       })
       .expect(200)
       .expect((res) => {
-        expect(res.body.memories.length).toBe(1);
+        expect(res.body.memories.length).toBe(2);
       })
       .end(done);
   });
