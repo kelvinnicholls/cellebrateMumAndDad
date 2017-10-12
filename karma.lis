@@ -1,0 +1,32 @@
+[36m11 10 2017 17:27:02.103:DEBUG [config]: [39mLoading config D:\apps\node-celebrate-app\karma.conf.js
+[36m11 10 2017 17:27:06.978:DEBUG [plugin]: [39mLoading inlined plugin (defining framework:jasmine).
+[36m11 10 2017 17:27:06.987:DEBUG [plugin]: [39mLoading inlined plugin (defining launcher:Chrome, launcher:ChromeHeadless, launcher:ChromeCanary, launcher:ChromeCanaryHeadless, launcher:Chromium, launcher:Dartium, test).
+[36m11 10 2017 17:27:06.987:DEBUG [plugin]: [39mLoading inlined plugin (defining reporter:kjhtml).
+[36m11 10 2017 17:27:06.988:DEBUG [plugin]: [39mLoading inlined plugin (defining reporter:coverage-istanbul).
+[36m11 10 2017 17:27:06.988:DEBUG [plugin]: [39mLoading inlined plugin (defining framework:@angular/cli, preprocessor:@angular/cli, reporter:@angular/cli, middleware:angularCliBlocker).
+[36m11 10 2017 17:27:08.674:DEBUG [web-server]: [39mInstantiating middleware
+[36m11 10 2017 17:27:08.675:DEBUG [reporter]: [39mTrying to load reporter: @angular/cli
+[36m11 10 2017 17:27:08.676:DEBUG [reporter]: [39mTrying to load color-version of reporter: @angular/cli (@angular/cli_color)
+[36m11 10 2017 17:27:08.676:DEBUG [reporter]: [39mCouldn't load color-version.
+[36m11 10 2017 17:27:08.712:DEBUG [reporter]: [39mTrying to load reporter: kjhtml
+[36m11 10 2017 17:27:08.713:DEBUG [reporter]: [39mTrying to load color-version of reporter: kjhtml (kjhtml_color)
+[36m11 10 2017 17:27:08.713:DEBUG [reporter]: [39mCouldn't load color-version.
+[36m11 10 2017 17:27:11.810:DEBUG [karma]: [39mList of files has changed, trying to execute
+[33m11 10 2017 17:27:11.811:WARN [karma]: [39mNo captured browser, open http://localhost:9876/
+[32m11 10 2017 17:27:11.819:INFO [karma]: [39mKarma v1.7.0 server started at http://0.0.0.0:9876/
+[32m11 10 2017 17:27:11.819:INFO [launcher]: [39mLaunching browser Chrome with unlimited concurrency
+[32m11 10 2017 17:27:11.827:INFO [launcher]: [39mStarting browser Chrome
+[36m11 10 2017 17:27:11.828:DEBUG [temp-dir]: [39mCreating temp dir at C:\Users\kelvi\AppData\Local\Temp\karma-10033716
+[36m11 10 2017 17:27:11.829:DEBUG [launcher]: [39mC:\Program Files (x86)\Google\Chrome\Application\chrome.exe --user-data-dir=C:\Users\kelvi\AppData\Local\Temp\karma-10033716 --no-default-browser-check --no-first-run --disable-default-apps --disable-popup-blocking --disable-translate --disable-background-timer-throttling --disable-renderer-backgrounding --disable-device-discovery-notifications http://localhost:9876/?id=10033716
+[33m11 10 2017 17:28:11.827:WARN [launcher]: [39mChrome have not captured in 60000 ms, killing.
+[36m11 10 2017 17:28:11.903:DEBUG [launcher]: [39mProcess Chrome exited with code 0
+[36m11 10 2017 17:28:11.904:DEBUG [temp-dir]: [39mCleaning temp dir C:\Users\kelvi\AppData\Local\Temp\karma-10033716
+[32m11 10 2017 17:28:11.945:INFO [launcher]: [39mTrying to start Chrome again (1/2).
+[36m11 10 2017 17:28:11.946:DEBUG [launcher]: [39mRestarting Chrome
+[36m11 10 2017 17:28:11.946:DEBUG [temp-dir]: [39mCreating temp dir at C:\Users\kelvi\AppData\Local\Temp\karma-10033716
+[36m11 10 2017 17:28:11.946:DEBUG [launcher]: [39mC:\Program Files (x86)\Google\Chrome\Application\chrome.exe --user-data-dir=C:\Users\kelvi\AppData\Local\Temp\karma-10033716 --no-default-browser-check --no-first-run --disable-default-apps --disable-popup-blocking --disable-translate --disable-background-timer-throttling --disable-renderer-backgrounding --disable-device-discovery-notifications http://localhost:9876/?id=10033716
+[36m11 10 2017 17:28:25.976:DEBUG [launcher]: [39mDisconnecting all browsers
+[36m11 10 2017 17:28:26.044:DEBUG [launcher]: [39mProcess Chrome exited with code 0
+[36m11 10 2017 17:28:26.044:DEBUG [temp-dir]: [39mCleaning temp dir C:\Users\kelvi\AppData\Local\Temp\karma-10033716
+[36m11 10 2017 17:28:26.080:DEBUG [launcher]: [39mFinished all browsers
+Terminate batch job (Y/N)? 
