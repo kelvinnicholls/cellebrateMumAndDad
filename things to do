@@ -26,7 +26,17 @@
 115) prob with IbacktheWorkersRound.JPG
 
 
+https://semaphoreci.com/community/tutorials/setting-up-angular-2-with-webpack
+
+https://github.com/angular/angular-cli/wiki/stories-rc.0-update
+
+
+https://github.com/angular/angular-cli/blob/08bb738af2a3a257e003081caa154f014cb5365b/packages/angular-cli/lib/config/schema.json
+
+    //"build": "webpack",
 
 
 
 
+
+https://medium.com/@lacolaco/setting-up-angular-2-testing-environment-with-karma-and-webpack-e9b833befd99
