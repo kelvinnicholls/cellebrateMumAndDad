@@ -40,3 +40,6 @@ https://github.com/angular/angular-cli/blob/08bb738af2a3a257e003081caa154f014cb5
 
 
 https://medium.com/@lacolaco/setting-up-angular-2-testing-environment-with-karma-and-webpack-e9b833befd99
+https://blog.fehskens.com/index.php/2016/04/22/how-i-use-angular-2-with-webpack-webpack-configuration/
+https://wannabeegeek.com/2017/04/07/debugging-jasmine-unit-tests-running-with-karma-runner-in-vs-code/
+karma start karma.conf.js --browsers Chrome_with_debugging
