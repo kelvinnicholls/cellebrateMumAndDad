@@ -11,16 +11,25 @@ export class AuthUserService {
 
 
     isAdminUser(): boolean {
-        let adminUser =  JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER)).adminUser;
+        const loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
         let ret = false;
-        if ((typeof adminUser === 'string' && adminUser.toLowerCase() === 'yes') || (typeof adminUser === 'boolean' && adminUser)) {
-            ret = true;
+        if (loggedInUser) {
+            let adminUser = loggedInUser.adminUser;
+            if ((typeof adminUser === 'string' && adminUser.toLowerCase() === 'yes') || (typeof adminUser === 'boolean' && adminUser)) {
+                ret = true;
+            };
         };
+
         return ret;
     }
 
     getLoggedInUserName() {
-        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER)).name;
+        const loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+        let name = "Not Logged In";
+        if (loggedInUser) { 
+            name = loggedInUser.name;
+        };
+        return name;
     }
 
     getLoggedInUserProfilePicLocation() {
@@ -39,6 +48,11 @@ export class AuthUserService {
     }
 
     getLoggedInCreatorRef() {
-        return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER))._creatorRef;
+        const loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+        let _creatorRef = "";
+        if (loggedInUser) {
+            _creatorRef = loggedInUser._creatorRef;
+        }
+        return _creatorRef;
     }
 }
