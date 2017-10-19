@@ -12,11 +12,11 @@
       </li>
 
 
-      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
-        <a class="nav-link" routerLink="/memories">Memories</a>
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="memoriesNavItem">
+        <a class="nav-link" routerLink="/memories">Memories</a> 
       </li>
 
-        <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
+        <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="photosNavItem">
           <a class="nav-link dropdown-toggle" id="photosDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
             aria-expanded="false">Photos</a>
           <div class="dropdown-menu" aria-labelledby="photosDropdown">
@@ -26,11 +26,11 @@
           </div>
         </li>
 
-      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()">
+      <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="chatNavItem">
         <a class="nav-link" routerLink="/chat">Chat</a>
       </li>
 
-      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()">
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()"  id="usersNavItem">
         <a class="nav-link dropdown-toggle" id="usersDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">Users</a>
         <div class="dropdown-menu" aria-labelledby="usersDropdown">
