@@ -450,7 +450,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             });
 
         photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
-
         photoInputComponent.myForm = new FormGroup({
             title: new FormControl(null, Validators.required,
                 photoInputComponent.forbiddenTitles),
@@ -461,6 +460,12 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         });
 
 
+        console.log("PhotoInputComponent","photoInputComponent.route.snapshot",photoInputComponent.route.snapshot);
+        console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url",photoInputComponent.route.snapshot.url);
+        console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url.length",photoInputComponent.route.snapshot.url.length);
+        console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url[0].path",photoInputComponent.route.snapshot.url[0].path);
+        console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url[1].path",photoInputComponent.route.snapshot.url[1].path);
+        
         if (photoInputComponent.route.snapshot.url.length === 2 && photoInputComponent.route.snapshot.url[0].path === 'photo' && photoInputComponent.route.snapshot.url[1].path === 'add') {
             photoInputComponent.submitType = Consts.ADD_PHOTO;
             photoInputComponent.clear();

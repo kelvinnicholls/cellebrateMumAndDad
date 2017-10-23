@@ -60,6 +60,7 @@ export class UserService {
     }
 
     public getLoggedInUser() {
+        console.log("UserService.getLoggedInUser()")
         return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
     }
 

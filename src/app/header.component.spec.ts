@@ -1,4 +1,8 @@
-import { TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { By }              from '@angular/platform-browser';
+import { DebugElement }    from '@angular/core';
+
+
 import { RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
 import {APP_BASE_HREF} from '@angular/common';
@@ -22,7 +26,18 @@ import { AuthUserService } from "./auth/auth-user.service";
 import { AuthService } from "./auth/auth.service";
 import { AppService } from "./app.service";
 
+
+
+
+
 describe('HeaderComponent', () => {
+
+
+  let component:    HeaderComponent;
+  let fixture: ComponentFixture<HeaderComponent>;
+  let compiled : any;
+  let de:      DebugElement;
+  let el:      HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -31,26 +46,27 @@ describe('HeaderComponent', () => {
       ], 
       imports: [RouterModule,HttpModule,appRouting],
       providers: [{provide: APP_BASE_HREF, useValue: '/src/app'},CommentsService, PersonService, TagService, PhotoService,DialogService,AppService,AuthUserService,AuthService,ChatService,UserService,ErrorService,SearchService]
-    }).compileComponents();
+    });
   }));
   
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(HeaderComponent);
+    component = fixture.debugElement.componentInstance;
+    compiled = fixture.debugElement.nativeElement;
+  });
+
   it('should create the HeaderComponent', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const headerComponent = fixture.debugElement.componentInstance;
-    expect(headerComponent).toBeTruthy();
+    fixture.detectChanges();
+    expect(component).toBeTruthy();
   });
 
   it('should render "Celebrate Mum And Dad" in navbar brand',() => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     fixture.detectChanges();
     expect(compiled.querySelector('nav.navbar > a.navbar-brand').textContent).toContain('Celebrate Mum And Dad');
   });
 
   it('should ask you to Sign In if not signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
-
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
@@ -58,8 +74,6 @@ describe('HeaderComponent', () => {
   });
 
   it('should not ask you to Sign In if you are signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     fixture.detectChanges();
@@ -67,8 +81,6 @@ describe('HeaderComponent', () => {
   });
 
   it('should not show photos menu option if you are not signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
@@ -76,8 +88,6 @@ describe('HeaderComponent', () => {
   });
 
   it('should show photos menu option if you are signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     fixture.detectChanges();
@@ -86,8 +96,6 @@ describe('HeaderComponent', () => {
 
 
   it('should not show memories menu option if you are not signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
@@ -95,8 +103,6 @@ describe('HeaderComponent', () => {
   });
 
   it('should show memories menu option if you are signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     fixture.detectChanges();
@@ -105,8 +111,6 @@ describe('HeaderComponent', () => {
 
 
   it('should not show users menu option if you are not signed in', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
@@ -115,8 +119,6 @@ describe('HeaderComponent', () => {
 
 
   it('should not show users menu option if you are signed in but not an admin user', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     spyOn<AuthUserService>(authUserService,'isAdminUser').and.returnValue(false);
@@ -126,8 +128,6 @@ describe('HeaderComponent', () => {
 
 
   it('should show users menu option if you are signed in and an admin user', () => {
-    const fixture = TestBed.createComponent(HeaderComponent);
-    const compiled = fixture.debugElement.nativeElement;
     const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     spyOn<AuthUserService>(authUserService,'isAdminUser').and.returnValue(true);

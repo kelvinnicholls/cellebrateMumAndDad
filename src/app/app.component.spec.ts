@@ -1,4 +1,7 @@
-import { TestBed, async } from '@angular/core/testing';
+import { ComponentFixture, TestBed, async } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
+
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header.component';
 import { HomeComponent } from "./home.component";
@@ -27,8 +30,15 @@ import { AuthUserService } from "./auth/auth-user.service";
 import { AuthService } from "./auth/auth.service";
 import { AppService } from "./app.service";
 
-
+// fdescribe
 describe('AppComponent', () => {
+
+  let component: AppComponent;
+  let fixture: ComponentFixture<AppComponent>;
+  let compiled: any;
+  let de: DebugElement;
+  let el: HTMLElement;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -37,12 +47,25 @@ describe('AppComponent', () => {
         HomeComponent
       ], imports: [RouterModule, ReactiveFormsModule, MultiselectDropdownModule, SharedModule, ChatModule, ToastModule.forRoot(), appRouting, HttpModule],
       providers: [{ provide: APP_BASE_HREF, useValue: '/src/app' }, CommentsService, PersonService, TagService, PhotoService, DialogService, AppService, AuthUserService, AuthService, ChatService, UserService, ErrorService, SearchService]
-    }).compileComponents();
+    });
   }));
 
+  // You can count on the test runner to wait for the first asynchronous beforeEach to finish before calling the second.
+  
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.debugElement.componentInstance;
+    compiled = fixture.debugElement.nativeElement;
+  });
+
+
+  //The TestBed.compileComponents method asynchronously compiles all the components configured in the testing module
+  //WebPack developers need not call compileComponents because it inlines templates and css as part of the automated build process that precedes running the test.
+
+  // fit
   it('should create the AppComponent', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
+
+    fixture.detectChanges();
+    expect(component).toBeTruthy();
   });
 });
