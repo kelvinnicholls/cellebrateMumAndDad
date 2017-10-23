@@ -28,7 +28,7 @@ import { PhotoTestService } from "./photo-test.service";
 
 
 import { ChatService } from "../chat/chat.service";
-import { UserService } from "../users/user.service";
+import { UserService } from '../users/user.service';
 import { ErrorService } from "../shared/errors/error.service";
 import { SearchService } from "../shared/search/search.service";
 import { PhotoService } from "../photos/photo.service";
@@ -66,6 +66,7 @@ xdescribe('PhotoInputComponent', () => {
   let de:      DebugElement;
   let el:      HTMLElement;
 
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -77,14 +78,16 @@ xdescribe('PhotoInputComponent', () => {
       ],
       imports: [HttpModule, RouterModule, ReactiveFormsModule, CommonModule, SharedModule, photosRouting, appRouting, ToastModule.forRoot()],
       providers: [FileStackService, { provide: APP_BASE_HREF, useValue: '/src/app' }, CommentsService, PersonService, TagService, PhotoService, DialogService, AppService, AuthUserService, AuthService, ChatService, UserService, ErrorService, SearchService]
-    }).compileComponents().then(() => {
-
-      fixture = TestBed.createComponent(PhotoInputComponent);
-      compiled = fixture.debugElement.nativeElement;
-      component = fixture.debugElement.componentInstance;
-
     });
   }));
+
+
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(PhotoInputComponent);
+    compiled = fixture.debugElement.nativeElement;
+    component = fixture.debugElement.componentInstance
+  });
 
   // beforeEach(async(() => {
   //   // The magic sauce!!

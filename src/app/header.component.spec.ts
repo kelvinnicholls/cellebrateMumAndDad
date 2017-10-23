@@ -38,6 +38,7 @@ describe('HeaderComponent', () => {
   let compiled : any;
   let de:      DebugElement;
   let el:      HTMLElement;
+  let authUserService : AuthUserService;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -54,6 +55,7 @@ describe('HeaderComponent', () => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.debugElement.componentInstance;
     compiled = fixture.debugElement.nativeElement;
+    authUserService = fixture.debugElement.injector.get(AuthUserService);
   });
 
   it('should create the HeaderComponent', () => {
@@ -67,59 +69,52 @@ describe('HeaderComponent', () => {
   });
 
   it('should ask you to Sign In if not signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
+    
     const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
     expect(compiled.querySelector('nav.navbar > div.navbar-collapse > ul.ml-auto > li.nav-item > a.nav-link').textContent).toContain('Sign In');
   });
 
   it('should not ask you to Sign In if you are signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
-    const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
+    spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     fixture.detectChanges();
     expect(compiled.querySelector('nav.navbar > div.navbar-collapse > ul.ml-auto > li.nav-item > a.nav-link').textContent).not.toContain('Sign In');
   });
 
   it('should not show photos menu option if you are not signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
-    const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
+    spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
     expect(compiled.querySelector('#photosNavItem')).toBeNull();
   });
 
   it('should show photos menu option if you are signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
-    const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
+    spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     fixture.detectChanges();
     expect(compiled.querySelector('#photosNavItem')).toBeTruthy();
   });
 
 
   it('should not show memories menu option if you are not signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
-    const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
+    spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
     expect(compiled.querySelector('#memoriesNavItem')).toBeNull();
   });
 
   it('should show memories menu option if you are signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
-    const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
+    spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     fixture.detectChanges();
     expect(compiled.querySelector('#memoriesNavItem')).toBeTruthy();
   });
 
 
   it('should not show users menu option if you are not signed in', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
-    const spy = spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
+    spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(false);
     fixture.detectChanges();
     expect(compiled.querySelector('#usersNavItem')).toBeNull();
   });
 
 
   it('should not show users menu option if you are signed in but not an admin user', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     spyOn<AuthUserService>(authUserService,'isAdminUser').and.returnValue(false);
     fixture.detectChanges();
@@ -128,7 +123,6 @@ describe('HeaderComponent', () => {
 
 
   it('should show users menu option if you are signed in and an admin user', () => {
-    const authUserService : AuthUserService = fixture.debugElement.injector.get(AuthUserService);
     spyOn<AuthUserService>(authUserService,'isLoggedIn').and.returnValue(true);
     spyOn<AuthUserService>(authUserService,'isAdminUser').and.returnValue(true);
     fixture.detectChanges();
