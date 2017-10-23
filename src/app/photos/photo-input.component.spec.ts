@@ -58,14 +58,15 @@ The title property value is interpolated into the DOM within <h1> tags. Use the 
 The query method takes a predicate function and searches the fixture's entire DOM tree for the first element that satisfies the predicate. The result is a different DebugElement, one associated with the matching DOM element.
 */
 // xdescribe
-xdescribe('PhotoInputComponent', () => {
+fdescribe('PhotoInputComponent', () => {
 
   let component:    PhotoInputComponent;
   let fixture: ComponentFixture<PhotoInputComponent>;
   let compiled : any;
   let de:      DebugElement;
   let el:      HTMLElement;
-
+  let userService : UserService;
+  let activatedRoute : ActivatedRoute;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -86,7 +87,13 @@ xdescribe('PhotoInputComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PhotoInputComponent);
     compiled = fixture.debugElement.nativeElement;
-    component = fixture.debugElement.componentInstance
+    component = fixture.debugElement.componentInstance;
+    userService = fixture.debugElement.injector.get(UserService);
+    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
+    //activatedRoute = TestBed.get(ActivatedRoute)
+    //spyOn<ActivatedRoute>(activatedRoute, 'snapshot').and.returnValue(PhotoTestService.getSnapShotForUrl('photo/add')); 
+    activatedRoute.snapshot = PhotoTestService.getSnapShotForUrl('photo/add');
+    spyOn<UserService>(userService, 'getLoggedInUser').and.returnValue(UserTestService.getUsers()[0]);
   });
 
   // beforeEach(async(() => {
@@ -110,12 +117,7 @@ xdescribe('PhotoInputComponent', () => {
 
   it('should create a photo', () => {
 
-    const userService = fixture.debugElement.injector.get(UserService);
-    const activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-
-    const userServiceSpy = spyOn<UserService>(userService, 'getLoggedInUser').and.returnValue(UserTestService.getUsers()[0]);
-    spyOn<ActivatedRoute>(activatedRoute, 'snapshot').and.returnValue(PhotoTestService.getSnapshotForUrl('photo/add'));
-
+   
     let title = fixture.debugElement.query(By.css('#title'));
     console.log("should create a photo", 4);
     let description = fixture.debugElement.query(By.css('#description'));

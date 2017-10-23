@@ -1,17 +1,18 @@
+import { ActivatedRouteSnapshot,UrlSegment } from '@angular/router';
+
 
 export class PhotoTestService {
     
-    public static getSnapshotForUrl(url : string) {
-        console.log("PhotoTestService","url",url);
+    public static getSnapShotForUrl(url : string) : ActivatedRouteSnapshot {
+        let activatedRouteSnapshot : ActivatedRouteSnapshot = new ActivatedRouteSnapshot();
+        let urlSegments : UrlSegment[] = [];
         let urls :  string [] = url.split('/');
-        console.log("PhotoTestService","urls",urls);
-        let urlsObjList : Object[]= [];
         urls.forEach((url) => {
-            urlsObjList.push({path: url});
+            let urlSegment : UrlSegment = new  UrlSegment(url,null);
+            urlSegments.push(urlSegment);
         });
-        console.log("PhotoTestService","urlsObjList",urlsObjList);
-        let ret = {url: urlsObjList};
-        console.log("PhotoTestService","ret",ret);
+        activatedRouteSnapshot.url = urlSegments;
+        let ret = activatedRouteSnapshot;
         return ret;
     }
 }

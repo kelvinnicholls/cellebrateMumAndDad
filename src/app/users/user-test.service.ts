@@ -19,7 +19,8 @@ export class UserTestService {
             let adminUser: boolean = true;
             let emailUpdates: boolean = false;
             let relationship: string = 'Son';
-            const user = new User(email, password, name, adminUser, emailUpdates, relationship);
+            let _creatorRef : string = '_creatorRef' + n;
+            const user = new User(email, password, name, adminUser, emailUpdates, relationship, null, null, null, _creatorRef);
             UserTestService.users.push(user);
         }
     }
