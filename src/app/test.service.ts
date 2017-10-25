@@ -1,15 +1,35 @@
+import { DebugElement } from '@angular/core';
+import { Observable } from 'rxjs';
 export class TestService {
 
     static sendInput(inputElement: any, text: string, fixture: any) {
-
-        console.log("TestService","sendInput","inputElement",inputElement,"text",text);
         inputElement.value = text;
-        console.log("TestService",1);
         inputElement.dispatchEvent(new Event('input'));
-        console.log("TestService",2);
         fixture.detectChanges();
-;
         return fixture.whenStable();
     }
 
+    static ButtonClickEvents = {
+        left: { button: 0 },
+        right: { button: 2 }
+    };
+
+    /** Simulate element click. Defaults to mouse left-button click event. */
+    static click(el: DebugElement | HTMLElement, eventObj: any = TestService.ButtonClickEvents.left): void {
+        if (el instanceof HTMLElement) {
+            el.click();
+        } else {
+            el.triggerEventHandler('click', eventObj);
+        }
+    }
+
+    static getObservable(retVal: any) {
+        return Observable.create(observer => {
+            observer.next(retVal);
+            observer.complete();
+        });
+    }
+
 }
+
+

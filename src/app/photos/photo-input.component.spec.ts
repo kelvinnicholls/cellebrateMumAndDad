@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-import { By }              from '@angular/platform-browser';
-import { DebugElement }    from '@angular/core';
+import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core';
 
 import { ReactiveFormsModule } from "@angular/forms";
 import { PhotoInputComponent } from "./photo-input.component";
@@ -14,7 +14,7 @@ import { RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
 import { ActivatedRoute } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
-
+import { Observable } from "rxjs";
 
 import { HomeComponent } from "../home.component";
 import { HeaderComponent } from "../header.component";
@@ -33,7 +33,9 @@ import { ErrorService } from "../shared/errors/error.service";
 import { SearchService } from "../shared/search/search.service";
 import { PhotoService } from "../photos/photo.service";
 import { TagService } from "../shared/tags/tag.service";
+import { TagTestService } from "../shared/tags/tag-test.service";
 import { PersonService } from "../shared/people/person.service";
+import { PersonTestService } from "../shared/people/person-test.service";
 import { CommentsService } from "../shared/comments/comments.service";
 import { DialogService } from "../shared/dialog/dialog.service";
 import { AuthUserService } from "../auth/auth-user.service";
@@ -42,7 +44,7 @@ import { AppService } from "../app.service";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
 
 // https://stackoverflow.com/questions/39582707/updating-input-html-field-from-within-an-angular-2-test
-//https://semaphoreci.com/community/tutorials/testing-routes-in-angular-2
+// https://semaphoreci.com/community/tutorials/testing-routes-in-angular-2
 
 // let fixture;
 // let componentInstance: PhotoInputComponent;
@@ -58,15 +60,25 @@ The title property value is interpolated into the DOM within <h1> tags. Use the 
 The query method takes a predicate function and searches the fixture's entire DOM tree for the first element that satisfies the predicate. The result is a different DebugElement, one associated with the matching DOM element.
 */
 // xdescribe
-fdescribe('PhotoInputComponent', () => {
+// fdescribe
+describe('PhotoInputComponent', () => {
 
-  let component:    PhotoInputComponent;
+  let component: PhotoInputComponent;
   let fixture: ComponentFixture<PhotoInputComponent>;
-  let compiled : any;
-  let de:      DebugElement;
-  let el:      HTMLElement;
-  let userService : UserService;
-  let activatedRoute : ActivatedRoute;
+  let compiled: any;
+  let de: DebugElement;
+  let el: HTMLElement;
+  let userService: UserService;
+  let photoService: PhotoService;
+  let tagService: TagService;
+  let personService: PersonService;
+
+  let activatedRoute: ActivatedRoute;
+
+
+  const titleVal = 'Title 1';
+  const descriptionVal = 'Description 1';
+
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -83,66 +95,72 @@ fdescribe('PhotoInputComponent', () => {
   }));
 
 
-
   beforeEach(() => {
     fixture = TestBed.createComponent(PhotoInputComponent);
     compiled = fixture.debugElement.nativeElement;
     component = fixture.debugElement.componentInstance;
     userService = fixture.debugElement.injector.get(UserService);
+    photoService = fixture.debugElement.injector.get(PhotoService);
+    tagService = fixture.debugElement.injector.get(TagService);
+    personService = fixture.debugElement.injector.get(PersonService);
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-    //activatedRoute = TestBed.get(ActivatedRoute)
-    //spyOn<ActivatedRoute>(activatedRoute, 'snapshot').and.returnValue(PhotoTestService.getSnapShotForUrl('photo/add')); 
     activatedRoute.snapshot = PhotoTestService.getSnapShotForUrl('photo/add');
     spyOn<UserService>(userService, 'getLoggedInUser').and.returnValue(UserTestService.getUsers()[0]);
+    spyOn<TagService>(tagService, 'getTags').and.returnValue(TestService.getObservable(TagTestService.getTags()));
+    spyOn<PersonService>(personService, 'getPeople').and.returnValue(TestService.getObservable(PersonTestService.getPeople()));
   });
 
-  // beforeEach(async(() => {
-  //   // The magic sauce!!
-  //   // Because this is in an async wrapper it will automatically wait
-  //   // for the call to whenStable() to complete
-  //   //const userService = fixture.debugElement.injector.get(UserService);
-  //   //const activatedRoute = fixture.debugElement.injector.get(ActivatedRoute);
-
-  //   //const userServiceSpy = spyOn<UserService>(userService, 'getLoggedInUser').and.returnValue(UserTestService.getUsers()[0]);
-  //   //spyOn<ActivatedRoute>(activatedRoute, 'snapshot').and.returnValue(PhotoTestService.getSnapshotForUrl('photo/add'));
-  //   fixture.detectChanges();
-  //   fixture.whenStable();
-  // }));
 
   it('should create the PhotoInputComponent', () => {
     fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
-
-  it('should create a photo', () => {
-
-   
-    let title = fixture.debugElement.query(By.css('#title'));
-    console.log("should create a photo", 4);
-    let description = fixture.debugElement.query(By.css('#description'));
-    console.log("should create a photo", 5);
-    //let title = photoInputComponentCompiled.querySelector('#title');
-    //let description = photoInputComponentCompiled.querySelector('#description');
-    // loginButton = fixture.debugElement.query(By.css('.btn-primary'));
-    // formElement = fixture.debugElement.query(By.css('form'));
+  it('form invalid when empty', () => {
+    fixture.detectChanges();
+    expect(component.myForm.valid).toBeFalsy();
+  });
 
 
-    TestService.sendInput(title.nativeElement, 'Title 1', fixture)
-      .then(() => {
-        return TestService.sendInput(description.nativeElement, 'Description 1', fixture)
-      }).then(() => {
-        //component.myForm.triggerEventHandler('submit', null);
-        //photoService.f formElement.triggerEventHandler('submit', null);
-        fixture.detectChanges();
+  it('title field initially invalid 1 ', () => {
+    fixture.detectChanges();
+    let title = component.myForm.controls['title'];
+    expect(title.valid).toBeFalsy();
+  });
 
-        // let spinner = fixture.debugElement.query(By.css('img'));
-        // expect(Helper.isHidden(spinner)).toBeFalsy('Spinner should be visible');
+  it('title field initially invalid 2', () => {
+    fixture.detectChanges();
+    let errors = {};
+    let title = component.myForm.controls['title'];
+    errors = title.errors || {};
+    expect(errors['required']).toBeTruthy();
+  });
 
-        // // ...etc...
+  it('A valid title validates the title field', async(() => {
+    spyOn<PhotoInputComponent>(component, 'forbiddenTitles').and.returnValue(Promise.resolve(null));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      let title = component.myForm.controls['title'];
+      title.setValue(titleVal);
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(title.valid).toBeTruthy();
       });
+    });
+  }));
 
-    //expect(photoInputComponent).toBeTruthy();
+
+  it('A valid description validates the description field', () => {
+
+    fixture.detectChanges();
+    let errors = {};
+    let description = component.myForm.controls['description'];
+    description.setValue(descriptionVal);
+    fixture.detectChanges();
+    errors = description.errors || {};
+    //expect(errors['pattern']).toBeTruthy(); 
+    //expect(errors['required']).toBeFalsy(); 
+    expect(description.valid).toBeTruthy();
 
   });
 

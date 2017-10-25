@@ -44,7 +44,7 @@
     <label for="mediaDate" class="col-sm-4 col-form-label"><strong>Date of Photo</strong></label>
     <div class="col-sm-5">
       <div class="input-group">
-        <input class="form-control" placeholder="DD-MM-YYYY" name="mediaDate" [(ngModel)]="modelMediaDate" [maxDate]="getMaxDate()"
+        <input class="form-control" placeholder="DD-MM-YYYY" name="mediaDate" id="mediaDate" [(ngModel)]="modelMediaDate" [maxDate]="getMaxDate()"
           [minDate]="getMinDate()" ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="mediaDate" [ngClass]="{
     'form-control-danger': myForm.get('mediaDate').invalid,
     'form-control-success': myForm.get('mediaDate').valid
