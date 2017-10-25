@@ -1,5 +1,6 @@
 import { DebugElement } from '@angular/core';
 import { Observable } from 'rxjs';
+import * as moment from 'moment';
 export class TestService {
 
     static sendInput(inputElement: any, text: string, fixture: any) {
@@ -28,6 +29,17 @@ export class TestService {
             observer.next(retVal);
             observer.complete();
         });
+    }
+
+
+    static getMediaDate(yearsToSubtract: any) {
+        let d = moment();
+        d.subtract(yearsToSubtract, 'years');
+        return d.isValid() ? {
+            year: d.year(),
+            month: d.month() + 1,
+            day: d.date()
+        } : null;
     }
 
 }

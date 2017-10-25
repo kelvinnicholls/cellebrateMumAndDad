@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed, async, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-
 import { ReactiveFormsModule } from "@angular/forms";
 import { PhotoInputComponent } from "./photo-input.component";
 import { CommonModule } from '@angular/common';
@@ -14,6 +13,7 @@ import { RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
 import { ActivatedRoute } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
+
 import { Observable } from "rxjs";
 
 import { HomeComponent } from "../home.component";
@@ -80,6 +80,8 @@ describe('PhotoInputComponent', () => {
   const descriptionVal = 'Description 1';
 
 
+
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -108,6 +110,7 @@ describe('PhotoInputComponent', () => {
     spyOn<UserService>(userService, 'getLoggedInUser').and.returnValue(UserTestService.getUsers()[0]);
     spyOn<TagService>(tagService, 'getTags').and.returnValue(TestService.getObservable(TagTestService.getTags()));
     spyOn<PersonService>(personService, 'getPeople').and.returnValue(TestService.getObservable(PersonTestService.getPeople()));
+    spyOn<PhotoInputComponent>(component, 'onSubmit').and.returnValue(null);
   });
 
 
@@ -149,19 +152,131 @@ describe('PhotoInputComponent', () => {
     });
   }));
 
+  it('A duplicate title invalidates the title field', async(() => {
+    spyOn<PhotoInputComponent>(component, 'forbiddenTitles').and.returnValue(Promise.resolve({ 'titleIsAlreadyUsed': true }));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      let title = component.myForm.controls['title'];
+      title.setValue(titleVal);
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(title.valid).toBeFalsy();
+      });
+    });
+  }));
+
+  it('A null title invalidates the title field', async(() => {
+    spyOn<PhotoInputComponent>(component, 'forbiddenTitles').and.returnValue(Promise.resolve({ 'titleIsAlreadyUsed': true }));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      let title = component.myForm.controls['title'];
+      title.setValue('');
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expect(title.valid).toBeFalsy();
+      });
+    });
+  }));
 
   it('A valid description validates the description field', () => {
-
     fixture.detectChanges();
     let errors = {};
     let description = component.myForm.controls['description'];
     description.setValue(descriptionVal);
     fixture.detectChanges();
-    errors = description.errors || {};
+    //errors = description.errors || {};
     //expect(errors['pattern']).toBeTruthy(); 
     //expect(errors['required']).toBeFalsy(); 
     expect(description.valid).toBeTruthy();
-
   });
+
+  it('A valid tags validates the tags field', () => {
+    fixture.detectChanges();
+    let errors = {};
+    let tags = component.myForm.controls['tags'];
+    tags.setValue(TagTestService.getTags());
+    fixture.detectChanges();
+    expect(tags.valid).toBeTruthy();
+  });
+
+  it('A valid people validates the people field', () => {
+    fixture.detectChanges();
+    let errors = {};
+    let people = component.myForm.controls['people'];
+    people.setValue(PersonTestService.getPeople());
+    fixture.detectChanges();
+    expect(people.valid).toBeTruthy();
+  });
+
+  it('A valid mediaDate validates the mediaDate field', () => {
+    fixture.detectChanges();
+    let errors = {};
+    let mediaDate = component.myForm.controls['mediaDate'];
+    mediaDate.setValue(TestService.getMediaDate(5));
+    fixture.detectChanges();
+
+    expect(mediaDate.valid).toBeTruthy();
+  });
+
+
+  it('Submit works with just required valid values', async(() => {
+    spyOn<PhotoInputComponent>(component, 'forbiddenTitles').and.returnValue(Promise.resolve(null));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+      let title = component.myForm.controls['title'];
+      title.setValue(titleVal);
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        component.onSubmit();
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          expect(component.myForm.pristine).toBeTruthy();
+        });
+      });
+    });
+  }));
+
+
+  // fit('Submit fails with no required values', async(() => {
+  //   spyOn<PhotoInputComponent>(component, 'forbiddenTitles').and.returnValue(Promise.resolve(null));
+  //   fixture.detectChanges();
+  //   fixture.whenStable().then(() => {
+  //     expect(component.myForm.valid).toBeFalsy('Form Valid');
+  //     component.onSubmit();
+  //     fixture.detectChanges();
+  //     fixture.whenStable().then(() => {
+  //       expect(component.myForm.pristine).toBeFalsy('Form Pristine');
+  //     });
+  //   });
+  // }));
+
+
+  it('Submit works with all valid values', async(() => {
+    spyOn<PhotoInputComponent>(component, 'forbiddenTitles').and.returnValue(Promise.resolve(null));
+    fixture.detectChanges();
+    fixture.whenStable().then(() => {
+
+      let title = component.myForm.controls['title'];
+      title.setValue(titleVal);
+      let description = component.myForm.controls['description'];
+      description.setValue(descriptionVal);
+      let mediaDate = component.myForm.controls['mediaDate'];
+      mediaDate.setValue(TestService.getMediaDate(5));
+      let tags = component.myForm.controls['tags'];
+      tags.setValue(TagTestService.getTags());
+      let people = component.myForm.controls['people'];
+      people.setValue(PersonTestService.getPeople());
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        component.onSubmit();
+        fixture.detectChanges();
+        fixture.whenStable().then(() => {
+          expect(component.myForm.pristine).toBeTruthy();
+        });
+      });
+    });
+  }));
+
+
 
 });
