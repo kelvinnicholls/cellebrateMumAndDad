@@ -1,36 +1,45 @@
 <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
   <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
     aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <span class="navbar-toggler-icon"></span>
+  </button>
   <a class="navbar-brand" routerLinkActive="active" routerLink="/">Celebrate Mum And Dad</a>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" routerLink="/">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" routerLink="/">Home
+          <span class="sr-only">(current)</span>
+        </a>
       </li>
 
 
       <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="memoriesNavItem">
-        <a class="nav-link" routerLink="/memories">Memories</a> 
+        <a class="nav-link dropdown-toggle" id="memoriesDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
+          aria-expanded="false">Memories</a>
+        <div class="dropdown-menu" aria-labelledby="memoriesDropdown">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/memories">Memories List</a>
+          <div class="dropdown-divider"></div>
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/memories/memory/add">Add Memory</a>
+        </div>
       </li>
 
-        <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="photosNavItem">
-          <a class="nav-link dropdown-toggle" id="photosDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
-            aria-expanded="false">Photos</a>
-          <div class="dropdown-menu" aria-labelledby="photosDropdown">
-            <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos">Photos List</a>
-            <div class="dropdown-divider"></div>
-            <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos/photo/add">Add Photo</a>
-          </div>
-        </li>
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="photosNavItem">
+        <a class="nav-link dropdown-toggle" id="photosDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
+          aria-expanded="false">Photos</a>
+        <div class="dropdown-menu" aria-labelledby="photosDropdown">
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos">Photos List</a>
+          <div class="dropdown-divider"></div>
+          <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos/photo/add">Add Photo</a>
+        </div>
+      </li>
 
       <li class="nav-item" routerLinkActive="active" *ngIf="authUserService.isLoggedIn()" id="chatNavItem">
         <a class="nav-link" routerLink="/chat">Chat</a>
       </li>
 
-      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()"  id="usersNavItem">
+      <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()"
+        id="usersNavItem">
         <a class="nav-link dropdown-toggle" id="usersDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">Users</a>
         <div class="dropdown-menu" aria-labelledby="usersDropdown">
@@ -53,13 +62,13 @@
       <li *ngIf="authUserService.isLoggedIn()" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="loggedInUserDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">
-                    <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;">
-                    {{authUserService.getLoggedInUserName()}}
-                    </a>
+          <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;"> {{authUserService.getLoggedInUserName()}}
+        </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loggedInUserDropdown">
           <a class="dropdown-item" [routerLink]="['/users','user','edit-me']">Edit</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" [routerLink]="['/users','user','change-password']">Change<br>Password</a>
+          <a class="dropdown-item" [routerLink]="['/users','user','change-password']">Change
+            <br>Password</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="authService.logOut()" style="cursor: pointer">Log Out</a>
         </div>

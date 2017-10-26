@@ -45,7 +45,7 @@ let MemorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Person'
   }],
-  memorys: [{
+  medias: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Media'
   }],

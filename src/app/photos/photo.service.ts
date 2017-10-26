@@ -3,6 +3,7 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { Subject } from 'rxjs/Subject';
 import { Router } from "@angular/router";
 import * as moment from 'moment';
+import { IMultiSelectSettings, IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { Consts } from "../shared/consts";
@@ -26,6 +27,47 @@ import { User } from "../users/user.model";
 
 @Injectable()
 export class PhotoService {
+
+
+    photo: string = "tag";
+    photoplural: string = this.photo + "'s";
+    public selectedPhotos: String[] = [];
+
+
+    public findPhotoTitleById(id: any): string {
+        let photoTitle = "";
+        let photo: Photo = this.findPhotoById(id);
+        if (photo) {
+            photoTitle = photo.title;
+        };
+        return photoTitle;
+    }
+
+    public multiSelectSettings: IMultiSelectSettings = {
+        enableSearch: true,
+        //checkedStyle: 'fontawesome',
+        //buttonClasses: 'btn btn-default btn-block',
+        //dynamicTitleMaxItems: 3,
+        //pullRight: true,
+        showCheckAll: false,
+        showUncheckAll: false,
+        closeOnSelect: false
+    };
+
+    // Text configuration 
+    public multiSelectTabsTexts: IMultiSelectTexts = {
+        checkAll: 'Select all ' + this.photoplural,
+        uncheckAll: 'Unselect all ' + this.photoplural,
+        checked: this.photo + ' selected',
+        checkedPlural: this.photoplural + '  selected',
+        searchPlaceholder: 'Find ' + this.photo,
+        defaultTitle: 'Select ' + this.photoplural,
+        allSelected: 'All ' + this.photoplural + ' selected',
+    };
+
+
+    public multiSelectTagOptions: IMultiSelectOption[] = [
+    ];
 
     public maxSize: number = 5;
     public bigTotalItems: number = 0;

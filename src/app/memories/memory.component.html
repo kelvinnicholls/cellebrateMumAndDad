@@ -1,0 +1,14 @@
+<li class="list-group-item justify-content-between">
+
+  <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this memory." routerLink="/memories/memory/{{memory.index}}"><img [src]="getSource()" class="img-responsive" style="max-height: 30px;"></a>
+
+  <div class="author">
+    <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this memory." routerLink="/memories/memory/{{memory.index}}">{{ memory.title }}</a>
+  </div>
+  <div *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="config">
+    <a placement="bottom" ngbTooltip="Click to view comments." target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{memory.comments.length}})</a>
+  </div>
+  <div class="config">
+    <a placement="bottom" ngbTooltip="Click to delete this memory." (click)="onDelete()">Delete</a>
+  </div>
+</li>

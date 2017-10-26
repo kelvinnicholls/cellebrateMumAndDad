@@ -6,6 +6,7 @@ export class Consts {
   public static API_URL_MEDIA_ROOT: string = Consts.API_URL_ROOT + 'media';
   public static API_URL_MEMORIES_ROOT: string = Consts.API_URL_ROOT + 'memories';
   public static API_URL_MEMORY_ROOT: string = Consts.API_URL_ROOT + 'memory';
+  public static API_URL_MEMORIES_ROOT_TITLE: string = Consts.API_URL_MEMORIES_ROOT + '/title';
   public static API_URL_MEDIAS_ROOT: string = Consts.API_URL_ROOT + 'medias';
   public static API_URL_MEDIAS_ROOT_TITLE: string = Consts.API_URL_MEDIAS_ROOT + '/title';
   public static API_URL_TAGS_ROOT: string = Consts.API_URL_ROOT + 'tags';
