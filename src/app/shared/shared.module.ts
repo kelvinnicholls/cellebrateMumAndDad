@@ -22,7 +22,7 @@ import { AddTagComponent } from "./tags/add-tag.component";
 import { AddPersonComponent } from "./people/add-person.component";
 
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
-
+import { NgxGalleryModule } from 'ngx-gallery';
 
 @NgModule({
     declarations: [
@@ -38,9 +38,10 @@ import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
         CommentListComponent,
         AddTagComponent,
         AddPersonComponent
+        
     ],
-    exports: [MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
-    imports: [MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
+    exports: [NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
+    imports: [NgxGalleryModule,MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateParserFormatter,
         useFactory: () => { return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT, Consts.DATE_DB_FORMAT) }

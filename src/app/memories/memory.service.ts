@@ -10,6 +10,7 @@ import { Memory } from "./memory.model";
 import { Photo } from "../photos/photo.model";
 import { AppService } from "../app.service";
 import { UserService } from "../users/user.service";
+import { PhotoService } from "../photos/photo.service";
 import { ErrorService } from "../shared/errors/error.service";
 import { SearchService } from "../shared/search/search.service";
 import { SearchRetEnum } from "../shared/search/search-ret.enum";
@@ -41,6 +42,7 @@ export class MemoryService {
         , private errorService: ErrorService
         , private appService: AppService
         , private userService: UserService
+        , private photoService : PhotoService
         , private commentsService: CommentsService
         , private searchService: SearchService
         , private tagService: TagService
@@ -179,6 +181,23 @@ export class MemoryService {
             });
         };
 
+
+
+        let photos: Photo[] = [];
+        let photoIds: String[] = [];
+
+
+        if (memory.medias && memory.medias.length > 0) {
+            memory.medias.forEach((photo) => {
+                let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                photos.push(newPhoto);
+                photoIds.push(photo._id);
+            });
+        };
+
+
+        memory.photos = photoIds;
+        memory.photosToDisplay = photos;
         memory.tags = tagIds;
         memory.tagsToDisplay = tags;
         memory.people = personIds;
@@ -193,6 +212,7 @@ export class MemoryService {
             memory.addedDate,
             memory._id,
             memory.description,
+            memory.photosToDisplay,
             memory.photos,
             null,
             memory.comments,
@@ -200,7 +220,7 @@ export class MemoryService {
             memory.tags,
             memory.peopleToDisplay,
             memory.people,
-            memory.mediaDate
+            memory.memoryDate
         );
     }
 
@@ -278,17 +298,15 @@ export class MemoryService {
     }
 
     addMemory(memory: Memory) {
-        let memoryService = this;
-        var fd = new FormData();
         const headers: Headers = new Headers();
-
-
+        headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
         memory._creator = this.userService.getLoggedInUser()._creatorRef;
-        const memoryJsonString = JSON.stringify(memory);
-        fd.append('media', memoryJsonString);
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+        const body = JSON.stringify(memory);
 
-        return this.http.post(Consts.API_URL_MEMORIES_ROOT, fd, { headers: headers })
+        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+        let memoryService = this;
+
+        return this.http.post(Consts.API_URL_MEMORIES_ROOT, body, { headers: headers })
             .map((response: Response) => {
                 const result = response.json();
                 const memory = this.createMemory(result);
@@ -327,12 +345,13 @@ export class MemoryService {
 
             return this.http.get(Consts.API_URL_MEMORIES_ROOT, { headers: headers })
                 .map((response: Response) => {
-                    const memories = response.json().medias;
+                    const memories = response.json().memories;
                     let transformedMemories: Memory[] = [];
                     for (let memory of memories) {
                         let comments: CommentDisplay[] = [];
-                        let tags: Tag[] = [];
                         let photos: Photo[] = [];
+                        let photoIds: String[] = [];
+                        let tags: Tag[] = [];
                         let tagIds: String[] = [];
                         let people: Person[] = [];
                         let personIds: String[] = [];
@@ -372,6 +391,14 @@ export class MemoryService {
                             });
                         };
 
+                        if (memory.medias && memory.medias.length > 0) {
+                            memory.medias.forEach((photo) => {
+                                let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                                photos.push(newPhoto);
+                                photoIds.push(photo._id);
+                            });
+                        };
+
                         let newMemory = new Memory(
                             memory.title,
                             memory._creator,
@@ -379,13 +406,14 @@ export class MemoryService {
                             memory._id,
                             memory.description,
                             photos,
+                            photoIds,
                             null,
                             comments,
                             tags,
                             tagIds,
                             people,
                             personIds,
-                            moment(memory.mediaDate).format(Consts.DATE_DB_FORMAT)
+                            moment(memory.memoryDate).format(Consts.DATE_DB_FORMAT)
                         );
                         transformedMemories.push(newMemory);
                     };
@@ -406,31 +434,30 @@ export class MemoryService {
         };
     }
 
-    private isAllowed(changeType, memory : Memory) : boolean {
-      let retVal : boolean = true;
-      if (changeType == "U" && !memory.comment || changeType == "D") {
-        retVal = Utils.checkIsAdminOrOwner(memory._creator,this.userService.getLoggedInUser());
-      };
-      console.log("isAllowed retVal", retVal);
-      return retVal;
+    private isAllowed(changeType, memory: Memory): boolean {
+        let retVal: boolean = true;
+        if (changeType == "U" && !memory.comment || changeType == "D") {
+            retVal = Utils.checkIsAdminOrOwner(memory._creator, this.userService.getLoggedInUser());
+        };
+        console.log("isAllowed retVal", retVal);
+        return retVal;
     }
 
     updateMemory(memory: Memory) {
         let memoryService = this;
         if (memoryService.isAllowed('U', memory)) {
-            var fd = new FormData();
+
             const headers: Headers = new Headers();
-
-            const memoryJsonString = JSON.stringify(memory);
-            fd.append('media', memoryJsonString);
-
+            headers.append(Consts.CONTENT_TYPE, Consts.APP_JSON);
+            const body = JSON.stringify(memory);
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-            
-            return this.http.patch(Consts.API_URL_MEMORIES_ROOT + '/' + memory._id, fd, { headers: headers })
+
+
+            return this.http.patch(Consts.API_URL_MEMORIES_ROOT + '/' + memory._id, body, { headers: headers })
                 .map((response: any) => {
                     let body = JSON.parse(response._body);
-                    memoryService.updateThisMemory(body.media);
-                    memoryService.socket.emit('memoryUpdated', body.media, function (err) {
+                    memoryService.updateThisMemory(body.memory);
+                    memoryService.socket.emit('memoryUpdated', body.memory, function (err) {
                         if (err) {
                             console.log("memoryUpdated err: ", err);
                         } else {
@@ -444,7 +471,7 @@ export class MemoryService {
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
                 });
         } else {
-            memoryService.errorService.handleError({title : "There was a problem updating this memory", error: "User must either own the memory or be an admin user!"});
+            memoryService.errorService.handleError({ title: "There was a problem updating this memory", error: "User must either own the memory or be an admin user!" });
         }
     }
 
@@ -466,29 +493,29 @@ export class MemoryService {
     deleteMemory(memory: Memory) {
         let memoryService = this;
         if (memoryService.isAllowed('D', memory)) {
-        const headers: Headers = new Headers();
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-        return memoryService.http.delete(Consts.API_URL_MEMORIES_ROOT + '/' + memory._id, { headers: headers })
-            .map((response: Response) => {
-                memoryService.removeMemory(memory);
-                memoryService.socket.emit('memoryDeleted', memory, function (err) {
-                    if (err) {
-                        console.log("memoryDeleted err: ", err);
-                    } else {
-                        console.log("memoryDeleted No Error");
-                    }
-                });
-                memoryService.appService.showToast(Consts.INFO, "Memory deleted.");
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            return memoryService.http.delete(Consts.API_URL_MEMORIES_ROOT + '/' + memory._id, { headers: headers })
+                .map((response: Response) => {
+                    memoryService.removeMemory(memory);
+                    memoryService.socket.emit('memoryDeleted', memory, function (err) {
+                        if (err) {
+                            console.log("memoryDeleted err: ", err);
+                        } else {
+                            console.log("memoryDeleted No Error");
+                        }
+                    });
+                    memoryService.appService.showToast(Consts.INFO, "Memory deleted.");
 
-                //memoryService.memoriesChanged.next(memoryService.allMemories);
-                return response.json();
-            })
-            .catch((error: Response) => {
-                memoryService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
+                    //memoryService.memoriesChanged.next(memoryService.allMemories);
+                    return response.json();
+                })
+                .catch((error: Response) => {
+                    memoryService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                });
         } else {
-            memoryService.errorService.handleError({title : "There was a problem deleting this memory", error: "User must either own the memory or be an admin user!"});
+            memoryService.errorService.handleError({ title: "There was a problem deleting this memory", error: "User must either own the memory or be an admin user!" });
         }
     }
 

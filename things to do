@@ -25,6 +25,15 @@
 114) test with non-admin user
 115) prob with IbacktheWorkersRound.JPG
 116) Get Karma to run from VSC
+117) Add slideshow option to photos list
+118) Add new slideshow  component
+119) add new search photos component
+120) clicking a photo in view/edit photos should go full screen
+121) add view options for photos/memories
+122) Add slideshow option to view/edit memory
+122) Add slideshow option to memory in memories list
+123) updating memory does not update photo list correctly
+
 
 https://semaphoreci.com/community/tutorials/setting-up-angular-2-with-webpack
 

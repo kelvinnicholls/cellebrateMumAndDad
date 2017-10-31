@@ -1,3 +1,4 @@
+import { IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
 export class Consts {
   public static API_URL_ROOT: string = 'http://localhost:3000/';
   public static API_URL_USERS_ROOT: string = Consts.API_URL_ROOT + 'users';
@@ -66,5 +67,17 @@ export class Consts {
   public static WEB = 'Web';
   public static TAGS = 'TAGS';
   public static PEOPLE = 'PEOPLE';
+
+
+  public static multiSelectSettings: IMultiSelectSettings = {
+    enableSearch: true,
+    checkedStyle: 'fontawesome',
+    buttonClasses: 'btn btn-info btn-block',
+    //dynamicTitleMaxItems: 3,
+    //pullRight: true,
+    showCheckAll: false,
+    showUncheckAll: false,
+    closeOnSelect: true
+};
   
 }

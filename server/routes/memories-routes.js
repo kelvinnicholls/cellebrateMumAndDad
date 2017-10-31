@@ -103,7 +103,7 @@ router.get('/', authenticate, (req, res) => {
   //   memoriesObj._creator = req.loggedInUser._creatorRef;
   // };
 
-  Memory.find(memoriesObj).populate('comments tags people').then((memories) => {
+  Memory.find(memoriesObj).populate('comments tags people medias').then((memories) => {
     transformCreatorToUser(memories).then((memories) => {
       let obj = {};
       obj['memories'] = memories;

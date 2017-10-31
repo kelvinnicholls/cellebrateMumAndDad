@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { Photo } from "./photo.model";
 import { PhotoService } from "./photo.service";
 import { ToastService } from "../shared/toast/toast.service";
+import { NgxGalleryOptions, NgxGalleryImage } from 'ngx-gallery';
+
 
 @Component({
     selector: 'app-photo-list',
@@ -10,6 +12,10 @@ import { ToastService } from "../shared/toast/toast.service";
     styleUrls: ['./photo-list.component.css']
 })
 export class PhotoListComponent implements OnInit, OnDestroy {
+
+    galleryOptions: NgxGalleryOptions[];
+    galleryImages: NgxGalleryImage[];
+
     photos: Photo[] = [];
 
     pagedPhotos: Photo[] = [];
@@ -79,6 +85,44 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let photoListComponent = this;
+
+        photoListComponent.galleryOptions = [
+            {
+                width: '600px',
+                height: '400px',
+                thumbnailsColumns: 4
+            }
+        ];
+
+        photoListComponent.galleryImages = [
+            {
+                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-small.jpeg',
+                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-medium.jpeg',
+                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-big.jpeg'
+            },
+            {
+                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-small.jpeg',
+                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-medium.jpeg',
+                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-big.jpeg'
+            },
+            {
+                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-small.jpeg',
+                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-medium.jpeg',
+                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-big.jpeg'
+            },
+            {
+                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-small.jpeg',
+                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-medium.jpeg',
+                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-big.jpeg'
+            },
+            {
+                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-small.jpeg',
+                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-medium.jpeg',
+                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-big.jpeg'
+            }
+        ];
+
+
         photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
             photoListComponent.toastService.showSuccess(msg);
         });

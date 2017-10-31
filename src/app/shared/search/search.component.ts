@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
-import { IMultiSelectSettings, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import * as moment from 'moment';
 import { EventEmitter } from "@angular/core";
 import { Search } from "./search.model";
@@ -31,6 +31,10 @@ export class SearchComponent implements OnInit {
   public showMatchCriteriaText: String = "Show Match Criteria";
   public toggleShowHideMatchCriteriaText = this.showMatchCriteriaText;
 
+  getConsts() {
+    return Consts;
+  }
+
   toggleShowHideMatchCriteria() {
     if (this.toggleShowHideMatchCriteriaText === this.hideMatchCriteriaText) {
       this.toggleShowHideMatchCriteriaText = this.showMatchCriteriaText;
@@ -51,16 +55,7 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  multiSelectSettings: IMultiSelectSettings = {
-    enableSearch: true,
-    //checkedStyle: 'fontawesome',
-    //buttonClasses: 'btn btn-default btn-block',
-    //dynamicTitleMaxItems: 3,
-    //pullRight: true,
-    showCheckAll: false,
-    showUncheckAll: false,
-    closeOnSelect: false
-  };
+
 
   onTagsChange() {
     //console.log(this.optionsModel);

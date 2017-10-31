@@ -69,6 +69,9 @@ export class AuthService {
         if (route.component.toString().startsWith("function PhotoListComponent")) {
             ret = false;
         } else
+        if (route.component.toString().startsWith("function MemoryListComponent")) {
+            ret = false;
+        } else
         if (route.url.length == 0) {
             ret = true;
         } else

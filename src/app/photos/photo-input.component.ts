@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IMultiSelectSettings, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import * as moment from 'moment';
 // https://www.npmjs.com/package/angular-2-dropdown-multiselect
 // http://softsimon.github.io/angular-2-dropdown-multiselect/#
@@ -41,20 +41,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     private index: any;
     private commentSub: EventEmitter<Comment>;
     private commentAddedSub: EventEmitter<Comment>;
-    
-
-    multiSelectSettings: IMultiSelectSettings = {
-        enableSearch: true,
-        //checkedStyle: 'fontawesome',
-        //buttonClasses: 'btn btn-default btn-block',
-        //dynamicTitleMaxItems: 3,
-        //pullRight: true,
-        showCheckAll: false,
-        showUncheckAll: false,
-        closeOnSelect: false
-    };
-
-
 
     fileSource: String = Consts.FILE_SYSTEM;
 

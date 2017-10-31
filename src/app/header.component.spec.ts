@@ -18,6 +18,7 @@ import { UserService } from "./users/user.service";
 import { ErrorService } from "./shared/errors/error.service";
 import { SearchService } from "./shared/search/search.service";
 import { PhotoService } from "./photos/photo.service";
+import { MemoryService } from "./memories/memory.service";
 import { TagService } from "./shared/tags/tag.service";
 import { PersonService } from "./shared/people/person.service";
 import { CommentsService } from "./shared/comments/comments.service";
@@ -46,7 +47,7 @@ describe('HeaderComponent', () => {
         HomeComponent
       ], 
       imports: [RouterModule,HttpModule,appRouting],
-      providers: [{provide: APP_BASE_HREF, useValue: '/src/app'},CommentsService, PersonService, TagService, PhotoService,DialogService,AppService,AuthUserService,AuthService,ChatService,UserService,ErrorService,SearchService]
+      providers: [{provide: APP_BASE_HREF, useValue: '/src/app'},CommentsService, PersonService, TagService,MemoryService, PhotoService,DialogService,AppService,AuthUserService,AuthService,ChatService,UserService,ErrorService,SearchService]
     });
   }));
   

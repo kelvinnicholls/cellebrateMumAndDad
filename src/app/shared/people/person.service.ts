@@ -2,7 +2,7 @@ import { Http, Response, Headers } from "@angular/http";
 import { Subject } from 'rxjs/Subject';
 import { Injectable, EventEmitter } from "@angular/core";
 import { Observable } from "rxjs";
-import { IMultiSelectSettings, IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 
 import { AppService } from "../../app.service";
 import { ErrorService } from "../errors/error.service";

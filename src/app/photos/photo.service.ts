@@ -3,7 +3,7 @@ import { Injectable, EventEmitter } from "@angular/core";
 import { Subject } from 'rxjs/Subject';
 import { Router } from "@angular/router";
 import * as moment from 'moment';
-import { IMultiSelectSettings, IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
 import { Consts } from "../shared/consts";
@@ -43,17 +43,6 @@ export class PhotoService {
         return photoTitle;
     }
 
-    public multiSelectSettings: IMultiSelectSettings = {
-        enableSearch: true,
-        //checkedStyle: 'fontawesome',
-        //buttonClasses: 'btn btn-default btn-block',
-        //dynamicTitleMaxItems: 3,
-        //pullRight: true,
-        showCheckAll: false,
-        showUncheckAll: false,
-        closeOnSelect: false
-    };
-
     // Text configuration 
     public multiSelectTabsTexts: IMultiSelectTexts = {
         checkAll: 'Select all ' + this.photoplural,
@@ -66,7 +55,7 @@ export class PhotoService {
     };
 
 
-    public multiSelectTagOptions: IMultiSelectOption[] = [
+    public multiSelectPhotoOptions: IMultiSelectOption[] = [
     ];
 
     public maxSize: number = 5;
@@ -385,6 +374,73 @@ export class PhotoService {
             });
     }
 
+    public createNewPhoto(photo): Photo {
+        let photoInfo: any = {};
+
+        photoInfo.location = photo.location;
+        photoInfo.isUrl = photo.isUrl;
+        photoInfo.mimeType = photo.mimeType;
+
+        let comments: CommentDisplay[] = [];
+        let tags: Tag[] = [];
+        let tagIds: String[] = [];
+        let people: Person[] = [];
+        let personIds: String[] = [];
+        if (photo.comments && photo.comments.length > 0) {
+            photo.comments.forEach((comment) => {
+                let userName = "";
+                let profilePicLocation = "";
+                if (comment.user) {
+                    if (comment.user.name) {
+                        userName = comment.user.name;
+                    };
+                    if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
+                        profilePicLocation = comment.user._profileMediaId.location;
+                        if (profilePicLocation.startsWith('server')) {
+                            profilePicLocation = profilePicLocation.substring(14);
+                        };
+                    };
+                };
+                let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
+                comments.push(commentDisplay);
+            });
+        };
+
+        if (photo.tags && photo.tags.length > 0) {
+            photo.tags.forEach((tag) => {
+                let newTag = new Tag(tag.tag, tag._id);
+                tags.push(newTag);
+                tagIds.push(tag._id);
+            });
+        };
+
+        if (photo.people && photo.people.length > 0) {
+            photo.people.forEach((person) => {
+                let newPerson = new Person(person.person, person._id);
+                people.push(newPerson);
+                personIds.push(person._id);
+            });
+        };
+
+        let newPhoto = new Photo(
+            photo.title,
+            photo._creator,
+            moment(photo.addedDate).format(Consts.DATE_DB_FORMAT),
+            photo._id,
+            photo.description,
+            null,
+            photoInfo,
+            null,
+            comments,
+            tags,
+            tagIds,
+            people,
+            personIds,
+            moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
+        );
+        return newPhoto;
+    }
+
     getPhotos(): Observable<any> {
         let photoService = this;
         if (photoService.photos.length > 0) {
@@ -403,69 +459,7 @@ export class PhotoService {
                     const photos = response.json().medias;
                     let transformedPhotos: Photo[] = [];
                     for (let photo of photos) {
-                        let photoInfo: any = {};
-
-                        photoInfo.location = photo.location;
-                        photoInfo.isUrl = photo.isUrl;
-                        photoInfo.mimeType = photo.mimeType;
-
-                        let comments: CommentDisplay[] = [];
-                        let tags: Tag[] = [];
-                        let tagIds: String[] = [];
-                        let people: Person[] = [];
-                        let personIds: String[] = [];
-                        if (photo.comments && photo.comments.length > 0) {
-                            photo.comments.forEach((comment) => {
-                                let userName = "";
-                                let profilePicLocation = "";
-                                if (comment.user) {
-                                    if (comment.user.name) {
-                                        userName = comment.user.name;
-                                    };
-                                    if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
-                                        profilePicLocation = comment.user._profileMediaId.location;
-                                        if (profilePicLocation.startsWith('server')) {
-                                            profilePicLocation = profilePicLocation.substring(14);
-                                        };
-                                    };
-                                };
-                                let commentDisplay = new CommentDisplay(comment.comment, moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT), userName, profilePicLocation);
-                                comments.push(commentDisplay);
-                            });
-                        };
-
-                        if (photo.tags && photo.tags.length > 0) {
-                            photo.tags.forEach((tag) => {
-                                let newTag = new Tag(tag.tag, tag._id);
-                                tags.push(newTag);
-                                tagIds.push(tag._id);
-                            });
-                        };
-
-                        if (photo.people && photo.people.length > 0) {
-                            photo.people.forEach((person) => {
-                                let newPerson = new Person(person.person, person._id);
-                                people.push(newPerson);
-                                personIds.push(person._id);
-                            });
-                        };
-
-                        let newPhoto = new Photo(
-                            photo.title,
-                            photo._creator,
-                            moment(photo.addedDate).format(Consts.DATE_DB_FORMAT),
-                            photo._id,
-                            photo.description,
-                            null,
-                            photoInfo,
-                            null,
-                            comments,
-                            tags,
-                            tagIds,
-                            people,
-                            personIds,
-                            moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
-                        );
+                        let newPhoto : Photo = photoService.createNewPhoto(photo);
                         transformedPhotos.push(newPhoto);
                     };
                     transformedPhotos.sort(Utils.dynamicSort('title'));
@@ -485,13 +479,13 @@ export class PhotoService {
         };
     }
 
-    private isAllowed(changeType, photo : Photo) : boolean {
-      let retVal : boolean = true;
-      if (changeType == "U" && !photo.comment || changeType == "D") {
-        retVal = Utils.checkIsAdminOrOwner(photo._creator,this.userService.getLoggedInUser());
-      };
-      console.log("isAllowed retVal", retVal);
-      return retVal;
+    private isAllowed(changeType, photo: Photo): boolean {
+        let retVal: boolean = true;
+        if (changeType == "U" && !photo.comment || changeType == "D") {
+            retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser());
+        };
+        console.log("isAllowed retVal", retVal);
+        return retVal;
     }
 
     updatePhoto(photo: Photo) {
@@ -508,7 +502,7 @@ export class PhotoService {
             fd.append('media', photoJsonString);
 
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-            
+
             return this.http.patch(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, fd, { headers: headers })
                 .map((response: any) => {
                     let body = JSON.parse(response._body);
@@ -527,7 +521,7 @@ export class PhotoService {
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
                 });
         } else {
-            photoService.errorService.handleError({title : "There was a problem updating this photo", error: "User must either own the photo or be an admin user!"});
+            photoService.errorService.handleError({ title: "There was a problem updating this photo", error: "User must either own the photo or be an admin user!" });
         }
     }
 
@@ -549,29 +543,29 @@ export class PhotoService {
     deletePhoto(photo: Photo) {
         let photoService = this;
         if (photoService.isAllowed('D', photo)) {
-        const headers: Headers = new Headers();
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-        return photoService.http.delete(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, { headers: headers })
-            .map((response: Response) => {
-                photoService.removePhoto(photo);
-                photoService.socket.emit('photoDeleted', photo, function (err) {
-                    if (err) {
-                        console.log("photoDeleted err: ", err);
-                    } else {
-                        console.log("photoDeleted No Error");
-                    }
-                });
-                photoService.appService.showToast(Consts.INFO, "Photo deleted.");
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            return photoService.http.delete(Consts.API_URL_MEDIAS_ROOT + '/' + photo._id, { headers: headers })
+                .map((response: Response) => {
+                    photoService.removePhoto(photo);
+                    photoService.socket.emit('photoDeleted', photo, function (err) {
+                        if (err) {
+                            console.log("photoDeleted err: ", err);
+                        } else {
+                            console.log("photoDeleted No Error");
+                        }
+                    });
+                    photoService.appService.showToast(Consts.INFO, "Photo deleted.");
 
-                //photoService.photosChanged.next(photoService.allPhotos);
-                return response.json();
-            })
-            .catch((error: Response) => {
-                photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
+                    //photoService.photosChanged.next(photoService.allPhotos);
+                    return response.json();
+                })
+                .catch((error: Response) => {
+                    photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                });
         } else {
-            photoService.errorService.handleError({title : "There was a problem deleting this photo", error: "User must either own the photo or be an admin user!"});
+            photoService.errorService.handleError({ title: "There was a problem deleting this photo", error: "User must either own the photo or be an admin user!" });
         }
     }
 

@@ -11,14 +11,16 @@ export class Memory {
         public addedDate: string,
         public _id: string,
         public description?: string,
-        public photos?: Photo[],
+        public mediasToDisplay?: Photo[],
+        public medias?: String[],
         public comment?: string,
         public comments?: CommentDisplay[],
         public tagsToDisplay?: Tag[],
         public tags?: String[],
         public peopleToDisplay?: Person[],
         public people?: String[],
-        public mediaDate?: string,
+        public memoryDate?: string
+         
     ) {
     }
 

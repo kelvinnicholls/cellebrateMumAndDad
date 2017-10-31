@@ -4,7 +4,8 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { IMultiSelectSettings, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
+import { NgxGalleryOptions, NgxGalleryImage } from 'ngx-gallery';
 import * as moment from 'moment';
 // https://www.npmjs.com/package/angular-2-dropdown-multiselect
 // http://softsimon.github.io/angular-2-dropdown-multiselect/#
@@ -25,6 +26,7 @@ import { FileStackService } from "../shared/file-stack/file-stack.service";
 import { Comment, CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
+import { Photo } from "../photos/photo.model";
 //import { element } from 'protractor';
 import { Utils } from "../shared/utils/utils";
 
@@ -42,22 +44,29 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
     private index: any;
     private commentSub: EventEmitter<Comment>;
     private commentAddedSub: EventEmitter<Comment>;
-    
 
-    multiSelectSettings: IMultiSelectSettings = {
-        enableSearch: true,
-        //checkedStyle: 'fontawesome',
-        //buttonClasses: 'btn btn-default btn-block',
-        //dynamicTitleMaxItems: 3,
-        //pullRight: true,
-        showCheckAll: false,
-        showUncheckAll: false,
-        closeOnSelect: false
-    };
+    galleryOptions: NgxGalleryOptions[];
+    //galleryImages: NgxGalleryImage[];
 
+    public getGalleryImages(): NgxGalleryImage[] {
+        let galleryImages: NgxGalleryImage[] = [];
 
+        for (let index in this.photoService.selectedPhotos) {
+            let photo = this.photoService.findPhotoById(this.photoService.selectedPhotos[index]);
+            if (photo && photo.photoInfo && photo.photoInfo.location) {
+                let location = photo.photoInfo.location.replace(/\\/g, "/");
+                let photoObj = {
+                    small: location,
+                    medium: location,
+                    big: location
+                };
+                galleryImages.push(photoObj);
+            };
+        }
 
+        return galleryImages;
 
+    }
 
     submitType = Consts.ADD_MEMORY;
 
@@ -144,6 +153,29 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
+    private findPhoto(id: String): String {
+        let retVal = "";
+        let option = this.photoService.multiSelectPhotoOptions.find((photo: IMultiSelectOption) => { return id == photo.id });
+        if (option) {
+            retVal = option.name;
+        };
+        return retVal;
+    }
+
+    getPhotos(): string {
+        let photoArr: String[] = [];
+        let retVal = "No Photos";
+
+        for (let index in this.photoService.selectedPhotos) {
+            let person = this.findPhoto(this.photoService.selectedPhotos[index]);
+            photoArr.push(person);
+        };
+        if (photoArr.length > 0) {
+            retVal = photoArr.join(", ");
+        };
+        return retVal;
+    }
+
     getConsts() {
         return Consts;
     }
@@ -188,11 +220,11 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         } : null;
     }
 
-    modelMediaDate: NgbDateStruct;
+    modelMemoryDate: NgbDateStruct;
 
-    getMediaDate() {
-        if (this.memory && this.memory.mediaDate) {
-            let d = moment(this.memory && this.memory.mediaDate);
+    getMemoryDate() {
+        if (this.memory && this.memory.memoryDate) {
+            let d = moment(this.memory && this.memory.memoryDate);
             return d.isValid() ? {
                 year: d.year(),
                 month: d.month() + 1,
@@ -231,6 +263,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                             null,
                             memoryInputComponent.memory._id,
                             memoryInputComponent.myForm.value.description,
+                            null,
                             memoryInputComponent.myForm.value.photos,
                             null,
                             null,
@@ -238,7 +271,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                             memoryInputComponent.myForm.value.tags,
                             null,
                             memoryInputComponent.myForm.value.people,
-                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.mediaDate)
+                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.memoryDate)
                         );
                         memoryInputComponent.memoryService.updateMemory(this.memory)
                             .subscribe(
@@ -262,6 +295,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                             null,
                             null,
                             memoryInputComponent.myForm.value.description,
+                            null,
                             memoryInputComponent.myForm.value.photos,
                             null,
                             null,
@@ -269,7 +303,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                             memoryInputComponent.myForm.value.tags,
                             null,
                             memoryInputComponent.myForm.value.people,
-                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.mediaDate));
+                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.memoryDate));
                         memoryInputComponent.memoryService.addMemory(memoryInputComponent.memory)
                             .subscribe(
                             data => {
@@ -335,13 +369,23 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
     private extractIdsAsArray(arr: any[]): String[] {
         let retArr: String[] = [];
         for (let element of arr) {
-            retArr.push(element.id);
+            retArr.push(element.id || element._id);
         };
         return retArr;
     }
 
     ngOnInit() {
         let memoryInputComponent = this;
+
+
+
+        memoryInputComponent.galleryOptions = [
+            {
+                width: '300px',
+                height: '200px',
+                thumbnailsColumns: 4
+            }
+        ];
 
         memoryInputComponent.tagService.getTags().subscribe(
             (tags: Tag[]) => {
@@ -360,6 +404,17 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                     memoryInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 };
                 console.log(memoryInputComponent.personService.multiSelectPersonOptions);
+            }
+        );
+
+
+        memoryInputComponent.photoService.getPhotos().subscribe(
+            (photos: Photo[]) => {
+                memoryInputComponent.photoService.multiSelectPhotoOptions = [];
+                for (let photo of photos) {
+                    memoryInputComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
+                };
+                console.log(memoryInputComponent.photoService.multiSelectPhotoOptions);
             }
         );
 
@@ -385,10 +440,10 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
             description: new FormControl(null, null),
             tags: new FormControl(null, null),
             photos: new FormControl(null, null),
-            mediaDate: new FormControl(null, null),
+            memoryDate: new FormControl(null, null),
             people: new FormControl(null, null)
         });
-        
+
         if (memoryInputComponent.route.snapshot.url.length === 2 && memoryInputComponent.route.snapshot.url[0].path === 'memory' && memoryInputComponent.route.snapshot.url[1].path === 'add') {
             memoryInputComponent.submitType = Consts.ADD_MEMORY;
             memoryInputComponent.clear();
@@ -398,10 +453,11 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                 (queryParams: Params) => {
                     memoryInputComponent.index = queryParams['index'];
                     memoryInputComponent.memory = memoryInputComponent.memoryService.findMemoryByIndex(memoryInputComponent.index);
-                    memoryInputComponent.modelMediaDate = this.getMediaDate();
+                    memoryInputComponent.modelMemoryDate = this.getMemoryDate();
                     memoryInputComponent.submitType = Consts.UPDATE_MEMORY;
                     memoryInputComponent.tagService.selectedTags = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.tagsToDisplay);
                     memoryInputComponent.personService.selectedPeople = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.peopleToDisplay);
+                    memoryInputComponent.photoService.selectedPhotos = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.mediasToDisplay);
                 }
             );
         };
@@ -422,7 +478,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
     isFormValid() {
         let retVal = false;
-        if (this.myForm.valid && this.myForm.dirty && this.memory) {
+        if (this.myForm.valid && this.myForm.dirty) {
             retVal = true
         }
         return retVal;
@@ -439,6 +495,10 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
     }
 
     onPeopleChange() {
+        //console.log(this.optionsModel);
+    }
+
+    onPhotosChange() {
         //console.log(this.optionsModel);
     }
 
