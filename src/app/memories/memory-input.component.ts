@@ -334,6 +334,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         this._creator = null;
         this.personService.selectedPeople = [];
         this.tagService.selectedTags = [];
+        this.photoService.selectedPhotos = [];
         this.myForm.reset();
 
     }

@@ -204,7 +204,7 @@ io.on('connection', (socket) => {
 
     console.log("memoryDeleted", memory, socket.id);
 
-    socket.broadcast.emit('deletedMemory', memory._creatorRef, getUserName(socket.id));
+    socket.broadcast.emit('deletedMemory', memory._id, getUserName(socket.id));
     callback();
   });
 

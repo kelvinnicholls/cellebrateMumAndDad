@@ -189,9 +189,15 @@ export class MemoryService {
 
         if (memory.medias && memory.medias.length > 0) {
             memory.medias.forEach((photo) => {
-                let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
-                photos.push(newPhoto);
-                photoIds.push(photo._id);
+                if (photo._id) {
+                    let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                    photos.push(newPhoto);
+                    photoIds.push(photo._id);
+                } else {
+                    let newPhoto = memoryService.photoService.findPhotoById(photo);
+                    photos.push(newPhoto);
+                    photoIds.push(photo);
+                };
             });
         };
 

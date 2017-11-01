@@ -101,7 +101,7 @@ x107) re-evaluate pagination size after insert/delete bigTotalItems
 x108) comment date not formatted correctly in firefox
 x109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
 x113) click on photo in list should edit it
-
+x123) updating memory does not update photo list correctly
 
 
 

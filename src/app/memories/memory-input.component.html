@@ -104,13 +104,6 @@
       type="button">Add New Person</button>
   </div>
 
-  <div *ngIf="photoService && photoService.selectedPhotos && photoService.selectedPhotos.length > 0" class="form-group row col col-sm-4 offset-sm-5">
-    <div>
-      <ngx-gallery [options]="galleryOptions" [images]="getGalleryImages()"></ngx-gallery>
-    </div>
-  </div>
-
-
   <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
     'has-danger': myForm.get('photos').invalid && (myForm.get('photos').dirty || myForm.get('photos').touched),
     'has-success': myForm.get('photos').valid && (myForm.get('photos').dirty || myForm.get('photos').touched)
@@ -129,6 +122,12 @@
 
     </div>
 
+  </div>
+
+  <div *ngIf="photoService && photoService.selectedPhotos && photoService.selectedPhotos.length > 0" class="form-group row col col-sm-4 offset-sm-2">
+    <div>
+      <ngx-gallery [options]="galleryOptions" [images]="getGalleryImages()"></ngx-gallery>
+    </div>
   </div>
 
   <div class="form-group row col col-sm-4 offset-sm-6">
