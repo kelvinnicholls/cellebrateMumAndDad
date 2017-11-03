@@ -32,6 +32,9 @@ export class MemoryComponent implements OnInit, OnDestroy {
     defaultMemoryFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
     constructor(private memoryService: MemoryService, private dialogService: DialogService, private commentsService: CommentsService) { }
 
+    checkCanDelete(): boolean {
+        return this.memoryService.isAllowed('D', this.memory);
+    }
 
     showComments() {
         this.commentsService.showComments("Comments for memory: '" + this.memory.title + "'", this.memory.comments);

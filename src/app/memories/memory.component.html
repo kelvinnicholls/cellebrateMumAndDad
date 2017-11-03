@@ -6,7 +6,7 @@
   <div *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="config">
     <a placement="bottom" ngbTooltip="Click to view comments." target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{memory.comments.length}})</a>
   </div>
-  <div class="config">
+  <div *ngIf="checkCanDelete()" class="config">
     <a placement="bottom" ngbTooltip="Click to delete this memory." (click)="onDelete()">Delete</a>
   </div>
 </li>

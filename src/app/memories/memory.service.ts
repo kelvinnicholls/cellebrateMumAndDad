@@ -450,7 +450,7 @@ export class MemoryService {
         };
     }
 
-    private isAllowed(changeType, memory: Memory): boolean {
+    public isAllowed(changeType, memory: Memory): boolean {
         let retVal: boolean = true;
         if (changeType == "U" && !memory.comment || changeType == "D") {
             retVal = Utils.checkIsAdminOrOwner(memory._creator, this.userService.getLoggedInUser());

@@ -38,6 +38,10 @@ export class PhotoComponent implements OnInit, OnDestroy {
     }
 
 
+    checkCanDelete(): boolean {
+        return this.photoService.isAllowed('D', this.photo);
+    }
+
     onDelete() {
 
         let retDialogSub = new EventEmitter<DialogRetEnum>();
