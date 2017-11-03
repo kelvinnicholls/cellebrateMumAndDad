@@ -58,6 +58,16 @@ export class MemoryService {
 
     public searchRet: SearchRet;
 
+
+    public getMode(memory : Memory) {
+        if (this.isAllowed('U', memory)) {
+            return Consts.EDIT;
+        } else {
+            return Consts.VIEW;
+        };
+    }
+
+
     findMemoryByIndex(index: any): Memory {
         return this.memories[index];
     }

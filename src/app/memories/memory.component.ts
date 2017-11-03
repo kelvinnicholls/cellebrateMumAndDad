@@ -27,6 +27,7 @@ import { CommentsService } from "../shared/comments/comments.service";
 })
 export class MemoryComponent implements OnInit, OnDestroy {
     @Input() memory: Memory;
+    @Input() mode: String;
     //@Input() index: Number;
     defaultMemoryFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
     constructor(private memoryService: MemoryService, private dialogService: DialogService, private commentsService: CommentsService) { }

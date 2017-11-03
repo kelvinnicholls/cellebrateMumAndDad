@@ -1,7 +1,7 @@
 <li class="list-group-item justify-content-between">
 
   <div class="author">
-    <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to edit this memory." routerLink="/memories/memory/{{memory.index}}">{{ memory.title }}</a>
+    <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to {{mode}} this memory." routerLink="/memories/memory/{{mode}}/{{memory.index}}">{{ memory.title }}</a>
   </div>
   <div *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="config">
     <a placement="bottom" ngbTooltip="Click to view comments." target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{memory.comments.length}})</a>

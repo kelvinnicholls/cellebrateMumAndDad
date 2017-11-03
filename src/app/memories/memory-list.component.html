@@ -1,7 +1,7 @@
 <div *ngIf="memories.length > 0">
   <div class="col-md-6 offset-md-2">
     <ul class="list-group">
-      <app-memory class="kgn-border-pad" *ngFor="let memory of pagedMemories" [memory]="memory">
+      <app-memory class="kgn-border-pad" *ngFor="let memory of pagedMemories" [memory]="memory" [mode]="memoryService.getMode(memory)">
       </app-memory>
     </ul>
   </div>

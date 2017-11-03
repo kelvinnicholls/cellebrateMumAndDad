@@ -45,6 +45,18 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
     private commentSub: EventEmitter<Comment>;
     private commentAddedSub: EventEmitter<Comment>;
 
+
+    private mode: String;
+
+    isEditable() {
+        if (this.mode === Consts.EDIT) {
+            return true;
+        } else {
+            return false;
+        };
+
+    }
+
     galleryOptions: NgxGalleryOptions[];
     //galleryImages: NgxGalleryImage[];
 
@@ -363,9 +375,11 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         }
     }
 
+
     forbiddenTitles = (control: FormControl): Promise<any> | Observable<any> => {
         return this.memoryService.titleExists(control.value, this.getId());
     }
+
 
     private extractIdsAsArray(arr: any[]): String[] {
         let retArr: String[] = [];
@@ -435,21 +449,17 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
             });
 
         memoryInputComponent._creator = memoryInputComponent.userService.getLoggedInUser()._creatorRef;
-        memoryInputComponent.myForm = new FormGroup({
-            title: new FormControl(null, Validators.required,
-                memoryInputComponent.forbiddenTitles),
-            description: new FormControl(null, null),
-            tags: new FormControl(null, null),
-            photos: new FormControl(null, null),
-            memoryDate: new FormControl(null, null),
-            people: new FormControl(null, null)
-        });
+
 
         if (memoryInputComponent.route.snapshot.url.length === 2 && memoryInputComponent.route.snapshot.url[0].path === 'memory' && memoryInputComponent.route.snapshot.url[1].path === 'add') {
             memoryInputComponent.submitType = Consts.ADD_MEMORY;
+            memoryInputComponent.mode = Consts.ADD;
+            memoryInputComponent.createForm(memoryInputComponent.mode);
             memoryInputComponent.clear();
 
         } else {
+            memoryInputComponent.mode = memoryInputComponent.route.snapshot.url[1].path;
+            memoryInputComponent.createForm(memoryInputComponent.mode);
             memoryInputComponent.paramsSubscription = memoryInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     memoryInputComponent.index = queryParams['index'];
@@ -462,6 +472,25 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                 }
             );
         };
+
+
+    }
+
+    createForm(mode: String) {
+        let memoryInputComponent = this;
+        let formState = null;
+        if (mode != Consts.ADD) {
+            formState = { value: '', disabled: !memoryInputComponent.isEditable() };
+        };
+        memoryInputComponent.myForm = new FormGroup({
+            title: new FormControl(formState, Validators.required,
+                memoryInputComponent.forbiddenTitles),
+            description: new FormControl(formState, null),
+            tags: new FormControl(formState, null),
+            photos: new FormControl(formState, null),
+            memoryDate: new FormControl(formState, null),
+            people: new FormControl(formState, null)
+        });
     }
 
     destroy(sub: any) {

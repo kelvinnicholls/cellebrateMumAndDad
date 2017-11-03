@@ -42,7 +42,11 @@ export class Consts {
   public static CUSTOM = "Custom";
   public static PHOTO = 'PHOTO';
   public static MEMORY = 'MEMORY';
- 
+
+  public static VIEW = 'view';
+  public static EDIT = 'edit';
+  public static ADD = 'add';
+  
   public static DATE_TIME_DISPLAY_FORMAT = "MMMM Do YYYY, HH:mm";
   public static DATE_DISPLAY_FORMAT = "DD-MM-YYYY";
   public static DATE_DB_FORMAT = "YYYY-MM-DD";
