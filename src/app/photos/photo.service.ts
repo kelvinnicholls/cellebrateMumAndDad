@@ -85,6 +85,14 @@ export class PhotoService {
 
 
     public searchRet: SearchRet;
+    
+    public getMode(photo : Photo) {
+        if (this.isAllowed('U', photo)) {
+            return Consts.EDIT;
+        } else {
+            return Consts.VIEW;
+        };
+    }
 
     findPhotoByIndex(index: any): Photo {
         return this.photos[index];

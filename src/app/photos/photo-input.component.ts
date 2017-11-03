@@ -42,6 +42,16 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     private commentSub: EventEmitter<Comment>;
     private commentAddedSub: EventEmitter<Comment>;
 
+    private mode: String;
+    
+        isEditable() {
+            if (this.mode === Consts.EDIT) {
+                return true;
+            } else {
+                return false;
+            };
+        }
+
     fileSource: String = Consts.FILE_SYSTEM;
 
     submitType = Consts.ADD_PHOTO;
@@ -347,6 +357,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     }
 
+
     clear() {
         this.submitType = Consts.ADD_PHOTO;
         this.photo = null;
@@ -436,27 +447,17 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             });
 
         photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
-        photoInputComponent.myForm = new FormGroup({
-            title: new FormControl(null, Validators.required,
-                photoInputComponent.forbiddenTitles),
-            description: new FormControl(null, null),
-            tags: new FormControl(null, null),
-            mediaDate: new FormControl(null, null),
-            people: new FormControl(null, null)
-        });
 
-
-        // console.log("PhotoInputComponent","photoInputComponent.route.snapshot",photoInputComponent.route.snapshot);
-        // console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url",photoInputComponent.route.snapshot.url);
-        // console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url.length",photoInputComponent.route.snapshot.url.length);
-        // console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url[0].path",photoInputComponent.route.snapshot.url[0].path);
-        // console.log("PhotoInputComponent","photoInputComponent.route.snapshot.url[1].path",photoInputComponent.route.snapshot.url[1].path);
-        
+  
         if (photoInputComponent.route.snapshot.url.length === 2 && photoInputComponent.route.snapshot.url[0].path === 'photo' && photoInputComponent.route.snapshot.url[1].path === 'add') {
             photoInputComponent.submitType = Consts.ADD_PHOTO;
+            photoInputComponent.mode = Consts.ADD;
+            photoInputComponent.createForm(photoInputComponent.mode);
             photoInputComponent.clear();
 
         } else {
+            photoInputComponent.mode = photoInputComponent.route.snapshot.url[1].path;
+            photoInputComponent.createForm(photoInputComponent.mode);
             photoInputComponent.paramsSubscription = photoInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     photoInputComponent.index = queryParams['index'];
@@ -468,6 +469,22 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                 }
             );
         };
+    }
+
+    createForm(mode: String) {
+        let photoInputComponent = this;
+        let formState = null;
+        if (mode != Consts.ADD) {
+            formState = { value: '', disabled: !photoInputComponent.isEditable() };
+        };
+        photoInputComponent.myForm = new FormGroup({
+            title: new FormControl(formState, Validators.required,
+                photoInputComponent.forbiddenTitles),
+            description: new FormControl(formState, null),
+            tags: new FormControl(formState, null),
+            mediaDate: new FormControl(formState, null),
+            people: new FormControl(formState, null)
+        });
     }
 
     destroy(sub: any) {

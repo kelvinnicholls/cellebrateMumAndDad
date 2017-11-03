@@ -27,6 +27,7 @@ import { CommentsService } from "../shared/comments/comments.service";
 })
 export class PhotoComponent implements OnInit, OnDestroy {
     @Input() photo: Photo;
+    @Input() mode: String;
     //@Input() index: Number;
     defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
     constructor(private photoService: PhotoService, private dialogService: DialogService, private commentsService: CommentsService) { }

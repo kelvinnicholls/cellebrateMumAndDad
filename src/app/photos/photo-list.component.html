@@ -1,7 +1,7 @@
 <div *ngIf="photos.length > 0">
   <div class="col-md-6 offset-md-2">
     <ul class="list-group">
-      <app-photo class="kgn-border-pad" *ngFor="let photo of pagedPhotos" [photo]="photo">
+      <app-photo class="kgn-border-pad" *ngFor="let photo of pagedPhotos" [photo]="photo" [mode]="photoService.getMode(photo)">
       </app-photo>
     </ul>
   </div>

@@ -54,7 +54,6 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         } else {
             return false;
         };
-
     }
 
     galleryOptions: NgxGalleryOptions[];

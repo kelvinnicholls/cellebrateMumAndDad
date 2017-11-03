@@ -71,7 +71,7 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable()" (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
       type="button">Add New Tag</button>
   </div>
 
@@ -90,7 +90,7 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable()" (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
       type="button">Add New Person</button>
   </div>
 
