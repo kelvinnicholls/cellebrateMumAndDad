@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
+//import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpModule } from "@angular/http";
 import { ToastOptions } from 'ng2-toastr';
@@ -56,7 +56,6 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         HomeComponent
     ],
     imports: [
-        BrowserModule,
         BrowserAnimationsModule,
         appRouting,
         ReactiveFormsModule,

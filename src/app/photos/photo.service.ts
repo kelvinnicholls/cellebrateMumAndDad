@@ -58,10 +58,10 @@ export class PhotoService {
     public multiSelectPhotoOptions: IMultiSelectOption[] = [
     ];
 
-    public maxSize: number = 5;
+    public maxSize: number = 12;
     public bigTotalItems: number = 0;
     public numPages: number = 0;
-    public eventItemsPerPage: number = 5;
+    public eventItemsPerPage: number = 12;
 
     public photos: Photo[] = [];
     public eventPage: number = 1;
@@ -487,7 +487,7 @@ export class PhotoService {
         };
     }
 
-    private isAllowed(changeType, photo: Photo): boolean {
+    public isAllowed(changeType, photo: Photo): boolean {
         let retVal: boolean = true;
         if (changeType == "U" && !photo.comment || changeType == "D") {
             retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser());

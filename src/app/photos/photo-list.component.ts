@@ -1,9 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef, EventEmitter} from "@angular/core";
 import { Subscription } from 'rxjs/Subscription';
 import { Photo } from "./photo.model";
 import { PhotoService } from "./photo.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { NgxGalleryOptions, NgxGalleryImage } from 'ngx-gallery';
+import { DialogService } from "../shared/dialog/dialog.service";
+import { Consts } from "../shared/consts";
+import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../shared/dialog/dialog.model";
+import { CommentsService } from "../shared/comments/comments.service";
+
 
 
 @Component({
@@ -13,8 +19,34 @@ import { NgxGalleryOptions, NgxGalleryImage } from 'ngx-gallery';
 })
 export class PhotoListComponent implements OnInit, OnDestroy {
 
-    galleryOptions: NgxGalleryOptions[];
-    galleryImages: NgxGalleryImage[];
+    defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
+ 
+    showComments(photo : Photo) {
+        this.commentsService.showComments("Comments for photo: '" + photo.title + "'",photo.comments);
+    }
+
+    checkCanDelete(photo : Photo): boolean {
+        return this.photoService.isAllowed('D', photo);
+    }
+
+    onDelete(photo : Photo) {
+
+        let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+        retDialogSub.subscribe(
+            (buttonPressed: DialogRetEnum) => {
+                if (buttonPressed === DialogRetEnum.ButtonOne) {
+                    this.photoService.deletePhoto(photo)
+                        .subscribe(
+                        result => console.log(result)
+                        );
+                }
+            });
+
+        this.dialogService.showDialog("Warning", "Do you really wish to delete this photo?", "Yes", "No", retDialogSub);
+    }
+
+
 
     photos: Photo[] = [];
 
@@ -61,7 +93,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 
-    constructor(private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private dialogService: DialogService, private commentsService: CommentsService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -85,43 +117,6 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let photoListComponent = this;
-
-        photoListComponent.galleryOptions = [
-            {
-                width: '600px',
-                height: '400px',
-                thumbnailsColumns: 4
-            }
-        ];
-
-        photoListComponent.galleryImages = [
-            {
-                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-small.jpeg',
-                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-medium.jpeg',
-                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/1-big.jpeg'
-            },
-            {
-                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-small.jpeg',
-                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-medium.jpeg',
-                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/2-big.jpeg'
-            },
-            {
-                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-small.jpeg',
-                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-medium.jpeg',
-                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/3-big.jpeg'
-            },
-            {
-                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-small.jpeg',
-                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-medium.jpeg',
-                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/4-big.jpeg'
-            },
-            {
-                small: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-small.jpeg',
-                medium: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-medium.jpeg',
-                big: 'https://lukasz-galka.github.io/ngx-gallery-demo/assets/img/5-big.jpeg'
-            }
-        ];
-
 
         photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
             photoListComponent.toastService.showSuccess(msg);

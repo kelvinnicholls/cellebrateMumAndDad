@@ -1,12 +1,34 @@
 <div *ngIf="photos.length > 0">
-  <div class="col-md-6 offset-md-2">
-    <ul class="list-group">
-      <app-photo class="kgn-border-pad" *ngFor="let photo of pagedPhotos" [photo]="photo" [mode]="photoService.getMode(photo)">
-      </app-photo>
-    </ul>
+
+  <!-- https://material.angular.io/components/grid-list/overview -->
+  <div class="col-md-6 offset-md-2 kgn-center-text">
+    <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
+      <mat-grid-tile *ngFor="let photo of pagedPhotos">
+        <mat-grid-tile-header>
+          <span mat-line>
+            <a routerLinkActive="active" routerLink="/photos/photo/{{photoService.getMode(photo)}}/{{photo.index}}">{{photo.title}}</a>
+          </span>
+        </mat-grid-tile-header>
+        <img [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 50px;">
+        <mat-grid-tile-footer placement="top" ngbTooltip="{{photo.description}}">
+          <div *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="">
+            <span class="kgn-left-text">
+              <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments ({{photo.comments.length}})</a>
+            </span>
+          </div>
+          <div *ngIf="checkCanDelete(photo)" class="">
+            <span class="kgn-right-text">
+              <a (click)="onDelete(photo)">Delete</a>
+            </span>
+          </div>
+        </mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
 
-  <ng-template #popContent> <span [innerHTML]="photoService.showSearchCriteria()"></span></ng-template>
+  <ng-template #popContent>
+    <span [innerHTML]="photoService.showSearchCriteria()"></span>
+  </ng-template>
 
   <div *ngIf="photoService.searchRet" class="row col offset-md-2">
     <a placement="left" [ngbPopover]="popContent" popoverTitle="Existing Search Criteria" target="_blank" href="javascript:void(0)"
@@ -15,8 +37,9 @@
 
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
-    <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize" class="pagination-sm" [boundaryLinks]="true"
-      [itemsPerPage]="5" [rotate]="false" (numPages)="photoService.numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="12" [rotate]="false" (numPages)="photoService.numPages = $event"
+      (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
@@ -39,5 +62,5 @@
   </div>
   <div *ngIf="photoService.searchRet" class="row col col-sm-4 offset-sm-5">
     <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-   </div>
+  </div>
 </div>

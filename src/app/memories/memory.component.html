@@ -1,4 +1,4 @@
-<li class="list-group-item justify-content-between">
+<!-- <li class="list-group-item justify-content-between">
 
   <div class="author">
     <a routerLinkActive="active" placement="bottom" ngbTooltip="Click to {{mode}} this memory." routerLink="/memories/memory/{{mode}}/{{memory.index}}">{{ memory.title }}</a>
@@ -9,4 +9,20 @@
   <div *ngIf="checkCanDelete()" class="config">
     <a placement="bottom" ngbTooltip="Click to delete this memory." (click)="onDelete()">Delete</a>
   </div>
-</li>
+</li> -->
+
+
+
+<mat-grid-tile>
+  <mat-grid-tile-header>
+      <!-- <mat-icon mat-grid-avatar>info_outline</mat-icon> -->
+      {{memory.title}}
+    </mat-grid-tile-header>
+<img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length >= 0 && memory.mediasToDisplay[0].getSource()}}" class="img-responsive" style="max-height: 50px;">
+
+<mat-grid-tile-footer>
+    <!-- <h3 mat-line>{{photo.description}}</h3> -->
+    <span mat-line>{{memory.description}}</span>
+    <!-- <mat-icon>star_border</mat-icon> -->
+  </mat-grid-tile-footer>
+</mat-grid-tile>

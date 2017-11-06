@@ -74,3 +74,16 @@ button {
   margin-bottom: 1.25rem;
   color: #999;
 }
+
+
+.kgn-center-text {
+  text-align: center;
+}
+
+.kgn-right-text {
+  text-align: right;
+}
+
+.kgn-left-text {
+  text-align: left;
+}

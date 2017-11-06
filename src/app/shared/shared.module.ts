@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 
-
 import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
@@ -24,6 +23,11 @@ import { AddPersonComponent } from "./people/add-person.component";
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { NgxGalleryModule } from 'ngx-gallery';
 
+import {
+    MatGridListModule
+  } from '@angular/material';
+  import {CdkTableModule} from '@angular/cdk/table';
+
 @NgModule({
     declarations: [
         SearchComponent,
@@ -40,7 +44,9 @@ import { NgxGalleryModule } from 'ngx-gallery';
         AddPersonComponent
         
     ],
-    exports: [NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent],
+    exports: [NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
+        MatGridListModule,
+       ],
     imports: [NgxGalleryModule,MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateParserFormatter,

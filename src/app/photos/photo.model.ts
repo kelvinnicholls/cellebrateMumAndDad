@@ -26,5 +26,13 @@ export class Photo {
 
     }
 
+    public getSource(): string {
+        let retVal: string = "";
+        if (this.photoInfo && this.photoInfo.location) {
+            retVal = this.photoInfo.location;
+        }
+        return retVal;
+    }
+
 
 };

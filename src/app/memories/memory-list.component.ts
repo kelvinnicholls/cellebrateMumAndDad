@@ -1,8 +1,13 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef, EventEmitter } from "@angular/core";
 import { Subscription } from 'rxjs/Subscription';
 import { Memory } from "./memory.model";
 import { MemoryService } from "./memory.service";
 import { ToastService } from "../shared/toast/toast.service";
+import { DialogService } from "../shared/dialog/dialog.service";
+import { Consts } from "../shared/consts";
+import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../shared/dialog/dialog.model";
+import { CommentsService } from "../shared/comments/comments.service";
 
 @Component({
     selector: 'app-memory-list',
@@ -10,7 +15,35 @@ import { ToastService } from "../shared/toast/toast.service";
     styleUrls: ['./memory-list.component.css']
 })
 export class MemoryListComponent implements OnInit, OnDestroy {
+
+
+    showComments(memory: Memory) {
+        this.commentsService.showComments("Comments for photo: '" + memory.title + "'", memory.comments);
+    }
+
+    checkCanDelete(memory: Memory): boolean {
+        return this.memoryService.isAllowed('D', memory);
+    }
+
+    onDelete(memory: Memory) {
+
+        let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+        retDialogSub.subscribe(
+            (buttonPressed: DialogRetEnum) => {
+                if (buttonPressed === DialogRetEnum.ButtonOne) {
+                    this.memoryService.deleteMemory(memory)
+                        .subscribe(
+                        result => console.log(result)
+                        );
+                }
+            });
+
+        this.dialogService.showDialog("Warning", "Do you really wish to delete this memory?", "Yes", "No", retDialogSub);
+    }
+
     memories: Memory[] = [];
+
 
     pagedMemories: Memory[] = [];
 
@@ -55,7 +88,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 
-    constructor(private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private dialogService: DialogService, private commentsService: CommentsService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 

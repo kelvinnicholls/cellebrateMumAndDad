@@ -1,12 +1,34 @@
 <div *ngIf="memories.length > 0">
-  <div class="col-md-6 offset-md-2">
-    <ul class="list-group">
-      <app-memory class="kgn-border-pad" *ngFor="let memory of pagedMemories" [memory]="memory" [mode]="memoryService.getMode(memory)">
-      </app-memory>
-    </ul>
+
+  <div class="col-md-6 offset-md-2 kgn-center-text">
+    <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
+      <mat-grid-tile *ngFor="let memory of pagedMemories">
+        <mat-grid-tile-header>
+          <span mat-line>
+            <a routerLinkActive="active" routerLink="/memories/memory/{{memoryService.getMode(memory)}}/{{memory.index}}">{{memory.title}}</a>
+          </span>
+        </mat-grid-tile-header>
+        <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length >= 0 && memory.mediasToDisplay[0].getSource()}}"
+          class="img-responsive" style="max-height: 50px;">
+        <mat-grid-tile-footer placement="top" ngbTooltip="{{memory.description}}">
+          <div *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="">
+            <span class="kgn-left-text">
+              <a target="_blank" href="javascript:void(0)" (click)="showComments(memory)">Comments ({{memory.comments.length}})</a>
+            </span>
+          </div>
+          <div *ngIf="checkCanDelete(memory)" class="">
+            <span class="kgn-right-text">
+              <a (click)="onDelete(memory)">Delete</a>
+            </span>
+          </div>
+        </mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
 
-  <ng-template #popContent> <span [innerHTML]="memoryService.showSearchCriteria()"></span></ng-template>
+  <ng-template #popContent>
+    <span [innerHTML]="memoryService.showSearchCriteria()"></span>
+  </ng-template>
 
   <div *ngIf="memoryService.searchRet" class="row col offset-md-2">
     <a placement="left" [ngbPopover]="popContent" popoverTitle="Existing Search Criteria" target="_blank" href="javascript:void(0)"
@@ -15,8 +37,9 @@
 
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
-    <pagination [totalItems]="memoryService.bigTotalItems" [(ngModel)]="memoryService.bigCurrentPage" [maxSize]="memoryService.maxSize" class="pagination-sm" [boundaryLinks]="true"
-      [itemsPerPage]="5" [rotate]="false" (numPages)="memoryService.numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="memoryService.bigTotalItems" [(ngModel)]="memoryService.bigCurrentPage" [maxSize]="memoryService.maxSize"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="5" [rotate]="false" (numPages)="memoryService.numPages = $event"
+      (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
@@ -39,5 +62,5 @@
   </div>
   <div *ngIf="memoryService.searchRet" class="row col col-sm-4 offset-sm-5">
     <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-   </div>
+  </div>
 </div>
