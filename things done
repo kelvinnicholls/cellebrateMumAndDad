@@ -102,7 +102,7 @@ x108) comment date not formatted correctly in firefox
 x109) comment username wrong when communicated via sockets and date is not formatted correctly and order is lost
 x113) click on photo in list should edit it
 x123) updating memory does not update photo list correctly
-
+x120) clicking a photo in view/edit photos should go full screen
 
 
 
