@@ -19,6 +19,7 @@ import { HeaderComponent } from "./header.component";
 import { appRouting } from "./app.routing";
 
 import { SearchService } from "./shared/search/search.service";
+import { SlideShowService } from "./shared/slideshow/slideshow.service";
 import { ChatService } from "./chat/chat.service";
 import { ErrorService } from "./shared/errors/error.service";
 import { CommentsService } from "./shared/comments/comments.service";
@@ -65,7 +66,7 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         ChatModule,
         SharedModule
     ],
-    providers: [CommentsService, PersonService, TagService, AuthService, UserService, PhotoService, MemoryService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, FileStackService],
+    providers: [CommentsService, PersonService, TagService, AuthService, UserService, PhotoService, MemoryService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, SlideShowService, FileStackService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

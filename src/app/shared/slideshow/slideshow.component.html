@@ -1,0 +1,18 @@
+<div class="backdrop" [ngStyle]="{'display': display}"></div>
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{ slideshow?.title }}</h4>
+        <div *ngIf="slideShow && slideShow.galleryImages && slideShow.galleryImages.length > 0">
+          <ngx-gallery [options]="slideShow?.galleryOptions" [images]="slideShow?.galleryImages"></ngx-gallery>
+          <button type="button" class="close" aria-label="Close" (click)="onClose()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->

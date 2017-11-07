@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, EventEmitter } from "@angular/core";
+import { NgxGalleryImage } from 'ngx-gallery';
 import { Subscription } from 'rxjs/Subscription';
 import { Memory } from "./memory.model";
 import { MemoryService } from "./memory.service";
@@ -8,6 +9,7 @@ import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { CommentsService } from "../shared/comments/comments.service";
+import { SlideShowService } from "../shared/slideshow/slideshow.service";
 
 @Component({
     selector: 'app-memory-list',
@@ -88,12 +90,31 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 
-    constructor(private dialogService: DialogService, private commentsService: CommentsService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private slideShowService: SlideShowService,private dialogService: DialogService, private commentsService: CommentsService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
     onSearch() {
         this.memoryService.search();
+    }
+
+    onSlideShow(memory : Memory) {
+        let galleryImages: NgxGalleryImage[] = [];
+
+        
+        memory.mediasToDisplay.forEach((photo) => {
+            if (photo && photo.photoInfo && photo.photoInfo.location) {
+                let location = photo.photoInfo.location.replace(/\\/g, "/");
+                let photoObj = {
+                    small: location,
+                    medium: location,
+                    big: location,
+                    description: photo.title
+                };
+                galleryImages.push(photoObj);
+            };
+        });
+        this.slideShowService.showSlideShow('Memories', galleryImages);
     }
 
     onClearSearch() {

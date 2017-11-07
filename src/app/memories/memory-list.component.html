@@ -1,7 +1,7 @@
 <div *ngIf="memories.length > 0">
   <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Memories</h2>
   <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
+    <mat-grid-list cols="3" gutterSize="10" rows="5" rowHeight="1:1">
       <mat-grid-tile *ngFor="let memory of pagedMemories">
         <mat-grid-tile-header>
           <span mat-line>
@@ -9,11 +9,16 @@
           </span>
         </mat-grid-tile-header>
         <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length >= 0 && memory.mediasToDisplay[0].getSource()}}"
-          class="img-responsive" style="max-height: 50px;" toggleFullscreen>
+          class="img-responsive" style="max-height: 80px;" toggleFullscreen>
         <mat-grid-tile-footer placement="top" ngbTooltip="{{memory.description}}">
           <div *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="">
             <span class="kgn-left-text">
               <a target="_blank" href="javascript:void(0)" (click)="showComments(memory)">Comments ({{memory.comments.length}})</a>
+            </span>
+          </div>
+          <div>
+            <span class="kgn-center-text">
+              <a (click)="onSlideShow(memory)">Slide Show</a>
             </span>
           </div>
           <div *ngIf="checkCanDelete(memory)" class="">

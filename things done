@@ -103,7 +103,9 @@ x109) comment username wrong when communicated via sockets and date is not forma
 x113) click on photo in list should edit it
 x123) updating memory does not update photo list correctly
 x120) clicking a photo in view/edit photos should go full screen
-
-
+x79) Hover over photo should  resize it (click resizes)
+x89) enlarge photo on hover
+x112) show photos/users in grid https://stackoverflow.com/questions/19535669/ng-repeat-array-to-rows-and-columns
+x121) add view options for photos/memories
 
 

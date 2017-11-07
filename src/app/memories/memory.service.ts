@@ -42,7 +42,7 @@ export class MemoryService {
         , private errorService: ErrorService
         , private appService: AppService
         , private userService: UserService
-        , private photoService : PhotoService
+        , private photoService: PhotoService
         , private commentsService: CommentsService
         , private searchService: SearchService
         , private tagService: TagService
@@ -59,7 +59,7 @@ export class MemoryService {
     public searchRet: SearchRet;
 
 
-    public getMode(memory : Memory) {
+    public getMode(memory: Memory) {
         if (this.isAllowed('U', memory)) {
             return Consts.EDIT;
         } else {
@@ -161,15 +161,18 @@ export class MemoryService {
 
         if (memory.tags && memory.tags.length > 0) {
             memory.tags.forEach((tag) => {
-                if (tag._id) {
-                    let newTag = new Tag(tag.tag, tag._id);
-                    tags.push(newTag);
-                    tagIds.push(tag._id);
-                } else {
-                    let newTag = memoryService.tagService.findTagById(tag);
-                    tags.push(newTag);
-                    tagIds.push(tag);
-                };
+                let newTag = new Tag(tag.tag, tag._id);
+                tags.push(newTag);
+                tagIds.push(tag._id);
+            // if (tag._id) {
+            //         let newTag = new Tag(tag.tag, tag._id);
+            //         tags.push(newTag);
+            //         tagIds.push(tag._id);
+            //     } else {
+            //         let newTag = memoryService.tagService.findTagById(tag);
+            //         tags.push(newTag);
+            //         tagIds.push(tag);
+            //     };
             });
         };
 
@@ -179,15 +182,18 @@ export class MemoryService {
 
         if (memory.people && memory.people.length > 0) {
             memory.people.forEach((person) => {
-                if (person._id) {
-                    let newPerson = new Person(person.person, person._id);
-                    people.push(newPerson);
-                    personIds.push(person._id);
-                } else {
-                    let newPerson = memoryService.personService.findPersonById(person);
-                    people.push(newPerson);
-                    personIds.push(person);
-                };
+                let newPerson = new Person(person.person, person._id);
+                people.push(newPerson);
+                personIds.push(person._id);
+            // if (person._id) {
+            //         let newPerson = new Person(person.person, person._id);
+            //         people.push(newPerson);
+            //         personIds.push(person._id);
+            //     } else {
+            //         let newPerson = memoryService.personService.findPersonById(person);
+            //         people.push(newPerson);
+            //         personIds.push(person);
+            //     };
             });
         };
 
@@ -199,15 +205,18 @@ export class MemoryService {
 
         if (memory.medias && memory.medias.length > 0) {
             memory.medias.forEach((photo) => {
-                if (photo._id) {
-                    let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
-                    photos.push(newPhoto);
-                    photoIds.push(photo._id);
-                } else {
-                    let newPhoto = memoryService.photoService.findPhotoById(photo);
-                    photos.push(newPhoto);
-                    photoIds.push(photo);
-                };
+                let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                photos.push(newPhoto);
+                photoIds.push(photo._id);
+                // if (photo._id) {
+                //     let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                //     photos.push(newPhoto);
+                //     photoIds.push(photo._id);
+                // } else {
+                //     let newPhoto = memoryService.photoService.findPhotoById(photo);
+                //     photos.push(newPhoto);
+                //     photoIds.push(photo);
+                // };
             });
         };
 

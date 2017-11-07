@@ -2,7 +2,7 @@
   <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Users</h2>
 
   <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
+    <mat-grid-list cols="3" gutterSize="10" rows="5" rowHeight="1:1">
       <mat-grid-tile *ngFor="let  user of pagedUsers">
         <mat-grid-tile-header>
           <span mat-line>
@@ -10,7 +10,7 @@
           </span>
         </mat-grid-tile-header>
         <img [alt]="user.name" [src]="getSource(user)" placement="top" ngbTooltip="{{ user.relationship }} - {{ user.email }}" class="img-responsive"
-          style="max-height: 50px;" toggleFullscreen>
+          style="max-height: 80px;" toggleFullscreen>
         <mat-grid-tile-footer>
           <span mat-line>
             <a (click)="onDelete(user)">Delete</a>

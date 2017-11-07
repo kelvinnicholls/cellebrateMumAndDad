@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef, EventEmitter} from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewContainerRef, EventEmitter } from "@angular/core";
 import { Subscription } from 'rxjs/Subscription';
 import { Photo } from "./photo.model";
 import { PhotoService } from "./photo.service";
@@ -9,6 +9,8 @@ import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { CommentsService } from "../shared/comments/comments.service";
+import { SlideShowService } from "../shared/slideshow/slideshow.service";
+import { NgxGalleryImage } from 'ngx-gallery';
 
 @Component({
     selector: 'app-photo-list',
@@ -18,16 +20,16 @@ import { CommentsService } from "../shared/comments/comments.service";
 export class PhotoListComponent implements OnInit, OnDestroy {
 
     defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
- 
-    showComments(photo : Photo) {
-        this.commentsService.showComments("Comments for photo: '" + photo.title + "'",photo.comments);
+
+    showComments(photo: Photo) {
+        this.commentsService.showComments("Comments for photo: '" + photo.title + "'", photo.comments);
     }
 
-    checkCanDelete(photo : Photo): boolean {
+    checkCanDelete(photo: Photo): boolean {
         return this.photoService.isAllowed('D', photo);
     }
 
-    onDelete(photo : Photo) {
+    onDelete(photo: Photo) {
 
         let retDialogSub = new EventEmitter<DialogRetEnum>();
 
@@ -91,8 +93,26 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 
-    constructor(private dialogService: DialogService, private commentsService: CommentsService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private slideShowService: SlideShowService, private dialogService: DialogService, private commentsService: CommentsService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
+    }
+
+    onSlideShow() {
+        let galleryImages: NgxGalleryImage[] = [];
+
+        this.photos.forEach((photo) => {
+            if (photo && photo.photoInfo && photo.photoInfo.location) {
+                let location = photo.photoInfo.location.replace(/\\/g, "/");
+                let photoObj = {
+                    small: location,
+                    medium: location,
+                    big: location,
+                    description: photo.title
+                };
+                galleryImages.push(photoObj);
+            };
+        });
+        this.slideShowService.showSlideShow('Photos', galleryImages);
     }
 
     onSearch() {

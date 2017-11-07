@@ -6,6 +6,7 @@ import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
 import { SearchComponent } from "./search/search.component";
+import { SlideShowComponent } from "./slideshow/slideshow.component";
 import { PasswordStrengthBarComponent } from './password-strength-bar/password-strength-bar.component';
 import { ReversePipe } from "./pipes/reverse-pipe";
 import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
@@ -33,6 +34,7 @@ import {
 @NgModule({
     declarations: [
         SearchComponent,
+        SlideShowComponent,
         PasswordStrengthBarComponent,
         ReversePipe,
         ErrorComponent,
@@ -46,7 +48,7 @@ import {
         AddPersonComponent,
         ToggleFullscreenDirective
     ],
-    exports: [ToggleFullscreenDirective,NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
+    exports: [ToggleFullscreenDirective,NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
         MatGridListModule,
        ],
     imports: [NgxGalleryModule,MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],

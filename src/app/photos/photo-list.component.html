@@ -1,15 +1,18 @@
 <div *ngIf="photos.length > 0">
-  <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Photos</h2>
+  <div  class="row col col-sm-4 offset-sm-4 kgn-center-text">
+    <h2 class="blog-post-title ">Photos</h2>
+    <button placement="bottom" ngbTooltip="Press to see a slide show of these photos." type="button" class="btn btn-md btn-primary" (click)="onSlideShow()">Slide Show</button>
+  </div>
   <!-- https://material.angular.io/components/grid-list/overview -->
   <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
+    <mat-grid-list cols="3" gutterSize="10" rows="5" rowHeight="1:1">
       <mat-grid-tile *ngFor="let photo of pagedPhotos">
         <mat-grid-tile-header>
           <span mat-line>
             <a routerLinkActive="active" routerLink="/photos/photo/{{photoService.getMode(photo)}}/{{photo.index}}">{{photo.title}}</a>
           </span>
         </mat-grid-tile-header>
-        <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 50px;" toggleFullscreen>
+        <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 80px;" toggleFullscreen>
         <mat-grid-tile-footer placement="top" ngbTooltip="{{photo.description}}">
           <div *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="">
             <span class="kgn-left-text">
@@ -52,6 +55,8 @@
   <div *ngIf="!photoService.searchRet" class="row col col-sm-4 offset-sm-5">
     <button placement="bottom" ngbTooltip="Press to restict photo list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
+
+
 </div>
 
 <div *ngIf="photos.length == 0">
