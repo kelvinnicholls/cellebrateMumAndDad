@@ -272,7 +272,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                                 // userInputComponent.toastService.showSuccess("User created.");
                                 // userInputComponent.router.navigate(['users']);
                             },
-                            error => console.error("UserComponent userService.newUser error", error)
+                            error => console.error("UserInputComponent userService.newUser error", error)
                             );
                         this.user = null;
                         this._creatorRef = null;

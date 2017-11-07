@@ -1,11 +1,27 @@
 <div *ngIf="users.length > 0">
   <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Users</h2>
-  <div class="col-md-6 offset-md-2">
-    <ul class="list-group">
-      <app-user class="kgn-border-pad" *ngFor="let user of pagedUsers" [user]="user">
-      </app-user>
-    </ul>
+
+  <div class="col-md-6 offset-md-2 kgn-center-text">
+    <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
+      <mat-grid-tile *ngFor="let  user of pagedUsers">
+        <mat-grid-tile-header>
+          <span mat-line>
+            <a routerLinkActive="active" routerLink="/users/user/{{user.index}}">{{ user.name }}</a>
+          </span>
+        </mat-grid-tile-header>
+        <img [alt]="user.name" [src]="getSource(user)" placement="top" ngbTooltip="{{ user.relationship }} - {{ user.email }}" class="img-responsive"
+          style="max-height: 50px;" toggleFullscreen>
+        <mat-grid-tile-footer>
+          <span mat-line>
+            <a (click)="onDelete(user)">Delete</a>
+          </span>
+        </mat-grid-tile-footer>
+      </mat-grid-tile>
+    </mat-grid-list>
   </div>
+
+
+
 
   <ng-template #popContent>
     <span [innerHTML]="userService.showSearchCriteria()"></span>

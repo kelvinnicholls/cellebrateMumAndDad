@@ -1,8 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, OnDestroy, EventEmitter, ViewContainerRef } from "@angular/core";
 import { Subscription } from 'rxjs/Subscription';
 import { User } from "./user.model";
 import { UserService } from "./user.service";
 import { ToastService } from "../shared/toast/toast.service";
+import { DialogService } from "../shared/dialog/dialog.service";
+import { Consts } from "../shared/consts";
+import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
+import { Dialog } from "../shared/dialog/dialog.model";
 
 @Component({
     selector: 'app-user-list',
@@ -14,6 +18,32 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     pagedUsers: User[] = [];
 
+    defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
+
+    getSource(user: User): string {
+        let retVal: string = this.defaultProfilePicFile;
+        if (user && user.profilePicInfo && user.profilePicInfo.location) {
+            retVal = user.profilePicInfo.location;
+        }
+        return retVal;
+    }
+
+    onDelete(user: User) {
+
+        let retDialogSub = new EventEmitter<DialogRetEnum>();
+
+        retDialogSub.subscribe(
+            (buttonPressed: DialogRetEnum) => {
+                if (buttonPressed === DialogRetEnum.ButtonOne) {
+                    this.userService.deleteUser(user)
+                        .subscribe(
+                        result => console.log(result)
+                        );
+                }
+            });
+
+        this.dialogService.showDialog("Warning", "Do you really wish to delete this user?", "Yes", "No", retDialogSub);
+    }
 
     subscription: Subscription;
 
@@ -63,7 +93,7 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
-    constructor(private userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef, private dialogService: DialogService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
