@@ -35,7 +35,7 @@
 125) Sort out hints being on for too long 
 126) sort out lov's being under photos
 127) test search memories
-
+128) allow initial user to be created on server startup if it doesn't already exists - similar to test and dev and prod db
 https://www.npmjs.com/package/angular2-image-zoom
 
 https://npm.runkit.com/angular2-image-popup

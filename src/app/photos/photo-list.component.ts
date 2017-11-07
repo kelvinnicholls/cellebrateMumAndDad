@@ -3,14 +3,12 @@ import { Subscription } from 'rxjs/Subscription';
 import { Photo } from "./photo.model";
 import { PhotoService } from "./photo.service";
 import { ToastService } from "../shared/toast/toast.service";
-import { NgxGalleryOptions, NgxGalleryImage } from 'ngx-gallery';
+import { NgxGalleryOptions } from 'ngx-gallery';
 import { DialogService } from "../shared/dialog/dialog.service";
 import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { CommentsService } from "../shared/comments/comments.service";
-
-
 
 @Component({
     selector: 'app-photo-list',

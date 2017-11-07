@@ -1,5 +1,5 @@
 <div *ngIf="photos.length > 0">
-
+  <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Photos</h2>
   <!-- https://material.angular.io/components/grid-list/overview -->
   <div class="col-md-6 offset-md-2 kgn-center-text">
     <mat-grid-list cols="4" gutterSize="10" rows="5" rowHeight="1:1">
@@ -9,7 +9,7 @@
             <a routerLinkActive="active" routerLink="/photos/photo/{{photoService.getMode(photo)}}/{{photo.index}}">{{photo.title}}</a>
           </span>
         </mat-grid-tile-header>
-        <img [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 50px;">
+        <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 50px;" toggleFullscreen>
         <mat-grid-tile-footer placement="top" ngbTooltip="{{photo.description}}">
           <div *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="">
             <span class="kgn-left-text">

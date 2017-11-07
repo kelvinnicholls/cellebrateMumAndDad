@@ -23,6 +23,8 @@ import { AddPersonComponent } from "./people/add-person.component";
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { NgxGalleryModule } from 'ngx-gallery';
 
+import {ToggleFullscreenDirective} from './screenfull/screenfull.directive';
+
 import {
     MatGridListModule
   } from '@angular/material';
@@ -41,10 +43,10 @@ import {
         CommentComponent,
         CommentListComponent,
         AddTagComponent,
-        AddPersonComponent
-        
+        AddPersonComponent,
+        ToggleFullscreenDirective
     ],
-    exports: [NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
+    exports: [ToggleFullscreenDirective,NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
         MatGridListModule,
        ],
     imports: [NgxGalleryModule,MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],

@@ -1,4 +1,5 @@
 <div *ngIf="users.length > 0">
+  <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Users</h2>
   <div class="col-md-6 offset-md-2">
     <ul class="list-group">
       <app-user class="kgn-border-pad" *ngFor="let user of pagedUsers" [user]="user">
@@ -6,7 +7,9 @@
     </ul>
   </div>
 
-  <ng-template #popContent> <span [innerHTML]="userService.showSearchCriteria()"></span></ng-template>
+  <ng-template #popContent>
+    <span [innerHTML]="userService.showSearchCriteria()"></span>
+  </ng-template>
 
   <div *ngIf="userService.searchRet" class="row col offset-md-2">
     <a placement="left" [ngbPopover]="popContent" popoverTitle="Existing Search Criteria" target="_blank" href="javascript:void(0)"
@@ -15,8 +18,8 @@
 
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
-    <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
-      [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+    <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-sm"
+      [boundaryLinks]="true" [itemsPerPage]="5" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
@@ -40,5 +43,5 @@
   </div>
   <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-5">
     <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-   </div>
+  </div>
 </div>

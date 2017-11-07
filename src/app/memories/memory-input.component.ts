@@ -69,7 +69,8 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                 let photoObj = {
                     small: location,
                     medium: location,
-                    big: location
+                    big: location,
+                    description  : photo.title
                 };
                 galleryImages.push(photoObj);
             };
