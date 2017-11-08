@@ -43,6 +43,42 @@ const {
 const utils = require('../utils/utils.js');
 
 
+let checkCreateInitialAdminUser = true;
+
+
+let createInitialAdminUser = (adminUser) => {
+
+  //console.log("createInitialAdminUser",adminUser);
+
+  User.findOne({}).then((user) => {
+    if (!user) {
+      const adminUserVals = adminUser.split(',');
+      const name = adminUserVals[0];
+      const email = adminUserVals[1];
+      const password = adminUserVals[2];
+      const relationship = adminUserVals[3];
+      const dob = new Date(adminUserVals[4]);
+
+      var user = new User({name,email,password,relationship,dob});
+      user._creatorRef = new ObjectID();
+      user._creator = user._creatorRef;
+      user.adminUser = true;
+      user.emailUpdates = true;
+
+      user.save().then((user) => {
+        if (user) {
+          console.log("Initial User Created : ",user.name);
+        };
+      });
+    };
+  });
+};
+
+if (checkCreateInitialAdminUser) {
+  createInitialAdminUser(process.env.ADMIN_USER);
+  checkCreateInitialAdminUser = false;
+};
+
 let upload = (req, res, next) => {
   //console.log('upload',req, res);
   multerUploadSingleFile(req, res, function (err) {
@@ -438,3 +474,8 @@ router.delete('/:_creatorRef', authenticate, (req, res) => {
 });
 
 module.exports = router;
+
+// module.exports = {
+//   router,
+//   createInitialAdminUser
+// };

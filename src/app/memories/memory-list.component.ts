@@ -114,7 +114,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
                 galleryImages.push(photoObj);
             };
         });
-        this.slideShowService.showSlideShow('Memories', galleryImages);
+        this.slideShowService.showSlideShow('Memory : ' + memory.title, galleryImages);
     }
 
     onClearSearch() {

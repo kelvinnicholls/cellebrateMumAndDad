@@ -27,7 +27,7 @@
 126) sort out lov's being under photos - use  z-index
 127) test search memories
 128) allow initial user to be created on server startup if it doesn't already exists - similar to test and dev and prod db
-
+129) right-clicking a photo in a slideshow should go to that photo/memory/user = 'contextmenu' therefore could add other options
 
 
 

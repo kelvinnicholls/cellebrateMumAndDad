@@ -41,6 +41,7 @@ app.use(function(req, res, next) {
   next();
 });
 
+
 app.use('/medias', mediasRoutes);
 app.use('/memories', memoriesRoutes);
 app.use('/users', usersRoutes);
