@@ -13,18 +13,18 @@
           </span>
         </mat-grid-tile-header>
         <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 80px;" toggleFullscreen>
-        <mat-grid-tile-footer placement="top" ngbTooltip="{{photo.description}}">
-          <div *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="">
-            <span class="kgn-left-text">
-              <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments ({{photo.comments.length}})</a>
-            </span>
-          </div>
-          <div *ngIf="checkCanDelete(photo)" class="">
-            <span class="kgn-right-text">
-              <a (click)="onDelete(photo)">Delete</a>
-            </span>
-          </div>
-        </mat-grid-tile-footer>
+        <mat-grid-tile-footer placement="top" ngbTooltip="{{photo.description}}" class="row col-sm-13">
+            <div class="col-sm-6 text-center">
+              <span *ngIf="photo && photo.comments &&  photo.comments.length > 0">
+                <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments<br/>({{photo.comments.length}})</a>
+              </span>
+            </div>
+            <div class="col-sm-6 text-center">
+              <span *ngIf="checkCanDelete(photo)">
+                <a (click)="onDelete(photo)">Delete</a>
+              </span>
+            </div>
+          </mat-grid-tile-footer>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

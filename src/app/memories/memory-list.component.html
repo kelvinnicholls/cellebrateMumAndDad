@@ -10,19 +10,19 @@
         </mat-grid-tile-header>
         <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length >= 0 && memory.mediasToDisplay[0].getSource()}}"
           class="img-responsive" style="max-height: 80px;" toggleFullscreen>
-        <mat-grid-tile-footer placement="top" ngbTooltip="{{memory.description}}">
-          <div *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="">
-            <span class="kgn-left-text">
-              <a target="_blank" href="javascript:void(0)" (click)="showComments(memory)">Comments ({{memory.comments.length}})</a>
+        <mat-grid-tile-footer placement="top" ngbTooltip="{{memory.description}}" class="row col-sm-13">
+            <div class="col-sm-3 text-center">
+                <span>
+                  <a (click)="onSlideShow(memory)">Slide<br/>Show</a>
+                </span>
+              </div>
+          <div class="col-sm-6 text-center">
+            <span *ngIf="memory && memory.comments &&  memory.comments.length > 0">
+              <a target="_blank" href="javascript:void(0)" (click)="showComments(memory)">Comments<br/>({{memory.comments.length}})</a>
             </span>
           </div>
-          <div>
-            <span class="kgn-center-text">
-              <a (click)="onSlideShow(memory)">Slide Show</a>
-            </span>
-          </div>
-          <div *ngIf="checkCanDelete(memory)" class="">
-            <span class="kgn-right-text">
+          <div class="col-sm-3 text-center">
+            <span *ngIf="checkCanDelete(memory)">
               <a (click)="onDelete(memory)">Delete</a>
             </span>
           </div>
