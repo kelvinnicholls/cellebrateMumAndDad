@@ -22,15 +22,22 @@
 114) test with non-admin user
 115) prob with IbacktheWorkersRound.JPG
 116) Get Karma to run from VSC
-117) Add slideshow option to photos list
-118) Add new slideshow  component
 119) add new search photos component
-122) Add slideshow option to view/edit memory
-124) Add slideshow option to memory in memories list
 125) Sort out hints being on for too long 
-126) sort out lov's being under photos
+126) sort out lov's being under photos - use  z-index
 127) test search memories
 128) allow initial user to be created on server startup if it doesn't already exists - similar to test and dev and prod db
+
+
+
+
+
+
+
+
+
+
+
 
 
 https://www.npmjs.com/package/angular2-image-zoom

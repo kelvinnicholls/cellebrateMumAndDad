@@ -107,5 +107,7 @@ x79) Hover over photo should  resize it (click resizes)
 x89) enlarge photo on hover
 x112) show photos/users in grid https://stackoverflow.com/questions/19535669/ng-repeat-array-to-rows-and-columns
 x121) add view options for photos/memories
-
-
+x122) Add slideshow option to view/edit memory
+x124) Add slideshow option to memory in memories list
+x117) Add slideshow option to photos list
+x118) Add new slideshow  component
