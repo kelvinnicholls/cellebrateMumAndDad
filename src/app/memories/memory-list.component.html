@@ -1,7 +1,7 @@
 <div *ngIf="memories.length > 0">
   <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Memories</h2>
   <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="3" gutterSize="10" rows="5" rowHeight="1:1">
+    <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1">
       <mat-grid-tile *ngFor="let memory of pagedMemories">
         <mat-grid-tile-header>
           <span mat-line>
@@ -43,7 +43,7 @@
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
     <pagination [totalItems]="memoryService.bigTotalItems" [(ngModel)]="memoryService.bigCurrentPage" [maxSize]="memoryService.maxSize"
-      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="5" [rotate]="false" (numPages)="memoryService.numPages = $event"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="memoryService.numPages = $event"
       (pageChanged)="pageChanged($event)"></pagination>
   </div>
 

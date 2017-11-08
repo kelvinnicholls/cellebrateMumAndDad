@@ -29,10 +29,10 @@ import { User } from "../users/user.model";
 @Injectable()
 export class MemoryService {
 
-    public maxSize: number = 5;
+    public maxSize: number = 6;
     public bigTotalItems: number = 0;
     public numPages: number = 0;
-    public eventItemsPerPage: number = 5;
+    public eventItemsPerPage: number = 6;
 
     public memories: Memory[] = [];
     public eventPage: number = 1;
