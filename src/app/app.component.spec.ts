@@ -25,6 +25,7 @@ import { PhotoService } from "./photos/photo.service";
 import { MemoryService } from "./memories/memory.service";
 import { TagService } from "./shared/tags/tag.service";
 import { PersonService } from "./shared/people/person.service";
+import { SlideShowService } from "./shared/slideshow/slideshow.service";
 import { CommentsService } from "./shared/comments/comments.service";
 import { DialogService } from "./shared/dialog/dialog.service";
 import { AuthUserService } from "./auth/auth-user.service";
@@ -47,7 +48,7 @@ describe('AppComponent', () => {
         HeaderComponent,
         HomeComponent
       ], imports: [RouterModule, ReactiveFormsModule, MultiselectDropdownModule, SharedModule, ChatModule, ToastModule.forRoot(), appRouting, HttpModule],
-      providers: [{ provide: APP_BASE_HREF, useValue: '/src/app' }, CommentsService, PersonService, TagService, PhotoService, MemoryService, DialogService, AppService, AuthUserService, AuthService, ChatService, UserService, ErrorService, SearchService]
+      providers: [{ provide: APP_BASE_HREF, useValue: '/src/app' }, SlideShowService, CommentsService, PersonService, TagService, PhotoService, MemoryService, DialogService, AppService, AuthUserService, AuthService, ChatService, UserService, ErrorService, SearchService]
     });
   }));
 

@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from "../shared/shared.module";
 import { memoriesRouting } from "./memories.routing";
 import { MemoryListComponent } from "./memory-list.component";
-import { MemoryComponent } from "./memory.component";
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
@@ -88,7 +87,6 @@ describe('MemoryInputComponent', () => {
       declarations: [
         MemoryInputComponent,
         MemoryListComponent,
-        MemoryComponent,
         HeaderComponent,
         HomeComponent
       ],

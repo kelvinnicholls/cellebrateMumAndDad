@@ -7,7 +7,6 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from "../shared/shared.module";
 import { photosRouting } from "./photos.routing";
 import { PhotoListComponent } from "./photo-list.component";
-import { PhotoComponent } from "./photo.component";
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { RouterModule } from "@angular/router";
 import { HttpModule } from "@angular/http";
@@ -87,7 +86,6 @@ describe('PhotoInputComponent', () => {
       declarations: [
         PhotoInputComponent,
         PhotoListComponent,
-        PhotoComponent,
         HeaderComponent,
         HomeComponent
       ],

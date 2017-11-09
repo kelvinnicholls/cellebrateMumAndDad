@@ -23,7 +23,7 @@ module.exports = webpackMerge.smart(commonConfig, {
                 use: [
                     'awesome-typescript-loader',
                     'angular2-template-loader',
-                    'angular-router-loader?aot=true'
+                    'angular2-router-loader?aot=true'
                 ]
             }
         ]

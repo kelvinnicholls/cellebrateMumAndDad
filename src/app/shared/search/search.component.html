@@ -6,7 +6,7 @@
         <h4 class="modal-title">{{ search?.title }}</h4>
         <button type="button" class="close" aria-label="Close" (click)="onClose()"><span aria-hidden="true">&times;</span></button>
       </div>
-      <form [formGroup]="myForm" (ngSubmit)="onSubmit()">
+      <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()">
         <div class="modal-body">
           <p><strong>{{ search?.message }}</strong></p>
 

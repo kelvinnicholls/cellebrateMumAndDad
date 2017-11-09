@@ -75,7 +75,7 @@
     "@types/core-js": "^0.9.42",
     "@types/jasmine": "^2.6.0",
     "@types/node": "^8.0.34",
-    "angular-router-loader": "^0.6.0",
+    "angular2-router-loader": "^0.3.5",
     "angular2-template-loader": "^0.6.2",
     "autoprefixer": "^6.5.3",
     "awesome-typescript-loader": "^3.2.3",

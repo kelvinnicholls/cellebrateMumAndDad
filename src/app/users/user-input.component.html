@@ -1,5 +1,5 @@
 <!-- https://scotch.io/tutorials/how-to-deal-with-different-form-controls-in-angular-2 -->
-<form [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
+<form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
