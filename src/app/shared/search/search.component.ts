@@ -73,6 +73,7 @@ export class SearchComponent implements OnInit {
     this.display = 'none';
     this.searchRet.searchRetEnum = SearchRetEnum.Close;
     this.search.retSearchSub.emit(this.searchRet);
+    this.reset();
   }
 
   populate(source: any): any {
@@ -105,8 +106,18 @@ export class SearchComponent implements OnInit {
     return retField;
   }
 
+
+  reset() {
+    this.myForm.reset();
+    this.tagService.selectedTags = [];
+    this.personService.selectedPeople = [];
+    this.myForm.get('from_date').setValue('1900-01-01');
+    this.myForm.get('to_date').setValue(moment().format(Consts.DATE_DB_FORMAT));
+  }
+
   onSubmit() {
     this.display = 'none';
+    
 
     if (this.isDirty(this.myForm.value.email, 'email')) {
       this.searchRet.searchElements.push({ name: 'email', value: this.populate(this.myForm.value.email) });
@@ -170,6 +181,8 @@ export class SearchComponent implements OnInit {
     this.searchRet.searchRetEnum = SearchRetEnum.ButtonOne;
     // add search criteria to searchRet, this may need to be onSubmit
     this.search.retSearchSub.emit(this.searchRet);
+    this.reset();
+    
   }
 
   onCaseSensitive(event) {
@@ -180,6 +193,7 @@ export class SearchComponent implements OnInit {
     this.display = 'none';
     this.searchRet.searchRetEnum = SearchRetEnum.ButtonTwo;
     this.search.retSearchSub.emit(this.searchRet);
+    this.reset();
   }
 
   isFormValid() {
@@ -245,6 +259,7 @@ export class SearchComponent implements OnInit {
     this.showSearchSub = this.searchService.showSearchSub
       .subscribe(
       (search: Search) => {
+        this.reset();
         this.search = search;
         this.display = 'block';
         switch (this.search.searchType) {

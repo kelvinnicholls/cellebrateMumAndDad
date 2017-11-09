@@ -91,3 +91,7 @@ button {
 .mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
   transform: none !important;
 }
+
+.dropdown-menu, .modal {
+  z-index: 2000;
+}
