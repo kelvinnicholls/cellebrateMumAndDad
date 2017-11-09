@@ -113,3 +113,4 @@ x117) Add slideshow option to photos list
 x118) Add new slideshow  component
 x128) allow initial user to be created on server startup if it doesn't already exists - similar to test and dev and prod db
 x126) sort out lov's being under photos - use  z-index
+x127) test search memories

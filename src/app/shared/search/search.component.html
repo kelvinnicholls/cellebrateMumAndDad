@@ -244,6 +244,20 @@
               </div>
             </div>
 
+
+            <div *ngIf="canShow('photos')" class="form-group row col col-sm-12" [ngClass]="{
+              'has-success': myForm.get('photos').valid && (myForm.get('photos').dirty && myForm.get('photos').value.length > 0)
+            }">
+              <label for="photos" class="col-sm-4 col-form-label"><strong>Photos</strong></label>
+              <div class="col-sm-8">
+                <ss-multiselect-dropdown [texts]="photoService.multiSelectPhotosTexts" [settings]="getConsts().multiSelectSettings" [(options)]="photoService.multiSelectPhotoOptions"
+                  placement="top" ngbTooltip="The photos associated with this photo." formControlName="photos" [(ngModel)]="photoService.selectedPhotos"
+                  (ngModelChange)="onPhotosChange($event)" class="form-control" [ngClass]="{
+            'form-control-danger': myForm.get('photos').invalid && (myForm.get('photos').dirty || myForm.get('photos').touched)
+          }"></ss-multiselect-dropdown>
+              </div>
+            </div>
+
             <div *ngIf="canShow('from_date')" class="form-group row col col-sm-12" [ngClass]="{
               'has-success': myForm.get('from_date').valid && (myForm.get('from_date').dirty && myForm.get('from_date').value.length > 0)
             }">

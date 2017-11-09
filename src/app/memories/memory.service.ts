@@ -581,6 +581,7 @@ export class MemoryService {
         searchFields.push('description');
         searchFields.push('tags');
         searchFields.push('people');
+        searchFields.push('photos');
         searchFields.push('from_date');
         searchFields.push('to_date');
 

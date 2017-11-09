@@ -11,8 +11,10 @@ import { SearchService } from "./search.service";
 import { Consts } from "../../shared/consts";
 import { TagService } from "../tags/tag.service";
 import { PersonService } from "../people/person.service";
+import { PhotoService } from "../../photos/photo.service";
 import { Tag } from "../tags/tag.model";
 import { Person } from "../people/person.model";
+import { Photo } from "../../photos/photo.model";
 
 @Component({
   selector: 'app-search',
@@ -65,8 +67,12 @@ export class SearchComponent implements OnInit {
     //console.log(this.optionsModel);
   }
 
+  onPhotosChange() {
+    //console.log(this.optionsModel);
+  }
+
   constructor(private searchService: SearchService, private formBuilder: FormBuilder, private tagService: TagService
-    , private personService: PersonService
+    , private personService: PersonService, private photoService: PhotoService
   ) { }
 
   onClose() {
@@ -111,13 +117,14 @@ export class SearchComponent implements OnInit {
     this.myForm.reset();
     this.tagService.selectedTags = [];
     this.personService.selectedPeople = [];
+    this.photoService.selectedPhotos = [];
     this.myForm.get('from_date').setValue('1900-01-01');
     this.myForm.get('to_date').setValue(moment().format(Consts.DATE_DB_FORMAT));
   }
 
   onSubmit() {
     this.display = 'none';
-    
+
 
     if (this.isDirty(this.myForm.value.email, 'email')) {
       this.searchRet.searchElements.push({ name: 'email', value: this.populate(this.myForm.value.email) });
@@ -173,6 +180,10 @@ export class SearchComponent implements OnInit {
       this.searchRet.searchElements.push({ name: 'people', value: this.populate(this.myForm.value.people), type: 'array' });
     };
 
+    if (this.isDirty(this.myForm.value.photos, 'photos')) {
+      this.searchRet.searchElements.push({ name: 'medias', value: this.populate(this.myForm.value.photos), type: 'array' });
+    };
+
     this.searchRet.caseSensitive = this.populate(this.myForm.value.caseSensitive);
     this.searchRet.matchAll = this.populate(this.myForm.value.matchAll);
     this.searchRet.matchCriteria = this.populate(this.myForm.value.matchCriteria * 1);
@@ -182,7 +193,7 @@ export class SearchComponent implements OnInit {
     // add search criteria to searchRet, this may need to be onSubmit
     this.search.retSearchSub.emit(this.searchRet);
     this.reset();
-    
+
   }
 
   onCaseSensitive(event) {
@@ -236,6 +247,16 @@ export class SearchComponent implements OnInit {
       }
     );
 
+    searchComponent.photoService.getPhotos().subscribe(
+      (photos: Photo[]) => {
+        searchComponent.photoService.multiSelectPhotoOptions = [];
+        for (let photo of photos) {
+          searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
+        };
+        console.log(searchComponent.photoService.multiSelectPhotoOptions);
+      }
+    );
+
 
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
@@ -252,6 +273,7 @@ export class SearchComponent implements OnInit {
       description: new FormControl(null, null),
       tags: new FormControl(null, null),
       people: new FormControl(null, null),
+      photos: new FormControl(null, null),
       from_date: new FormControl('1900-01-01', null),
       to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
     });
@@ -293,6 +315,18 @@ export class SearchComponent implements OnInit {
             });
             break;
           case SearchTypeEnum.Memories:
+            this.myForm = this.formBuilder.group({
+              caseSensitive: new FormControl(null, null),
+              matchAll: new FormControl('true', null),
+              matchCriteria: new FormControl('Starts With', null),
+              title: new FormControl(null, null),
+              description: new FormControl(null, null),
+              tags: new FormControl(null, null),
+              people: new FormControl(null, null),
+              photos: new FormControl(null, null),
+              from_date: new FormControl('1900-01-01', null),
+              to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+            });
             break;
 
         }
