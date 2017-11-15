@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateMomentParserFormatter} from '.././shared/ngb-date-moment-parser-formatter';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
@@ -196,11 +197,11 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
 
 
-    constructor(private ngbDateParserFormatter: NgbDateParserFormatter
+    constructor(private ngbDateParserFormatter: NgbDateMomentParserFormatter
         , private userService: UserService
-        , private tagService: TagService
-        , private personService: PersonService
-        , private photoService: PhotoService
+        , public tagService: TagService
+        , public personService: PersonService
+        , public photoService: PhotoService
         , private commentsService: CommentsService
         , private memoryService: MemoryService
         , private route: ActivatedRoute
@@ -520,15 +521,15 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
     }
 
 
-    onTagsChange() {
+    onTagsChange(event) {
         //console.log(this.optionsModel);
     }
 
-    onPeopleChange() {
+    onPeopleChange(event) {
         //console.log(this.optionsModel);
     }
 
-    onPhotosChange() {
+    onPhotosChange(event) {
         //console.log(this.optionsModel);
     }
 

@@ -9,7 +9,7 @@ import { SearchComponent } from "./search/search.component";
 import { SlideShowComponent } from "./slideshow/slideshow.component";
 import { PasswordStrengthBarComponent } from './password-strength-bar/password-strength-bar.component';
 import { ReversePipe } from "./pipes/reverse-pipe";
-import { NgbModule, NgbDateParserFormatter } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { PaginationModule } from 'ngx-bootstrap';
 import { NgbDateMomentParserFormatter } from './ngb-date-moment-parser-formatter';
 import { Consts } from "./consts";
@@ -24,12 +24,17 @@ import { AddPersonComponent } from "./people/add-person.component";
 import { MultiselectDropdownModule } from 'angular-2-dropdown-multiselect';
 import { NgxGalleryModule } from 'ngx-gallery';
 
-import {ToggleFullscreenDirective} from './screenfull/screenfull.directive';
+import { ToggleFullscreenDirective } from './screenfull/screenfull.directive';
 
 import {
     MatGridListModule
-  } from '@angular/material';
-  import {CdkTableModule} from '@angular/cdk/table';
+} from '@angular/material';
+import { CdkTableModule } from '@angular/cdk/table';
+
+
+export function ngbDateMomentParserFormatterFactory() {
+    return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT, Consts.DATE_DB_FORMAT);
+}
 
 @NgModule({
     declarations: [
@@ -48,13 +53,13 @@ import {
         AddPersonComponent,
         ToggleFullscreenDirective
     ],
-    exports: [ToggleFullscreenDirective,NgxGalleryModule,MultiselectDropdownModule,AddPersonComponent,AddTagComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
+    exports: [ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
         MatGridListModule,
-       ],
-    imports: [NgxGalleryModule,MultiselectDropdownModule,CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
+    ],
+    imports: [NgxGalleryModule, MultiselectDropdownModule, CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
-        provide: NgbDateParserFormatter,
-        useFactory: () => { return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT, Consts.DATE_DB_FORMAT) }
+        provide: NgbDateMomentParserFormatter,
+        useFactory: ngbDateMomentParserFormatterFactory
     }],
     bootstrap: []
 })

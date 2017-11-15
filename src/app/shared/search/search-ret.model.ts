@@ -25,7 +25,7 @@ export class SearchRet {
         this.searchElements.forEach((element) => {
             if (element.value) {
                 let value: String = element.value;
-                if (element.type === 'from' || (element.type === 'to') {
+                if (element.type === 'from' || (element.type === 'to')) {
                     value = moment(element.value, Consts.DATE_DB_FORMAT).format(Consts.DATE_DISPLAY_FORMAT);
                 } else if (element.type === 'array') {
                     let valArr: String[] = [];

@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter } from "@angular/core";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateMomentParserFormatter} from '.././shared/ngb-date-moment-parser-formatter';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import * as moment from 'moment';
@@ -104,7 +105,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
         return retVal;
     }
 
-    constructor(private ngbDateParserFormatter: NgbDateParserFormatter
+    constructor(private ngbDateParserFormatter: NgbDateMomentParserFormatter
         , private userService: UserService
         , private route: ActivatedRoute
         , private vcr: ViewContainerRef

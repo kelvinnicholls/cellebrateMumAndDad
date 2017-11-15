@@ -14,7 +14,7 @@ export class AppComponent {
 
     private toastOccurredSub: any;
 
-    constructor(private vcr: ViewContainerRef, private toastService: ToastService, private appService: AppService, private authUserService: AuthUserService) {
+    constructor(private vcr: ViewContainerRef, private toastService: ToastService, private appService: AppService, public authUserService: AuthUserService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 

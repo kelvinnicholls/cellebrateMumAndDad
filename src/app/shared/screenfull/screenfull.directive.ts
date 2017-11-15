@@ -1,28 +1,33 @@
 import { Directive, HostListener, ElementRef } from '@angular/core';
 
 //declare var screenfull: any;
-import screenfull from './screenfull.js';
+import * as screenfull from './screenfull.js';
+
+//declare var fullscreen;
+
+//declare var screenfull;
 
 @Directive({
     selector: '[toggleFullscreen]'
 })
 export class ToggleFullscreenDirective {
+    private fullscreen : any;
     constructor(private elementRef: ElementRef) {
-
+        this.fullscreen = screenfull;
     }
     @HostListener('click') onClick() {
         console.log('toggleFullscreen');
-        if (screenfull.enabled) {
-            screenfull.on("change", () => {
+        if (this.fullscreen.enabled) {
+            this.fullscreen.on("change", () => {
                 let oldMaxHeight = "50px";
-                if (screenfull.isFullscreen) {
+                if (this.fullscreen.isFullscreen) {
                     oldMaxHeight = this.elementRef.nativeElement.style.maxHeight;
                     this.elementRef.nativeElement.style.maxHeight = "100%";
                 } else {
                     this.elementRef.nativeElement.style.maxHeight = oldMaxHeight;
                 };
             });
-            screenfull.toggle(this.elementRef.nativeElement);
+            this.fullscreen.toggle(this.elementRef.nativeElement);
         }
     };
 }

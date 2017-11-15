@@ -13,7 +13,7 @@ import { ToastModule } from 'ng2-toastr/ng2-toastr';
 // http://valor-software.com/ngx-bootstrap/#/datepicker
 
 // https://github.com/danrevah/ngx-pipes#reverse-1
-import { NgPipesModule } from 'ngx-pipes';
+//import { NgPipesModule } from 'ngx-pipes';
 
 import { HeaderComponent } from "./header.component";
 import { appRouting } from "./app.routing";
@@ -62,7 +62,7 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         ReactiveFormsModule,
         HttpModule,
         ToastModule.forRoot(),
-        NgPipesModule,
+//        NgPipesModule,
         ChatModule,
         SharedModule
     ],

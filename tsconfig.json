@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-      "module": "commonjs",
-      "target": "es5",
-      "noImplicitAny": false,
-      "sourceMap": false,
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true
-  },
-  "exclude": [
-      "node_modules",
-      "public.js"
-  ]
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "target": "es5",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "lib": [
+      "es5",
+      "dom"
+    ]
+  }
 }

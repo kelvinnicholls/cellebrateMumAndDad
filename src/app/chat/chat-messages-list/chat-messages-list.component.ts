@@ -11,7 +11,7 @@ import { Dialog } from "../../shared/dialog/dialog.model";
 })
 export class ChatMessagesListComponent implements OnInit {
 
-  constructor(private chatService: ChatService, private dialogService: DialogService) { }
+  constructor(public chatService: ChatService, private dialogService: DialogService) { }
 
   ngOnInit() {
   }

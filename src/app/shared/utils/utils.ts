@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import { User } from "../../users/user.model";
 export class Utils {
-    public static dynamicSort(property, dataType?: SortDataType = SortDataType.String, format?: string) {
+    public static dynamicSort(property, dataType: SortDataType = SortDataType.String, format?: string) {
         var sortOrder = 1;
         if (property[0] === "-") {
             sortOrder = -1;

@@ -6,7 +6,7 @@ import { AuthGuard } from '../auth/auth-guard.service';
 const USERS_ROUTES: Routes = [
   { path: '', component: MemoryListComponent, canActivate: [AuthGuard], pathMatch: 'full' },
   { path: 'memory/add', component: MemoryInputComponent, canActivate: [AuthGuard] },
-  { path: 'memory/view/:index', component: MemoryInputComponent, canActivate: [AuthGuard] }
+  { path: 'memory/view/:index', component: MemoryInputComponent, canActivate: [AuthGuard] },
   { path: 'memory/edit/:index', component: MemoryInputComponent, canActivate: [AuthGuard] }
 ];
 

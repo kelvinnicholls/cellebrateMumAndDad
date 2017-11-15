@@ -44,7 +44,7 @@ export class PhotoService {
     }
 
     // Text configuration 
-    public multiSelectTabsTexts: IMultiSelectTexts = {
+    public multiSelectPhotosTexts: IMultiSelectTexts = {
         checkAll: 'Select all ' + this.photoplural,
         uncheckAll: 'Unselect all ' + this.photoplural,
         checked: this.photo + ' selected',

@@ -24,7 +24,7 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
   public heading = "";
   private chatUser: ChatUser = null;
 
-  constructor(private chatService: ChatService, private dialogService: DialogService, private appService: AppService, private router: Router
+  constructor(public chatService: ChatService, private dialogService: DialogService, private appService: AppService, private router: Router
     , private route: ActivatedRoute) {
 
   }

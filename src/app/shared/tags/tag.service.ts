@@ -40,7 +40,7 @@ export class TagService {
 
 
     // Text configuration 
-    public multiSelectTabsTexts: IMultiSelectTexts = {
+    public multiSelectTagsTexts: IMultiSelectTexts = {
         checkAll: 'Select all ' + this.tagplural,
         uncheckAll: 'Unselect all ' + this.tagplural,
         checked: this.tag + ' selected',

@@ -11,7 +11,7 @@ export class ChatUsersComponent implements OnInit {
 
   @Input() chatUser: ChatUser;
 
-  constructor(private chatService: ChatService) { }
+  constructor(public chatService: ChatService) { }
 
   ngOnInit() {
   }
