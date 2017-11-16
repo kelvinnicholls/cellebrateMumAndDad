@@ -2,7 +2,7 @@ import { IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
 import { environment } from '../../environments/environment';
 
 export class Consts {
-  public static API_URL_ROOT: string = environment.APP_URL;
+  public static API_URL_ROOT: string = 'https://celeb-mum-and-dad.herokuapp.com/';
   public static API_URL_USERS_ROOT: string = Consts.API_URL_ROOT + 'users';
   public static API_URL_USERS_ROOT_EMAIL: string = Consts.API_URL_USERS_ROOT + '/email';
   public static API_URL_USERS_ROOT_NAME: string = Consts.API_URL_USERS_ROOT + '/name';
