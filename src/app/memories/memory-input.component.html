@@ -1,3 +1,6 @@
+<div  class="row col col-sm-4 offset-sm-5">
+  <h2 class="blog-post-title ">{{getTitle()}}</h2>
+</div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
@@ -79,7 +82,7 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button [disabled]="!isEditable()" (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable" (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
       type="button">Add New Tag</button>
   </div>
 
@@ -100,7 +103,7 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button [disabled]="!isEditable()" (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable" (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
       type="button">Add New Person</button>
   </div>
 

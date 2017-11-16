@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import {NgbDateMomentParserFormatter} from '.././shared/ngb-date-moment-parser-formatter';
+import { NgbDateMomentParserFormatter } from '.././shared/ngb-date-moment-parser-formatter';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
@@ -44,14 +44,20 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     private commentAddedSub: EventEmitter<Comment>;
 
     private mode: String;
-    
-        isEditable() {
-            if (this.mode === Consts.EDIT) {
-                return true;
-            } else {
-                return false;
-            };
-        }
+
+    public isEditable : Boolean = false;
+
+    checkIsEditable() {
+        if (this.mode === Consts.ADD || (this.mode === Consts.EDIT && this.photoService.getMode(this.photo) != Consts.VIEW )) {
+            this.isEditable = true;
+        } else {
+            this.isEditable = false;
+        };
+    }
+
+    getTitle(): string {
+      return  Utils.initCap(this.mode) + " Photo";
+    }
 
     fileSource: String = Consts.FILE_SYSTEM;
 
@@ -449,16 +455,16 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
         photoInputComponent._creator = photoInputComponent.userService.getLoggedInUser()._creatorRef;
 
-  
+
         if (photoInputComponent.route.snapshot.url.length === 2 && photoInputComponent.route.snapshot.url[0].path === 'photo' && photoInputComponent.route.snapshot.url[1].path === 'add') {
             photoInputComponent.submitType = Consts.ADD_PHOTO;
             photoInputComponent.mode = Consts.ADD;
+            photoInputComponent.checkIsEditable();
             photoInputComponent.createForm(photoInputComponent.mode);
             photoInputComponent.clear();
 
         } else {
-            photoInputComponent.mode = photoInputComponent.route.snapshot.url[1].path;
-            photoInputComponent.createForm(photoInputComponent.mode);
+            photoInputComponent.mode = photoInputComponent.route.snapshot.url[1].path;            
             photoInputComponent.paramsSubscription = photoInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     photoInputComponent.index = queryParams['index'];
@@ -467,6 +473,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                     photoInputComponent.submitType = Consts.UPDATE_PHOTO;
                     photoInputComponent.tagService.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);
                     photoInputComponent.personService.selectedPeople = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.peopleToDisplay);
+                    photoInputComponent.checkIsEditable();
+                    photoInputComponent.createForm(photoInputComponent.mode);
                 }
             );
         };
@@ -476,7 +484,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         let formState = null;
         if (mode != Consts.ADD) {
-            formState = { value: '', disabled: !photoInputComponent.isEditable() };
+            formState = { value: '', disabled: !photoInputComponent.isEditable };
         };
         photoInputComponent.myForm = new FormGroup({
             title: new FormControl(formState, Validators.required,

@@ -1,3 +1,6 @@
+<div  class="row col col-sm-4 offset-sm-5">
+  <h2 class="blog-post-title ">{{getTitle()}}</h2>
+</div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
@@ -71,7 +74,7 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button [disabled]="!isEditable()" (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable" (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
       type="button">Add New Tag</button>
   </div>
 
@@ -90,7 +93,7 @@
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button [disabled]="!isEditable()" (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable" (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
       type="button">Add New Person</button>
   </div>
 
@@ -127,11 +130,14 @@
         <input *ngIf="fileSource === getConsts().FILE_SYSTEM" type="file" #file id="photoPicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
         <input *ngIf="fileSource === getConsts().WEB" type="button" class="form-control" style="display: none;">
         </label>
-
     </div>
   </div>
-
-
+  <div class="form-group row col col-sm-4 offset-sm-6">
+    <button *ngIf="isAddPhoto()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger"
+      (click)="onClear()">Clear</button>
+    <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit"
+      [disabled]="!isFormValid()">{{submitType}}</button>
+  </div>
 
 </form>
 <app-comment-add *ngIf="!isNewPhoto()" [entity]="getConsts().PHOTO" [entityIndex]="getIndex()">

@@ -19,14 +19,18 @@ export class Utils {
         }
     }
 
+    public static initCap(passedString: String) {
+        return passedString.charAt(0).toUpperCase() + passedString.slice(1).toLowerCase();
+    }
+
     public static checkIsAdminOrOwner(creator: string, loggedInUser: User): boolean {
-        console.log("checkIsAdminOrOwner",creator,loggedInUser.adminUser,loggedInUser._creatorRef);
+        console.log("checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
         let retVal = false;
 
         if (loggedInUser.adminUser || (loggedInUser._creatorRef === creator)) {
             retVal = true;
         };
-        console.log("checkIsAdminOrOwner retVal",retVal);
+        console.log("checkIsAdminOrOwner retVal", retVal);
         return retVal;
 
     }

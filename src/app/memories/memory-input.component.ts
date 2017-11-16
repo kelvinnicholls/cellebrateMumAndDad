@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import {NgbDateMomentParserFormatter} from '.././shared/ngb-date-moment-parser-formatter';
+import { NgbDateMomentParserFormatter } from '.././shared/ngb-date-moment-parser-formatter';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { IMultiSelectOption } from 'angular-2-dropdown-multiselect';
@@ -48,13 +48,18 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
 
     private mode: String;
+    public isEditable: Boolean = false;
 
-    isEditable() {
-        if (this.mode === Consts.EDIT) {
-            return true;
+    checkIsEditable() {
+        if (this.mode === Consts.ADD || (this.mode === Consts.EDIT && this.memoryService.getMode(this.memory) != Consts.VIEW)) {
+            this.isEditable = true;
         } else {
-            return false;
+            this.isEditable = false;
         };
+    }
+
+    getTitle(): string {
+        return Utils.initCap(this.mode) + " Photo";
     }
 
     galleryOptions: NgxGalleryOptions[];
@@ -71,7 +76,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                     small: location,
                     medium: location,
                     big: location,
-                    description  : photo.title
+                    description: photo.title
                 };
                 galleryImages.push(photoObj);
             };
@@ -455,12 +460,12 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         if (memoryInputComponent.route.snapshot.url.length === 2 && memoryInputComponent.route.snapshot.url[0].path === 'memory' && memoryInputComponent.route.snapshot.url[1].path === 'add') {
             memoryInputComponent.submitType = Consts.ADD_MEMORY;
             memoryInputComponent.mode = Consts.ADD;
+            memoryInputComponent.checkIsEditable();
             memoryInputComponent.createForm(memoryInputComponent.mode);
             memoryInputComponent.clear();
 
         } else {
             memoryInputComponent.mode = memoryInputComponent.route.snapshot.url[1].path;
-            memoryInputComponent.createForm(memoryInputComponent.mode);
             memoryInputComponent.paramsSubscription = memoryInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     memoryInputComponent.index = queryParams['index'];
@@ -470,6 +475,8 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                     memoryInputComponent.tagService.selectedTags = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.tagsToDisplay);
                     memoryInputComponent.personService.selectedPeople = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.peopleToDisplay);
                     memoryInputComponent.photoService.selectedPhotos = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.mediasToDisplay);
+                    memoryInputComponent.checkIsEditable();
+                    memoryInputComponent.createForm(memoryInputComponent.mode);
                 }
             );
         };
@@ -481,7 +488,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         let memoryInputComponent = this;
         let formState = null;
         if (mode != Consts.ADD) {
-            formState = { value: '', disabled: !memoryInputComponent.isEditable() };
+            formState = { value: '', disabled: !memoryInputComponent.isEditable };
         };
         memoryInputComponent.myForm = new FormGroup({
             title: new FormControl(formState, Validators.required,
