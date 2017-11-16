@@ -15,7 +15,7 @@ import { PhotoService } from "../../photos/photo.service";
 import { Tag } from "../tags/tag.model";
 import { Person } from "../people/person.model";
 import { Photo } from "../../photos/photo.model";
-
+import { AuthUserService } from "../../auth/auth-user.service";
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -72,7 +72,7 @@ export class SearchComponent implements OnInit {
   }
 
   constructor(private searchService: SearchService, private formBuilder: FormBuilder, private tagService: TagService
-    , private personService: PersonService, private photoService: PhotoService
+    , private personService: PersonService, private photoService: PhotoService, private authUserService: AuthUserService
   ) { }
 
   onClose() {
@@ -227,36 +227,40 @@ export class SearchComponent implements OnInit {
 
     let searchComponent = this;
 
-    searchComponent.tagService.getTags().subscribe(
-      (tags: Tag[]) => {
-        searchComponent.tagService.multiSelectTagOptions = [];
-        for (let tag of tags) {
-          searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
-        };
-        console.log(searchComponent.tagService.multiSelectTagOptions);
-      }
-    );
+    if (searchComponent.authUserService.isLoggedIn()) {
 
-    searchComponent.personService.getPeople().subscribe(
-      (people: Person[]) => {
-        searchComponent.personService.multiSelectPersonOptions = [];
-        for (let person of people) {
-          searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
-        };
-        console.log(searchComponent.personService.multiSelectPersonOptions);
-      }
-    );
 
-    searchComponent.photoService.getPhotos().subscribe(
-      (photos: Photo[]) => {
-        searchComponent.photoService.multiSelectPhotoOptions = [];
-        for (let photo of photos) {
-          searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
-        };
-        console.log(searchComponent.photoService.multiSelectPhotoOptions);
-      }
-    );
 
+      searchComponent.tagService.getTags().subscribe(
+        (tags: Tag[]) => {
+          searchComponent.tagService.multiSelectTagOptions = [];
+          for (let tag of tags) {
+            searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+          };
+          console.log(searchComponent.tagService.multiSelectTagOptions);
+        }
+      );
+
+      searchComponent.personService.getPeople().subscribe(
+        (people: Person[]) => {
+          searchComponent.personService.multiSelectPersonOptions = [];
+          for (let person of people) {
+            searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+          };
+          console.log(searchComponent.personService.multiSelectPersonOptions);
+        }
+      );
+
+      searchComponent.photoService.getPhotos().subscribe(
+        (photos: Photo[]) => {
+          searchComponent.photoService.multiSelectPhotoOptions = [];
+          for (let photo of photos) {
+            searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
+          };
+          console.log(searchComponent.photoService.multiSelectPhotoOptions);
+        }
+      );
+    };
 
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
@@ -329,7 +333,7 @@ export class SearchComponent implements OnInit {
             });
             break;
 
-        }
+        };
         this.searchRet = new SearchRet();
       }
       );

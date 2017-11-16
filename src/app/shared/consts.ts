@@ -2,7 +2,7 @@ import { IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
 import { environment } from '../../environments/environment';
 
 export class Consts {
-  public static API_URL_ROOT: string = 'https://celeb-mum-and-dad.herokuapp.com/';
+  public static API_URL_ROOT: string = '';
   public static API_URL_USERS_ROOT: string = Consts.API_URL_ROOT + 'users';
   public static API_URL_USERS_ROOT_EMAIL: string = Consts.API_URL_USERS_ROOT + '/email';
   public static API_URL_USERS_ROOT_NAME: string = Consts.API_URL_USERS_ROOT + '/name';
@@ -17,7 +17,7 @@ export class Consts {
   public static API_URL_PEOPLE_ROOT: string = Consts.API_URL_ROOT + 'people';
   public static API_URL_PEOPLE_ROOT_PERSON: string = Consts.API_URL_PEOPLE_ROOT + '/person';
 
- 
+
 
   public static CONTENT_TYPE = 'Content-Type';
   public static APP_JSON = 'application/json';
@@ -48,7 +48,7 @@ export class Consts {
   public static VIEW = 'view';
   public static EDIT = 'edit';
   public static ADD = 'add';
-  
+
   public static DATE_TIME_DISPLAY_FORMAT = "MMMM Do YYYY, HH:mm";
   public static DATE_DISPLAY_FORMAT = "DD-MM-YYYY";
   public static DATE_DB_FORMAT = "YYYY-MM-DD";
@@ -74,6 +74,10 @@ export class Consts {
   public static TAGS = 'TAGS';
   public static PEOPLE = 'PEOPLE';
 
+  public static setUrlDomain(urlDomain: string) {
+    this.API_URL_ROOT = urlDomain;
+  };
+
 
   public static multiSelectSettings: IMultiSelectSettings = {
     enableSearch: true,
@@ -84,6 +88,6 @@ export class Consts {
     showCheckAll: false,
     showUncheckAll: false,
     closeOnSelect: true
-};
-  
+  };
+
 }
