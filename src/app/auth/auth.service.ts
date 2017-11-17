@@ -58,6 +58,7 @@ export class AuthService {
                 this.appService.showToast(Consts.SUCCESS, "User logged out.");
                 this.chatService.logOut();
             }, (err) => {
+                localStorage.clear();
                 console.log("logOut() err", err);
             }
             );

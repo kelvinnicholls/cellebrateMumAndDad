@@ -209,8 +209,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             emailUpdates,
                             this.myForm.value.relationship,
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
-                            this.myForm.value.twitterId,
-                            this.myForm.value.facebookId,
+                            null, //this.myForm.value.twitterId,
+                            null, //this.myForm.value.facebookId,
                             this._creatorRef,
                             this.profilePicFile,
                             this.profilePicInfo);
@@ -257,8 +257,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.emailUpdates == 'Yes' ? true : false,
                             this.myForm.value.relationship,
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
-                            this.myForm.value.twitterId,
-                            this.myForm.value.facebookId,
+                            null, //this.myForm.value.twitterId,
+                            null, //this.myForm.value.facebookId,
                             null,
                             this.profilePicFile,
                             this.profilePicInfo);
@@ -353,9 +353,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                 this.forbiddenEmails
             ),
             password: new FormControl(null, this.passwordValidators),
-            dob: new FormControl(null, null),
-            twitterId: new FormControl(null, null),
-            facebookId: new FormControl(null, null)
+            dob: new FormControl(null, null)
         });
 
 

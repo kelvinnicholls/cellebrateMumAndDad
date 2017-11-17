@@ -52,8 +52,8 @@ export class UserService {
             user.emailUpdates ? 'Yes' : 'No',
             user.relationship,
             moment(user.dob).format(Consts.DATE_DB_FORMAT),
-            user.twitterId,
-            user.facebookId,
+            null, //user.twitterId,
+            null, //user.facebookId,
             user._creatorRef,
             null,
             profilePicInfo);
@@ -185,8 +185,8 @@ export class UserService {
                         user.emailUpdates ? 'Yes' : 'No',
                         user.relationship,
                         moment(user.dob).format(Consts.DATE_DB_FORMAT),
-                        user.twitterId,
-                        user.facebookId,
+                        null, //user.twitterId,
+                        null, //user.facebookId,
                         user._creatorRef,
                         null,
                         profilePicInfo);
@@ -228,8 +228,8 @@ export class UserService {
                     user.emailUpdates ? 'Yes' : 'No',
                     user.relationship,
                     moment(user.dob).format(Consts.DATE_DB_FORMAT),
-                    user.twitterId,
-                    user.facebookId,
+                    null, //user.twitterId,
+                    null, //user.facebookId,
                     user._creatorRef,
                     null,
                     profilePicInfo);
@@ -393,8 +393,8 @@ export class UserService {
         searchFields.push('emailUpdates');
         searchFields.push('email');
         searchFields.push('name');
-        searchFields.push('twitterId');
-        searchFields.push('facebookId');
+        //searchFields.push('twitterId');
+        //searchFields.push('facebookId');
         searchFields.push('relationship');
         searchFields.push('from_date');
         searchFields.push('to_date');

@@ -27,12 +27,16 @@
 129) right-clicking a photo in a slideshow should go to that photo/memory/user = 'contextmenu' therefore could add other options
 
 x130) move messages to last column
-131) Don't show 503 error when checking duplicate names/titles Request timeout
+131) Don't show 503 error when checking duplicate names/titles Request timeout https://devcenter.heroku.com/articles/request-timeout
+     this is when getting memories/photos
+
 x132) remove hints
 x133) resize input cols
 134) check mobile rendering
-145) Remove Twitter ID and Facebook ID
+x145) Remove Twitter ID and Facebook ID
 146) Add guest Users (add readOnly flag)
+147) Add option to associate photo with a memory when adding photo
+148) Clear local storage on logout
 
 
 
