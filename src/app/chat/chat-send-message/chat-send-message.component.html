@@ -1,19 +1,19 @@
-<form ngNativeValidate   class="col-sm-10 offset-sm-2" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
+<form ngNativeValidate   class="col-md-10 offset-md-2" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
-  <h4 class="col-sm-5 offset-sm-2">{{heading}}</h4>
+  <h4 class="col-md-5 offset-md-2">{{heading}}</h4>
   <div class="form-group row" [ngClass]="{
         'has-danger': myForm.get('message').invalid && (myForm.get('message').dirty || myForm.get('message').touched),
         'has-success': myForm.get('message').valid && (myForm.get('message').dirty || myForm.get('message').touched)
       }">
-    <label for="message" class="col-sm-2 col-form-label"><strong>Message</strong></label>
-    <div class="col-sm-5">
+    <label for="message" class="col-md-2 col-form-label"><strong>Message</strong></label>
+    <div class="col-md-5">
        <textarea type="text" class="form-control" id="message" placeholder="Message"
         formControlName="message"></textarea>
       <small *ngIf="myForm.get('message').invalid" class="form-text text-muted">Enter the message to be sent.</small>
     </div>
-    <div *ngIf="chatService.authUserService.isAdminUser() && !socketId" class="col-sm-1">
+    <div *ngIf="chatService.authUserService.isAdminUser() && !socketId" class="col-md-1">
       <label class="form-check-label">
         <input class="form-check-input" type="checkbox" name="sendAsAdmin" [(ngModel)]="sendAsAdmin" [ngModelOptions]="{standalone: true}">
         Send as "Admin"?
@@ -23,7 +23,7 @@
 
   <div class="form-group row">
     <button *ngIf="chatService.geolocationSupported"
-      type="button" class="btn btn-md btn-danger offset-sm-3" (click)="onSendLocation()">Send Location</button>
+      type="button" class="btn btn-md btn-danger offset-md-3" (click)="onSendLocation()">Send Location</button>
     <button class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Send Message</button>
   </div>
 </form>

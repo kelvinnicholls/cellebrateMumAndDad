@@ -40,12 +40,12 @@
 
 
 
-  <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-4">
+  <div *ngIf="userService.searchRet" class="row col col-md-4 offset-md-4">
     <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
     <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 
-  <div *ngIf="!userService.searchRet" class="row col col-sm-4 offset-sm-5">
+  <div *ngIf="!userService.searchRet" class="row col col-md-4 offset-md-5">
     <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 </div>
@@ -57,7 +57,7 @@
       <h1 class="display-1 text-center">{{getNoUsersText()}}</h1>
     </div>
   </div>
-  <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-5">
+  <div *ngIf="userService.searchRet" class="row col col-md-4 offset-md-5">
     <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
   </div>
 </div>

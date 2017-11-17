@@ -1,17 +1,17 @@
-<div  class="row col col-sm-4 offset-sm-5">
+<div  class="row col col-md-4 offset-md-5">
   <h2 class="blog-post-title ">{{getTitle()}}</h2>
 </div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
-  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
         'has-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
         'has-success': myForm.get('title').valid && (myForm.get('title').dirty || myForm.get('title').touched)
       }">
-    <label for="title" class="col-sm-4 col-form-label"><strong>Title</strong></label>
-    <div class="col-sm-6">
-      <input placement="bottom" ngbTooltip="The title of this photo." type="text" class="form-control" id="title" placeholder="Title"
+    <label for="title" class="col-md-4 col-form-label"><strong>Title</strong></label>
+    <div class="col-md-6">
+      <input type="text" class="form-control" id="title" placeholder="Title"
         [ngModel]="photo?.title" formControlName="title" [ngClass]="{
         'form-control-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
         'form-control-success': myForm.get('title').valid && (myForm.get('title').dirty || myForm.get('title').touched)
@@ -24,13 +24,13 @@
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
         'has-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'has-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }">
-    <label for="description" class="col-sm-4 col-form-label"><strong>Description</strong></label>
-    <div class="col-sm-6">
-      <textarea placement="bottom" ngbTooltip="The description of this photo." type="text" class="form-control" id="description"
+    <label for="description" class="col-md-4 col-form-label"><strong>Description</strong></label>
+    <div class="col-md-6">
+      <textarea type="text" class="form-control" id="description"
         placeholder="Description" [ngModel]="photo?.description" formControlName="description" [ngClass]="{
         'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
@@ -40,12 +40,12 @@
   </div>
 
 
-  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
     'has-danger': myForm.get('mediaDate').invalid,
     'has-success': myForm.get('mediaDate').valid
   }">
-    <label for="mediaDate" class="col-sm-4 col-form-label"><strong>Date of Photo</strong></label>
-    <div class="col-sm-5">
+    <label for="mediaDate" class="col-md-4 col-form-label"><strong>Date of Photo</strong></label>
+    <div class="col-md-6">
       <div class="input-group">
         <input class="form-control" placeholder="DD-MM-YYYY" name="mediaDate" id="mediaDate" [(ngModel)]="modelMediaDate" [maxDate]="getMaxDate()"
           [minDate]="getMinDate()" ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="mediaDate" [ngClass]="{
@@ -59,83 +59,83 @@
     </div>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
     'has-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched),
     'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty || myForm.get('tags').touched)
   }">
-    <label for="tags" class="col-sm-4 col-form-label"><strong>Tags</strong></label>
-    <div placement="left" [ngbTooltip]="getTags()" class="col-sm-4">
+    <label for="tags" class="col-md-4 col-form-label"><strong>Tags</strong></label>
+    <div placement="left" [ngbTooltip]="getTags()" class="col-md-4">
 
       <ss-multiselect-dropdown [texts]="tagService.multiSelectTagsTexts" [settings]="getConsts().multiSelectSettings" [(options)]="tagService.multiSelectTagOptions"
-        placement="top" ngbTooltip="The tags associated with this photo." formControlName="tags" [(ngModel)]="tagService.selectedTags"
+         formControlName="tags" [(ngModel)]="tagService.selectedTags"
         (ngModelChange)="onTagsChange($event)" class="form-control" [ngClass]="{
     'form-control-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched),
     'form-control-success': myForm.get('tags').valid && (myForm.get('tags').dirty || myForm.get('tags').touched)
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button [disabled]="!isEditable" (click)="addTag()" placement="bottom" ngbTooltip="Press to add a new tag to list of tags." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable" (click)="addTag()" class="btn btn-md btn-primary"
       type="button">Add New Tag</button>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
     'has-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched),
     'has-success': myForm.get('people').valid && (myForm.get('people').dirty || myForm.get('people').touched)
   }">
-    <label for="people" class="col-sm-4 col-form-label"><strong>People</strong></label>
-    <div placement="left" [ngbTooltip]="getPeople()" class="col-sm-4">
+    <label for="people" class="col-md-4 col-form-label"><strong>People</strong></label>
+    <div placement="left" [ngbTooltip]="getPeople()" class="col-md-4">
 
       <ss-multiselect-dropdown [texts]="personService.multiSelectPeopleTexts" [settings]="getConsts().multiSelectSettings" [(options)]="personService.multiSelectPersonOptions"
-        placement="top" ngbTooltip="The people associated with this photo." formControlName="people" [(ngModel)]="personService.selectedPeople"
+         formControlName="people" [(ngModel)]="personService.selectedPeople"
         (ngModelChange)="onPeopleChange($event)" class="form-control" [ngClass]="{
     'form-control-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched),
     'form-control-success': myForm.get('people').valid && (myForm.get('people').dirty || myForm.get('people').touched)
   }"></ss-multiselect-dropdown>
 
     </div>
-    <button [disabled]="!isEditable" (click)="addPerson()" placement="bottom" ngbTooltip="Press to add a new person to list of people." class="btn btn-md btn-primary"
+    <button [disabled]="!isEditable" (click)="addPerson()" class="btn btn-md btn-primary"
       type="button">Add New Person</button>
   </div>
 
-  <div class="form-group row col col-sm-8 offset-sm-2">
-    <label for="photoPic" class="col-sm-4 col-form-label"><strong>Photo</strong></label>
-    <div class="col col-sm-2">
+  <div class="form-group row col col-md-8 offset-md-2">
+    <label for="photoPic" class="col-md-4 col-form-label"><strong>Photo</strong></label>
+    <div class="col col-md-2">
       <span class="pull-right">
-        <img placement="bottom" ngbTooltip="The photo." [src]="getSource()" class="img-responsive" style="max-height: 50px;" toggleFullscreen>
+        <img [src]="getSource()" class="img-responsive" style="max-height: 50px;" toggleFullscreen>
         </span>
     </div>
 
 
-    <div id="comments" *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="form-group row col col-sm-8 offset-sm-4">
-      <a placement="bottom" ngbTooltip="Click to view comments." target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{photo.comments.length}})</a>
+    <div id="comments" *ngIf="photo && photo.comments &&  photo.comments.length > 0" class="form-group row col col-md-8 offset-md-4">
+      <a  target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{photo.comments.length}})</a>
     </div>
 
-    <div *ngIf="!photo" class="col col-sm-2">
+    <div *ngIf="!photo" class="col col-md-2">
       <div id="fileSource">
-        <label placement="bottom" ngbTooltip="Look for the file on the file system of local computer." class="custom-control custom-radio">
+        <label class="custom-control custom-radio">
                 <input (click)="setFileSource(getConsts().FILE_SYSTEM)" id="fileSystem" name="fileSource" type="radio" value="File System" class="custom-control-input" checked>
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description"><strong>File<br />System</strong></span>
               </label>
-        <label placement="bottom" ngbTooltip="Look for the file on the web." class="custom-control custom-radio">
+        <label class="custom-control custom-radio">
                 <input (click)="setFileSource(getConsts().WEB)" id="web" name="fileSource" type="radio" value="Web" class="custom-control-input">
                   <span class="custom-control-indicator"></span>
                   <span class="custom-control-description"><strong>Web</strong></span>
               </label>
       </div>
     </div>
-    <div *ngIf="!photo" class="col col-sm-1">
-      <label placement="right" ngbTooltip="Press to select a photo to upload." class="btn btn-success" for='photoPicPath' (click)="showFileStackPicker()">
+    <div *ngIf="!photo" class="col col-md-1">
+      <label class="btn btn-success" for='photoPicPath' (click)="showFileStackPicker()">
           Browse
         <input *ngIf="fileSource === getConsts().FILE_SYSTEM" type="file" #file id="photoPicPath" class="form-control" name="profilePicPath"  style="display: none;" (change)="onImageChange(file.files)">
         <input *ngIf="fileSource === getConsts().WEB" type="button" class="form-control" style="display: none;">
         </label>
     </div>
   </div>
-  <div class="form-group row col col-sm-4 offset-sm-6">
-    <button *ngIf="isAddPhoto()" placement="bottom" ngbTooltip="Press to clear all entered values." type="button" class="btn btn-md btn-danger"
+  <div class="form-group row col col-md-4 offset-md-6">
+    <button *ngIf="isAddPhoto()" type="button" class="btn btn-md btn-danger"
       (click)="onClear()">Clear</button>
-    <button placement="bottom" ngbTooltip="Press to save changes to the cloud." class="btn btn-md btn-primary" type="submit"
+    <button class="btn btn-md btn-primary" type="submit"
       [disabled]="!isFormValid()">{{submitType}}</button>
   </div>
 

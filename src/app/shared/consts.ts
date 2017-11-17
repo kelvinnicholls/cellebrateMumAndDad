@@ -83,7 +83,7 @@ export class Consts {
     enableSearch: true,
     checkedStyle: 'fontawesome',
     buttonClasses: 'btn btn-info btn-block',
-    //dynamicTitleMaxItems: 3,
+    dynamicTitleMaxItems: 2,
     //pullRight: true,
     showCheckAll: false,
     showUncheckAll: false,

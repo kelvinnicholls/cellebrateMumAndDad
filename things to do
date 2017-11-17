@@ -29,7 +29,7 @@
 x130) move messages to last column
 131) Don't show 503 error when checking duplicate names/titles Request timeout
 x132) remove hints
-133) resize input cols
+x133) resize input cols
 134) check mobile rendering
 
 
