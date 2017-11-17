@@ -36,7 +36,8 @@ x133) resize input cols
 x145) Remove Twitter ID and Facebook ID
 146) Add guest Users (add readOnly flag)
 147) Add option to associate photo with a memory when adding photo
-148) Clear local storage on logout
+x148) Clear local storage on logout
+149) when deploying photos will be overwritten (I think) check!
 
 
 
