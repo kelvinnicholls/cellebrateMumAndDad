@@ -64,7 +64,7 @@
     'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty || myForm.get('tags').touched)
   }">
     <label for="tags" class="col-md-4 col-form-label"><strong>Tags</strong></label>
-    <div placement="left" [ngbTooltip]="getTags()" class="col-md-4">
+    <div placement="left" [ngbTooltip]="getTags()" class="col-md-6">
 
       <ss-multiselect-dropdown [texts]="tagService.multiSelectTagsTexts" [settings]="getConsts().multiSelectSettings" [(options)]="tagService.multiSelectTagOptions"
          formControlName="tags" [(ngModel)]="tagService.selectedTags"
@@ -75,7 +75,7 @@
 
     </div>
     <button [disabled]="!isEditable" (click)="addTag()" class="btn btn-md btn-primary"
-      type="button">Add New Tag</button>
+      type="button">Add Tag</button>
   </div>
 
   <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
@@ -83,7 +83,7 @@
     'has-success': myForm.get('people').valid && (myForm.get('people').dirty || myForm.get('people').touched)
   }">
     <label for="people" class="col-md-4 col-form-label"><strong>People</strong></label>
-    <div placement="left" [ngbTooltip]="getPeople()" class="col-md-4">
+    <div placement="left" [ngbTooltip]="getPeople()" class="col-md-6">
 
       <ss-multiselect-dropdown [texts]="personService.multiSelectPeopleTexts" [settings]="getConsts().multiSelectSettings" [(options)]="personService.multiSelectPersonOptions"
          formControlName="people" [(ngModel)]="personService.selectedPeople"
@@ -94,7 +94,7 @@
 
     </div>
     <button [disabled]="!isEditable" (click)="addPerson()" class="btn btn-md btn-primary"
-      type="button">Add New Person</button>
+      type="button">Add Person</button>
   </div>
 
   <div class="form-group row col col-md-8 offset-md-2">

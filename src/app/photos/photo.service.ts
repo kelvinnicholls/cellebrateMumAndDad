@@ -29,7 +29,7 @@ import { User } from "../users/user.model";
 export class PhotoService {
 
 
-    photo: string = "tag";
+    photo: string = "photo";
     photoplural: string = this.photo + "'s";
     public selectedPhotos: String[] = [];
 

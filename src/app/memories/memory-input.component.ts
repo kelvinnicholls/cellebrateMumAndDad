@@ -59,7 +59,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
     }
 
     getTitle(): string {
-        return Utils.initCap(this.mode) + " Photo";
+        return Utils.initCap(this.mode) + " Memory";
     }
 
     galleryOptions: NgxGalleryOptions[];
@@ -428,9 +428,10 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
             }
         );
 
-        console.log('MemoryInputComponent ngOnInit');
+        console.log('MemoryInputComponent ngOnInit.getPhotos() before');
         memoryInputComponent.photoService.getPhotos().subscribe(
             (photos: Photo[]) => {
+                console.log('MemoryInputComponent ngOnInit.getPhotos() after');
                 memoryInputComponent.photoService.multiSelectPhotoOptions = [];
                 for (let photo of photos) {
                     memoryInputComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });

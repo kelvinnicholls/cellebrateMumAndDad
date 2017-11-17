@@ -31,6 +31,8 @@ x130) move messages to last column
 x132) remove hints
 x133) resize input cols
 134) check mobile rendering
+145) Remove Twitter ID and Facebook ID
+146) Add guest Users (add readOnly flag)
 
 
 
