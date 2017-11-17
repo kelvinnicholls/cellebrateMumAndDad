@@ -136,6 +136,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         memoryListComponent.memoryService.showSuccessToast.subscribe((msg) => {
             memoryListComponent.toastService.showSuccess(msg);
         });
+        console.log('MemoryListComponent ngOnInit');
         memoryListComponent.memoryService.getMemories()
             .subscribe(
             (memories: Memory[]) => {

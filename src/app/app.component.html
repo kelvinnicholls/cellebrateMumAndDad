@@ -4,6 +4,9 @@
   </div>
   <hr>
   <div class="row">
+    <div class="col-md-10">
+      <router-outlet></router-outlet>
+    </div>
     <div class="col-md-2 blog-sidebar">
       <div [hidden]="!authUserService.isLoggedIn()">
         <app-chat-users></app-chat-users>
@@ -12,9 +15,6 @@
         <br>
         <app-chat-messages-list></app-chat-messages-list>
       </div>
-    </div>
-    <div class="col-md-10">
-      <router-outlet></router-outlet>
     </div>
   </div>
 </div>
@@ -27,4 +27,3 @@
 <app-comments-list></app-comments-list>
 <!-- <app-comments-list [comments]="photo.comments">
   </app-comments-list> -->
-

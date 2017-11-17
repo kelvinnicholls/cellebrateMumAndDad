@@ -26,7 +26,11 @@
 125) Sort out hints being on for too long 
 129) right-clicking a photo in a slideshow should go to that photo/memory/user = 'contextmenu' therefore could add other options
 
-
+x130) move messages to last column
+131) Don't show 503 error when checking duplicate names/titles Request timeout
+x132) remove hints
+133) resize input cols
+134) check mobile rendering
 
 
 

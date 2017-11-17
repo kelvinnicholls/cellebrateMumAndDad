@@ -428,7 +428,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
             }
         );
 
-
+        console.log('MemoryInputComponent ngOnInit');
         memoryInputComponent.photoService.getPhotos().subscribe(
             (photos: Photo[]) => {
                 memoryInputComponent.photoService.multiSelectPhotoOptions = [];

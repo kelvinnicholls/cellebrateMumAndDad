@@ -8,12 +8,12 @@
       }">
     <label for="comment" class="col-sm-4 col-form-label"><strong>Comment</strong></label>
     <div class="col-sm-6">
-      <textarea placement="bottom" ngbTooltip="The comment to be added." type="text" class="form-control" id="comment" placeholder="Comment"
+      <textarea type="text" class="form-control" id="comment" placeholder="Comment"
         formControlName="comment"></textarea>
       <small *ngIf="myForm.get('comment').invalid" class="form-text text-muted">Enter the comment to be added.</small>
     </div>
   </div>
     <div class="form-group row col col-sm-4 offset-sm-6">
-    <button placement="bottom" ngbTooltip="Press to add comment." class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Add Comment</button>
+    <button class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Add Comment</button>
   </div>
 </form>

@@ -9,7 +9,7 @@
             <a routerLinkActive="active" routerLink="/users/user/{{user.index}}">{{ user.name }}</a>
           </span>
         </mat-grid-tile-header>
-        <img [alt]="user.name" [src]="getSource(user)" placement="top" ngbTooltip="{{ user.relationship }} - {{ user.email }}" class="img-responsive"
+        <img [alt]="user.name" [src]="getSource(user)" class="img-responsive"
           style="max-height: 80px;" toggleFullscreen>
         <mat-grid-tile-footer>
           <span mat-line>
@@ -41,12 +41,12 @@
 
 
   <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-4">
-    <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-    <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+    <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
+    <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 
   <div *ngIf="!userService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button placement="bottom" ngbTooltip="Press to restict user list." type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+    <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 </div>
 
@@ -58,6 +58,6 @@
     </div>
   </div>
   <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button placement="bottom" ngbTooltip="Press to clear search." type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
+    <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
   </div>
 </div>

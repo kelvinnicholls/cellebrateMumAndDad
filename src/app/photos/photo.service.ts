@@ -467,7 +467,7 @@ export class PhotoService {
         } else {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-
+            
             return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
                 .map((response: Response) => {
                     const photos = response.json().medias;

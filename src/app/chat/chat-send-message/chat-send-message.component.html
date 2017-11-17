@@ -9,8 +9,7 @@
       }">
     <label for="message" class="col-sm-2 col-form-label"><strong>Message</strong></label>
     <div class="col-sm-5">
-      <!-- <input  placement="bottom" ngbTooltip="The message to be sent." type="text" class="form-control" id="message" placeholder="Message" formControlName="message"> -->
-      <textarea placement="bottom" ngbTooltip="The message to be sent." type="text" class="form-control" id="message" placeholder="Message"
+       <textarea type="text" class="form-control" id="message" placeholder="Message"
         formControlName="message"></textarea>
       <small *ngIf="myForm.get('message').invalid" class="form-text text-muted">Enter the message to be sent.</small>
     </div>
@@ -23,8 +22,8 @@
   </div>
 
   <div class="form-group row">
-    <button *ngIf="chatService.geolocationSupported" placement="bottom" ngbTooltip="Press to send current location as a message."
+    <button *ngIf="chatService.geolocationSupported"
       type="button" class="btn btn-md btn-danger offset-sm-3" (click)="onSendLocation()">Send Location</button>
-    <button placement="bottom" ngbTooltip="Press to send message." class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Send Message</button>
+    <button class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Send Message</button>
   </div>
 </form>
