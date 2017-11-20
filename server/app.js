@@ -13,7 +13,6 @@ const tagsRoutes = require('./routes/tags-routes.js');
 const peopleRoutes = require('./routes/people-routes.js');
 const appRoutes = require('./routes/app-routes.js');
 
-
 var app = express();
 
 // view engine setup

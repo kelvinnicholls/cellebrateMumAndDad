@@ -40,6 +40,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/platform-server": "^4.2.5",
     "@angular/router": "^4.0.0",
+    "@google-cloud/storage": "^1.4.0",
     "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.27",
     "@types/socket.io-client": "^1.4.29",
     "angular-2-dropdown-multiselect": "^1.5.4",

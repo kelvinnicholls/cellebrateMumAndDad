@@ -1,4 +1,6 @@
 const express = require('express');
+const googleCloudApi = require('../shared/google-cloud-api');
+const fs = require('fs');
 const router = express.Router();
 const _ = require('lodash');
 var path = require('path');
@@ -37,6 +39,7 @@ const {
   processErr
 } = require('../shared/file-upload');
 
+//googleCloudApi.showBuckets();
 
 let upload = (req, res, next) => {
   //console.log('upload',req, res);
@@ -61,6 +64,7 @@ let upload = (req, res, next) => {
         req.passedMedia.mimeType = req.file.mimetype;
         req.passedMedia.isProfilePic = false;
         req.passedMedia.isUrl = false;
+        googleCloudApi.uploadFile(location);
       };
       next();
     };
@@ -83,19 +87,19 @@ let addUserToComments = (media) => {
       };
       User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
         console.log('addUserToComments', 'user', user);
-        console.log('addUserToComments', 'typeof user',typeof user);
-        console.log('addUserToComments', 'typeof comment',typeof comment);
+        console.log('addUserToComments', 'typeof user', typeof user);
+        console.log('addUserToComments', 'typeof comment', typeof comment);
         if (user) {
           delete user._id;
           let newComment = JSON.parse(JSON.stringify(comment));
-          console.log('addUserToComments', 'user.name',user.name);
-          console.log('addUserToComments', 'user._profileMediaId',user._profileMediaId);
+          console.log('addUserToComments', 'user.name', user.name);
+          console.log('addUserToComments', 'user._profileMediaId', user._profileMediaId);
           newComment.user = {};
-          console.log('addUserToComments', 'newComment.user',newComment.user);
+          console.log('addUserToComments', 'newComment.user', newComment.user);
           newComment.user.name = user.name;
           newComment.user._profileMediaId = user._profileMediaId;
-          console.log('addUserToComments', 'newComment.user2',newComment.user);
-          
+          console.log('addUserToComments', 'newComment.user2', newComment.user);
+
           commentsArr.push(newComment);
           console.log('addUserToComments', 'newComment', newComment);
         };
@@ -111,7 +115,7 @@ let addUserToComments = (media) => {
       });
     };
   });
-}
+};
 
 
 
@@ -154,7 +158,35 @@ let transformCreatorToUser = (medias) => {
       };
     };
   });
-}
+};
+
+let downloadFiles = (medias) => {
+  return new Promise((resolve, reject) => {
+    let numMedias = medias ? medias.length : 0;
+    let processedMedias = 0;
+    for (let media of medias) {
+      downloadFile(media);
+      processedMedias++;
+      if (numMedias === processedMedias) {
+        return resolve();
+      };
+    };
+  });
+};
+
+
+
+let downloadFile = (media) => {
+  return new Promise((resolve, reject) => {
+    if (media.location && media.location.length > 0) {
+      if (!fs.existsSync(media.location)) {
+        googleCloudApi.downloadFile(media.location);
+      };
+      return resolve();
+    };
+  });
+};
+
 
 router.post('/', authenticate, upload, (req, res) => {
   let body = _.pick(req.passedMedia, mediaInsertFields);
@@ -197,7 +229,11 @@ router.get('/', authenticate, (req, res) => {
     transformCreatorToUser(medias).then((medias) => {
       let obj = {};
       obj['medias'] = medias;
-      res.send(obj);
+      downloadFiles(medias).then(() => {
+        res.send(obj);
+      }, (e) => {
+        console.log("downloadFiles error", e);
+      });
     }, (e) => {
       console.log("transformCreatorToUser error", e);
     });
@@ -217,8 +253,11 @@ router.get('/byCriteria', authenticate, (req, res) => {
 
   Media.findByCriteria(tags, people, fromDate, toDate).then((medias) => {
     let obj = {};
-    obj['medias'] = medias;
-    res.send(obj);
+    downloadFiles(medias).then(() => {
+      res.send(obj);
+    }, (e) => {
+      console.log("downloadFiles error", e);
+    });
   }, (e) => {
     console.log("mediasApp.get('/medias/byCriteria' error", e);
   });
@@ -266,8 +305,12 @@ router.get('/:id', authenticate, (req, res) => {
     '_id': id
   }).populate('comments tags people').then((media) => {
     if (media) {
-      res.send({
-        media
+      downloadFile(media).then(() => {
+        res.send({
+          media
+        });
+      }, (e) => {
+        console.log("downloadFile error", e);
       });
     } else {
       res.status(404).send({
@@ -302,6 +345,7 @@ router.delete('/:id', authenticate, (req, res) => {
   Media.findOneAndRemove(medias).then((media) => {
 
     if (media) {
+      googleCloudApi.deleteFile(media.location);
       res.send({
         media
       });
@@ -317,36 +361,36 @@ router.delete('/:id', authenticate, (req, res) => {
 });
 
 
-router.delete('/', authenticate, (req, res) => {
+// router.delete('/', authenticate, (req, res) => {
 
-  let medias = {};
-  if (!req.loggedInUser.adminUser) {
-    medias = {
-      '_creator': req.loggedInUser._creatorRef
-    };
-  }
+//   let medias = {};
+//   if (!req.loggedInUser.adminUser) {
+//     medias = {
+//       '_creator': req.loggedInUser._creatorRef
+//     };
+//   }
 
-  Media.remove(medias).then((medias) => {
-    if (medias) {
-      if (medias.result.n === 0) {
-        res.status(404).send({
-          error: "No media deleted"
-        });
-      } else {
-        let obj = {};
-        obj['medias'] = medias;
-        res.send(obj);
-      }
+//   Media.remove(medias).then((medias) => {
+//     if (medias) {
+//       if (medias.result.n === 0) {
+//         res.status(404).send({
+//           error: "No media deleted"
+//         });
+//       } else {
+//         let obj = {};
+//         obj['medias'] = medias;
+//         res.send(obj);
+//       }
 
-    } else {
-      res.status(400).send({
-        error: "No media deleted"
-      });
-    }
-  }, (e) => {
-    res.status(400).send();
-  });
-});
+//     } else {
+//       res.status(400).send({
+//         error: "No media deleted"
+//       });
+//     }
+//   }, (e) => {
+//     res.status(400).send();
+//   });
+// });
 
 
 let updateMedias = (res, body, medias, commentId) => {
