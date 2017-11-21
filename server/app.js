@@ -45,11 +45,13 @@ app.use(function (req, res, next) {
 });
 
 
-app.use(function (req, res, next) {
-  googleCloudApi.authorize().then(() => {
-    next();
-  });
-});
+// app.use(function (req, res, next) {
+//   googleCloudApi.authorize().then(() => {
+//     next();
+//   });
+// });
+
+googleCloudApi.showBuckets();
 
 
 app.use('/medias', mediasRoutes);

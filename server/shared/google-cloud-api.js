@@ -1,53 +1,21 @@
-// // Imports the Google Cloud client library
-// const Storage = require('@google-cloud/storage');
-
-// // Your Google Cloud Platform project ID
-// const projectId = 'YOUR_PROJECT_ID';
-
-// // Creates a client
-// const storage = new Storage({
-//   projectId: projectId,
-// });
-
-// // The name for the new bucket
-// const bucketName = 'my-new-bucket';
-
-// // Creates the new bucket
-// storage
-//   .createBucket(bucketName)
-//   .then(() => {
-//     console.log(`Bucket ${bucketName} created.`);
-//   })
-//   .catch(err => {
-//     console.error('ERROR:', err);
-//   });
-
 const Storage = require('@google-cloud/storage');
-const GoogleAuth = require('google-auth-library');
 
-function authorize() {
-  return new Promise(resolve => {
-    if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
-      const authFactory = new GoogleAuth();
-      const jwtClient = new authFactory.JWT(
-        process.env.GOOGLE_CLIENT_EMAIL, // defined in Heroku
-        null,
-        process.env.GOOGLE_PRIVATE_KEY, // defined in Heroku
-        ['https://www.googleapis.com/auth/calendar']
-      );
-      jwtClient.authorize(() => resolve(jwtClient));
-    } else {
-      resolve();
-    };
-  });
-}
-
-const storage = Storage();
+const projectId = 'celebmumanddad';
 const bucketName = 'celebmumanddadphotos';
-const bucket = storage.bucket(bucketName);
+
+
+let storage = Storage({
+  credentials: require('./CelebMumAndDad-a5afc62b3487.json'),
+  projectId: projectId
+});
+
+
+
+let bucket = storage.bucket(bucketName);
+
+
 
 function showBuckets() {
-
   storage
     .getBuckets()
     .then((results) => {
@@ -62,11 +30,12 @@ function showBuckets() {
     .catch((err) => {
       console.error('ERROR:', err);
     });
-}
+};
 
 
 
 function uploadFile(filename) {
+  //accessStorage();
   bucket
     .upload(filename)
     .then(() => {
@@ -75,30 +44,12 @@ function uploadFile(filename) {
     .catch(err => {
       console.error('ERROR:', err);
     });
-  // [END storage_upload_file]
 }
 
 function downloadFile(srcFilename, destFilename) {
-  // [START storage_download_file]
-  // Imports the Google Cloud client library
-
-  // Creates a client
-  //const storage = new Storage();
-  //const storage = Storage();
-  /**
-   * TODO(developer): Uncomment the following lines before running the sample.
-   */
-  // const bucketName = 'Name of a bucket, e.g. my-bucket';
-  // const srcFilename = 'Remote file to download, e.g. file.txt';
-  // const destFilename = 'Local destination for file, e.g. ./local/path/to/file.txt';
-
   const options = {
-    // The path to which the file should be downloaded, e.g. "./file.txt"
     destination: destFilename,
   };
-
-  // Downloads the file
-
   bucket
     .file(srcFilename)
     .download(options)
@@ -131,6 +82,5 @@ module.exports = {
   downloadFile,
   uploadFile,
   showBuckets,
-  deleteFile,
-  authorize
+  deleteFile
 }
