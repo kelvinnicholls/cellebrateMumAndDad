@@ -23,7 +23,24 @@
 //   });
 
 const Storage = require('@google-cloud/storage');
-//const projectId = 'celebmumanddad';
+const GoogleAuth = require('google-auth-library');
+
+function authorize() {
+  return new Promise(resolve => {
+    if (process.env.GOOGLE_CLIENT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
+      const authFactory = new GoogleAuth();
+      const jwtClient = new authFactory.JWT(
+        process.env.GOOGLE_CLIENT_EMAIL, // defined in Heroku
+        null,
+        process.env.GOOGLE_PRIVATE_KEY, // defined in Heroku
+        ['https://www.googleapis.com/auth/calendar']
+      );
+      jwtClient.authorize(() => resolve(jwtClient));
+    } else {
+      resolve();
+    };
+  });
+}
 
 const storage = Storage();
 const bucketName = 'celebmumanddadphotos';
@@ -114,5 +131,6 @@ module.exports = {
   downloadFile,
   uploadFile,
   showBuckets,
-  deleteFile
+  deleteFile,
+  authorize
 }
