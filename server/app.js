@@ -51,7 +51,7 @@ app.use(function (req, res, next) {
 //   });
 // });
 
-googleCloudApi.showBuckets();
+//googleCloudApi.showBuckets();
 
 
 app.use('/medias', mediasRoutes);
