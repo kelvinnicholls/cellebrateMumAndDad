@@ -93,6 +93,29 @@
     </div>
   </div>
 
+
+  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+    'has-danger': myForm.get('guestUser').invalid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched),
+    'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched)
+  }">
+<label for="guestUser" class="col-md-4 col-form-label"><strong>Guest?</strong></label>
+<div class="col-md-5">
+  <select class="form-control dropdown" [ngModel]="user?.guestUser"
+    formControlName="guestUser" [ngClass]="{
+    'form-control-danger': myForm.get('guestUser').invalid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched),
+    'form-control-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched)
+  }">
+          <option value="Yes" >Yes</option>
+          <option value="No" selected>No</option>
+        </select>
+  <div class="form-control-feedback" *ngIf="myForm.get('guestUser').errors && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched)">
+    <p *ngIf="myForm.get('guestUser').errors.required">Guest User is required</p>
+
+  </div>
+  <small *ngIf="myForm.get('guestUser').invalid" class="form-text text-muted">Is this user a guest user? Y or N?</small>
+</div>
+</div>
+
   <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
         'has-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
         'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)

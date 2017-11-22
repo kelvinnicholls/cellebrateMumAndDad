@@ -136,6 +136,34 @@
               </div>
             </div>
 
+            <div *ngIf="canShow('guestUser')" class="form-group row col col-md-12" [ngClass]="{
+              'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && myForm.get('guestUser').value.length > 0)
+            }">
+      
+                    <label for="guestUser" class="col-md-4 col-form-label">
+                      <strong>Guest User?</strong>
+                    </label>
+                    <div id="guestUser" [ngClass]="{
+              'form-control-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && myForm.get('guestUser').value.length > 0)
+            }">
+                      <label class="custom-control custom-radio">
+                        <input id="guestUserYes" name="guestUser" type="radio" value="Yes" class="custom-control-input" formControlName="guestUser">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Yes</span>
+                      </label>
+                      <label class="custom-control custom-radio">
+                        <input id="guestUserNo" name="guestUser" type="radio" value="No" class="custom-control-input" formControlName="guestUser">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">No</span>
+                      </label>
+                      <label class="custom-control custom-radio">
+                        <input id="guestUserBoth" name="guestUser" type="radio" value="Both" class="custom-control-input" formControlName="guestUser">
+                        <span class="custom-control-indicator"></span>
+                        <span class="custom-control-description">Both</span>
+                      </label>
+                    </div>
+                  </div>
+
             <div *ngIf="canShow('email')" class="form-group row col col-md-12" [ngClass]="{
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty && myForm.get('email').value.length > 0)
       }">

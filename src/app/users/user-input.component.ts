@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewContainerRef, ViewChild, EventEmitter
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import {NgbDateMomentParserFormatter} from '.././shared/ngb-date-moment-parser-formatter';
+import { NgbDateMomentParserFormatter } from '.././shared/ngb-date-moment-parser-formatter';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import * as moment from 'moment';
@@ -195,6 +195,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         } else {
                             adminUser = this.user.adminUser;
                         };
+                        let guestUser = this.myForm.value.guestUser;
+                        if (guestUser && typeof guestUser === 'string') {
+                            guestUser = guestUser === 'Yes' ? true : false;
+                        } else {
+                            guestUser = this.user.guestUser;
+                        };
                         let emailUpdates = this.myForm.value.emailUpdates;
                         if (emailUpdates && typeof emailUpdates === 'string') {
                             emailUpdates = emailUpdates === 'Yes' ? true : false;
@@ -206,6 +212,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             null,
                             this.myForm.value.name,
                             adminUser,
+                            guestUser,
                             emailUpdates,
                             this.myForm.value.relationship,
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
@@ -218,7 +225,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             .subscribe(
                             result => {
                                 console.log(result);
-                                
+
                                 if (this.submitType == Consts.UPDATE_CURRENT_USER) {
                                     userInputComponent.router.navigate(['']).then((ok) => {
                                         if (ok) {
@@ -229,12 +236,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
 
                                     //userInputComponent.router.navigate(['']);
                                     //userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
-                                } else {       
+                                } else {
                                     userInputComponent.router.navigate(['users']).then((ok) => {
                                         if (ok) {
                                             userInputComponent.userService.showSuccessToast.emit("User updated");
                                         };
-                                    });                             
+                                    });
                                     //userInputComponent.toastService.showSuccess("User updated.");
                                     //userInputComponent.router.navigate(['users']);
                                 };
@@ -254,6 +261,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             this.myForm.value.password,
                             this.myForm.value.name,
                             this.myForm.value.adminUser == 'Yes' ? true : false,
+                            this.myForm.value.guestUser == 'Yes' ? true : false,
                             this.myForm.value.emailUpdates == 'Yes' ? true : false,
                             this.myForm.value.relationship,
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
@@ -269,7 +277,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                                     if (ok) {
                                         userInputComponent.userService.showSuccessToast.emit("User created");
                                     };
-                                });  
+                                });
                                 // userInputComponent.toastService.showSuccess("User created.");
                                 // userInputComponent.router.navigate(['users']);
                             },
@@ -345,6 +353,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
             name: new FormControl(null, Validators.required,
                 this.forbiddenNames),
             adminUser: new FormControl(null, Validators.required),
+            guestUser: new FormControl(null, Validators.required),
             emailUpdates: new FormControl(null, Validators.required),
             relationship: new FormControl(null, Validators.required),
             email: new FormControl(null, [
@@ -366,6 +375,9 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     this._creatorRef = user._creatorRef;
                     if (typeof this.user.adminUser === 'boolean') {
                         this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
+                    };
+                    if (typeof this.user.guestUser === 'boolean') {
+                        this.user.guestUser = this.user.guestUser ? 'Yes' : 'No';
                     };
                     if (typeof this.user.emailUpdates === 'boolean') {
                         this.user.emailUpdates = this.user.emailUpdates ? 'Yes' : 'No';

@@ -6,6 +6,7 @@ export class User {
         public password: string,
         public name: string,
         public adminUser: string | boolean,
+        public guestUser: string | boolean,
         public emailUpdates: string | boolean,
         public relationship: string,
         public dob?: string,

@@ -11,9 +11,9 @@ const utils = require('../utils/utils.js');
 
 const seed = process.env.JWT_SECRET;
 
-const userOutFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
-const userInsertFields = ['email', 'password', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
-const userUpdateFields = ['email', 'name', 'adminUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
+const userOutFields = ['email', 'name', 'adminUser','guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
+const userInsertFields = ['email', 'password', 'name', 'adminUser','guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
+const userUpdateFields = ['email', 'name', 'adminUser','guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 
 
 let UserSchema = new mongoose.Schema({
@@ -46,6 +46,10 @@ let UserSchema = new mongoose.Schema({
     minlength: 1
   },
   adminUser: {
+    required: true,
+    type: Boolean
+  },
+  guestUser: {
     required: true,
     type: Boolean
   },

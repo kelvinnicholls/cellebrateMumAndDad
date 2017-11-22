@@ -49,6 +49,7 @@ export class UserService {
             null,
             user.name,
             user.adminUser ? 'Yes' : 'No',
+            user.guestUser ? 'Yes' : 'No',
             user.emailUpdates ? 'Yes' : 'No',
             user.relationship,
             moment(user.dob).format(Consts.DATE_DB_FORMAT),
@@ -182,6 +183,7 @@ export class UserService {
                         null,
                         user.name,
                         user.adminUser ? 'Yes' : 'No',
+                        user.guestUser ? 'Yes' : 'No',
                         user.emailUpdates ? 'Yes' : 'No',
                         user.relationship,
                         moment(user.dob).format(Consts.DATE_DB_FORMAT),
@@ -225,6 +227,7 @@ export class UserService {
                     null,
                     user.name,
                     user.adminUser ? 'Yes' : 'No',
+                    user.guestUser ? 'Yes' : 'No',
                     user.emailUpdates ? 'Yes' : 'No',
                     user.relationship,
                     moment(user.dob).format(Consts.DATE_DB_FORMAT),
@@ -390,6 +393,7 @@ export class UserService {
             });
         let searchFields: String[] = [];
         searchFields.push('adminUser');
+        searchFields.push('guestUser');
         searchFields.push('emailUpdates');
         searchFields.push('email');
         searchFields.push('name');

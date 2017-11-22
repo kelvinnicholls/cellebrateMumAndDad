@@ -23,6 +23,19 @@ export class AuthUserService {
         return ret;
     }
 
+    isGuestUser(): boolean {
+        const loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+        let ret = false;
+        if (loggedInUser) {
+            let guestUser = loggedInUser.guestUser;
+            if ((typeof guestUser === 'string' && guestUser.toLowerCase() === 'yes') || (typeof guestUser === 'boolean' && guestUser)) {
+                ret = true;
+            };
+        };
+
+        return ret;
+    }
+
     getLoggedInUserName() {
         const loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
         let name = "Not Logged In";

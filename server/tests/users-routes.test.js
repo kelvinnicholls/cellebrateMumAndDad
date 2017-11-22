@@ -240,6 +240,7 @@ describe('POST /users', () => {
 
     let name = "Kelvin";
     let adminUser = true;
+    let guestUser = true;
     let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
@@ -248,6 +249,7 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      guestUser,
       emailUpdates,
       relationship,
       dob
@@ -294,6 +296,7 @@ describe('POST /users', () => {
 
     let name = "Kelvin";
     let adminUser = true;
+    let guestUser = true;
     let emailUpdates = true;
     let relationship = "Son";
     let dob = 2342323;
@@ -302,6 +305,7 @@ describe('POST /users', () => {
       password,
       name,
       adminUser,
+      guestUser,
       emailUpdates,
       relationship,
       dob
