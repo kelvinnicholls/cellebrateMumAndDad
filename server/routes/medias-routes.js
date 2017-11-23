@@ -39,7 +39,6 @@ const {
   processErr
 } = require('../shared/file-upload');
 
-//googleCloudApi.showBuckets();
 
 let upload = (req, res, next) => {
   //console.log('upload',req, res);
