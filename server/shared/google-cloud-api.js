@@ -3,6 +3,8 @@ const config = require('../config/config.js');
 const projectId = 'celebmumanddad';
 const bucketName = 'celebmumanddadphotos';
 
+console.log("process.env.GOOGLE_PRIVATE_KEY",process.env.GOOGLE_PRIVATE_KEY);
+
 const credentialsObj = {
   "type": process.env.GOOGLE_TYPE,
   "project_id": process.env.GOOGLE_PROJECT_ID,
@@ -17,7 +19,8 @@ const credentialsObj = {
 };
 
 
-console.log("credentialsObj",credentialsObj);
+
+//console.log("credentialsObj",credentialsObj);
 
 const storage = Storage({
   credentials: credentialsObj,
