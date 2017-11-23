@@ -27,6 +27,7 @@ import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 //import { element } from 'protractor';
 import { Utils } from "../shared/utils/utils";
+import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
     selector: 'app-photo-input',
@@ -45,10 +46,10 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     private mode: String;
 
-    public isEditable : Boolean = false;
+    public isEditable: Boolean = false;
 
     checkIsEditable() {
-        if (this.mode === Consts.ADD || (this.mode === Consts.EDIT && this.photoService.getMode(this.photo) != Consts.VIEW )) {
+        if (this.mode === Consts.ADD || (this.mode === Consts.EDIT && this.photoService.getMode(this.photo) != Consts.VIEW)) {
             this.isEditable = true;
         } else {
             this.isEditable = false;
@@ -56,7 +57,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     }
 
     getTitle(): string {
-      return  Utils.initCap(this.mode) + " Photo";
+        return Utils.initCap(this.mode) + " Photo";
     }
 
     fileSource: String = Consts.FILE_SYSTEM;
@@ -205,6 +206,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         , private toastService: ToastService
         , private dialogService: DialogService
         , private router: Router
+        , private authUserService: AuthUserService        
         , private fileStackService: FileStackService
         , private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
@@ -417,6 +419,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let photoInputComponent = this;
+        photoInputComponent.createForm(Consts.ADD);
 
         photoInputComponent.tagService.getTags().subscribe(
             (tags: Tag[]) => {
@@ -464,7 +467,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             photoInputComponent.clear();
 
         } else {
-            photoInputComponent.mode = photoInputComponent.route.snapshot.url[1].path;            
+            photoInputComponent.mode = photoInputComponent.route.snapshot.url[1].path;
             photoInputComponent.paramsSubscription = photoInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     photoInputComponent.index = queryParams['index'];
@@ -511,7 +514,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
     isFormValid() {
         let retVal = false;
-        if (this.myForm.valid && this.myForm.dirty && (this.photo || (!this.photo && (this.photoData || this.photoInfo)))) {
+        if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty && (this.photo || (!this.photo && (this.photoData || this.photoInfo)))) {
             retVal = true
         }
         return retVal;

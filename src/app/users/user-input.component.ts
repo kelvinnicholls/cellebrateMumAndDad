@@ -18,8 +18,8 @@ import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
-
-
+import { Utils } from "../shared/utils/utils";
+import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
     selector: 'app-user-input',
@@ -36,6 +36,20 @@ export class UserInputComponent implements OnInit, OnDestroy {
     password = "";
     email = "";
 
+    private mode: String;
+    public isEditable: Boolean = false;
+
+    checkIsEditable() {
+        if (this.mode === Consts.ADD || (this.mode === Consts.EDIT && this.userService.getMode(this.user) != Consts.VIEW)) {
+            this.isEditable = true;
+        } else {
+            this.isEditable = false;
+        };
+    }
+
+    getTitle(): string {
+        return Utils.initCap(this.mode) + " User";
+    }
 
     fileSource: String = Consts.FILE_SYSTEM;
 
@@ -112,10 +126,14 @@ export class UserInputComponent implements OnInit, OnDestroy {
         , private toastService: ToastService
         , private dialogService: DialogService
         , private router: Router
+        , private authUserService: AuthUserService
         , private fileStackService: FileStackService
         , private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
+
+
+
 
     getMaxDate() {
         let d = moment();
@@ -187,46 +205,46 @@ export class UserInputComponent implements OnInit, OnDestroy {
         retDialogSub.subscribe(
             (buttonPressed: DialogRetEnum) => {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
-                    if (this.user) {
+                    if (userInputComponent.user) {
                         // Edit       
-                        let adminUser = this.myForm.value.adminUser;
+                        let adminUser = userInputComponent.myForm.value.adminUser;
                         if (adminUser && typeof adminUser === 'string') {
                             adminUser = adminUser === 'Yes' ? true : false;
                         } else {
-                            adminUser = this.user.adminUser;
+                            adminUser = userInputComponent.user.adminUser;
                         };
-                        let guestUser = this.myForm.value.guestUser;
+                        let guestUser = userInputComponent.myForm.value.guestUser;
                         if (guestUser && typeof guestUser === 'string') {
                             guestUser = guestUser === 'Yes' ? true : false;
                         } else {
-                            guestUser = this.user.guestUser;
+                            guestUser = userInputComponent.user.guestUser;
                         };
-                        let emailUpdates = this.myForm.value.emailUpdates;
+                        let emailUpdates = userInputComponent.myForm.value.emailUpdates;
                         if (emailUpdates && typeof emailUpdates === 'string') {
                             emailUpdates = emailUpdates === 'Yes' ? true : false;
                         } else {
-                            emailUpdates = this.user.emailUpdates;
+                            emailUpdates = userInputComponent.user.emailUpdates;
                         };
-                        this.user = new User(
-                            this.myForm.value.email,
+                        userInputComponent.user = new User(
+                            userInputComponent.myForm.value.email,
                             null,
-                            this.myForm.value.name,
+                            userInputComponent.myForm.value.name,
                             adminUser,
                             guestUser,
                             emailUpdates,
-                            this.myForm.value.relationship,
-                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
+                            userInputComponent.myForm.value.relationship,
+                            userInputComponent.ngbDateParserFormatter.formatForDB(userInputComponent.myForm.value.dob),
                             null, //this.myForm.value.twitterId,
                             null, //this.myForm.value.facebookId,
-                            this._creatorRef,
-                            this.profilePicFile,
-                            this.profilePicInfo);
-                        this.userService.updateUser(this.user)
+                            userInputComponent._creatorRef,
+                            userInputComponent.profilePicFile,
+                            userInputComponent.profilePicInfo);
+                            userInputComponent.userService.updateUser(userInputComponent.user)
                             .subscribe(
                             result => {
                                 console.log(result);
 
-                                if (this.submitType == Consts.UPDATE_CURRENT_USER) {
+                                if (userInputComponent.submitType == Consts.UPDATE_CURRENT_USER) {
                                     userInputComponent.router.navigate(['']).then((ok) => {
                                         if (ok) {
                                             userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
@@ -247,30 +265,30 @@ export class UserInputComponent implements OnInit, OnDestroy {
                                 };
                             }
                             );
-                        this.user = null;
-                        this._creatorRef = null;
-                        this.profilePicData = null;
-                        this.profilePicFile = null;
-                        this.profilePicInfo = null;
-                        this.submitType = Consts.CREATE_USER;
+                            userInputComponent.user = null;
+                            userInputComponent._creatorRef = null;
+                            userInputComponent.profilePicData = null;
+                            userInputComponent.profilePicFile = null;
+                            userInputComponent.profilePicInfo = null;
+                            userInputComponent.submitType = Consts.CREATE_USER;
 
                     } else {
                         // Create
-                        this.user = new User(
-                            this.myForm.value.email,
-                            this.myForm.value.password,
-                            this.myForm.value.name,
-                            this.myForm.value.adminUser == 'Yes' ? true : false,
-                            this.myForm.value.guestUser == 'Yes' ? true : false,
-                            this.myForm.value.emailUpdates == 'Yes' ? true : false,
-                            this.myForm.value.relationship,
-                            this.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
+                        userInputComponent.user = new User(
+                            userInputComponent.myForm.value.email,
+                            userInputComponent.myForm.value.password,
+                            userInputComponent.myForm.value.name,
+                            userInputComponent.myForm.value.adminUser == 'Yes' ? true : false,
+                            userInputComponent.myForm.value.guestUser == 'Yes' ? true : false,
+                            userInputComponent.myForm.value.emailUpdates == 'Yes' ? true : false,
+                            userInputComponent.myForm.value.relationship,
+                            userInputComponent.ngbDateParserFormatter.formatForDB(this.myForm.value.dob),
                             null, //this.myForm.value.twitterId,
                             null, //this.myForm.value.facebookId,
                             null,
-                            this.profilePicFile,
-                            this.profilePicInfo);
-                        this.userService.addUser(this.user)
+                            userInputComponent.profilePicFile,
+                            userInputComponent.profilePicInfo);
+                            userInputComponent.userService.addUser(this.user)
                             .subscribe(
                             data => {
                                 userInputComponent.router.navigate(['users']).then((ok) => {
@@ -283,18 +301,18 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             },
                             error => console.error("UserInputComponent userService.newUser error", error)
                             );
-                        this.user = null;
-                        this._creatorRef = null;
-                        this.profilePicData = null;
-                        this.profilePicFile = null;
-                        this.profilePicInfo = null;
-                        this.submitType = Consts.CREATE_USER;
+                            userInputComponent.user = null;
+                            userInputComponent._creatorRef = null;
+                            userInputComponent.profilePicData = null;
+                            userInputComponent.profilePicFile = null;
+                            userInputComponent.profilePicInfo = null;
+                            userInputComponent.submitType = Consts.CREATE_USER;
                     }
-                    this.myForm.reset();
+                    userInputComponent.myForm.reset();
                 }
             });
 
-        this.dialogService.showDialog("Warning", "Do you really wish to " + this.submitType + "?", "Yes", "No", retDialogSub);
+            userInputComponent.dialogService.showDialog("Warning", "Do you really wish to " + userInputComponent.submitType + "?", "Yes", "No", retDialogSub);
 
     }
 
@@ -347,71 +365,86 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
 
-    ngOnInit() {
-
-        this.myForm = new FormGroup({
-            name: new FormControl(null, Validators.required,
-                this.forbiddenNames),
-            adminUser: new FormControl(null, Validators.required),
-            guestUser: new FormControl(null, Validators.required),
-            emailUpdates: new FormControl(null, Validators.required),
-            relationship: new FormControl(null, Validators.required),
-            email: new FormControl(null, [
+    createForm(mode: String) {
+        let userInputComponent = this;
+        let formState = null;
+        if (mode != Consts.ADD) {
+            formState = { value: '', disabled: !userInputComponent.isEditable };
+        };
+        userInputComponent.myForm = new FormGroup({
+            name: new FormControl(formState, Validators.required,
+                userInputComponent.forbiddenNames),
+            adminUser: new FormControl(formState, Validators.required),
+            guestUser: new FormControl(formState, Validators.required),
+            emailUpdates: new FormControl(formState, Validators.required),
+            relationship: new FormControl(formState, Validators.required),
+            email: new FormControl(formState, [
                 Validators.required,
                 Validators.pattern(Consts.EMAIL_PATTERN)],
-                this.forbiddenEmails
+                userInputComponent.forbiddenEmails
             ),
-            password: new FormControl(null, this.passwordValidators),
-            dob: new FormControl(null, null)
+            password: new FormControl(formState, userInputComponent.passwordValidators),
+            dob: new FormControl(formState, null)
         });
+    }
 
 
-        if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'user' && this.route.snapshot.url[1].path === 'edit-me') {
-            this.submitType = Consts.UPDATE_CURRENT_USER;
-            this.userService.getMe().subscribe(
+    ngOnInit() {
+        let userInputComponent = this;
+
+        if (userInputComponent.route.snapshot.url.length === 2 && userInputComponent.route.snapshot.url[0].path === 'user' && userInputComponent.route.snapshot.url[1].path === 'edit-me') {
+            userInputComponent.submitType = Consts.UPDATE_CURRENT_USER;
+            userInputComponent.mode = Consts.EDIT;
+            userInputComponent.userService.getMe().subscribe(
                 (user: User) => {
-                    this.user = user;
-                    this.modelDob = this.getDob();
-                    this._creatorRef = user._creatorRef;
-                    if (typeof this.user.adminUser === 'boolean') {
-                        this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
+                    userInputComponent.user = user;
+                    userInputComponent.modelDob = userInputComponent.getDob();
+                    userInputComponent._creatorRef = user._creatorRef;
+                    if (typeof userInputComponent.user.adminUser === 'boolean') {
+                        userInputComponent.user.adminUser = userInputComponent.user.adminUser ? 'Yes' : 'No';
                     };
-                    if (typeof this.user.guestUser === 'boolean') {
-                        this.user.guestUser = this.user.guestUser ? 'Yes' : 'No';
+                    if (typeof userInputComponent.user.guestUser === 'boolean') {
+                        userInputComponent.user.guestUser = userInputComponent.user.guestUser ? 'Yes' : 'No';
                     };
-                    if (typeof this.user.emailUpdates === 'boolean') {
-                        this.user.emailUpdates = this.user.emailUpdates ? 'Yes' : 'No';
+                    if (typeof userInputComponent.user.emailUpdates === 'boolean') {
+                        userInputComponent.user.emailUpdates = userInputComponent.user.emailUpdates ? 'Yes' : 'No';
                     };
-                    this.myForm.get('password').clearValidators();
-                    this.myForm.get('password').updateValueAndValidity();
-                    this.myForm.get('adminUser').disable();
-                    this.myForm.get('adminUser').updateValueAndValidity();
+                    userInputComponent.checkIsEditable();
+                    userInputComponent.createForm(userInputComponent.mode);
+                    userInputComponent.myForm.get('password').clearValidators();
+                    userInputComponent.myForm.get('password').updateValueAndValidity();
+                    userInputComponent.myForm.get('adminUser').disable();
+                    userInputComponent.myForm.get('adminUser').updateValueAndValidity();
                 }
             );
-        } else if (this.route.snapshot.url.length === 2 && this.route.snapshot.url[0].path === 'user' && this.route.snapshot.url[1].path === 'create') {
-            this.submitType = Consts.CREATE_USER;
-            this.clear();
-
+        } else if (userInputComponent.route.snapshot.url.length === 2 && userInputComponent.route.snapshot.url[0].path === 'user' && userInputComponent.route.snapshot.url[1].path === 'create') {
+            userInputComponent.submitType = Consts.CREATE_USER;
+            userInputComponent.mode = Consts.ADD;
+            userInputComponent.checkIsEditable();
+            userInputComponent.createForm(userInputComponent.mode);
+            userInputComponent.clear();
         } else {
-            this.paramsSubscription = this.route.params.subscribe(
+            userInputComponent.paramsSubscription = userInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
-                    this.index = queryParams['index'];
-                    this.user = this.userService.findUserByIndex(this.index);
-                    this.modelDob = this.getDob();
-                    this.submitType = Consts.UPDATE_USER;
-                    this._creatorRef = this.user._creatorRef;
-                    if (typeof this.user.adminUser === 'boolean') {
-                        this.user.adminUser = this.user.adminUser ? 'Yes' : 'No';
+                    userInputComponent.index = queryParams['index'];
+                    userInputComponent.user = userInputComponent.userService.findUserByIndex(userInputComponent.index);
+                    userInputComponent.modelDob = userInputComponent.getDob();
+                    userInputComponent.submitType = Consts.UPDATE_USER;
+                    userInputComponent.mode = Consts.EDIT;
+                    userInputComponent._creatorRef = userInputComponent.user._creatorRef;
+                    if (typeof userInputComponent.user.adminUser === 'boolean') {
+                        userInputComponent.user.adminUser = userInputComponent.user.adminUser ? 'Yes' : 'No';
                     };
-                    if (typeof this.user.emailUpdates === 'boolean') {
-                        this.user.emailUpdates = this.user.emailUpdates ? 'Yes' : 'No';
+                    if (typeof userInputComponent.user.emailUpdates === 'boolean') {
+                        userInputComponent.user.emailUpdates = userInputComponent.user.emailUpdates ? 'Yes' : 'No';
                     };
+                    userInputComponent.checkIsEditable();
+                    userInputComponent.createForm(userInputComponent.mode);
 
-
-                    this.myForm.get('password').clearValidators();
-                    this.myForm.get('password').updateValueAndValidity();
-                    this.myForm.get('adminUser').enable();
-                    this.myForm.get('adminUser').updateValueAndValidity();
+                    userInputComponent.myForm.get('password').clearValidators();
+                    userInputComponent.myForm.get('password').updateValueAndValidity();
+                    userInputComponent.myForm.get('adminUser').enable();
+                    userInputComponent.myForm.get('adminUser').updateValueAndValidity();
                 }
             );
         };
@@ -429,8 +462,11 @@ export class UserInputComponent implements OnInit, OnDestroy {
     }
 
     isFormValid() {
-        return this.myForm.valid && this.myForm.dirty;
-
+        let retVal = false;
+        if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty) {
+            retVal = true
+        }
+        return retVal;
     }
 
 

@@ -23,7 +23,7 @@
 
   <div class="form-group row">
     <button *ngIf="chatService.geolocationSupported"
-      type="button" class="btn btn-md btn-danger offset-md-3" (click)="onSendLocation()">Send Location</button>
+      type="button" class="btn btn-md btn-danger offset-md-3" (click)="onSendLocation()" [disabled]="isGuestUser()">Send Location</button>
     <button class="btn btn-md btn-primary" type="submit" [disabled]="!isFormValid()">Send Message</button>
   </div>
 </form>

@@ -1,4 +1,8 @@
 <!-- https://scotch.io/tutorials/how-to-deal-with-different-form-controls-in-angular-2 -->
+
+<div  class="row col col-md-4 offset-md-5">
+  <h2 class="blog-post-title ">{{getTitle()}}</h2>
+</div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)

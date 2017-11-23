@@ -24,6 +24,7 @@ import { PersonService } from "../shared/people/person.service";
 import { CommentsService } from "../shared/comments/comments.service";
 import { Utils, SortDataType } from "../shared/utils/utils";
 import { User } from "../users/user.model";
+import { AuthUserService } from "../auth/auth-user.service";
 
 @Injectable()
 export class PhotoService {
@@ -75,6 +76,7 @@ export class PhotoService {
         , private searchService: SearchService
         , private tagService: TagService
         , private personService: PersonService
+        , private authUserService: AuthUserService
         , private router: Router) {
     }
 
@@ -496,7 +498,7 @@ export class PhotoService {
     public isAllowed(changeType, photo: Photo): boolean {
         let retVal: boolean = true;
         if (changeType == "U" && !photo.comment || changeType == "D") {
-            retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser());
+            retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser(),this.authUserService);
         };
         console.log("isAllowed retVal", retVal);
         return retVal;

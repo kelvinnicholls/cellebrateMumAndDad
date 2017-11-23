@@ -31,11 +31,6 @@ const {
   ObjectID
 } = require('mongodb');
 
-
-
-
-
-
 let transformCreatorToUser = (memories) => {
   return new Promise((resolve, reject) => {
     let numMemories = memories ? memories.length : 0;
@@ -78,21 +73,23 @@ let transformCreatorToUser = (memories) => {
 }
 
 router.post('/', authenticate, (req, res) => {
-  let body = _.pick(req.body, memoryInsertFields);
-  let memory = new Memory(body);
-  memory._creator = req.loggedInUser._creatorRef;
-  memory.addedDate = new Date().getTime();
-  memory._id = new ObjectID();
+  if (!req.loggedInUser.guestUser) {
+    let body = _.pick(req.body, memoryInsertFields);
+    let memory = new Memory(body);
+    memory._creator = req.loggedInUser._creatorRef;
+    memory.addedDate = new Date().getTime();
+    memory._id = new ObjectID();
 
-  memory.comments = [];
+    memory.comments = [];
 
-  memory.save().then((newMemory) => {
-    console.log('memory2', newMemory);
-    res.send(_.pick(newMemory, memoryOutFields));
-  }, (e) => {
-    console.log('memory.save() e', e);
-    res.status(400).send();
-  });
+    memory.save().then((newMemory) => {
+      console.log('memory2', newMemory);
+      res.send(_.pick(newMemory, memoryOutFields));
+    }, (e) => {
+      console.log('memory.save() e', e);
+      res.status(400).send();
+    });
+  };
 });
 
 
@@ -191,71 +188,77 @@ router.get('/title/:title', authenticate, (req, res) => {
 });
 
 router.delete('/:id', authenticate, (req, res) => {
-  let {
-    id
-  } = req.params;
+  if (!req.loggedInUser.guestUser) {
+    if (!req.loggedInUser.guestUser) {
+      let {
+        id
+      } = req.params;
 
 
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "Memory ID is invalid"
-    });
-  };
+      if (!ObjectID.isValid(id)) {
+        return res.status(404).send({
+          error: "Memory ID is invalid"
+        });
+      };
 
-  let memories = {
-    '_id': id
-  };
-  if (!req.loggedInUser.adminUser) {
-    memories._creator = req.loggedInUser._creatorRef;
-  }
+      let memories = {
+        '_id': id
+      };
+      if (!req.loggedInUser.adminUser) {
+        memories._creator = req.loggedInUser._creatorRef;
+      }
 
-  Memory.findOneAndRemove(memories).then((memory) => {
+      Memory.findOneAndRemove(memories).then((memory) => {
 
-    if (memory) {
-      res.send({
-        memory
+        if (memory) {
+          res.send({
+            memory
+          });
+        } else {
+          res.status(404).send({
+            error: "memory not found for id"
+          });
+        }
+
+      }, (e) => {
+        res.status(400).send(e);
       });
-    } else {
-      res.status(404).send({
-        error: "memory not found for id"
-      });
-    }
-
-  }, (e) => {
-    res.status(400).send(e);
-  });
+    };
+  };
 });
 
 
 router.delete('/', authenticate, (req, res) => {
+  if (!req.loggedInUser.guestUser) {
 
-  let memories = {};
-  if (!req.loggedInUser.adminUser) {
-    memories = {
-      '_creator': req.loggedInUser._creatorRef
-    };
-  }
+    let memories = {};
+    if (!req.loggedInUser.adminUser) {
+      memories = {
+        '_creator': req.loggedInUser._creatorRef
+      };
+    }
 
-  Memory.remove(memories).then((memories) => {
-    if (memories) {
-      if (memories.result.n === 0) {
-        res.status(404).send({
+    Memory.remove(memories).then((memories) => {
+      if (memories) {
+        if (memories.result.n === 0) {
+          res.status(404).send({
+            error: "No memory deleted"
+          });
+        } else {
+          let obj = {};
+          obj['memories'] = memories;
+          res.send(obj);
+        }
+
+      } else {
+        res.status(400).send({
           error: "No memory deleted"
         });
-      } else {
-        let obj = {};
-        obj['memories'] = memories;
-        res.send(obj);
       }
-
-    } else {
-      res.status(400).send({
-        error: "No memory deleted"
-      });
-    }
-  }, (e) => {
-    res.status(400).send();
-  });
+    }, (e) => {
+      res.status(400).send();
+    });
+  };
 });
 
 let updateMemories = (res, body, memories, commentId) => {
@@ -291,43 +294,45 @@ let updateMemories = (res, body, memories, commentId) => {
 
 
 router.patch('/:id', authenticate, (req, res) => {
-  let {
-    id
-  } = req.params;
+  if (!req.loggedInUser.guestUser) {
+    let {
+      id
+    } = req.params;
 
-  let body = _.pick(req.body, memoryUpdateFields);
+    let body = _.pick(req.body, memoryUpdateFields);
 
-  if (!ObjectID.isValid(id)) {
-    return res.status(404).send({
-      error: "Memory ID is invalid"
-    });
-  };
-
-  let memories = {
-    '_id': id
-  };
-
-
-
-  if (body.comment) {
-
-    let memoriesCommentObj = {
-      'comment': body.comment
+    if (!ObjectID.isValid(id)) {
+      return res.status(404).send({
+        error: "Memory ID is invalid"
+      });
     };
-    let comment = new Comment(memoriesCommentObj);
 
-    comment._creator = req.loggedInUser._creatorRef;
-    comment.commentDate = new Date().getTime();
-    console.log('comment', comment);
-
-    comment.save().then((comment) => {
-      updateMemories(res, body, memories, comment._id);
-    });
-  } else {
-    if (!req.loggedInUser.adminUser) {
-      memories._creator = req.loggedInUser._creatorRef;
+    let memories = {
+      '_id': id
     };
-    updateMemories(res, body, memories, null);
+
+
+
+    if (body.comment) {
+
+      let memoriesCommentObj = {
+        'comment': body.comment
+      };
+      let comment = new Comment(memoriesCommentObj);
+
+      comment._creator = req.loggedInUser._creatorRef;
+      comment.commentDate = new Date().getTime();
+      console.log('comment', comment);
+
+      comment.save().then((comment) => {
+        updateMemories(res, body, memories, comment._id);
+      });
+    } else {
+      if (!req.loggedInUser.adminUser) {
+        memories._creator = req.loggedInUser._creatorRef;
+      };
+      updateMemories(res, body, memories, null);
+    };
   };
 });
 

@@ -14,7 +14,8 @@ import { SearchRetEnum } from "../shared/search/search-ret.enum";
 import { SearchRet } from "../shared/search/search-ret.model";
 import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
-
+import { Utils } from "../shared/utils/utils";
+import { AuthUserService } from '../auth/auth-user.service';
 
 
 @Injectable()
@@ -24,7 +25,7 @@ export class UserService {
     public eventPage: number = 1;
     public bigCurrentPage: number = 1;
     private allUsers: User[] = [];
-    constructor(private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
+    constructor(private authUserService : AuthUserService,private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
 
     usersChanged = new Subject<User[]>();
     showSuccessToast = new EventEmitter<string>();
@@ -73,7 +74,22 @@ export class UserService {
     }
 
 
+    public isAllowed(changeType, user: User): boolean {
+        let retVal: boolean = true;
+        if (changeType == "U" || changeType == "D") {
+            retVal = Utils.checkIsAdminOrOwner(user._creatorRef, this.getLoggedInUser(),this.authUserService);
+        };
+        console.log("isAllowed retVal", retVal);
+        return retVal;
+    }
 
+    public getMode(user: User) {
+        if (this.isAllowed('U', user)) {
+            return Consts.EDIT;
+        } else {
+            return Consts.VIEW;
+        };
+    }
 
     updateThisUser(user): any {
         const updateUser = this.createUser(user, user.profilePicInfo);

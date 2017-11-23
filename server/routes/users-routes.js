@@ -59,7 +59,13 @@ let createInitialAdminUser = (adminUser) => {
       const relationship = adminUserVals[3];
       const dob = new Date(adminUserVals[4]);
 
-      var user = new User({name,email,password,relationship,dob});
+      var user = new User({
+        name,
+        email,
+        password,
+        relationship,
+        dob
+      });
       user._creatorRef = new ObjectID();
       user._creator = user._creatorRef;
       user.adminUser = true;
@@ -67,7 +73,7 @@ let createInitialAdminUser = (adminUser) => {
 
       user.save().then((user) => {
         if (user) {
-          console.log("Initial User Created : ",user.name);
+          console.log("Initial User Created : ", user.name);
         };
       });
     };
@@ -153,7 +159,7 @@ let createUser = (body, _creatorRef, res, req) => {
 };
 
 router.post('/', authenticate, upload, (req, res) => {
-  if (req.loggedInUser.adminUser) {
+  if (req.loggedInUser.adminUser && !req.loggedInUser.guestUser) {
     let body = _.pick(req.passedUser, userInsertFields);
     //body._profileMediaId = req.body._profileMediaId;
 
@@ -170,8 +176,6 @@ router.post('/', authenticate, upload, (req, res) => {
 });
 
 router.post('/login', (req, res) => {
-
-
   let body = _.pick(req.body, ['email', 'password']);
   console.log("body", body);
   User.findByCredentials(body.email, body.password).then((user) => {
@@ -187,71 +191,73 @@ router.post('/login', (req, res) => {
 });
 
 router.patch('/change-password', authenticate, (req, res) => {
+  if (!req.loggedInUser.guestUser) {
 
-  let token = req.header('x-auth');
-  let {
-    oldPassword
-  } = req.body;
-  let {
-    newPassword
-  } = req.body;
-  let decoded;
-  if (oldPassword && newPassword) {
-    User.findByToken(token).then((user) => {
+    let token = req.header('x-auth');
+    let {
+      oldPassword
+    } = req.body;
+    let {
+      newPassword
+    } = req.body;
+    let decoded;
+    if (oldPassword && newPassword) {
+      User.findByToken(token).then((user) => {
 
-      if (!user) {
-        return Promise.reject();
-      };
+        if (!user) {
+          return Promise.reject();
+        };
 
-      try {
-        decoded = jwt.verify(token, seed);
-      } catch (e) {
-        return Promise.reject();
-      };
+        try {
+          decoded = jwt.verify(token, seed);
+        } catch (e) {
+          return Promise.reject();
+        };
 
-      return bcrypt.compare(oldPassword, user.password);
+        return bcrypt.compare(oldPassword, user.password);
 
-    }).then((passwordsMatch) => {
+      }).then((passwordsMatch) => {
 
-      if (passwordsMatch && req.loggedInUser._id == decoded._id) {
+        if (passwordsMatch && req.loggedInUser._id == decoded._id) {
 
-        utils.getEncryptedPassword(newPassword, function (err, hash) {
-          if (err) {
-            console.log("router.patch('/change-password' e", e);
-            res.status(400).send(CONSTS.AN_ERROR_OCURRED);
-          } else if (hash) {
-            let userObj = {
-              '_id': decoded._id,
-              'tokens.token': token,
-              'tokens.access': 'auth'
-            };
-            let body = {
-              password: hash
-            };
-
-            User.findOneAndUpdate(userObj, {
-              $set: body
-            }, {
-              new: true
-            }).then((user) => {
-              if (user) {
-                res.send(_.pick(user, userOutFields));
-              } else {
-                res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_ID);
+          utils.getEncryptedPassword(newPassword, function (err, hash) {
+            if (err) {
+              console.log("router.patch('/change-password' e", e);
+              res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+            } else if (hash) {
+              let userObj = {
+                '_id': decoded._id,
+                'tokens.token': token,
+                'tokens.access': 'auth'
               };
-            }, () => {
-              res.status(401).send(CONSTS.NOT_AUTHORISED);
-            });
-          };
-        });
-      } else {
+              let body = {
+                password: hash
+              };
+
+              User.findOneAndUpdate(userObj, {
+                $set: body
+              }, {
+                new: true
+              }).then((user) => {
+                if (user) {
+                  res.send(_.pick(user, userOutFields));
+                } else {
+                  res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_ID);
+                };
+              }, () => {
+                res.status(401).send(CONSTS.NOT_AUTHORISED);
+              });
+            };
+          });
+        } else {
+          res.status(401).send(CONSTS.NOT_AUTHORISED);
+        };
+      }).catch((e) => {
         res.status(401).send(CONSTS.NOT_AUTHORISED);
-      };
-    }).catch((e) => {
-      res.status(401).send(CONSTS.NOT_AUTHORISED);
-    });
-  } else {
-    res.status(404).send(CONSTS.AN_OLD_AND_NEW_PASSWORD_MUST_BE_PASSED);
+      });
+    } else {
+      res.status(404).send(CONSTS.AN_OLD_AND_NEW_PASSWORD_MUST_BE_PASSED);
+    };
   };
 });
 
@@ -277,49 +283,51 @@ let updateUser = (body, _creatorRef, res, req) => {
 };
 
 router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
-  let _creatorRef = new ObjectID(req.params._creatorRef);
-  let token = req.header('x-auth');
-  console.log("_creatorRef", _creatorRef);
-  User.findOne({
-    _creatorRef
-  }).then((user) => {
-    console.log("user", user);
-    console.log("req.body", req.body);
-    if (!user) {
-      return Promise.reject();
-    };
-    let decoded;
-    try {
-      decoded = jwt.verify(token, seed);
-    } catch (e) {
-      return Promise.reject();
-    };
-    console.log("req.passedUser1", req.passedUser);
-
-    if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
-      console.log("req.passedUser2", req.passedUser);
-      let body = _.pick(req.passedUser, userUpdateFields);
-      //body._profileMediaId = req.body._profileMediaId;
-      console.log("body profilePicInfo", body);
-
-      if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
-        saveMedia(body, req, _creatorRef, res, updateUser);
-      } else {
-        updateUser(body, _creatorRef, res);
+  if (!req.loggedInUser.guestUser) {
+    let _creatorRef = new ObjectID(req.params._creatorRef);
+    let token = req.header('x-auth');
+    console.log("_creatorRef", _creatorRef);
+    User.findOne({
+      _creatorRef
+    }).then((user) => {
+      console.log("user", user);
+      console.log("req.body", req.body);
+      if (!user) {
+        return Promise.reject();
       };
+      let decoded;
+      try {
+        decoded = jwt.verify(token, seed);
+      } catch (e) {
+        return Promise.reject();
+      };
+      console.log("req.passedUser1", req.passedUser);
 
-    } else {
-      if (!req.loggedInUser.adminUser) {
-        return res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_UPDATE_OTHER_USERS);
-      }
-      if (req.loggedInUser._creatorRef != _creatorRef) {
-        return res.status(401).send(CONSTS.NON_ADMIN_USERS_CAN_ONLY_UPDATE_THEIR_USER);
-      }
-    };
-  }).catch((e) => {
-    console.log("4 router.patch('/:_creatorRef' e", e);
-    res.status(401).send(CONSTS.AN_ERROR_OCURRED);
-  });
+      if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
+        console.log("req.passedUser2", req.passedUser);
+        let body = _.pick(req.passedUser, userUpdateFields);
+        //body._profileMediaId = req.body._profileMediaId;
+        console.log("body profilePicInfo", body);
+
+        if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
+          saveMedia(body, req, _creatorRef, res, updateUser);
+        } else {
+          updateUser(body, _creatorRef, res);
+        };
+
+      } else {
+        if (!req.loggedInUser.adminUser) {
+          return res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_UPDATE_OTHER_USERS);
+        }
+        if (req.loggedInUser._creatorRef != _creatorRef) {
+          return res.status(401).send(CONSTS.NON_ADMIN_USERS_CAN_ONLY_UPDATE_THEIR_USER);
+        }
+      };
+    }).catch((e) => {
+      console.log("4 router.patch('/:_creatorRef' e", e);
+      res.status(401).send(CONSTS.AN_ERROR_OCURRED);
+    });
+  };
 });
 
 router.get('/me', authenticate, (req, res) => {
@@ -327,7 +335,7 @@ router.get('/me', authenticate, (req, res) => {
 });
 
 router.get('/getEncryptedPassword', authenticate, (req, res) => {
-  if (req.loggedInUser.adminUser) {
+  if (req.loggedInUser.adminUser && !req.loggedInUser.guestUser) {
     let password = req.header('password');
     utils.getEncryptedPassword(password, function (err, hash) {
       if (!hash) {
@@ -424,53 +432,55 @@ router.delete('/me/token', authenticate, (req, res) => {
 });
 
 router.delete('/:_creatorRef', authenticate, (req, res) => {
-  let _creatorRef = new ObjectID(req.params._creatorRef);
-  let token = req.header('x-auth');
-  User.findOne({
-    _creatorRef
-  }).then((user) => {
-    if (!user) {
-      return Promise.reject("User not found");
-    };
-    let decoded;
-    try {
-      decoded = jwt.verify(token, seed);
-    } catch (e) {
-      return Promise.reject(e);
-    };
-
-    if (req.loggedInUser.adminUser && req.loggedInUser._creatorRef.toHexString() !== _creatorRef.toHexString() && !user.adminUser) {
-      let userObj = {
-        _creatorRef,
-        adminUser: false
+  if (!req.loggedInUser.guestUser) {
+    let _creatorRef = new ObjectID(req.params._creatorRef);
+    let token = req.header('x-auth');
+    User.findOne({
+      _creatorRef
+    }).then((user) => {
+      if (!user) {
+        return Promise.reject("User not found");
+      };
+      let decoded;
+      try {
+        decoded = jwt.verify(token, seed);
+      } catch (e) {
+        return Promise.reject(e);
       };
 
-      User.findOneAndRemove(userObj).then((user) => {
-        if (user) {
-          res.send(_.pick(user, userOutFields));
-        } else {
-          res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
+      if (req.loggedInUser.adminUser && req.loggedInUser._creatorRef.toHexString() !== _creatorRef.toHexString() && !user.adminUser) {
+        let userObj = {
+          _creatorRef,
+          adminUser: false
         };
-      }, (e) => {
-        console.log("7 router.delete('/:_creatorRef' e", e);
-        res.status(400).send(CONSTS.AN_ERROR_OCURRED);
-      });
 
-    } else {
-      if (!req.loggedInUser.adminUser) {
-        res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_DELETE_USERS);
-      } else
-      if (req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
-        res.status(401).send(CONSTS.CANNOT_DELETE_LOGGED_IN_USER);
-      } else
-      if (user.adminUser) {
-        res.status(401).send(CONSTS.CANNOT_DELETE_ADMIN_USER);
-      }
-    };
-  }).catch((e) => {
-    console.log("8 router.delete('/:_creatorRef' e", e);
-    res.status(401).send(CONSTS.AN_ERROR_OCURRED);
-  });
+        User.findOneAndRemove(userObj).then((user) => {
+          if (user) {
+            res.send(_.pick(user, userOutFields));
+          } else {
+            res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
+          };
+        }, (e) => {
+          console.log("7 router.delete('/:_creatorRef' e", e);
+          res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+        });
+
+      } else {
+        if (!req.loggedInUser.adminUser) {
+          res.status(401).send(CONSTS.ONLY_ADMIN_USERS_CAN_DELETE_USERS);
+        } else
+        if (req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
+          res.status(401).send(CONSTS.CANNOT_DELETE_LOGGED_IN_USER);
+        } else
+        if (user.adminUser) {
+          res.status(401).send(CONSTS.CANNOT_DELETE_ADMIN_USER);
+        }
+      };
+    }).catch((e) => {
+      console.log("8 router.delete('/:_creatorRef' e", e);
+      res.status(401).send(CONSTS.AN_ERROR_OCURRED);
+    });
+  };
 });
 
 module.exports = router;

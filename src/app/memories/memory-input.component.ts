@@ -30,6 +30,7 @@ import { Person } from "../shared/people/person.model";
 import { Photo } from "../photos/photo.model";
 //import { element } from 'protractor';
 import { Utils } from "../shared/utils/utils";
+import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
     selector: 'app-memory-input',
@@ -214,6 +215,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         , private toastService: ToastService
         , private dialogService: DialogService
         , private router: Router
+        , private authUserService: AuthUserService
         , private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
@@ -517,7 +519,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
     isFormValid() {
         let retVal = false;
-        if (this.myForm.valid && this.myForm.dirty) {
+        if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty) {
             retVal = true
         }
         return retVal;

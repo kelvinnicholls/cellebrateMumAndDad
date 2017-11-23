@@ -9,6 +9,7 @@ import { ChatService } from "../chat.service";
 import { ChatUser } from "../chat-user.model";
 import { AppService } from "../../app.service";
 import { Consts } from "../../shared/consts";
+import { AuthUserService } from "../../auth/auth-user.service";
 
 @Component({
   selector: 'app-chat-send-message',
@@ -25,7 +26,7 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
   private chatUser: ChatUser = null;
 
   constructor(public chatService: ChatService, private dialogService: DialogService, private appService: AppService, private router: Router
-    , private route: ActivatedRoute) {
+    , private route: ActivatedRoute, private authUserService: AuthUserService) {
 
   }
 
@@ -72,8 +73,6 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-
-
     this.myForm = new FormGroup({
       message: new FormControl(null, Validators.required)
     });
@@ -98,9 +97,20 @@ export class ChatSendMessageComponent implements OnInit, OnDestroy {
     this.paramsSubscription.unsubscribe();
   }
 
+  isGuestUser(): Boolean {
+    let retVal : Boolean = false;
+    if (this.authUserService.isGuestUser()) {
+      retVal = true;
+    };
+    return retVal; 
+  }
 
-  isFormValid() {
-    return this.myForm.valid;
+  isFormValid(): Boolean {
+    let retVal : Boolean = false;
+    if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty) {
+      retVal = true;
+    };
+    return retVal; 
   }
 
 }
