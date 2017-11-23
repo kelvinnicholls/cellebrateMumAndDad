@@ -3,7 +3,6 @@ const config = require('../config/config.js');
 const projectId = 'celebmumanddad';
 const bucketName = 'celebmumanddadphotos';
 
-console.log("process.env.GOOGLE_PRIVATE_KEY",process.env.GOOGLE_PRIVATE_KEY);
 
 const credentialsObj = {
   "type": process.env.GOOGLE_TYPE,
@@ -18,11 +17,9 @@ const credentialsObj = {
   "client_x509_cert_url": process.env.GOOGLE_CLIENT_X509_CERT_URL
 };
 
-console.log("credentialsObj 1",credentialsObj);
-
+// fix for issue encountered when deploying to Heroku
 credentialsObj.private_key = credentialsObj.private_key.replace(/\\n/g,'\n');
 
-console.log("credentialsObj 2",credentialsObj);
 
 const storage = Storage({
   credentials: credentialsObj,
