@@ -16,6 +16,9 @@ const credentialsObj = {
   "client_x509_cert_url": process.env.GOOGLE_CLIENT_X509_CERT_URL
 };
 
+
+console.log("credentialsObj",credentialsObj);
+
 const storage = Storage({
   credentials: credentialsObj,
   projectId: projectId
