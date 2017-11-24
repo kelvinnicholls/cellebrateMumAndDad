@@ -97,7 +97,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         retTagSub.subscribe((tag: Tag) => {
             if (tag) {
-                photoInputComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.slice();
                 photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
                 if (tag.autoSelect) {
@@ -127,7 +126,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         retPersonSub.subscribe((person: Person) => {
             if (person) {
-                photoInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.slice();
                 photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
                 if (person.autoSelect) {
@@ -420,26 +418,6 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
     ngOnInit() {
         let photoInputComponent = this;
         photoInputComponent.createForm(Consts.ADD);
-
-        photoInputComponent.tagService.getTags().subscribe(
-            (tags: Tag[]) => {
-                photoInputComponent.tagService.multiSelectTagOptions = [];
-                for (let tag of tags) {
-                    photoInputComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
-                };
-                console.log(photoInputComponent.tagService.multiSelectTagOptions);
-            }
-        );
-
-        photoInputComponent.personService.getPeople().subscribe(
-            (people: Person[]) => {
-                photoInputComponent.personService.multiSelectPersonOptions = [];
-                for (let person of people) {
-                    photoInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
-                };
-                console.log(photoInputComponent.personService.multiSelectPersonOptions);
-            }
-        );
 
         photoInputComponent.commentSub = photoInputComponent.commentsService.commentSub
             .subscribe(

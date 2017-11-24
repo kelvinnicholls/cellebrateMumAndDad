@@ -60,6 +60,7 @@ export class TagService {
         , private errorService: ErrorService
         , private userService: UserService
         , private appService: AppService) {
+        this.getTags();
     }
 
     showTagSub = new EventEmitter<EventEmitter<Tag>>();
@@ -70,12 +71,14 @@ export class TagService {
 
 
     addCallbacks(socket: any) {
-        this.socket = socket;
+        let tagService = this;
+        tagService.socket = socket;
 
-        this.socket.on('createdTag', (tag, changedBy) => {
-            this.tags.push(tag);
-            this.tagsChanged.next(this.tags);
-            this.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
+        tagService.socket.on('createdTag', (tag, changedBy) => {
+            tagService.tags.push(tag);
+            tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+            tagService.tagsChanged.next(this.tags);
+            tagService.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
             console.log(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
         });
 
@@ -110,7 +113,7 @@ export class TagService {
                 const result = response.json();
                 let tag = new Tag(result.tag, result._id, result._creator);
                 tagService.tags.push(tag);
-
+                tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 this.socket.emit('tagCreated', tag, function (err) {
                     if (err) {
                         console.log("tagCreated err: ", err);
@@ -129,27 +132,31 @@ export class TagService {
     }
 
 
-    public getTags(): Observable<any> {
-        const headers: Headers = new Headers();
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+    public getTags() {
         let tagService = this;
-        return this.http.get(Consts.API_URL_TAGS_ROOT, { headers: headers })
-            .map((response: Response) => {
-                let tags = response.json().tags;
-                let transformedTags: Tag[] = [];
-                for (let tag of tags) {
-                    let newTag = new Tag(
-                        tag.tag,
-                        tag._id,
-                        tag._creator);
-                    transformedTags.push(newTag);
-                };
-                transformedTags.sort(Utils.dynamicSort('tag'));
-                this.tags = transformedTags;
-                return this.tags;
-            }).catch((error: Response) => {
-                tagService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
-    }
+        if (!(tagService.tags && tagService.tags.length > 0)) {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            this.http.get(Consts.API_URL_TAGS_ROOT, { headers: headers })
+                .map((response: Response) => {
+                    let tags = response.json().tags;
+                    let transformedTags: Tag[] = [];
+                    tagService.multiSelectTagOptions = [];
+                    for (let tag of tags) {
+                        let newTag = new Tag(
+                            tag.tag,
+                            tag._id,
+                            tag._creator);
+                        transformedTags.push(newTag);
+                        tagService.multiSelectTagOptions.push({ id: tag._id, name: tag.tag });
+                    };
+                    transformedTags.sort(Utils.dynamicSort('tag'));
+                    this.tags = transformedTags;
+                    //return this.tags;
+                }).catch((error: Response) => {
+                    tagService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                }).subscribe();
+        };
+    };
 }

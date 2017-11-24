@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { CommentsService } from "../comments.service";
 import { AppService } from "../../../app.service";
 import { Consts } from "../../consts";
+import { AuthUserService } from "../../../auth/auth-user.service";
 
 @Component({
   selector: 'app-comment-add',
@@ -21,7 +22,7 @@ export class CommentAddComponent implements OnInit, OnDestroy {
   @Input() entityIndex: any;
 
 
-  constructor(private commentsService: CommentsService, private dialogService: DialogService, private appService: AppService) {
+  constructor(private commentsService: CommentsService, private dialogService: DialogService, private appService: AppService, private authUserService: AuthUserService) {
 
   }
 
@@ -61,7 +62,11 @@ export class CommentAddComponent implements OnInit, OnDestroy {
 
 
   isFormValid() {
-    return this.myForm.valid;
+    let retVal = false;
+    if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty) {
+      retVal = true
+    }
+    return retVal;
   }
 
 }

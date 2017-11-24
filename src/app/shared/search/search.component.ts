@@ -231,40 +231,40 @@ export class SearchComponent implements OnInit {
 
     let searchComponent = this;
 
-    if (searchComponent.authUserService.isLoggedIn()) {
+   // if (searchComponent.authUserService.isLoggedIn()) {
 
 
 
-      searchComponent.tagService.getTags().subscribe(
-        (tags: Tag[]) => {
-          searchComponent.tagService.multiSelectTagOptions = [];
-          for (let tag of tags) {
-            searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
-          };
-          console.log(searchComponent.tagService.multiSelectTagOptions);
-        }
-      );
+      // searchComponent.tagService.getTags().subscribe(
+      //   (tags: Tag[]) => {
+      //     searchComponent.tagService.multiSelectTagOptions = [];
+      //     for (let tag of tags) {
+      //       searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+      //     };
+      //     console.log(searchComponent.tagService.multiSelectTagOptions);
+      //   }
+      // );
 
-      searchComponent.personService.getPeople().subscribe(
-        (people: Person[]) => {
-          searchComponent.personService.multiSelectPersonOptions = [];
-          for (let person of people) {
-            searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
-          };
-          console.log(searchComponent.personService.multiSelectPersonOptions);
-        }
-      );
+      //   searchComponent.personService.getPeople().subscribe(
+      //     (people: Person[]) => {
+      //       searchComponent.personService.multiSelectPersonOptions = [];
+      //       for (let person of people) {
+      //         searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+      //       };
+      //       console.log(searchComponent.personService.multiSelectPersonOptions);
+      //     }
+      //   );
 
-      searchComponent.photoService.getPhotos().subscribe(
-        (photos: Photo[]) => {
-          searchComponent.photoService.multiSelectPhotoOptions = [];
-          for (let photo of photos) {
-            searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
-          };
-          console.log(searchComponent.photoService.multiSelectPhotoOptions);
-        }
-      );
-    };
+      //   searchComponent.photoService.getPhotos().subscribe(
+      //     (photos: Photo[]) => {
+      //       searchComponent.photoService.multiSelectPhotoOptions = [];
+      //       for (let photo of photos) {
+      //         searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
+      //       };
+      //       console.log(searchComponent.photoService.multiSelectPhotoOptions);
+      //     }
+      //   );
+    //};
 
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),

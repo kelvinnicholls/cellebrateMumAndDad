@@ -9,6 +9,7 @@ import { Consts } from "../consts";
 import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
 import { DialogService } from "../dialog/dialog.service";
+import { AuthUserService } from "../../auth/auth-user.service";
 
 @Component({
   selector: 'app-add-person',
@@ -28,6 +29,7 @@ export class AddPersonComponent implements OnInit {
   constructor(private personService: PersonService
     , private toastService: ToastService
     , private dialogService: DialogService
+    , private authUserService: AuthUserService
     , private vcr: ViewContainerRef
     , private formBuilder: FormBuilder) {
     toastService.toast.setRootViewContainerRef(vcr);
@@ -83,7 +85,7 @@ export class AddPersonComponent implements OnInit {
             }
             );
 
-            addPersonComponent.reset();
+          addPersonComponent.reset();
         } else {
           addPersonComponent.display = 'block';
         };
@@ -95,12 +97,16 @@ export class AddPersonComponent implements OnInit {
 
 
   isFormValid() {
-    return this.myForm.valid && this.myForm.dirty;
+    let retVal = false;
+    if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty) {
+      retVal = true
+    }
+    return retVal;
   }
 
   ngOnInit() {
     this.myForm = this.formBuilder.group({
-      person: new FormControl(null, [Validators.required,Validators.pattern(Consts.ALPHANUMERIC_PATTERN)], this.forbiddenPeople),
+      person: new FormControl(null, [Validators.required, Validators.pattern(Consts.ALPHANUMERIC_PATTERN)], this.forbiddenPeople),
       autoSelect: new FormControl('false', null)
     });
 

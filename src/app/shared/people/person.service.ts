@@ -39,6 +39,7 @@ export class PersonService {
         , private errorService: ErrorService
         , private userService: UserService
         , private appService: AppService) {
+        this.getPeople();
     }
 
     public findPersonById(id: any): Person {
@@ -66,12 +67,14 @@ export class PersonService {
 
 
     addCallbacks(socket: any) {
-        this.socket = socket;
+        let personService = this;
+        personService.socket = socket;
 
-        this.socket.on('createdPerson', (person, changedBy) => {
-            this.people.push(person);
-            this.peopleChanged.next(this.people);
-            this.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
+        personService.socket.on('createdPerson', (person, changedBy) => {
+            personService.people.push(person);
+            personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+            personService.peopleChanged.next(personService.people);
+            personService.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
             console.log(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
         });
 
@@ -106,7 +109,7 @@ export class PersonService {
                 const result = response.json();
                 let person = new Person(result.person, result._id, result._creator);
                 personService.people.push(person);
-
+                personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 this.socket.emit('personCreated', person, function (err) {
                     if (err) {
                         console.log("personCreated err: ", err);
@@ -125,27 +128,32 @@ export class PersonService {
     }
 
 
-    public getPeople(): Observable<any> {
-        const headers: Headers = new Headers();
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+    public getPeople() {
         let personService = this;
-        return this.http.get(Consts.API_URL_PEOPLE_ROOT, { headers: headers })
-            .map((response: Response) => {
-                let people = response.json().people;
-                let transformedPersons: Person[] = [];
-                for (let person of people) {
-                    let newPerson = new Person(
-                        person.person,
-                        person._id,
-                        person._creator);
-                    transformedPersons.push(newPerson);
-                };
-                transformedPersons.sort(Utils.dynamicSort('person'));
-                this.people = transformedPersons;
-                return this.people;
-            }).catch((error: Response) => {
-                personService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
-    }
+        if (!(personService.people && personService.people.length > 0)) {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            let personService = this;
+            this.http.get(Consts.API_URL_PEOPLE_ROOT, { headers: headers })
+                .map((response: Response) => {
+                    let people = response.json().people;
+                    let transformedPersons: Person[] = [];
+                    personService.multiSelectPersonOptions = [];
+                    for (let person of people) {
+                        let newPerson = new Person(
+                            person.person,
+                            person._id,
+                            person._creator);
+                        transformedPersons.push(newPerson);
+                        personService.multiSelectPersonOptions.push({ id: person._id, name: person.person });
+                    };
+                    transformedPersons.sort(Utils.dynamicSort('person'));
+                    this.people = transformedPersons;
+                    //return this.people;
+                }).catch((error: Response) => {
+                    personService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                }).subscribe();
+        };
+    };
 }

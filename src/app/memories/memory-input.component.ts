@@ -117,7 +117,6 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         let memoryInputComponent = this;
         retTagSub.subscribe((tag: Tag) => {
             if (tag) {
-                memoryInputComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 memoryInputComponent.tagService.multiSelectTagOptions = memoryInputComponent.tagService.multiSelectTagOptions.slice();
                 memoryInputComponent.tagService.multiSelectTagOptions = memoryInputComponent.tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
                 if (tag.autoSelect) {
@@ -147,7 +146,6 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         let memoryInputComponent = this;
         retPersonSub.subscribe((person: Person) => {
             if (person) {
-                memoryInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 memoryInputComponent.personService.multiSelectPersonOptions = memoryInputComponent.personService.multiSelectPersonOptions.slice();
                 memoryInputComponent.personService.multiSelectPersonOptions = memoryInputComponent.personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
                 if (person.autoSelect) {
@@ -409,38 +407,6 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                 thumbnailsColumns: 4
             }
         ];
-
-        memoryInputComponent.tagService.getTags().subscribe(
-            (tags: Tag[]) => {
-                memoryInputComponent.tagService.multiSelectTagOptions = [];
-                for (let tag of tags) {
-                    memoryInputComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
-                };
-                console.log(memoryInputComponent.tagService.multiSelectTagOptions);
-            }
-        );
-
-        memoryInputComponent.personService.getPeople().subscribe(
-            (people: Person[]) => {
-                memoryInputComponent.personService.multiSelectPersonOptions = [];
-                for (let person of people) {
-                    memoryInputComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
-                };
-                console.log(memoryInputComponent.personService.multiSelectPersonOptions);
-            }
-        );
-
-        console.log('MemoryInputComponent ngOnInit.getPhotos() before');
-        memoryInputComponent.photoService.getPhotos().subscribe(
-            (photos: Photo[]) => {
-                console.log('MemoryInputComponent ngOnInit.getPhotos() after');
-                memoryInputComponent.photoService.multiSelectPhotoOptions = [];
-                for (let photo of photos) {
-                    memoryInputComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
-                };
-                console.log(memoryInputComponent.photoService.multiSelectPhotoOptions);
-            }
-        );
 
         memoryInputComponent.commentSub = memoryInputComponent.commentsService.commentSub
             .subscribe(

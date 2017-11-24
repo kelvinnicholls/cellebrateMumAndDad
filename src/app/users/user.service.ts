@@ -25,7 +25,9 @@ export class UserService {
     public eventPage: number = 1;
     public bigCurrentPage: number = 1;
     private allUsers: User[] = [];
-    constructor(private authUserService : AuthUserService,private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) { }
+    constructor(private authUserService: AuthUserService, private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) {
+        this.getUsers();
+    }
 
     usersChanged = new Subject<User[]>();
     showSuccessToast = new EventEmitter<string>();
@@ -77,7 +79,7 @@ export class UserService {
     public isAllowed(changeType, user: User): boolean {
         let retVal: boolean = true;
         if (changeType == "U" || changeType == "D") {
-            retVal = Utils.checkIsAdminOrOwner(user._creatorRef, this.getLoggedInUser(),this.authUserService);
+            retVal = Utils.checkIsAdminOrOwner(user._creatorRef, this.getLoggedInUser(), this.authUserService);
         };
         console.log("isAllowed retVal", retVal);
         return retVal;
@@ -180,49 +182,51 @@ export class UserService {
     }
 
     getUsers() {
-        const headers: Headers = new Headers();
-        headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-        let userService = this;
-        return this.http.get(Consts.API_URL_USERS_ROOT, { headers: headers })
-            .map((response: Response) => {
-                const users = response.json();
-                let transformedUsers: User[] = [];
-                for (let user of users) {
-                    let profilePicInfo: any = {};
-                    if (user._profileMediaId && user._profileMediaId.location) {
-                        profilePicInfo.location = user._profileMediaId.location;
-                        profilePicInfo.isUrl = user._profileMediaId.isUrl;
-                    };
+        if (!(this.users && this.users.length > 0)) {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+            let userService = this;
+            this.http.get(Consts.API_URL_USERS_ROOT, { headers: headers })
+                .map((response: Response) => {
+                    const users = response.json();
+                    let transformedUsers: User[] = [];
+                    for (let user of users) {
+                        let profilePicInfo: any = {};
+                        if (user._profileMediaId && user._profileMediaId.location) {
+                            profilePicInfo.location = user._profileMediaId.location;
+                            profilePicInfo.isUrl = user._profileMediaId.isUrl;
+                        };
 
-                    let newUser = new User(
-                        user.email,
-                        null,
-                        user.name,
-                        user.adminUser ? 'Yes' : 'No',
-                        user.guestUser ? 'Yes' : 'No',
-                        user.emailUpdates ? 'Yes' : 'No',
-                        user.relationship,
-                        moment(user.dob).format(Consts.DATE_DB_FORMAT),
-                        null, //user.twitterId,
-                        null, //user.facebookId,
-                        user._creatorRef,
-                        null,
-                        profilePicInfo);
-                    transformedUsers.push(newUser);
-                    this.updateLocalStorage(newUser);
-                };
-                userService.allUsers = transformedUsers;
-                if (userService.searchRet) {
-                    userService.users = Search.restrict(userService.allUsers, userService.searchRet);
-                } else {
-                    userService.users = userService.allUsers.slice(0);
-                };
-                return userService.users;
-            })
-            .catch((error: Response) => {
-                userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
-                return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-            });
+                        let newUser = new User(
+                            user.email,
+                            null,
+                            user.name,
+                            user.adminUser ? 'Yes' : 'No',
+                            user.guestUser ? 'Yes' : 'No',
+                            user.emailUpdates ? 'Yes' : 'No',
+                            user.relationship,
+                            moment(user.dob).format(Consts.DATE_DB_FORMAT),
+                            null, //user.twitterId,
+                            null, //user.facebookId,
+                            user._creatorRef,
+                            null,
+                            profilePicInfo);
+                        transformedUsers.push(newUser);
+                        this.updateLocalStorage(newUser);
+                    };
+                    userService.allUsers = transformedUsers;
+                    if (userService.searchRet) {
+                        userService.users = Search.restrict(userService.allUsers, userService.searchRet);
+                    } else {
+                        userService.users = userService.allUsers.slice(0);
+                    };
+                    return userService.users;
+                })
+                .catch((error: Response) => {
+                    userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                }).subscribe();
+        };
     }
 
     getMe() {
@@ -386,7 +390,7 @@ export class UserService {
     showSearchCriteria() {
         let retVal: String = "";
         if (this.searchRet) {
-            retVal = this.searchRet.getSearchCriteria(null,null);
+            retVal = this.searchRet.getSearchCriteria(null, null);
         };
         return retVal;
     }

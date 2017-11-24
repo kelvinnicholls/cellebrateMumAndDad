@@ -9,6 +9,7 @@ import { Consts } from "../consts";
 import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
 import { DialogService } from "../dialog/dialog.service";
+import { AuthUserService } from "../../auth/auth-user.service";
 
 @Component({
   selector: 'app-add-tag',
@@ -28,6 +29,7 @@ export class AddTagComponent implements OnInit {
   constructor(private tagService: TagService
     , private toastService: ToastService
     , private dialogService: DialogService
+    , private authUserService: AuthUserService
     , private vcr: ViewContainerRef
     , private formBuilder: FormBuilder) {
     toastService.toast.setRootViewContainerRef(vcr);
@@ -93,9 +95,12 @@ export class AddTagComponent implements OnInit {
 
 
   isFormValid() {
-    return this.myForm.valid && this.myForm.dirty;
-  }
-
+    let retVal = false;
+    if (!this.authUserService.isGuestUser() && this.myForm.valid && this.myForm.dirty) {
+        retVal = true
+    }
+    return retVal;
+}
   ngOnInit() {
     this.myForm = this.formBuilder.group({
       tag: new FormControl(null, [Validators.required,Validators.pattern(Consts.ALPHANUMERIC_PATTERN)], this.forbiddenTags),

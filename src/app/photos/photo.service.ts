@@ -78,6 +78,7 @@ export class PhotoService {
         , private personService: PersonService
         , private authUserService: AuthUserService
         , private router: Router) {
+        this.getPhotos();
     }
 
     photosChanged = new Subject<Photo[]>();
@@ -87,8 +88,8 @@ export class PhotoService {
 
 
     public searchRet: SearchRet;
-    
-    public getMode(photo : Photo) {
+
+    public getMode(photo: Photo) {
         if (this.isAllowed('U', photo)) {
             return Consts.EDIT;
         } else {
@@ -323,6 +324,7 @@ export class PhotoService {
         photoService.socket.on('createdPhoto', (photo, changedBy) => {
             let createdPhoto = photoService.createPhoto(photo, null);
             photoService.allPhotos.push(createdPhoto);
+            photoService.multiSelectPhotoOptions.push({ id: createdPhoto._id, name: createdPhoto.title });
             photoService.photos.push(createdPhoto);
             photoService.allPhotos.sort(Utils.dynamicSort('title'));
             photoService.photos.sort(Utils.dynamicSort('title'));
@@ -370,6 +372,7 @@ export class PhotoService {
                 photoInfo.location = result.location;
                 photoInfo.isUrl = result.isUrl;
                 const photo = this.createPhoto(result, photoInfo);
+                photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
                 photoService.allPhotos.push(photo);
                 photoService.photos.push(photo);
                 photoService.allPhotos.sort(Utils.dynamicSort('title'));
@@ -459,24 +462,26 @@ export class PhotoService {
 
     getPhotos(): Observable<any> {
         let photoService = this;
-        if (photoService.photos.length > 0) {
+        if (photoService.allPhotos && photoService.allPhotos.length > 0) {
             if (photoService.searchRet) {
                 photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
             } else {
                 photoService.photos = photoService.allPhotos.slice(0);
             };
-            return Observable.of(photoService.photos);
+            //return Observable.of(photoService.photos);
         } else {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-            
-            return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
+
+            this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
                 .map((response: Response) => {
                     const photos = response.json().medias;
                     let transformedPhotos: Photo[] = [];
+                    photoService.multiSelectPhotoOptions = [];
                     for (let photo of photos) {
-                        let newPhoto : Photo = photoService.createNewPhoto(photo);
+                        let newPhoto: Photo = photoService.createNewPhoto(photo);
                         transformedPhotos.push(newPhoto);
+                        photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
                     };
                     transformedPhotos.sort(Utils.dynamicSort('title'));
                     photoService.allPhotos = transformedPhotos;
@@ -486,19 +491,19 @@ export class PhotoService {
                         photoService.photos = photoService.allPhotos.slice(0);
                     };
                     photoService.bigTotalItems = photoService.photos.length;
-                    return photoService.photos;
+                    //return photoService.photos;
                 })
                 .catch((error: Response) => {
                     photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-                });
+                }).subscribe();
         };
     }
 
     public isAllowed(changeType, photo: Photo): boolean {
         let retVal: boolean = true;
         if (changeType == "U" && !photo.comment || changeType == "D") {
-            retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser(),this.authUserService);
+            retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser(), this.authUserService);
         };
         console.log("isAllowed retVal", retVal);
         return retVal;

@@ -49,6 +49,7 @@ export class MemoryService {
         , private personService: PersonService
         , private authUserService: AuthUserService
         , private router: Router) {
+        this.getMemories();
     }
 
     memoriesChanged = new Subject<Memory[]>();
@@ -165,15 +166,15 @@ export class MemoryService {
                 let newTag = new Tag(tag.tag, tag._id);
                 tags.push(newTag);
                 tagIds.push(tag._id);
-            // if (tag._id) {
-            //         let newTag = new Tag(tag.tag, tag._id);
-            //         tags.push(newTag);
-            //         tagIds.push(tag._id);
-            //     } else {
-            //         let newTag = memoryService.tagService.findTagById(tag);
-            //         tags.push(newTag);
-            //         tagIds.push(tag);
-            //     };
+                // if (tag._id) {
+                //         let newTag = new Tag(tag.tag, tag._id);
+                //         tags.push(newTag);
+                //         tagIds.push(tag._id);
+                //     } else {
+                //         let newTag = memoryService.tagService.findTagById(tag);
+                //         tags.push(newTag);
+                //         tagIds.push(tag);
+                //     };
             });
         };
 
@@ -186,15 +187,15 @@ export class MemoryService {
                 let newPerson = new Person(person.person, person._id);
                 people.push(newPerson);
                 personIds.push(person._id);
-            // if (person._id) {
-            //         let newPerson = new Person(person.person, person._id);
-            //         people.push(newPerson);
-            //         personIds.push(person._id);
-            //     } else {
-            //         let newPerson = memoryService.personService.findPersonById(person);
-            //         people.push(newPerson);
-            //         personIds.push(person);
-            //     };
+                // if (person._id) {
+                //         let newPerson = new Person(person.person, person._id);
+                //         people.push(newPerson);
+                //         personIds.push(person._id);
+                //     } else {
+                //         let newPerson = memoryService.personService.findPersonById(person);
+                //         people.push(newPerson);
+                //         personIds.push(person);
+                //     };
             });
         };
 
@@ -356,7 +357,7 @@ export class MemoryService {
             });
     }
 
-    getMemories(): Observable<any> {
+    getMemories() {
         let memoryService = this;
         if (memoryService.memories.length > 0) {
             if (memoryService.searchRet) {
@@ -364,12 +365,12 @@ export class MemoryService {
             } else {
                 memoryService.memories = memoryService.allMemories.slice(0);
             };
-            return Observable.of(memoryService.memories);
+            //return Observable.of(memoryService.memories);
         } else {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
-            return this.http.get(Consts.API_URL_MEMORIES_ROOT, { headers: headers })
+            this.http.get(Consts.API_URL_MEMORIES_ROOT, { headers: headers })
                 .map((response: Response) => {
                     const memories = response.json().memories;
                     let transformedMemories: Memory[] = [];
@@ -451,19 +452,19 @@ export class MemoryService {
                         memoryService.memories = memoryService.allMemories.slice(0);
                     };
                     memoryService.bigTotalItems = memoryService.memories.length;
-                    return memoryService.memories;
+                    //return memoryService.memories;
                 })
                 .catch((error: Response) => {
                     memoryService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-                });
+                }).subscribe();
         };
     }
 
     public isAllowed(changeType, memory: Memory): boolean {
         let retVal: boolean = true;
         if (changeType == "U" && !memory.comment || changeType == "D") {
-            retVal = Utils.checkIsAdminOrOwner(memory._creator, this.userService.getLoggedInUser(),this.authUserService);
+            retVal = Utils.checkIsAdminOrOwner(memory._creator, this.userService.getLoggedInUser(), this.authUserService);
         };
         console.log("isAllowed retVal", retVal);
         return retVal;

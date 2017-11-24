@@ -111,12 +111,13 @@ export class UserListComponent implements OnInit, OnDestroy {
         userListComponent.userService.showSuccessToast.subscribe((msg) => {
             userListComponent.toastService.showSuccess(msg);
         });
-        userListComponent.userService.getUsers()
-            .subscribe(
-            (users: User[]) => {
-                this.newUserList(users)
-            }
-            );
+        this.newUserList(userListComponent.userService.users);
+        // userListComponent.userService.getUsers()
+        //     .subscribe(
+        //     (users: User[]) => {
+        //         this.newUserList(users)
+        //     }
+        //     );
         userListComponent.subscription = userListComponent.userService.usersChanged.subscribe((users: User[]) => userListComponent.newUserList(users));
     }
 

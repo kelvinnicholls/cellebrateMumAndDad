@@ -137,13 +137,14 @@ export class MemoryListComponent implements OnInit, OnDestroy {
             memoryListComponent.toastService.showSuccess(msg);
         });
         console.log('MemoryListComponent ngOnInit.getMemories() before');
-        memoryListComponent.memoryService.getMemories()
-            .subscribe(
-            (memories: Memory[]) => {
-                console.log('MemoryListComponent ngOnInit.getMemories() after');
-                memoryListComponent.newMemoryList(memories)
-            }
-            );
+        memoryListComponent.newMemoryList(memoryListComponent.memoryService.memories);
+        // memoryListComponent.memoryService.getMemories()
+        //     .subscribe(
+        //     (memories: Memory[]) => {
+        //         console.log('MemoryListComponent ngOnInit.getMemories() after');
+        //         memoryListComponent.newMemoryList(memories)
+        //     }
+        //     );
         memoryListComponent.subscription = memoryListComponent.memoryService.memoriesChanged.subscribe(
             (memories: Memory[]) =>
                 memoryListComponent.newMemoryList(memories));
