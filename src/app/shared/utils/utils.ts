@@ -28,7 +28,7 @@ export class Utils {
         console.log("checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
         let retVal = false;
 
-        if (!authUserService.isGuestUser() && ((loggedInUser.adminUser.toString().toLowerCase() == 'yes' || (loggedInUser._creatorRef === creator)) {
+        if (!authUserService.isGuestUser() && ((loggedInUser.adminUser.toString().toLowerCase() == 'yes' || (loggedInUser._creatorRef === creator)))) {
             retVal = true;
         };
         console.log("checkIsAdminOrOwner retVal", retVal);

@@ -460,7 +460,7 @@ export class PhotoService {
         return newPhoto;
     }
 
-    getPhotos(): Observable<any> {
+    getPhotos() {
         let photoService = this;
         if (photoService.allPhotos && photoService.allPhotos.length > 0) {
             if (photoService.searchRet) {
@@ -468,7 +468,7 @@ export class PhotoService {
             } else {
                 photoService.photos = photoService.allPhotos.slice(0);
             };
-            //return Observable.of(photoService.photos);
+
         } else {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
@@ -491,7 +491,6 @@ export class PhotoService {
                         photoService.photos = photoService.allPhotos.slice(0);
                     };
                     photoService.bigTotalItems = photoService.photos.length;
-                    //return photoService.photos;
                 })
                 .catch((error: Response) => {
                     photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
