@@ -70,8 +70,9 @@ let createInitialAdminUser = (adminUser) => {
       user._creator = user._creatorRef;
       user.adminUser = true;
       user.emailUpdates = true;
-
-      user.save().then((user) => {
+      user.guestUser = false;
+      
+                  user.save().then((user) => {
         if (user) {
           console.log("Initial User Created : ", user.name);
         };
