@@ -25,7 +25,12 @@ export class UserService {
     public eventPage: number = 1;
     public bigCurrentPage: number = 1;
     private allUsers: User[] = [];
+    private retrievedUsers = false;
     constructor(private authUserService: AuthUserService, private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) {
+        this.initialize();
+    }
+
+    async initialize() {
         this.getUsers();
     }
 
@@ -181,11 +186,12 @@ export class UserService {
             });
     }
 
-    getUsers() {
-        if (!(this.users && this.users.length > 0)) {
+    getUsers(refresh: Boolean = false) {
+        let userService = this;
+        if ((!userService.retrievedUsers || refresh) && userService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-            let userService = this;
+
             this.http.get(Consts.API_URL_USERS_ROOT, { headers: headers })
                 .map((response: Response) => {
                     const users = response.json();
@@ -220,7 +226,7 @@ export class UserService {
                     } else {
                         userService.users = userService.allUsers.slice(0);
                     };
-                    return userService.users;
+                    userService.retrievedUsers = true;
                 })
                 .catch((error: Response) => {
                     userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));

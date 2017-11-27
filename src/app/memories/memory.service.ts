@@ -33,6 +33,7 @@ export class MemoryService {
     public bigTotalItems: number = 0;
     public numPages: number = 0;
     public eventItemsPerPage: number = 6;
+    private retrievedMemories = false;
 
     public memories: Memory[] = [];
     public eventPage: number = 1;
@@ -49,6 +50,10 @@ export class MemoryService {
         , private personService: PersonService
         , private authUserService: AuthUserService
         , private router: Router) {
+        this.initialize();
+    }
+
+    async initialize() {
         this.getMemories();
     }
 
@@ -357,16 +362,17 @@ export class MemoryService {
             });
     }
 
-    getMemories() {
+    getMemories(refresh: Boolean = false) {
         let memoryService = this;
-        if (memoryService.memories.length > 0) {
-            if (memoryService.searchRet) {
-                memoryService.memories = Search.restrict(memoryService.allMemories, memoryService.searchRet);
-            } else {
-                memoryService.memories = memoryService.allMemories.slice(0);
-            };
-            //return Observable.of(memoryService.memories);
-        } else {
+        // if ((!memoryService.retrievedMemories || refresh) && memoryService.authUserService.isLoggedIn()) {
+        //     if (memoryService.searchRet) {
+        //         memoryService.memories = Search.restrict(memoryService.allMemories, memoryService.searchRet);
+        //     } else {
+        //         memoryService.memories = memoryService.allMemories.slice(0);
+        //     };
+        //     //return Observable.of(memoryService.memories);
+        // } else {
+        if ((!memoryService.retrievedMemories || refresh) && memoryService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
@@ -452,7 +458,7 @@ export class MemoryService {
                         memoryService.memories = memoryService.allMemories.slice(0);
                     };
                     memoryService.bigTotalItems = memoryService.memories.length;
-                    //return memoryService.memories;
+                    memoryService.retrievedMemories = true;
                 })
                 .catch((error: Response) => {
                     memoryService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));

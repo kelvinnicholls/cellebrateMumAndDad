@@ -8,6 +8,12 @@ import { ErrorService } from "../errors/error.service";
 import { AppService } from "../../app.service";
 import { ChatService } from "../../chat/chat.service";
 
+import { UserService } from "../../users/user.service";
+import { TagService } from "../../shared/tags/tag.service";
+import { PersonService } from "../../shared/people/person.service";
+import { PhotoService } from "../../photos/photo.service";
+import { MemoryService } from "../../memories/memory.service";
+
 
 import { PasswordStrengthBarComponent } from '../password-strength-bar/password-strength-bar.component';
 import { PasswordValidationService } from '../password-validation.service';
@@ -22,7 +28,16 @@ export class SignInComponent implements OnInit, OnDestroy {
     myForm: FormGroup;
     private authServiceSub: any;
 
-    constructor(private authService: AuthService, private router: Router, private errorService: ErrorService, private appService: AppService, private chatService: ChatService) {
+    constructor(private authService: AuthService
+        , private router: Router
+        , private errorService: ErrorService
+        , private appService: AppService
+        , private userService: UserService
+        , private tagService: TagService
+        , private personService: PersonService
+        , private photoService: PhotoService
+        , private memoryService: MemoryService
+        , private chatService: ChatService) {
     }
 
     onSubmit() {
@@ -38,6 +53,11 @@ export class SignInComponent implements OnInit, OnDestroy {
                 router.navigate(['']);
                 this.appService.showToast(Consts.SUCCESS, "User signed in successfully.");
                 this.chatService.connect(userName);
+                this.memoryService.getMemories(true);
+                this.userService.getUsers(true);
+                this.photoService.getPhotos(true);
+                this.tagService.getTags(true);
+                this.personService.getPeople(true);
             }
             , (err) => {
                 this.errorService.handleError(JSON.parse(err._body));

@@ -40,8 +40,9 @@ x148) Clear local storage on logout
 x149) when deploying photos will be overwritten (I think) check!
 150) check if photos exists on start up. If they don't remove all from bucket
 151) Add hidden option to copy all files in bucket to public/images
-
-
+152) When logging out remove socket connection
+153) Adding a photo to a memory with no photos does not update memory list
+154) test with no memories or photos - see if unauthorised error appears
 
 
 

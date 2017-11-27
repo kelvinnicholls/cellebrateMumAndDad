@@ -10,12 +10,15 @@ import { UserService } from "../../users/user.service";
 import { Tag } from "./tag.model";
 import { Consts } from "../consts";
 import { Utils } from "../utils/utils";
+import { AuthUserService } from "../../auth/auth-user.service";
+
 
 @Injectable()
 export class TagService {
     public tags: Tag[] = [];
     private socket;
     tagsChanged = new Subject<Tag[]>();
+    private retrievedTags = false;
 
 
     tag: string = "tag";
@@ -59,7 +62,13 @@ export class TagService {
     constructor(private http: Http
         , private errorService: ErrorService
         , private userService: UserService
+        , private authUserService: AuthUserService
         , private appService: AppService) {
+        this.initialize();
+    }
+
+
+    async initialize() {
         this.getTags();
     }
 
@@ -132,9 +141,9 @@ export class TagService {
     }
 
 
-    public getTags() {
+    public getTags(refresh: Boolean = false) {
         let tagService = this;
-        if (!(tagService.tags && tagService.tags.length > 0)) {
+        if ((!tagService.retrievedTags || refresh) && tagService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
             this.http.get(Consts.API_URL_TAGS_ROOT, { headers: headers })
@@ -152,7 +161,7 @@ export class TagService {
                     };
                     transformedTags.sort(Utils.dynamicSort('tag'));
                     this.tags = transformedTags;
-                    //return this.tags;
+                    tagService.retrievedTags = true;
                 }).catch((error: Response) => {
                     tagService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));

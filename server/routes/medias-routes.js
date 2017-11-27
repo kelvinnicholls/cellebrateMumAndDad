@@ -348,6 +348,7 @@ router.delete('/:id', authenticate, (req, res) => {
 
       if (media) {
         googleCloudApi.deleteFile(media.location);
+        fs.unlinkSync(media.location);
         res.send({
           media
         });

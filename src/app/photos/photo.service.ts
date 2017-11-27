@@ -33,7 +33,7 @@ export class PhotoService {
     photo: string = "photo";
     photoplural: string = this.photo + "'s";
     public selectedPhotos: String[] = [];
-
+    private retrievedPhotos = false;
 
     public findPhotoTitleById(id: any): string {
         let photoTitle = "";
@@ -78,6 +78,11 @@ export class PhotoService {
         , private personService: PersonService
         , private authUserService: AuthUserService
         , private router: Router) {
+        this.initialize();
+
+    }
+
+    async initialize() {
         this.getPhotos();
     }
 
@@ -460,16 +465,17 @@ export class PhotoService {
         return newPhoto;
     }
 
-    getPhotos() {
+    getPhotos(refresh: Boolean = false) {
         let photoService = this;
-        if (photoService.allPhotos && photoService.allPhotos.length > 0) {
-            if (photoService.searchRet) {
-                photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
-            } else {
-                photoService.photos = photoService.allPhotos.slice(0);
-            };
+        // if ((!photoService.retrievedPhotos || refresh) && photoService.authUserService.isLoggedIn()) {
+        //     if (photoService.searchRet) {
+        //         photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
+        //     } else {
+        //         photoService.photos = photoService.allPhotos.slice(0);
+        //     };
 
-        } else {
+        // } else {
+        if ((!photoService.retrievedPhotos || refresh) && photoService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
@@ -491,6 +497,7 @@ export class PhotoService {
                         photoService.photos = photoService.allPhotos.slice(0);
                     };
                     photoService.bigTotalItems = photoService.photos.length;
+                    photoService.retrievedPhotos = true;
                 })
                 .catch((error: Response) => {
                     photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));

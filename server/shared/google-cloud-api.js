@@ -56,10 +56,13 @@ function uploadFile(filename) {
     });
 };
 
-function downloadFile(srcFilename, destFilename) {
+function downloadFile(destFilename) {
   const options = {
     destination: destFilename,
   };
+  let srcFilename = destFilename.substring(destFilename.indexOf("file_"));
+  console.log('downloadFile : srcFilename',srcFilename);
+  console.log('downloadFile : destFilename',destFilename);
   bucket
     .file(srcFilename)
     .download(options)

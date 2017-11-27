@@ -8,7 +8,7 @@
             <a routerLinkActive="active" routerLink="/memories/memory/{{memoryService.getMode(memory)}}/{{memory.index}}">{{memory.title}}</a>
           </span>
         </mat-grid-tile-header>
-        <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length >= 0 && memory.mediasToDisplay[0].getSource()}}"
+        <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length > 0 && memory.mediasToDisplay[0].getSource()}}"
           class="img-responsive" style="max-height: 80px;" toggleFullscreen>
         <mat-grid-tile-footer class="row col-md-13">
             <div class="col-md-3 text-center">

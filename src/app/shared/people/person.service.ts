@@ -10,13 +10,15 @@ import { UserService } from "../../users/user.service";
 import { Person } from "./person.model";
 import { Consts } from "../consts";
 import { Utils } from "../utils/utils";
+import { AuthUserService } from "../../auth/auth-user.service";
 
 @Injectable()
 export class PersonService {
     public people: Person[] = [];
     private socket;
     peopleChanged = new Subject<Person[]>();
-
+    private retrievedPeople = false;
+    
     person: string = "person";
     personplural: string = 'people';
     public selectedPeople: String[] = [];
@@ -38,7 +40,12 @@ export class PersonService {
     constructor(private http: Http
         , private errorService: ErrorService
         , private userService: UserService
+        , private authUserService: AuthUserService
         , private appService: AppService) {
+        this.initialize();
+    }
+
+    async initialize() {
         this.getPeople();
     }
 
@@ -128,9 +135,9 @@ export class PersonService {
     }
 
 
-    public getPeople() {
+    public getPeople(refresh: Boolean = false) {
         let personService = this;
-        if (!(personService.people && personService.people.length > 0)) {
+        if ((!personService.retrievedPeople || refresh) && personService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
             let personService = this;
@@ -149,7 +156,7 @@ export class PersonService {
                     };
                     transformedPersons.sort(Utils.dynamicSort('person'));
                     this.people = transformedPersons;
-                    //return this.people;
+                    personService.retrievedPeople = true;
                 }).catch((error: Response) => {
                     personService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));

@@ -99,7 +99,6 @@ export class ChatService {
         this.tagService.addCallbacks(this.socket);
         this.personService.addCallbacks(this.socket);
         this.memoryService.addCallbacks(this.socket);
-        
     }
 
 
@@ -120,6 +119,7 @@ export class ChatService {
 
     public logOut() {
         this.socket.emit('logOut');
+        this.socket.removeAllListeners();
         this.socket = null;
         this.chatUsers = [];
         this.chatUserMessages = [];
@@ -150,7 +150,12 @@ export class ChatService {
         };
     };
 
-    constructor(public authUserService: AuthUserService, public userService: UserService, public memoryService: MemoryService, public photoService: PhotoService, public tagService: TagService, public personService: PersonService) {
+    constructor(public authUserService: AuthUserService
+        , public userService: UserService
+        , public memoryService: MemoryService
+        , public photoService: PhotoService
+        , public tagService: TagService
+        , public personService: PersonService) {
 
         if (this.authUserService.isLoggedIn()) {
             this.connect(this.authUserService.getLoggedInUserName());
