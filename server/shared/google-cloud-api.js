@@ -28,28 +28,28 @@ const storage = Storage({
 const bucket = storage.bucket(bucketName);
 
 
-function showBuckets() {
-  storage
-    .getBuckets()
-    .then((results) => {
-      const buckets = results[0];
+// function showBuckets() {
+//   storage
+//     .getBuckets()
+//     .then((results) => {
+//       const buckets = results[0];
 
-      console.log('Buckets:');
-      buckets.forEach((bucket) => {
-        console.log(bucket.name);
-        console.log(bucket);
-      });
-    })
-    .catch((err) => {
-      console.error('ERROR:', err);
-    });
-};
+//       console.log('Buckets:');
+//       buckets.forEach((bucket) => {
+//         console.log(bucket.name);
+//         console.log(bucket);
+//       });
+//     })
+//     .catch((err) => {
+//       console.error('ERROR:', err);
+//     });
+// };
 
 function uploadFile(filename) {
   bucket
     .upload(filename)
     .then(() => {
-      console.log(`${filename} uploaded to ${bucketName}.`);
+      //console.log(`${filename} uploaded to ${bucketName}.`);
     })
     .catch(err => {
       console.error('ERROR:', err);
@@ -61,15 +61,13 @@ function downloadFile(destFilename) {
     destination: destFilename,
   };
   let srcFilename = destFilename.substring(destFilename.indexOf("file_"));
-  console.log('downloadFile : srcFilename',srcFilename);
-  console.log('downloadFile : destFilename',destFilename);
+  //console.log('downloadFile : srcFilename',srcFilename);
+  //console.log('downloadFile : destFilename',destFilename);
   bucket
     .file(srcFilename)
     .download(options)
     .then(() => {
-      console.log(
-        `gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`
-      );
+      //console.log(`gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`);
     })
     .catch(err => {
       console.error('ERROR:', err);
@@ -82,7 +80,7 @@ function deleteFile(fullFilename) {
     .file(filename)
     .delete()
     .then(() => {
-      console.log(`gs://${bucketName}/${filename} deleted.`);
+      //console.log(`gs://${bucketName}/${filename} deleted.`);
     })
     .catch(err => {
       console.error('ERROR:', err);
@@ -91,6 +89,6 @@ function deleteFile(fullFilename) {
 module.exports = {
   downloadFile,
   uploadFile,
-  showBuckets,
+  //showBuckets,
   deleteFile
 }

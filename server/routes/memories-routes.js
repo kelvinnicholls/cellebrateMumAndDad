@@ -36,38 +36,42 @@ let transformCreatorToUser = (memories) => {
     let numMemories = memories ? memories.length : 0;
     let processedMemories = 0;
     let transformedMemories = [];
-    for (let memory of memories) {
-      if (memory.comments && memory.comments.length > 0) {
-        let numComments = memory.comments.length;
-        let processedComments = 0;
-        for (let comment of memory.comments) {
-          let userObj = {
-            '_creatorRef': comment._creator
-          };
-          User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
-            if (user) {
-              delete user._id;
-              comment.user = user;
+    if (numMemories > 0) {
+      for (let memory of memories) {
+        if (memory.comments && memory.comments.length > 0) {
+          let numComments = memory.comments.length;
+          let processedComments = 0;
+          for (let comment of memory.comments) {
+            let userObj = {
+              '_creatorRef': comment._creator
             };
-            processedComments++;
-            if (numComments === processedComments) {
-              transformedMemories.push(memory);
-              processedMemories++;
-              if (numMemories === processedMemories) {
-                return resolve(transformedMemories);
+            User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
+              if (user) {
+                delete user._id;
+                comment.user = user;
               };
-            };
-          }, (e) => {
-            reject(e);
-          });
-        };
-      } else {
-        transformedMemories.push(memory);
-        processedMemories++;
-        if (numMemories === processedMemories) {
-          return resolve(transformedMemories);
+              processedComments++;
+              if (numComments === processedComments) {
+                transformedMemories.push(memory);
+                processedMemories++;
+                if (numMemories === processedMemories) {
+                  return resolve(transformedMemories);
+                };
+              };
+            }, (e) => {
+              reject(e);
+            });
+          };
+        } else {
+          transformedMemories.push(memory);
+          processedMemories++;
+          if (numMemories === processedMemories) {
+            return resolve(transformedMemories);
+          };
         };
       };
+    } else {
+      return resolve(transformedMemories);
     };
   });
 }
@@ -83,10 +87,10 @@ router.post('/', authenticate, (req, res) => {
     memory.comments = [];
 
     memory.save().then((newMemory) => {
-      console.log('memory2', newMemory);
+      //console.log('memory2', newMemory);
       res.send(_.pick(newMemory, memoryOutFields));
     }, (e) => {
-      console.log('memory.save() e', e);
+      //console.log('memory.save() e', e);
       res.status(400).send();
     });
   };
@@ -145,7 +149,7 @@ router.get('/:id', authenticate, (req, res) => {
 
   Memory.findOne({
     '_id': id
-  }).populate('comments tags people').then((memory) => {
+  }).populate('comments tags people medias').then((memory) => {
     if (memory) {
       res.send({
         memory
@@ -167,9 +171,9 @@ router.get('/title/:title', authenticate, (req, res) => {
   let memoryObj = {
     title
   };
-  console.log("memoryObj", memoryObj);
-  Memory.findOne(memoryObj).populate('comments tags people').then((memory) => {
-    console.log("memory", memory);
+  //console.log("memoryObj", memoryObj);
+  Memory.findOne(memoryObj).then((memory) => {
+    //console.log("memory", memory);
     if (memory) {
       res.send({
         'titleFound': true,
@@ -182,7 +186,7 @@ router.get('/title/:title', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    console.log("memory router.get('/title/:title' e", e);
+    //console.log("memory router.get('/title/:title' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -261,7 +265,62 @@ router.delete('/', authenticate, (req, res) => {
   };
 });
 
+let addUserToComments = (memory) => {
+  return new Promise((resolve, reject) => {
+    let retMemory = JSON.parse(JSON.stringify(memory));
+    let numComments = retMemory.comments.length;
+    let processedComments = 0;
+    let commentsArr = [];
+
+    //('addUserToComments', 'numComments', numComments);
+    if (retMemory.comments && retMemory.comments.length > 0) {
+      for (let comment of retMemory.comments) {
+        //console.log('addUserToComments', 'comment', comment);
+        let userObj = {
+          '_creatorRef': comment._creator
+        };
+        User.findOne(userObj).populate('_profileMemoryId', ['location']).then((user) => {
+          //console.log('addUserToComments', 'user', user);
+          //console.log('addUserToComments', 'typeof user', typeof user);
+          //console.log('addUserToComments', 'typeof comment', typeof comment);
+          if (user) {
+            delete user._id;
+            let newComment = JSON.parse(JSON.stringify(comment));
+            //console.log('addUserToComments', 'user.name', user.name);
+            //console.log('addUserToComments', 'user._profileMemoryId', user._profileMemoryId);
+            newComment.user = {};
+            //console.log('addUserToComments', 'newComment.user', newComment.user);
+            newComment.user.name = user.name;
+            newComment.user._profileMemoryId = user._profileMemoryId;
+            //console.log('addUserToComments', 'newComment.user2', newComment.user);
+
+            commentsArr.push(newComment);
+            //console.log('addUserToComments', 'newComment', newComment);
+          };
+
+          processedComments++;
+          if (numComments === processedComments) {
+            retMemory.comments = commentsArr;
+            //console.log('addUserToComments', 'resolve', retMemory);
+            return resolve(retMemory);
+          };
+        }, (e) => {
+          reject(e);
+        });
+      };
+    } else {
+      return resolve(retMemory);
+    };
+  });
+};
+
 let updateMemories = (res, body, memories, commentId) => {
+
+  //console.log("updateMemories", body, memories, commentId);
+
+  // let memoriesObj = {
+  //   _id : memories._id
+  // };
 
   let updateObj = {
     $set: body
@@ -272,15 +331,27 @@ let updateMemories = (res, body, memories, commentId) => {
       "comments": commentId
     };
   };
+  //console.log("updateObj", updateObj);
+  //console.log("memories", memories);
 
   Memory.findOneAndUpdate(memories, updateObj, {
     new: true
-  }).populate('comments tags people').then((memory) => {
-
+  }).populate('comments tags people medias').then((memory) => {
     if (memory) {
-      res.send({
-        memory
-      });
+      if (memory.comments) {
+        addUserToComments(memory).then((memory) => {
+          res.send({
+            memory
+          });
+        }, (e) => {
+          res.status(400).send();
+          console.log(e);
+        });
+      } else {
+        res.send({
+          memory
+        });
+      };
     } else {
       res.status(404).send({
         error: "memory not found for id"
@@ -289,6 +360,7 @@ let updateMemories = (res, body, memories, commentId) => {
 
   }, (e) => {
     res.status(400).send();
+    console.log(e);
   });
 };
 
@@ -322,7 +394,7 @@ router.patch('/:id', authenticate, (req, res) => {
 
       comment._creator = req.loggedInUser._creatorRef;
       comment.commentDate = new Date().getTime();
-      console.log('comment', comment);
+      //console.log('comment', comment);
 
       comment.save().then((comment) => {
         updateMemories(res, body, memories, comment._id);

@@ -395,11 +395,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
         if (userInputComponent.route.snapshot.url.length === 2 && userInputComponent.route.snapshot.url[0].path === 'user' && userInputComponent.route.snapshot.url[1].path === 'edit-me') {
             userInputComponent.submitType = Consts.UPDATE_CURRENT_USER;
             userInputComponent.mode = Consts.EDIT;
-            userInputComponent.userService.getMe().subscribe(
-                (user: User) => {
-                    userInputComponent.user = user;
+            let loggedInUser = userInputComponent.userService.getLoggedInUser();
+            // userInputComponent.userService.getMe().subscribe(
+            //     (user: User) => {
+                    userInputComponent.user = loggedInUser;
                     userInputComponent.modelDob = userInputComponent.getDob();
-                    userInputComponent._creatorRef = user._creatorRef;
+                    userInputComponent._creatorRef = loggedInUser._creatorRef;
                     if (typeof userInputComponent.user.adminUser === 'boolean') {
                         userInputComponent.user.adminUser = userInputComponent.user.adminUser ? 'Yes' : 'No';
                     };
@@ -415,8 +416,8 @@ export class UserInputComponent implements OnInit, OnDestroy {
                     userInputComponent.myForm.get('password').updateValueAndValidity();
                     userInputComponent.myForm.get('adminUser').disable();
                     userInputComponent.myForm.get('adminUser').updateValueAndValidity();
-                }
-            );
+            //     }
+            // );
         } else if (userInputComponent.route.snapshot.url.length === 2 && userInputComponent.route.snapshot.url[0].path === 'user' && userInputComponent.route.snapshot.url[1].path === 'create') {
             userInputComponent.submitType = Consts.CREATE_USER;
             userInputComponent.mode = Consts.ADD;

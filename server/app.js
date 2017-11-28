@@ -40,7 +40,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
-  console.log("Request Url : " + req.originalUrl);
+  //console.log("Request Url : " + req.originalUrl);
   next();
 });
 
@@ -55,7 +55,7 @@ app.use('/', appRoutes);
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  console.log("catch 404 and forward to error handler");
+  //console.log("catch 404 and forward to error handler");
   res.render('index');
 });
 

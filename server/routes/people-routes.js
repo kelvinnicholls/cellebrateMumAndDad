@@ -24,18 +24,18 @@ const {
 
 router.post('/', authenticate, (req, res) => {
   let body = _.pick(req.body, personInsertFields);
-  console.log('body', body);
+  //console.log('body', body);
   let person = new Person(body);
 
   person._creator = req.loggedInUser._creatorRef;
   person.addedDate = new Date().getTime();
-  console.log('person', person);
+  //console.log('person', person);
 
   person.save().then((person) => {
-    console.log('person2', person);
+    //console.log('person2', person);
     res.send(_.pick(person, personOutFields));
   }, (e) => {
-    console.log('person.save() e', e);
+    //console.log('person.save() e', e);
     res.status(400).send();
   });
 });
@@ -67,7 +67,7 @@ router.get('/person/:person', authenticate, (req, res) => {
       });
     };
   }, (e) => {
-    console.log("5a router.get('/person/:person' e", e);
+    //console.log("5a router.get('/person/:person' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });

@@ -201,7 +201,7 @@ export class SearchComponent implements OnInit {
   }
 
   onCaseSensitive(event) {
-    console.log(event);
+    //console.log(event);
   }
 
   onButtonTwo() {

@@ -79,8 +79,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private updatePagedUsers(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        console.log('startIndex : ', startIndex);
-        console.log('endIndex : ', endIndex);
+        //console.log('startIndex : ', startIndex);
+        //console.log('endIndex : ', endIndex);
         this.setUsersIndex();
         this.pagedUsers = this.users.slice(startIndex, endIndex + 1);
     }
@@ -88,8 +88,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
         this.userService.eventPage = event.page;
-        console.log('Page changed to: ' + this.userService.eventPage);
-        console.log('Number items per page: ' + this.eventItemsPerPage);
+        //console.log('Page changed to: ' + this.userService.eventPage);
+        //console.log('Number items per page: ' + this.eventItemsPerPage);
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 

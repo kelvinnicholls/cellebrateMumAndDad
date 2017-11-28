@@ -24,18 +24,18 @@ const {
 
 router.post('/', authenticate, (req, res) => {
   let body = _.pick(req.body, tagInsertFields);
-  console.log('body', body);
+  //console.log('body', body);
   let tag = new Tag(body);
 
   tag._creator = req.loggedInUser._creatorRef;
   tag.addedDate = new Date().getTime();
-  console.log('tag', tag);
+  //console.log('tag', tag);
 
   tag.save().then((tag) => {
-    console.log('tag2', tag);
+    //console.log('tag2', tag);
     res.send(_.pick(tag, tagOutFields));
   }, (e) => {
-    console.log('tag.save() e', e);
+    //console.log('tag.save() e', e);
     res.status(400).send();
   });
 });

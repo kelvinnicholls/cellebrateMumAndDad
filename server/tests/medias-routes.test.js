@@ -347,33 +347,33 @@ describe('POST /medias', () => {
 });
 
 
-describe('DELETE /medias', () => {
-  it('should delete all medias if admin user', (done) => {
-    request(app)
-      .delete('/medias')
-      .set({
-        'x-auth': users[0].tokens[0].token
-      })
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.medias.n).toBe(2);
-      })
-      .end(done);
-  });
+// describe('DELETE /medias', () => {
+//   it('should delete all medias if admin user', (done) => {
+//     request(app)
+//       .delete('/medias')
+//       .set({
+//         'x-auth': users[0].tokens[0].token
+//       })
+//       .expect(200)
+//       .expect((res) => {
+//         expect(res.body.medias.n).toBe(2);
+//       })
+//       .end(done);
+//   });
 
-  it('should delete only user\'s medias if not admin user', (done) => {
-    request(app)
-      .delete('/medias')
-      .set({
-        'x-auth': users[1].tokens[0].token
-      })
-      .expect(200)
-      .expect((res) => {
-        expect(res.body.medias.n).toBe(1);
-      })
-      .end(done);
-  });
-});
+//   it('should delete only user\'s medias if not admin user', (done) => {
+//     request(app)
+//       .delete('/medias')
+//       .set({
+//         'x-auth': users[1].tokens[0].token
+//       })
+//       .expect(200)
+//       .expect((res) => {
+//         expect(res.body.medias.n).toBe(1);
+//       })
+//       .end(done);
+//   });
+// });
 
 describe('DELETE /medias/:id', () => {
   it('should delete media for id', (done) => {

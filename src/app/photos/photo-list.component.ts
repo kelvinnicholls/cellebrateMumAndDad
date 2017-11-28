@@ -79,8 +79,8 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     private updatePagedPhotos(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        console.log('startIndex : ', startIndex);
-        console.log('endIndex : ', endIndex);
+        //console.log('startIndex : ', startIndex);
+        //console.log('endIndex : ', endIndex);
         this.setPhotosIndex();
         this.pagedPhotos = this.photos.slice(startIndex, endIndex + 1);
     }
@@ -88,8 +88,8 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.photoService.eventItemsPerPage = event.itemsPerPage;
         this.photoService.eventPage = event.page;
-        console.log('Page changed to: ' + this.photoService.eventPage);
-        console.log('Number items per page: ' + this.photoService.eventItemsPerPage);
+        //console.log('Page changed to: ' + this.photoService.eventPage);
+        //console.log('Number items per page: ' + this.photoService.eventItemsPerPage);
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 

@@ -82,7 +82,7 @@ export class PersonService {
             personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
             personService.peopleChanged.next(personService.people);
             personService.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
-            console.log(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
+            //console.log(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
         });
 
     }

@@ -32,8 +32,8 @@ export class Search {
         if (arrayElement[elementName]) {
           let attributeValue = arrayElement[elementName];
           let typeOfAttributeValue = typeof attributeValue;
-          console.log("attributeValue", attributeValue);
-          console.log("typeOfAttributeValue", typeOfAttributeValue);
+          //console.log("attributeValue", attributeValue);
+          //console.log("typeOfAttributeValue", typeOfAttributeValue);
           switch (typeOfAttributeValue) {
             case 'string':
               if (searchElement.type === 'y_n_both') {
@@ -101,7 +101,7 @@ export class Search {
             case 'object':
               if (Object.prototype.toString.call(arrayElement[elementName]) === "[object Array]") {
                 if (searchElement.type === 'array') {
-                  console.log(attributeValue);
+                  //console.log(attributeValue);
                   let matchingElementsCount = 0;
                   searchElement.value.forEach((searchElementValue) => {
                     attributeValue.forEach(attributeValueElement => {

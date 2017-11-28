@@ -38,7 +38,7 @@ export class ChatService {
             longitude: this.location.longitude,
             socketId: socketId
         }, callback);
-        console.log(position.coords);
+        //console.log(position.coords);
     }
 
     findChatUser(socketId: any): ChatUser {
@@ -72,17 +72,17 @@ export class ChatService {
         // });
 
         this.socket.on('connect', () => {
-            console.log("Connected to server");
+            //console.log("Connected to server");
         });
 
         this.socket.on('disconnect', () => {
-            console.log("Disconnected from server");
+            //console.log("Disconnected from server");
         });
 
         this.socket.on('updateUserList', (users) => {
             if (this.socket && this.socket.io) {
                 let socketId = this.socket.io.engine.id;
-                console.log('updateUserList', users);
+                //console.log('updateUserList', users);
                 let chatUsers: ChatUser[] = [];
                 users.forEach(function (user) {
                     if (user.id != socketId) {
@@ -108,11 +108,11 @@ export class ChatService {
         this.addSocketCallbacks();
         this.socket.emit('join', this.name, function (err) {
             if (err) {
-                console.log("join Error", err);
+                //console.log("join Error", err);
                 // alert(err);
                 // window.location.href = '/';
             } else {
-                console.log("join No Error");
+                //console.log("join No Error");
             }
         });
     }

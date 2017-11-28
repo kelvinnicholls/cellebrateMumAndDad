@@ -25,7 +25,7 @@ beforeEach(() => {
 });
 
 describe('Users', () => {
-    it.only('should add new user', () => {
+    it('should add new user', () => {
         let users = new Users();
         let user = {
             id: "123",

@@ -88,7 +88,7 @@ export class TagService {
             tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
             tagService.tagsChanged.next(this.tags);
             tagService.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
-            console.log(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
+            //console.log(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
         });
 
     }
@@ -125,9 +125,9 @@ export class TagService {
                 tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 this.socket.emit('tagCreated', tag, function (err) {
                     if (err) {
-                        console.log("tagCreated err: ", err);
+                        //console.log("tagCreated err: ", err);
                     } else {
-                        console.log("tagCreated No Error");
+                        //console.log("tagCreated No Error");
                     }
                 });
 

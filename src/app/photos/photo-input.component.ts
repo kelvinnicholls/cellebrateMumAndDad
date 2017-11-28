@@ -306,7 +306,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
                             result => {
-                                console.log(result);
+                                //console.log(result);
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
                                         photoInputComponent.photoService.showSuccessToast.emit("Photo updated.");

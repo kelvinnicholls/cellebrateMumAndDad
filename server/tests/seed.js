@@ -124,7 +124,7 @@ const users = [{
     password: user1password,
     name: "Kelv",
     adminUser: true,
-    guestUser: true,
+    guestUser: false,
     emailUpdates: true,
     relationship: "Son",
     _creator: user2CreatorRef,

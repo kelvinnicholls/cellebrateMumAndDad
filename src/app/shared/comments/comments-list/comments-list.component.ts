@@ -31,16 +31,16 @@ export class CommentListComponent {
     private updatePagedCommentsDisplay(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        console.log('startIndex : ', startIndex);
-        console.log('endIndex : ', endIndex);
+        //console.log('startIndex : ', startIndex);
+        //console.log('endIndex : ', endIndex);
         this.pagedCommentsDisplay = this.commentsDisplay.slice(startIndex, endIndex + 1);
     }
 
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
         this.eventPage = event.page;
-        console.log('Page changed to: ' + this.eventPage);
-        console.log('Number items per page: ' + this.eventItemsPerPage);
+        //console.log('Page changed to: ' + this.eventPage);
+        //console.log('Number items per page: ' + this.eventItemsPerPage);
         this.updatePagedCommentsDisplay(this.eventItemsPerPage, this.eventPage);
     }
 

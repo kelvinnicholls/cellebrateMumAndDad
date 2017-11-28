@@ -76,8 +76,8 @@ export class MemoryListComponent implements OnInit, OnDestroy {
     private updatePagedMemories(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        console.log('startIndex : ', startIndex);
-        console.log('endIndex : ', endIndex);
+        //console.log('startIndex : ', startIndex);
+        //console.log('endIndex : ', endIndex);
         this.setMemoriesIndex();
         this.pagedMemories = this.memories.slice(startIndex, endIndex + 1);
     }
@@ -85,8 +85,8 @@ export class MemoryListComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.memoryService.eventItemsPerPage = event.itemsPerPage;
         this.memoryService.eventPage = event.page;
-        console.log('Page changed to: ' + this.memoryService.eventPage);
-        console.log('Number items per page: ' + this.memoryService.eventItemsPerPage);
+        //console.log('Page changed to: ' + this.memoryService.eventPage);
+        //console.log('Number items per page: ' + this.memoryService.eventItemsPerPage);
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 
@@ -136,7 +136,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         memoryListComponent.memoryService.showSuccessToast.subscribe((msg) => {
             memoryListComponent.toastService.showSuccess(msg);
         });
-        console.log('MemoryListComponent ngOnInit.getMemories() before');
+        //('MemoryListComponent ngOnInit.getMemories() before');
         memoryListComponent.newMemoryList(memoryListComponent.memoryService.memories);
         // memoryListComponent.memoryService.getMemories()
         //     .subscribe(

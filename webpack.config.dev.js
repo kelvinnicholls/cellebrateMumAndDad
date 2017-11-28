@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var webpackMerge = require('webpack-merge');
 var commonConfig = require('./webpack.config.common.js');
 
-console.log("webpack.config.dev.js");
+//console.log("webpack.config.dev.js");
 
 module.exports = env => {
   return webpackMerge(commonConfig, {

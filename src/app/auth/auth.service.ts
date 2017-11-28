@@ -55,22 +55,22 @@ export class AuthService {
         let router = authService.router;
         authService.http.delete(Consts.API_URL_USERS_ROOT + '/me/token', { headers: headers })
             .map((response: Response) => {
-                console.log("logOut() success");
+                //console.log("logOut() success");
                 return response.json();
             })
             .catch((error: Response) => {
                 localStorage.clear();
-                console.log("logOut() error", error.toString());
+                //console.log("logOut() error", error.toString());
                 return Observable.throw(error.toString());
             }).subscribe(
             (response) => {
                 authService.clear();
-                console.log("logOut() response", response);
+                //console.log("logOut() response", response);
                 router.navigate(['']);
                 authService.appService.showToast(Consts.SUCCESS, "User logged out.");
             }, (err) => {
                 authService.clear();
-                console.log("logOut() err", err);
+                //console.log("logOut() err", err);
             }
             );
     };

@@ -168,9 +168,18 @@ export class MemoryService {
 
         if (memory.tags && memory.tags.length > 0) {
             memory.tags.forEach((tag) => {
-                let newTag = new Tag(tag.tag, tag._id);
-                tags.push(newTag);
-                tagIds.push(tag._id);
+                if (typeof tag == "string" || tag instanceof String) {
+                    let newTag = memoryService.tagService.findTagById(tag);
+                    tags.push(newTag);
+                    tagIds.push(tag);
+                } else {
+                    let newTag = new Tag(tag.tag, tag._id);
+                    tags.push(newTag);
+                    tagIds.push(tag._id);
+                };
+                // let newTag = new Tag(tag.tag, tag._id);
+                // tags.push(newTag);
+                // tagIds.push(tag._id);
                 // if (tag._id) {
                 //         let newTag = new Tag(tag.tag, tag._id);
                 //         tags.push(newTag);
@@ -189,9 +198,18 @@ export class MemoryService {
 
         if (memory.people && memory.people.length > 0) {
             memory.people.forEach((person) => {
-                let newPerson = new Person(person.person, person._id);
-                people.push(newPerson);
-                personIds.push(person._id);
+                if (typeof person == "string" || person instanceof String) {
+                    let newPerson = memoryService.personService.findPersonById(person);
+                    people.push(newPerson);
+                    personIds.push(person);
+                } else {
+                    let newPerson = new Person(person.person, person._id);
+                    people.push(newPerson);
+                    personIds.push(person._id);
+                };
+                // let newPerson = new Person(person.person, person._id);
+                // people.push(newPerson);
+                // personIds.push(person._id);
                 // if (person._id) {
                 //         let newPerson = new Person(person.person, person._id);
                 //         people.push(newPerson);
@@ -212,9 +230,19 @@ export class MemoryService {
 
         if (memory.medias && memory.medias.length > 0) {
             memory.medias.forEach((photo) => {
-                let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
-                photos.push(newPhoto);
-                photoIds.push(photo._id);
+                if (typeof photo == "string" || photo instanceof String) {
+                    let newPhoto = memoryService.photoService.findPhotoById(photo);
+                    photos.push(newPhoto);
+                    photoIds.push(photo);
+                } else {
+                    let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                    photos.push(newPhoto);
+                    photoIds.push(photo._id);
+                };
+
+                // let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
+                // photos.push(newPhoto);
+                // photoIds.push(photo._id);
                 // if (photo._id) {
                 //     let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
                 //     photos.push(newPhoto);

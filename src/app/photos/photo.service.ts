@@ -198,9 +198,18 @@ export class PhotoService {
 
         if (photo.tags && photo.tags.length > 0) {
             photo.tags.forEach((tag) => {
-                let newTag = new Tag(tag.tag, tag._id);
-                tags.push(newTag);
-                tagIds.push(tag._id);
+                if (typeof tag == "string" || tag instanceof String) {
+                    let newTag = photoService.tagService.findTagById(tag);
+                    tags.push(newTag);
+                    tagIds.push(tag);
+                } else {
+                    let newTag = new Tag(tag.tag, tag._id);
+                    tags.push(newTag);
+                    tagIds.push(tag._id);
+                };
+                // let newTag = new Tag(tag.tag, tag._id);
+                // tags.push(newTag);
+                // tagIds.push(tag._id);
                 // if (tag._id) {
                 //     let newTag = new Tag(tag.tag, tag._id);
                 //     tags.push(newTag);
@@ -219,9 +228,19 @@ export class PhotoService {
 
         if (photo.people && photo.people.length > 0) {
             photo.people.forEach((person) => {
-                let newPerson = new Person(person.person, person._id);
-                people.push(newPerson);
-                personIds.push(person._id);
+                if (typeof person == "string" || person instanceof String) {
+                    let newPerson = photoService.personService.findPersonById(person);
+                    people.push(newPerson);
+                    personIds.push(person);
+                } else {
+                    let newPerson = new Person(person.person, person._id);
+                    people.push(newPerson);
+                    personIds.push(person._id);
+                };
+
+                // let newPerson = new Person(person.person, person._id);
+                // people.push(newPerson);
+                // personIds.push(person._id);
                 // if (person._id) {
                 //     let newPerson = new Person(person.person, person._id);
                 //     people.push(newPerson);
