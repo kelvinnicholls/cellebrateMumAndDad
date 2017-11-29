@@ -4,6 +4,7 @@
 //server/public/images/file_*.*
 //!server/public
 
+
 npm-debug.log.*
 
 server/config/config.json
