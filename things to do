@@ -23,11 +23,11 @@
 115) prob with IbacktheWorkersRound.JPG
 116) Get Karma to run from VSC
 119) add new search photos component
-125) Sort out hints being on for too long 
+x125) Sort out hints being on for too long 
 129) right-clicking a photo in a slideshow should go to that photo/memory/user = 'contextmenu' therefore could add other options
 
 x130) move messages to last column
-131) Don't show 503 error when checking duplicate names/titles Request timeout https://devcenter.heroku.com/articles/request-timeout
+x131) Don't show 503 error when checking duplicate names/titles Request timeout https://devcenter.heroku.com/articles/request-timeout
      this is when getting memories/photos
 
 x132) remove hints
@@ -45,8 +45,8 @@ x153) Adding a photo to a memory with no photos does not update memory list
 x154) test with no memories or photos - see if unauthorised error appears
 155) replace console.log with logger to have different logging levels set by process env env variable Info, Warn, Err
 x156) add N/A relationship
-157) get error adding comments to memories
-158) Remove message removes the wrong message!
+x157) get error adding comments to memories
+x158) Remove message removes the wrong message!
 159) Toasts are remaining at top
 160) firefox navigates to blank on pop up
 

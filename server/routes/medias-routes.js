@@ -41,22 +41,22 @@ const {
 
 
 let upload = (req, res, next) => {
-  //console.log('upload',req, res);
+  console.log('upload',req, res);
   multerUploadSingleFile(req, res, function (err) {
-    //console.log('media-routes multerUploadSingleFile', err);
-    //console.log('req.body.media', req.body.media);
+    console.log('media-routes multerUploadSingleFile', err);
+    console.log('req.body.media', req.body.media);
     req.passedMedia = JSON.parse(req.body.media);
     delete req.body.media;
-    //console.log('req.file', req.file);
+    console.log('req.file', req.file);
     if (err) {
       processErr(err);
     } else {
       if (!req.file) {
-        //console.log('No file was selected');
+        console.log('No file was selected');
       } else {
-        //console.log('media patch File uploaded!');
+        console.log('media patch File uploaded!');
         let fileName = req.file.filename;
-        //console.log("newFileName", fileName);
+        console.log("newFileName", fileName);
         let location = path.join(req.file.destination, fileName);
         req.passedMedia.location = location;
         req.passedMedia.originalFileName = req.file.originalname;
@@ -78,36 +78,36 @@ let addUserToComments = (media) => {
     let processedComments = 0;
     let commentsArr = [];
 
-    //console.log('addUserToComments', 'numComments', numComments);
+    console.log('addUserToComments', 'numComments', numComments);
     if (retMedia.comments && retMedia.comments.length > 0) {
       for (let comment of retMedia.comments) {
-        //console.log('addUserToComments', 'comment', comment);
+        console.log('addUserToComments', 'comment', comment);
         let userObj = {
           '_creatorRef': comment._creator
         };
         User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
-          //console.log('addUserToComments', 'user', user);
-          //console.log('addUserToComments', 'typeof user', typeof user);
-          //console.log('addUserToComments', 'typeof comment', typeof comment);
+          console.log('addUserToComments', 'user', user);
+          console.log('addUserToComments', 'typeof user', typeof user);
+          console.log('addUserToComments', 'typeof comment', typeof comment);
           if (user) {
             delete user._id;
             let newComment = JSON.parse(JSON.stringify(comment));
-            //console.log('addUserToComments', 'user.name', user.name);
-            //console.log('addUserToComments', 'user._profileMediaId', user._profileMediaId);
+            console.log('addUserToComments', 'user.name', user.name);
+            console.log('addUserToComments', 'user._profileMediaId', user._profileMediaId);
             newComment.user = {};
-            //console.log('addUserToComments', 'newComment.user', newComment.user);
+            console.log('addUserToComments', 'newComment.user', newComment.user);
             newComment.user.name = user.name;
             newComment.user._profileMediaId = user._profileMediaId;
-            //console.log('addUserToComments', 'newComment.user2', newComment.user);
+            console.log('addUserToComments', 'newComment.user2', newComment.user);
 
             commentsArr.push(newComment);
-            //console.log('addUserToComments', 'newComment', newComment);
+            console.log('addUserToComments', 'newComment', newComment);
           };
 
           processedComments++;
           if (numComments === processedComments) {
             retMedia.comments = commentsArr;
-            //console.log('addUserToComments', 'resolve', retMedia);
+            console.log('addUserToComments', 'resolve', retMedia);
             return resolve(retMedia);
           };
         }, (e) => {
@@ -202,9 +202,9 @@ let downloadFile = (media) => {
 router.post('/', authenticate, upload, (req, res) => {
   if (!req.loggedInUser.guestUser) {
     let body = _.pick(req.passedMedia, mediaInsertFields);
-    //console.log('body', body);
+    console.log('body', body);
     let media = new Media(body);
-    //console.log('body.photoInfo', body.photoInfo);
+    console.log('body.photoInfo', body.photoInfo);
     if (body.photoInfo && body.photoInfo.location && body.photoInfo.isUrl) {
       media.location = body.photoInfo.location;
       media.isUrl = true;
@@ -216,10 +216,10 @@ router.post('/', authenticate, upload, (req, res) => {
     media.addedDate = new Date().getTime();
     media.comments = [];
     media._id = new ObjectID();
-    //console.log('media', media);
+    console.log('media', media);
 
     media.save().then((newMedia) => {
-      //console.log('media2', newMedia);
+      console.log('media2', newMedia);
       res.send(_.pick(newMedia, mediaOutFields));
     }, (e) => {
       console.log('media.save() e', e);
@@ -283,9 +283,9 @@ router.get('/title/:title', authenticate, (req, res) => {
   let mediaObj = {
     title
   };
-  //console.log("mediaObj", mediaObj);
+  console.log("mediaObj", mediaObj);
   Media.findOne(mediaObj).then((media) => {
-    //console.log("media", media);
+    console.log("media", media);
     if (media) {
       res.send({
         'titleFound': true,
@@ -415,7 +415,7 @@ router.delete('/:id', authenticate, (req, res) => {
 
 let updateMedias = (res, body, medias, commentId) => {
 
-  //console.log("updateMedias", body, medias, commentId);
+  console.log("updateMedias", body, medias, commentId);
 
   // let mediasObj = {
   //   _id : medias._id
@@ -430,8 +430,8 @@ let updateMedias = (res, body, medias, commentId) => {
       "comments": commentId
     };
   };
-  //console.log("updateObj", updateObj);
-  //console.log("medias", medias);
+  console.log("updateObj", updateObj);
+  console.log("medias", medias);
 
   Media.findOneAndUpdate(medias, updateObj, {
     new: true
@@ -444,7 +444,7 @@ let updateMedias = (res, body, medias, commentId) => {
           });
         }, (e) => {
           res.status(400).send();
-          //console.log(e);
+          console.log(e);
         });
       } else {
         res.send({
@@ -459,13 +459,13 @@ let updateMedias = (res, body, medias, commentId) => {
 
   }, (e) => {
     res.status(400).send();
-    //console.log(e);
+    console.log(e);
   });
 };
 
 
 router.patch('/:id', authenticate, upload, (req, res) => {
-  //console.log("router.patch1", req.passedMedia);
+  console.log("router.patch1", req.passedMedia);
   if (!req.loggedInUser.guestUser) {
     let {
       id
@@ -473,7 +473,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
 
     let body = _.pick(req.passedMedia, mediaUpdateFields);
 
-    //console.log("router.patch2", body);
+    console.log("router.patch2", body);
 
     if (!ObjectID.isValid(id)) {
       return res.status(404).send({
@@ -495,7 +495,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
 
       comment._creator = req.loggedInUser._creatorRef;
       comment.commentDate = new Date().getTime();
-      //console.log('comment', comment);
+      console.log('comment', comment);
 
       comment.save().then((comment) => {
         updateMedias(res, body, medias, comment._id);
