@@ -52,6 +52,7 @@ export class Consts {
   public static DATE_TIME_DISPLAY_FORMAT = "MMMM Do YYYY, HH:mm";
   public static DATE_DISPLAY_FORMAT = "DD-MM-YYYY";
   public static DATE_DB_FORMAT = "YYYY-MM-DD";
+  public static CHAT_DATE_FORMAT ='h:mm a';
 
   public static FILE_PICKER_API_KEY = "A0KaiilMGRAavl1oJwvn3z";
 

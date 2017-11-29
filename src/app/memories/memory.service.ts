@@ -142,13 +142,15 @@ export class MemoryService {
                         };
 
                     };
-                } else if (comment.user) {
+                } else if (comment.user instanceof User) {
                     userName = comment.user.name;
                     formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);
                     if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
-                        profilePicLocation = comment.user._profileMediaId.location.substring(14);
-                    } else {
-                        profilePicLocation = comment.user._profileMediaId.location;
+                        if (comment.user._profileMediaId.location.substring(0, 6) !== "images") {
+                            profilePicLocation = comment.user._profileMediaId.location.substring(14);
+                        } else {
+                            profilePicLocation = comment.user._profileMediaId.location;
+                        };
                     };
                 } else {
                     let user = memoryService.userService.getLoggedInUser();
@@ -460,10 +462,21 @@ export class MemoryService {
                             });
                         };
 
+                        let addedDate = null;
+                        if (memory.addedDate) {
+                            addedDate = moment(memory.addedDate).format(Consts.DATE_DB_FORMAT);
+                        };
+
+
+                        let memoryDate = null;
+                        if (memory.memoryDate) {
+                            memoryDate = moment(memory.memoryDate).format(Consts.DATE_DB_FORMAT);
+                        };
+
                         let newMemory = new Memory(
                             memory.title,
                             memory._creator,
-                            moment(memory.addedDate).format(Consts.DATE_DB_FORMAT),
+                            addedDate,
                             memory._id,
                             memory.description,
                             photos,
@@ -474,7 +487,7 @@ export class MemoryService {
                             tagIds,
                             people,
                             personIds,
-                            moment(memory.memoryDate).format(Consts.DATE_DB_FORMAT)
+                            memoryDate
                         );
                         transformedMemories.push(newMemory);
                     };
@@ -500,7 +513,7 @@ export class MemoryService {
         if (changeType == "U" && !memory.comment || changeType == "D") {
             retVal = Utils.checkIsAdminOrOwner(memory._creator, this.userService.getLoggedInUser(), this.authUserService);
         };
-        console.log("isAllowed retVal", retVal);
+        //console.log("isAllowed retVal", retVal);
         return retVal;
     }
 

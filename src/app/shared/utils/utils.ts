@@ -25,13 +25,13 @@ export class Utils {
     }
 
     public static checkIsAdminOrOwner(creator: string, loggedInUser: User,authUserService: AuthUserService): boolean {
-        console.log("checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
+        //console.log("checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
         let retVal = false;
 
         if (!authUserService.isGuestUser() && ((loggedInUser.adminUser.toString().toLowerCase() == 'yes' || (loggedInUser._creatorRef === creator)))) {
             retVal = true;
         };
-        console.log("checkIsAdminOrOwner retVal", retVal);
+        //console.log("checkIsAdminOrOwner retVal", retVal);
         return retVal;
 
     }

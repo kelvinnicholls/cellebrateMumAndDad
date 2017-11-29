@@ -5,7 +5,7 @@
   <br>
   <br>
   <div id="messages-scroll">
-    <app-chat-message *ngFor="let chatMessage of chatService.chatUserMessages | reverseArray" [index]="i" [chatMessage]="chatMessage">
+    <app-chat-message *ngFor="let chatMessage of chatService.chatUserMessages; let i=index" [index]="i" [chatMessage]="chatMessage">
     </app-chat-message>
   </div>
 </div>

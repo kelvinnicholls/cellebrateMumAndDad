@@ -8,7 +8,7 @@ import { PhotoService } from "../photos/photo.service";
 import { MemoryService } from "../memories/memory.service";
 import { TagService } from "../shared/tags/tag.service";
 import { PersonService } from "../shared/people/person.service";
-
+import { Utils, SortDataType } from "../shared/utils/utils";
 import { Consts } from "../shared/consts";
 //https://stackoverflow.com/questions/37090031/how-to-import-socket-io-client-in-a-angular-2-application
 import * as io from "socket.io-client";
@@ -29,6 +29,7 @@ export class ChatService {
 
     removeMessage(index) {
         this.chatUserMessages.splice(index, 1);
+        this.chatUserMessages.sort(Utils.dynamicSort('-createdAt',SortDataType.Moment,Consts.CHAT_DATE_FORMAT));
     };
 
     setPosition(position, socketId, callback) {
@@ -50,7 +51,7 @@ export class ChatService {
     addSocketCallbacks() {
         this.socket.removeAllListeners();
         this.socket.on('newMessage', (msg) => {
-            let formattedDate = moment(msg.createdAt).format('h:mm a');
+            let formattedDate = moment(msg.createdAt).format(Consts.CHAT_DATE_FORMAT);
             let text = null;
             let url = null;
             if (msg.text) {
@@ -61,6 +62,7 @@ export class ChatService {
             };
             let chatMessage = new ChatMessage(text, new ChatUser(msg.from.id, msg.from.name), formattedDate, url);
             this.chatUserMessages.push(chatMessage);
+            this.chatUserMessages.sort(Utils.dynamicSort('-createdAt',SortDataType.Moment,Consts.CHAT_DATE_FORMAT));
         });
 
         // this.socket.on('addUser', (user) => {

@@ -46,9 +46,9 @@ x154) test with no memories or photos - see if unauthorised error appears
 155) replace console.log with logger to have different logging levels set by process env env variable Info, Warn, Err
 x156) add N/A relationship
 157) get error adding comments to memories
-
-
-
+158) Remove message removes the wrong message!
+159) Toasts are remaining at top
+160) firefox navigates to blank on pop up
 
 
 

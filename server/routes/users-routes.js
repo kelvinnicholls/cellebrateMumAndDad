@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
+const googleCloudApi = require('../shared/google-cloud-api');
+
 
 var path = require('path');
 
@@ -116,6 +118,9 @@ let upload = (req, res, next) => {
         media.save().then((media) => {
           req.passedUser._profileMediaId = media._id;
           req.body.location = location;
+          if (location) {
+            googleCloudApi.uploadFile(location);
+          };
           next();
         }).catch((e) => {
           console.log("multerUploadSingleFile media.save e", e);
@@ -273,6 +278,9 @@ let updateUser = (body, _creatorRef, res, req) => {
     new: true
   }).populate('_profileMediaId', ['location', 'isUrl']).then((user) => {
     if (user) {
+      if (user.location && !user.isUrl) {
+        googleCloudApi.uploadFile(user.location);
+      };
       res.send(_.pick(user, userOutFields));
     } else {
       res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
@@ -397,6 +405,14 @@ router.get('/name/:name', authenticate, (req, res) => {
   });
 });
 
+let downloadFile = (user) => {
+  if (user.location && user.location.length > 0 && !user.isUrl) {
+    if (!fs.existsSync(user.location)) {
+      googleCloudApi.downloadFile(user.location);
+    };
+  };
+};
+
 router.get('/', authenticate, (req, res) => {
 
   let userObj = {};
@@ -408,6 +424,7 @@ router.get('/', authenticate, (req, res) => {
   User.find(userObj).populate('_profileMediaId', ['location', 'isUrl']).then((users) => {
     if (users) {
       users.forEach((user) => {
+        downloadFile(user);
         users.user = _.pick(user, userOutFields);
       });
       res.send(users);
@@ -455,8 +472,14 @@ router.delete('/:_creatorRef', authenticate, (req, res) => {
           adminUser: false
         };
 
-        User.findOneAndRemove(userObj).then((user) => {
+        User.findOneAndRemove(userObj).populate('_profileMediaId', ['location', 'isUrl']).then((user) => {
           if (user) {
+            if (user.location && !user.isUrl) {
+              googleCloudApi.deleteFile(user.location);
+              if (fs.existsSync(user.location)) {
+                fs.unlinkSync(user.location);
+              };
+            };
             res.send(_.pick(user, userOutFields));
           } else {
             res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);

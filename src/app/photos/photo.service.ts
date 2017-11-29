@@ -169,13 +169,15 @@ export class PhotoService {
                         };
 
                     };
-                } else if (comment.user) {
+                } else if (comment.user instanceof User) {
                     userName = comment.user.name;
                     formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);
                     if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
-                        profilePicLocation = comment.user._profileMediaId.location.substring(14);
-                    } else {
-                        profilePicLocation = comment.user._profileMediaId.location;
+                        if (comment.user._profileMediaId.location.substring(0, 6) !== "images") {
+                            profilePicLocation = comment.user._profileMediaId.location.substring(14);
+                        } else {
+                            profilePicLocation = comment.user._profileMediaId.location;
+                        };
                     };
                 } else {
                     let user = photoService.userService.getLoggedInUser();
@@ -465,10 +467,21 @@ export class PhotoService {
             });
         };
 
+        let addedDate = null;
+        if (photo.mediaDate) {
+            addedDate = moment(photo.addedDate).format(Consts.DATE_DB_FORMAT);
+        };
+
+
+        let mediaDate = null;
+        if (photo.mediaDate) {
+            mediaDate = moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT);
+        };
+
         let newPhoto = new Photo(
             photo.title,
             photo._creator,
-            moment(photo.addedDate).format(Consts.DATE_DB_FORMAT),
+            addedDate,
             photo._id,
             photo.description,
             null,
@@ -479,7 +492,7 @@ export class PhotoService {
             tagIds,
             people,
             personIds,
-            moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT)
+            mediaDate
         );
         return newPhoto;
     }

@@ -211,19 +211,31 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         if (adminUser && typeof adminUser === 'string') {
                             adminUser = adminUser === 'Yes' ? true : false;
                         } else {
-                            adminUser = userInputComponent.user.adminUser;
+                            if (userInputComponent.user.adminUser && typeof userInputComponent.user.adminUser === 'string') {
+                                adminUser = userInputComponent.user.adminUser === 'Yes' ? true : false;
+                            } else {
+                                adminUser = userInputComponent.user.adminUser
+                            };
                         };
                         let guestUser = userInputComponent.myForm.value.guestUser;
                         if (guestUser && typeof guestUser === 'string') {
                             guestUser = guestUser === 'Yes' ? true : false;
                         } else {
-                            guestUser = userInputComponent.user.guestUser;
+                            if (userInputComponent.user.guestUser && typeof userInputComponent.user.guestUser === 'string') {
+                                guestUser = userInputComponent.user.guestUser === 'Yes' ? true : false;
+                            } else {
+                                guestUser = userInputComponent.user.guestUser
+                            };
                         };
                         let emailUpdates = userInputComponent.myForm.value.emailUpdates;
                         if (emailUpdates && typeof emailUpdates === 'string') {
                             emailUpdates = emailUpdates === 'Yes' ? true : false;
                         } else {
-                            emailUpdates = userInputComponent.user.emailUpdates;
+                            if (userInputComponent.user.emailUpdates && typeof userInputComponent.user.emailUpdates === 'string') {
+                                emailUpdates = userInputComponent.user.emailUpdates === 'Yes' ? true : false;
+                            } else {
+                                emailUpdates = userInputComponent.user.emailUpdates
+                            };
                         };
                         userInputComponent.user = new User(
                             userInputComponent.myForm.value.email,
@@ -239,12 +251,13 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             userInputComponent._creatorRef,
                             userInputComponent.profilePicFile,
                             userInputComponent.profilePicInfo);
-                            userInputComponent.userService.updateUser(userInputComponent.user)
+                        let submitType = userInputComponent.submitType;
+                        userInputComponent.userService.updateUser(userInputComponent.user)
                             .subscribe(
                             result => {
                                 console.log(result);
 
-                                if (userInputComponent.submitType == Consts.UPDATE_CURRENT_USER) {
+                                if (submitType == Consts.UPDATE_CURRENT_USER) {
                                     userInputComponent.router.navigate(['']).then((ok) => {
                                         if (ok) {
                                             userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
@@ -265,12 +278,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
                                 };
                             }
                             );
-                            userInputComponent.user = null;
-                            userInputComponent._creatorRef = null;
-                            userInputComponent.profilePicData = null;
-                            userInputComponent.profilePicFile = null;
-                            userInputComponent.profilePicInfo = null;
-                            userInputComponent.submitType = Consts.CREATE_USER;
+                        userInputComponent.user = null;
+                        userInputComponent._creatorRef = null;
+                        userInputComponent.profilePicData = null;
+                        userInputComponent.profilePicFile = null;
+                        userInputComponent.profilePicInfo = null;
+                        userInputComponent.submitType = Consts.CREATE_USER;
 
                     } else {
                         // Create
@@ -288,7 +301,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             null,
                             userInputComponent.profilePicFile,
                             userInputComponent.profilePicInfo);
-                            userInputComponent.userService.addUser(this.user)
+                        userInputComponent.userService.addUser(this.user)
                             .subscribe(
                             data => {
                                 userInputComponent.router.navigate(['users']).then((ok) => {
@@ -301,18 +314,18 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             },
                             error => console.error("UserInputComponent userService.newUser error", error)
                             );
-                            userInputComponent.user = null;
-                            userInputComponent._creatorRef = null;
-                            userInputComponent.profilePicData = null;
-                            userInputComponent.profilePicFile = null;
-                            userInputComponent.profilePicInfo = null;
-                            userInputComponent.submitType = Consts.CREATE_USER;
+                        userInputComponent.user = null;
+                        userInputComponent._creatorRef = null;
+                        userInputComponent.profilePicData = null;
+                        userInputComponent.profilePicFile = null;
+                        userInputComponent.profilePicInfo = null;
+                        userInputComponent.submitType = Consts.CREATE_USER;
                     }
                     userInputComponent.myForm.reset();
                 }
             });
 
-            userInputComponent.dialogService.showDialog("Warning", "Do you really wish to " + userInputComponent.submitType + "?", "Yes", "No", retDialogSub);
+        userInputComponent.dialogService.showDialog("Warning", "Do you really wish to " + userInputComponent.submitType + "?", "Yes", "No", retDialogSub);
 
     }
 
@@ -396,26 +409,26 @@ export class UserInputComponent implements OnInit, OnDestroy {
             userInputComponent.submitType = Consts.UPDATE_CURRENT_USER;
             userInputComponent.mode = Consts.EDIT;
             let loggedInUser = userInputComponent.userService.getLoggedInUser();
-            // userInputComponent.userService.getMe().subscribe(
-            //     (user: User) => {
-                    userInputComponent.user = loggedInUser;
-                    userInputComponent.modelDob = userInputComponent.getDob();
-                    userInputComponent._creatorRef = loggedInUser._creatorRef;
-                    if (typeof userInputComponent.user.adminUser === 'boolean') {
-                        userInputComponent.user.adminUser = userInputComponent.user.adminUser ? 'Yes' : 'No';
-                    };
-                    if (typeof userInputComponent.user.guestUser === 'boolean') {
-                        userInputComponent.user.guestUser = userInputComponent.user.guestUser ? 'Yes' : 'No';
-                    };
-                    if (typeof userInputComponent.user.emailUpdates === 'boolean') {
-                        userInputComponent.user.emailUpdates = userInputComponent.user.emailUpdates ? 'Yes' : 'No';
-                    };
-                    userInputComponent.checkIsEditable();
-                    userInputComponent.createForm(userInputComponent.mode);
-                    userInputComponent.myForm.get('password').clearValidators();
-                    userInputComponent.myForm.get('password').updateValueAndValidity();
-                    userInputComponent.myForm.get('adminUser').disable();
-                    userInputComponent.myForm.get('adminUser').updateValueAndValidity();
+            userInputComponent.user = userInputComponent.userService.findUserByCreatorRef(loggedInUser._creatorRef);
+            userInputComponent.modelDob = userInputComponent.getDob();
+            userInputComponent._creatorRef = userInputComponent.user._creatorRef;
+            if (typeof userInputComponent.user.adminUser === 'boolean') {
+                userInputComponent.user.adminUser = userInputComponent.user.adminUser ? 'Yes' : 'No';
+            };
+            if (typeof userInputComponent.user.guestUser === 'boolean') {
+                userInputComponent.user.guestUser = userInputComponent.user.guestUser ? 'Yes' : 'No';
+            };
+            if (typeof userInputComponent.user.emailUpdates === 'boolean') {
+                userInputComponent.user.emailUpdates = userInputComponent.user.emailUpdates ? 'Yes' : 'No';
+            };
+            userInputComponent.checkIsEditable();
+            userInputComponent.createForm(userInputComponent.mode);
+            userInputComponent.myForm.get('password').clearValidators();
+            userInputComponent.myForm.get('password').updateValueAndValidity();
+            if (userInputComponent.user.adminUser === 'No') {
+                userInputComponent.myForm.get('adminUser').disable();
+                userInputComponent.myForm.get('adminUser').updateValueAndValidity();
+            }
             //     }
             // );
         } else if (userInputComponent.route.snapshot.url.length === 2 && userInputComponent.route.snapshot.url[0].path === 'user' && userInputComponent.route.snapshot.url[1].path === 'create') {
