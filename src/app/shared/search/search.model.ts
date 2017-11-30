@@ -4,7 +4,7 @@ import { SearchRet } from "./search-ret.model";
 import { SearchTypeEnum } from "./search-type.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
 import { Consts } from "../../shared/consts";
-
+import { Utils, LoglevelEnum } from "../../shared/utils/utils";
 
 export class Search {
   constructor(public title: string, public message: string, public buttonOneTitle: string, public buttonTwoTitle: string, public retSearchSub: EventEmitter<SearchRet>, public searchType: SearchTypeEnum, public searchFields: String[]) { }
@@ -32,8 +32,8 @@ export class Search {
         if (arrayElement[elementName]) {
           let attributeValue = arrayElement[elementName];
           let typeOfAttributeValue = typeof attributeValue;
-          //console.log("attributeValue", attributeValue);
-          //console.log("typeOfAttributeValue", typeOfAttributeValue);
+          Utils.log(LoglevelEnum.Info,"attributeValue", attributeValue);
+          Utils.log(LoglevelEnum.Info,"typeOfAttributeValue", typeOfAttributeValue);
           switch (typeOfAttributeValue) {
             case 'string':
               if (searchElement.type === 'y_n_both') {
@@ -101,7 +101,7 @@ export class Search {
             case 'object':
               if (Object.prototype.toString.call(arrayElement[elementName]) === "[object Array]") {
                 if (searchElement.type === 'array') {
-                  //console.log(attributeValue);
+                  Utils.log(LoglevelEnum.Info,attributeValue);
                   let matchingElementsCount = 0;
                   searchElement.value.forEach((searchElementValue) => {
                     attributeValue.forEach(attributeValueElement => {

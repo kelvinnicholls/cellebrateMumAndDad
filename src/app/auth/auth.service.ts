@@ -9,8 +9,7 @@ import { ChatService } from "../chat/chat.service";
 import { AuthUserService } from "./auth-user.service";
 import { SignInUser } from "../shared/sign-in/sign-in-user.model";
 import { Consts } from "../shared/consts";
-
-
+import { Utils, LoglevelEnum } from "../shared/utils/utils";
 @Injectable()
 export class AuthService {
     private static Consts: Consts;
@@ -55,33 +54,33 @@ export class AuthService {
         let router = authService.router;
         authService.http.delete(Consts.API_URL_USERS_ROOT + '/me/token', { headers: headers })
             .map((response: Response) => {
-                //console.log("logOut() success");
+                Utils.log(LoglevelEnum.Info, "logOut() success");
                 return response.json();
             })
             .catch((error: Response) => {
                 localStorage.clear();
-                //console.log("logOut() error", error.toString());
+                Utils.log(LoglevelEnum.Info, "logOut() error", error.toString());
                 return Observable.throw(error.toString());
             }).subscribe(
             (response) => {
                 authService.clear();
-                //console.log("logOut() response", response);
+                Utils.log(LoglevelEnum.Info, "logOut() response", response);
                 router.navigate(['']);
                 authService.appService.showToast(Consts.SUCCESS, "User logged out.");
             }, (err) => {
                 authService.clear();
-                //console.log("logOut() err", err);
+                Utils.log(LoglevelEnum.Info, "logOut() err", err);
             }
             );
     };
 
     isAdminRoute(route: ActivatedRouteSnapshot): boolean {
         let ret = false;
-        //console.log("isAdminRoute",route.component.toString());
-        if (route.component.toString().startsWith("function PhotoListComponent")) {
+        Utils.log(LoglevelEnum.Info, "isAdminRoute", route.component.toString());
+        if (route.component.toString().includes('"PhotoListComponent"')) {
             ret = false;
         } else
-            if (route.component.toString().startsWith("function MemoryListComponent")) {
+            if (route.component.toString().includes('"MemoryListComponent"')) {
                 ret = false;
             } else
                 if (route.url.length == 0) {
@@ -92,19 +91,24 @@ export class AuthService {
                     } else
                         if (route.url.length == 2 && route.url[0].path === "auth" && route.url[1].path === "get-encrypted-password") {
                             ret = true;
-                        }
+                        };
+        Utils.log(LoglevelEnum.Info, "isAdminRoute ret:", ret);
         return ret;
     };
 
     isAuthorised(route: ActivatedRouteSnapshot): boolean {
         let ret: boolean = true;
         if (this.authUserService.isLoggedIn()) {
+            Utils.log(LoglevelEnum.Info, "AuthService.isAuthorised is logged in");
             if (!this.authUserService.isAdminUser() && (this.isAdminRoute(route))) {
                 ret = false;
             }
         } else {
+            Utils.log(LoglevelEnum.Info, "AuthService.isAuthorised not logged in");
             ret = false;
-        }
+        };
+
+        Utils.log(LoglevelEnum.Info, "AuthService.isAuthorised ret: ", ret);
         return ret;
     };
 }

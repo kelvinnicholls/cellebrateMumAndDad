@@ -7,7 +7,7 @@ import { DialogService } from "../shared/dialog/dialog.service";
 import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
-
+import { Utils, LoglevelEnum } from "../shared/utils/utils";
 @Component({
     selector: 'app-user-list',
     templateUrl: './user-list.component.html',
@@ -37,7 +37,7 @@ export class UserListComponent implements OnInit, OnDestroy {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     this.userService.deleteUser(user)
                         .subscribe(
-                        result => console.log(result)
+                        result => Utils.log(LoglevelEnum.Info,result)
                         );
                 }
             });
@@ -79,8 +79,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private updatePagedUsers(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        //console.log('startIndex : ', startIndex);
-        //console.log('endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info,'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info,'endIndex : ', endIndex);
         this.setUsersIndex();
         this.pagedUsers = this.users.slice(startIndex, endIndex + 1);
     }
@@ -88,8 +88,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
         this.userService.eventPage = event.page;
-        //console.log('Page changed to: ' + this.userService.eventPage);
-        //console.log('Number items per page: ' + this.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info,'Page changed to: ' + this.userService.eventPage);
+        Utils.log(LoglevelEnum.Info,'Number items per page: ' + this.eventItemsPerPage);
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 

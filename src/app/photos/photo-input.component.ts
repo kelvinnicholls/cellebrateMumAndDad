@@ -26,7 +26,7 @@ import { Comment, CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 //import { element } from 'protractor';
-import { Utils } from "../shared/utils/utils";
+import { Utils,LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
@@ -306,7 +306,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
                             result => {
-                                //console.log(result);
+                                Utils.log(LoglevelEnum.Info,result);
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
                                         photoInputComponent.photoService.showSuccessToast.emit("Photo updated.");
@@ -505,11 +505,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
 
     onTagsChange(event) {
-        //console.log(this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this.optionsModel);
     }
 
     onPeopleChange(event) {
-        //console.log(this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this.optionsModel);
     }
 
 }

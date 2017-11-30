@@ -18,7 +18,7 @@ import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { Consts } from "../shared/consts";
 import { FileStackService } from "../shared/file-stack/file-stack.service";
-import { Utils } from "../shared/utils/utils";
+import { Utils,LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
@@ -255,7 +255,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         userInputComponent.userService.updateUser(userInputComponent.user)
                             .subscribe(
                             result => {
-                                console.log(result);
+                                Utils.log(LoglevelEnum.Info,result);
 
                                 if (submitType == Consts.UPDATE_CURRENT_USER) {
                                     userInputComponent.router.navigate(['']).then((ok) => {

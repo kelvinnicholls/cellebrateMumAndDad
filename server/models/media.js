@@ -78,7 +78,7 @@ let MediaSchema = new mongoose.Schema({
   }]
 });
 
-//console.log("MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));
+utils.log(utils.LoglevelEnum.Info,"MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));
 
 // MediaSchema { location: '',
 //   isUrl: '',
@@ -110,7 +110,7 @@ MediaSchema.statics.findByCriteria = function (tags, people, fromDate, toDate) {
   return Media.find(queryObj).populate('comments tags people').then((medias) => {
     return medias;
   }).catch((e) => {
-    console.log("MediaSchema.statics.findByCriteria  error", e);
+    utils.log(utils.LoglevelEnum.Info,"MediaSchema.statics.findByCriteria  error", e);
     return [];
   });
 };

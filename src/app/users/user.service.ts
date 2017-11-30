@@ -14,7 +14,7 @@ import { SearchRetEnum } from "../shared/search/search-ret.enum";
 import { SearchRet } from "../shared/search/search-ret.model";
 import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
-import { Utils } from "../shared/utils/utils";
+import { Utils,LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from '../auth/auth-user.service';
 
 
@@ -69,7 +69,7 @@ export class UserService {
     }
 
     public getLoggedInUser() {
-        //console.log("UserService.getLoggedInUser()")
+        Utils.log(LoglevelEnum.Info,"UserService.getLoggedInUser()")
         return JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
     }
 
@@ -86,7 +86,7 @@ export class UserService {
         if (changeType == "U" || changeType == "D") {
             retVal = Utils.checkIsAdminOrOwner(user._creatorRef, this.getLoggedInUser(), this.authUserService);
         };
-        //console.log("isAllowed retVal", retVal);
+        Utils.log(LoglevelEnum.Info,"isAllowed retVal", retVal);
         return retVal;
     }
 
@@ -127,13 +127,13 @@ export class UserService {
             this.users.push(this.createUser(user, user.profilePicInfo));
             this.usersChanged.next(this.users);
             this.appService.showToast(Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
-            //console.log(Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,Consts.INFO, "New user  : " + user.name + " added by " + changedBy);
         });
 
         this.socket.on('updatedUser', (user, changedBy) => {
             let updatedUser = this.updateThisUser(user);
             this.appService.showToast(Consts.INFO, "User  : " + updatedUser.name + " updated by " + changedBy);
-            //console.log(Consts.INFO, "User  : " + updatedUser.name + " updated by " + changedBy);
+            Utils.log(LoglevelEnum.Info,Consts.INFO, "User  : " + updatedUser.name + " updated by " + changedBy);
         });
 
 
@@ -143,7 +143,7 @@ export class UserService {
                 this.users.splice(this.users.indexOf(userToBeDeleted), 1);
                 this.usersChanged.next(this.users);
                 this.appService.showToast(Consts.INFO, "User  : " + userToBeDeleted.name + " deleted by " + changedBy);
-                //console.log(Consts.INFO, "User  : " + userToBeDeleted.name + " deleted by " + changedBy);
+                Utils.log(LoglevelEnum.Info,Consts.INFO, "User  : " + userToBeDeleted.name + " deleted by " + changedBy);
             };
         });
     }
@@ -171,9 +171,9 @@ export class UserService {
 
                 this.socket.emit('userCreated', user, function (err) {
                     if (err) {
-                        //console.log("userCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,"userCreated err: ", err);
                     } else {
-                        //console.log("userCreated No Error");
+                        Utils.log(LoglevelEnum.Info,"userCreated No Error");
                     }
                 });
 
@@ -291,9 +291,9 @@ export class UserService {
 
                 this.socket.emit('userUpdated', updatedUser, function (err) {
                     if (err) {
-                        //console.log("userUpdated err: ", err);
+                        Utils.log(LoglevelEnum.Info,"userUpdated err: ", err);
                     } else {
-                        //console.log("userUpdated No Error");
+                        Utils.log(LoglevelEnum.Info,"userUpdated No Error");
                     }
                 });
 
@@ -316,9 +316,9 @@ export class UserService {
 
                 this.socket.emit('userDeleted', user, function (err) {
                     if (err) {
-                        //console.log("userDeleted err: ", err);
+                        Utils.log(LoglevelEnum.Info,"userDeleted err: ", err);
                     } else {
-                        //console.log("userDeleted No Error");
+                        Utils.log(LoglevelEnum.Info,"userDeleted No Error");
                     }
                 });
 

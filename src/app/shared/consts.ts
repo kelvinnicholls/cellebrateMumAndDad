@@ -1,5 +1,4 @@
 import { IMultiSelectSettings } from 'angular-2-dropdown-multiselect';
-import { environment } from '../../environments/environment';
 
 export class Consts {
   public static API_URL_ROOT: string = '';
@@ -78,8 +77,7 @@ export class Consts {
   public static setUrlDomain(urlDomain: string) {
     this.API_URL_ROOT = urlDomain;
   };
-
-
+  
   public static multiSelectSettings: IMultiSelectSettings = {
     enableSearch: true,
     checkedStyle: 'fontawesome',

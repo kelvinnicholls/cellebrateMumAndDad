@@ -30,6 +30,8 @@ const {
   seed
 } = require('../models/user');
 
+const utils = require('../utils/utils.js');
+
 const jwt = require('jsonwebtoken');
 
 const user1Id = new ObjectID();
@@ -216,7 +218,7 @@ const populateTags = (done) => {
     let tag4 = new Tag(tags[3]).save();
     return Promise.all([tag1, tag2, tag3, tag4]); // returns after both passed promises finish and calls middleware
   }).then(() => done()).catch((err) => {
-    console.log("populateTags", err);
+    utils.log(utils.LoglevelEnum.Info,"populateTags", err);
   });
 };
 
@@ -228,7 +230,7 @@ const populatePeople = (done) => {
     let person4 = new Person(people[3]).save();
     return Promise.all([person1, person2, person3, person4]); // returns after both passed promises finish and calls middleware
   }).then(() => done()).catch((err) => {
-    console.log("populatePeople", err);
+    utils.log(utils.LoglevelEnum.Info,"populatePeople", err);
   });
 };
 
@@ -239,7 +241,7 @@ const populateComments = (done) => {
     let comment2 = new Comment(comments[1]).save();
     return Promise.all([comment1, comment2]); // returns after both passed promises finish and calls middleware
   }).then(() => done()).catch((err) => {
-    console.log("populateComments", err);
+    utils.log(utils.LoglevelEnum.Info,"populateComments", err);
   });
 };
 
@@ -250,7 +252,7 @@ const populateUsers = (done) => {
     let user2 = new User(users[1]).save();
     return Promise.all([user1, user2]); // returns after both passed promises finish and calls middleware
   }).then(() => done()).catch((err) => {
-    console.log("populateUsers", err);
+    utils.log(utils.LoglevelEnum.Info,"populateUsers", err);
   });
 };
 
@@ -261,7 +263,7 @@ const populateMedias = (done) => {
     let media2 = new Media(medias[1]).save();
     return Promise.all([media1, media2]); // returns after both passed promises finish and calls middleware
   }).then(() => done()).catch((err) => {
-    console.log("populateMedias", err);
+    utils.log(utils.LoglevelEnum.Info,"populateMedias", err);
   });
 };
 
@@ -272,7 +274,7 @@ const populateMemories = (done) => {
     let memory2 = new Memory(memories[1]).save();
     return Promise.all([memory1, memory2]); // returns after both passed promises finish and calls middleware
   }).then(() => done()).catch((err) => {
-    console.log("populateMemories", err);
+    utils.log(utils.LoglevelEnum.Info,"populateMemories", err);
   });
 };
 

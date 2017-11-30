@@ -91,7 +91,7 @@ let UserSchema = new mongoose.Schema({
   }]
 });
 
-// console.log("UserSchema",utils.schemaToObject(Object.keys(UserSchema.paths)));
+// utils.log(utils.LoglevelEnum.Info,"UserSchema",utils.schemaToObject(Object.keys(UserSchema.paths)));
 
 //  { email: '',
 //   password: '',

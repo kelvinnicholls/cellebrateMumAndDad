@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
+const utils = require('../utils/utils.js');
 const {
   authenticate
 } = require('../middleware/authenticate');
@@ -87,10 +88,10 @@ router.post('/', authenticate, (req, res) => {
     memory.comments = [];
 
     memory.save().then((newMemory) => {
-      //console.log('memory2', newMemory);
+      utils.log(utils.LoglevelEnum.Info,'memory2', newMemory);
       res.send(_.pick(newMemory, memoryOutFields));
     }, (e) => {
-      //console.log('memory.save() e', e);
+      utils.log(utils.LoglevelEnum.Info,'memory.save() e', e);
       res.status(400).send();
     });
   };
@@ -110,10 +111,10 @@ router.get('/', authenticate, (req, res) => {
       obj['memories'] = memories;
       res.send(obj);
     }, (e) => {
-      console.log("transformCreatorToUser error", e);
+      utils.log(utils.LoglevelEnum.Info,"transformCreatorToUser error", e);
     });
   }).catch((e) => {
-    console.log("app.get('/memories/' error", e);
+    utils.log(utils.LoglevelEnum.Info,"app.get('/memories/' error", e);
   });
 
 });
@@ -171,9 +172,9 @@ router.get('/title/:title', authenticate, (req, res) => {
   let memoryObj = {
     title
   };
-  //console.log("memoryObj", memoryObj);
+  utils.log(utils.LoglevelEnum.Info,"memoryObj", memoryObj);
   Memory.findOne(memoryObj).then((memory) => {
-    //console.log("memory", memory);
+    utils.log(utils.LoglevelEnum.Info,"memory", memory);
     if (memory) {
       res.send({
         'titleFound': true,
@@ -186,7 +187,7 @@ router.get('/title/:title', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    //console.log("memory router.get('/title/:title' e", e);
+    utils.log(utils.LoglevelEnum.Info,"memory router.get('/title/:title' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -275,33 +276,33 @@ let addUserToComments = (memory) => {
     //('addUserToComments', 'numComments', numComments);
     if (retMemory.comments && retMemory.comments.length > 0) {
       for (let comment of retMemory.comments) {
-        //console.log('addUserToComments', 'comment', comment);
+        utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'comment', comment);
         let userObj = {
           '_creatorRef': comment._creator
         };
         User.findOne(userObj).populate('_profileMemoryId', ['location']).then((user) => {
-          //console.log('addUserToComments', 'user', user);
-          //console.log('addUserToComments', 'typeof user', typeof user);
-          //console.log('addUserToComments', 'typeof comment', typeof comment);
+          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user', user);
+          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'typeof user', typeof user);
+          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'typeof comment', typeof comment);
           if (user) {
             delete user._id;
             let newComment = JSON.parse(JSON.stringify(comment));
-            //console.log('addUserToComments', 'user.name', user.name);
-            //console.log('addUserToComments', 'user._profileMemoryId', user._profileMemoryId);
+            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user.name', user.name);
+            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user._profileMemoryId', user._profileMemoryId);
             newComment.user = {};
-            //console.log('addUserToComments', 'newComment.user', newComment.user);
+            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment.user', newComment.user);
             newComment.user.name = user.name;
             newComment.user._profileMemoryId = user._profileMemoryId;
-            //console.log('addUserToComments', 'newComment.user2', newComment.user);
+            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment.user2', newComment.user);
 
             commentsArr.push(newComment);
-            //console.log('addUserToComments', 'newComment', newComment);
+            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment', newComment);
           };
 
           processedComments++;
           if (numComments === processedComments) {
             retMemory.comments = commentsArr;
-            //console.log('addUserToComments', 'resolve', retMemory);
+            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'resolve', retMemory);
             return resolve(retMemory);
           };
         }, (e) => {
@@ -316,7 +317,7 @@ let addUserToComments = (memory) => {
 
 let updateMemories = (res, body, memories, commentId) => {
 
-  //console.log("updateMemories", body, memories, commentId);
+  utils.log(utils.LoglevelEnum.Info,"updateMemories", body, memories, commentId);
 
   // let memoriesObj = {
   //   _id : memories._id
@@ -331,8 +332,8 @@ let updateMemories = (res, body, memories, commentId) => {
       "comments": commentId
     };
   };
-  //console.log("updateObj", updateObj);
-  //console.log("memories", memories);
+  utils.log(utils.LoglevelEnum.Info,"updateObj", updateObj);
+  utils.log(utils.LoglevelEnum.Info,"memories", memories);
 
   Memory.findOneAndUpdate(memories, updateObj, {
     new: true
@@ -345,7 +346,7 @@ let updateMemories = (res, body, memories, commentId) => {
           });
         }, (e) => {
           res.status(400).send();
-          console.log(e);
+          utils.log(utils.LoglevelEnum.Info,e);
         });
       } else {
         res.send({
@@ -360,7 +361,7 @@ let updateMemories = (res, body, memories, commentId) => {
 
   }, (e) => {
     res.status(400).send();
-    console.log(e);
+    utils.log(utils.LoglevelEnum.Info,e);
   });
 };
 
@@ -394,7 +395,7 @@ router.patch('/:id', authenticate, (req, res) => {
 
       comment._creator = req.loggedInUser._creatorRef;
       comment.commentDate = new Date().getTime();
-      //console.log('comment', comment);
+      utils.log(utils.LoglevelEnum.Info,'comment', comment);
 
       comment.save().then((comment) => {
         updateMemories(res, body, memories, comment._id);

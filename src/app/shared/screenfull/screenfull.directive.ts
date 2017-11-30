@@ -2,6 +2,7 @@ import { Directive, HostListener, ElementRef } from '@angular/core';
 
 //declare var screenfull: any;
 import * as screenfull from './screenfull.js';
+import { Utils, LoglevelEnum, SortDataType } from "../../shared/utils/utils";
 
 //declare var fullscreen;
 
@@ -16,7 +17,7 @@ export class ToggleFullscreenDirective {
         this.fullscreen = screenfull;
     }
     @HostListener('click') onClick() {
-        console.log('toggleFullscreen');
+        Utils.log(LoglevelEnum.Info,'toggleFullscreen');
         if (this.fullscreen.enabled) {
             this.fullscreen.on("change", () => {
                 let oldMaxHeight = "50px";

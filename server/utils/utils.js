@@ -70,4 +70,22 @@ utils.genQueryForCriteria = function (tags, people, fromDate, toDate, dateField)
   return queryObj;
 };
 
+utils.log = function (...arguments) {
+  let passedArguments = arguments.slice();
+  if (passedArguments && passedArguments.length > 0) {
+    let logLevel = passedArguments[0];
+    if (logLevel <= process.env.LOG_LEVEL) {
+      passedArguments.shift();
+      console.log.apply(this, passedArguments);
+    };
+  };
+};
+
+utils.LoglevelEnum = {
+  Error: 0,
+  Warn: 1,
+  Info: 2
+};
+
+
 module.exports = utils;

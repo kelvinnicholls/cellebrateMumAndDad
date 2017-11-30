@@ -1,6 +1,18 @@
 import * as moment from 'moment';
 import { User } from "../../users/user.model";
 import { AuthUserService } from "../../auth/auth-user.service";
+
+export enum SortDataType {
+    String
+    , Moment
+}
+
+export enum LoglevelEnum {
+    Error
+    , Warn
+    , Info
+}
+
 export class Utils {
     public static dynamicSort(property, dataType: SortDataType = SortDataType.String, format?: string) {
         var sortOrder = 1;
@@ -24,20 +36,33 @@ export class Utils {
         return passedString.charAt(0).toUpperCase() + passedString.slice(1).toLowerCase();
     }
 
-    public static checkIsAdminOrOwner(creator: string, loggedInUser: User,authUserService: AuthUserService): boolean {
-        //console.log("checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
+    public static checkIsAdminOrOwner(creator: string, loggedInUser: User, authUserService: AuthUserService): boolean {
+        Utils.log(LoglevelEnum.Info,"checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
         let retVal = false;
 
         if (!authUserService.isGuestUser() && ((loggedInUser.adminUser.toString().toLowerCase() == 'yes' || (loggedInUser._creatorRef === creator)))) {
             retVal = true;
         };
-        //console.log("checkIsAdminOrOwner retVal", retVal);
+        Utils.log(LoglevelEnum.Info,"checkIsAdminOrOwner retVal", retVal);
         return retVal;
 
     }
-}
 
-export enum SortDataType {
-    String
-    , Moment
-}
+    private static LOG_LEVEL = LoglevelEnum.Info;
+
+    public static setLogLevel(loglevelEnum : LoglevelEnum) {
+        Utils.LOG_LEVEL = loglevelEnum;
+    };
+
+    public static log(...args : any[]) {
+        let passedArguments = args.slice();
+        if (passedArguments && passedArguments.length > 0) {
+            let logLevel = passedArguments[0];
+            if (logLevel <= Utils.LOG_LEVEL) {
+                passedArguments.shift();
+                console.log.apply(this, passedArguments);
+            };
+        };
+    };
+};
+

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 var path = require('path');
+const utils = require('../utils/utils.js');
 const {
   authenticate
 } = require('../middleware/authenticate');
@@ -24,18 +25,18 @@ const {
 
 router.post('/', authenticate, (req, res) => {
   let body = _.pick(req.body, tagInsertFields);
-  //console.log('body', body);
+  utils.log(utils.LoglevelEnum.Info,'body', body);
   let tag = new Tag(body);
 
   tag._creator = req.loggedInUser._creatorRef;
   tag.addedDate = new Date().getTime();
-  //console.log('tag', tag);
+  utils.log(utils.LoglevelEnum.Info,'tag', tag);
 
   tag.save().then((tag) => {
-    //console.log('tag2', tag);
+    utils.log(utils.LoglevelEnum.Info,'tag2', tag);
     res.send(_.pick(tag, tagOutFields));
   }, (e) => {
-    //console.log('tag.save() e', e);
+    utils.log(utils.LoglevelEnum.Info,'tag.save() e', e);
     res.status(400).send();
   });
 });
@@ -47,7 +48,7 @@ router.get('/', authenticate, (req, res) => {
     obj['tags'] = tags;
     res.send(obj);
   }).catch((e) => {
-    console.log("tagsApp.get('/tags/' error", e);
+    utils.log(utils.LoglevelEnum.Info,"tagsApp.get('/tags/' error", e);
   });
 });
 
@@ -68,7 +69,7 @@ router.get('/tag/:tag', authenticate, (req, res) => {
       });
     };
   }, (e) => {
-    console.log("5a router.get('/tag/:tag' e", e);
+    utils.log(utils.LoglevelEnum.Info,"5a router.get('/tag/:tag' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });

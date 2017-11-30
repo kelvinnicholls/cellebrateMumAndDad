@@ -16,6 +16,8 @@ import { Tag } from "../tags/tag.model";
 import { Person } from "../people/person.model";
 import { Photo } from "../../photos/photo.model";
 import { AuthUserService } from "../../auth/auth-user.service";
+import { Utils, LoglevelEnum, SortDataType } from "../../shared/utils/utils";
+
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -60,15 +62,15 @@ export class SearchComponent implements OnInit {
 
 
   onTagsChange() {
-    //console.log(this.optionsModel);
+    //Utils.log(LoglevelEnum.Info,this.optionsModel);
   }
 
   onPeopleChange() {
-    //console.log(this.optionsModel);
+    //Utils.log(LoglevelEnum.Info,this.optionsModel);
   }
 
   onPhotosChange() {
-    //console.log(this.optionsModel);
+    //Utils.log(LoglevelEnum.Info,this.optionsModel);
   }
 
   constructor(private searchService: SearchService, private formBuilder: FormBuilder, private tagService: TagService
@@ -201,7 +203,7 @@ export class SearchComponent implements OnInit {
   }
 
   onCaseSensitive(event) {
-    //console.log(event);
+    Utils.log(LoglevelEnum.Info,event);
   }
 
   onButtonTwo() {
@@ -241,7 +243,7 @@ export class SearchComponent implements OnInit {
       //     for (let tag of tags) {
       //       searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
       //     };
-      //     console.log(searchComponent.tagService.multiSelectTagOptions);
+      //     Utils.log(LoglevelEnum.Info,searchComponent.tagService.multiSelectTagOptions);
       //   }
       // );
 
@@ -251,7 +253,7 @@ export class SearchComponent implements OnInit {
       //       for (let person of people) {
       //         searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
       //       };
-      //       console.log(searchComponent.personService.multiSelectPersonOptions);
+      //       Utils.log(LoglevelEnum.Info,searchComponent.personService.multiSelectPersonOptions);
       //     }
       //   );
 
@@ -261,7 +263,7 @@ export class SearchComponent implements OnInit {
       //       for (let photo of photos) {
       //         searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
       //       };
-      //       console.log(searchComponent.photoService.multiSelectPhotoOptions);
+      //       Utils.log(LoglevelEnum.Info,searchComponent.photoService.multiSelectPhotoOptions);
       //     }
       //   );
     //};

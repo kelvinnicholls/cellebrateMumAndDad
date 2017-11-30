@@ -1,6 +1,10 @@
 // Place your settings in this file to overwrite default and user settings.
 {
     "cSpell.words": [
-        "screenfull"
+        "consts",
+        "enum",
+        "loglevel",
+        "screenfull",
+        "validators"
     ]
 }

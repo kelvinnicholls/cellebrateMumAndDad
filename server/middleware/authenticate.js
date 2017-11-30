@@ -1,13 +1,15 @@
+const utils = require('../utils/utils.js');
+
 let {
   User
 } = require('../models/user');
 
 let authenticate = (req, res, next) => {
-  //console.log('authenticate req',req);
-  //console.log('authenticate res',res);
-  //console.log('authenticate next',next);
+  utils.log(utils.LoglevelEnum.Info,'authenticate req',req);
+  utils.log(utils.LoglevelEnum.Info,'authenticate res',res);
+  utils.log(utils.LoglevelEnum.Info,'authenticate next',next);
   var token = req.header('x-auth');
-  //console.log('authenticate token',token);
+  utils.log(utils.LoglevelEnum.Info,'authenticate token',token);
   User.findByToken(token).then((user) => {
     if (!user) {
       return Promise.reject();
@@ -17,7 +19,7 @@ let authenticate = (req, res, next) => {
     next();
     
   }).catch((e) => {
-    //console.log("authenticate error: ", e);
+    utils.log(utils.LoglevelEnum.Info,"authenticate error: ", e);
     res.status(401).render('index');
     //res.status(401).send();
   });

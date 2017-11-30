@@ -11,13 +11,15 @@ import { Dialog } from "../shared/dialog/dialog.model";
 import { CommentsService } from "../shared/comments/comments.service";
 import { SlideShowService } from "../shared/slideshow/slideshow.service";
 import { NgxGalleryImage } from 'ngx-gallery';
-
+import { Utils,LoglevelEnum } from "../shared/utils/utils";
 @Component({
     selector: 'app-photo-list',
     templateUrl: './photo-list.component.html',
     styleUrls: ['./photo-list.component.css']
 })
 export class PhotoListComponent implements OnInit, OnDestroy {
+
+    routeId = "PhotoListComponent";
 
     defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
 
@@ -38,7 +40,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     this.photoService.deletePhoto(photo)
                         .subscribe(
-                        result => console.log(result)
+                        result => Utils.log(LoglevelEnum.Info,result)
                         );
                 }
             });
@@ -79,8 +81,8 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     private updatePagedPhotos(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        //console.log('startIndex : ', startIndex);
-        //console.log('endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info,'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info,'endIndex : ', endIndex);
         this.setPhotosIndex();
         this.pagedPhotos = this.photos.slice(startIndex, endIndex + 1);
     }
@@ -88,8 +90,8 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.photoService.eventItemsPerPage = event.itemsPerPage;
         this.photoService.eventPage = event.page;
-        //console.log('Page changed to: ' + this.photoService.eventPage);
-        //console.log('Number items per page: ' + this.photoService.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info,'Page changed to: ' + this.photoService.eventPage);
+        Utils.log(LoglevelEnum.Info,'Number items per page: ' + this.photoService.eventItemsPerPage);
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 
@@ -139,12 +141,12 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
             photoListComponent.toastService.showSuccess(msg);
         });
-        console.log('PhotoListComponent ngOnInit.getPhotos() before');
+        Utils.log(LoglevelEnum.Info,'PhotoListComponent ngOnInit.getPhotos() before');
         photoListComponent.newPhotoList(photoListComponent.photoService.photos);
         // photoListComponent.photoService.getPhotos()
         //     .subscribe(
         //     (photos: Photo[]) => {
-        //         console.log('PhotoListComponent ngOnInit.getPhotos() after');
+        //         Utils.log(LoglevelEnum.Info,'PhotoListComponent ngOnInit.getPhotos() after');
         //         photoListComponent.newPhotoList(photos)
         //     }
         //     );

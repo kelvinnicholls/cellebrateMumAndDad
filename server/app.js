@@ -13,6 +13,7 @@ const tagsRoutes = require('./routes/tags-routes.js');
 const peopleRoutes = require('./routes/people-routes.js');
 const appRoutes = require('./routes/app-routes.js');
 const googleCloudApi = require('./shared/google-cloud-api');
+const utils = require('./utils/utils.js');
 var app = express();
 
 // view engine setup
@@ -40,7 +41,7 @@ app.use(function (req, res, next) {
 });
 
 app.use(function (req, res, next) {
-  //console.log("Request Url : " + req.originalUrl);
+  utils.log(utils.LoglevelEnum.Info,"Request Url : " + req.originalUrl);
   next();
 });
 
@@ -55,7 +56,7 @@ app.use('/', appRoutes);
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  //console.log("catch 404 and forward to error handler");
+  utils.log(utils.LoglevelEnum.Info,"catch 404 and forward to error handler");
   res.render('index');
 });
 

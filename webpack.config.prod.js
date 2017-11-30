@@ -5,7 +5,7 @@ var webpackMerge = require('webpack-merge');
 var commonConfig = require('./webpack.config.common.js');
 
 
-//console.log("webpack.config.prod.js");
+//Console.log("webpack.config.prod.js");
 
 module.exports = dev => {
   return webpackMerge.smart(commonConfig, {

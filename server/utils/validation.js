@@ -1,7 +1,9 @@
+const utils = require('../utils/utils.js');
+
 let isRealString =  (str) => {
   
   let ret = typeof str === 'string' && str.trim().length > 0;
-  //console.log("isRealString",str,ret);
+  utils.log(utils.LoglevelEnum.Info,"isRealString",str,ret);
   return ret;
 }
 

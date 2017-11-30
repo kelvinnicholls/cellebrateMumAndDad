@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 import { AuthService } from './auth.service';
 import { AuthUserService } from './auth-user.service';
-
+import { Utils, LoglevelEnum } from '../shared/utils/utils';
 @Injectable()
 export class AuthGuard implements CanActivate, CanLoad {
 
@@ -12,8 +12,10 @@ export class AuthGuard implements CanActivate, CanLoad {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     if (this.authService.isAuthorised(route)) {
+      Utils.log(LoglevelEnum.Info,"AuthGuard.canActivate is authorised");
       return true;
     };
+    Utils.log(LoglevelEnum.Info,"AuthGuard.canActivate is not authorised");
     this.router.navigate(['not-found']);
     return false;
   }

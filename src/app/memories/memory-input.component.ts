@@ -29,7 +29,7 @@ import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 import { Photo } from "../photos/photo.model";
 //import { element } from 'protractor';
-import { Utils } from "../shared/utils/utils";
+import { Utils,LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
@@ -294,7 +294,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                         memoryInputComponent.memoryService.updateMemory(this.memory)
                             .subscribe(
                             result => {
-                                console.log(result);
+                                Utils.log(LoglevelEnum.Info,result);
                                 memoryInputComponent.router.navigate(['memories']).then((ok) => {
                                     if (ok) {
                                         memoryInputComponent.memoryService.showSuccessToast.emit("Memory updated.");
@@ -498,15 +498,15 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
 
     onTagsChange(event) {
-        //console.log(this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this.optionsModel);
     }
 
     onPeopleChange(event) {
-        //console.log(this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this.optionsModel);
     }
 
     onPhotosChange(event) {
-        //console.log(this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this.optionsModel);
     }
 
 }

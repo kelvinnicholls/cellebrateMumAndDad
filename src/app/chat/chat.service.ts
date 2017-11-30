@@ -8,7 +8,7 @@ import { PhotoService } from "../photos/photo.service";
 import { MemoryService } from "../memories/memory.service";
 import { TagService } from "../shared/tags/tag.service";
 import { PersonService } from "../shared/people/person.service";
-import { Utils, SortDataType } from "../shared/utils/utils";
+import { Utils, SortDataType, LoglevelEnum } from "../shared/utils/utils";
 import { Consts } from "../shared/consts";
 //https://stackoverflow.com/questions/37090031/how-to-import-socket-io-client-in-a-angular-2-application
 import * as io from "socket.io-client";
@@ -39,7 +39,7 @@ export class ChatService {
             longitude: this.location.longitude,
             socketId: socketId
         }, callback);
-        //console.log(position.coords);
+        Utils.log(LoglevelEnum.Info,position.coords);
     }
 
     findChatUser(socketId: any): ChatUser {
@@ -74,17 +74,17 @@ export class ChatService {
         // });
 
         this.socket.on('connect', () => {
-            //console.log("Connected to server");
+            Utils.log(LoglevelEnum.Info,"Connected to server");
         });
 
         this.socket.on('disconnect', () => {
-            //console.log("Disconnected from server");
+            Utils.log(LoglevelEnum.Info,"Disconnected from server");
         });
 
         this.socket.on('updateUserList', (users) => {
             if (this.socket && this.socket.io) {
                 let socketId = this.socket.io.engine.id;
-                //console.log('updateUserList', users);
+                Utils.log(LoglevelEnum.Info,'updateUserList', users);
                 let chatUsers: ChatUser[] = [];
                 users.forEach(function (user) {
                     if (user.id != socketId) {
@@ -110,11 +110,11 @@ export class ChatService {
         this.addSocketCallbacks();
         this.socket.emit('join', this.name, function (err) {
             if (err) {
-                //console.log("join Error", err);
+                Utils.log(LoglevelEnum.Info,"join Error", err);
                 // alert(err);
                 // window.location.href = '/';
             } else {
-                //console.log("join No Error");
+                Utils.log(LoglevelEnum.Info,"join No Error");
             }
         });
     }
@@ -137,7 +137,7 @@ export class ChatService {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setPosition(position, socketId, callback);
         }, () => {
-            console.log("There was an error getting position");
+            Utils.log(LoglevelEnum.Info,"There was an error getting position");
         });
 
 

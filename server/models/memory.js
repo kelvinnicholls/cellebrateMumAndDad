@@ -15,6 +15,7 @@ const {
   Person
 } = require('../models/person');
 
+
 let MemorySchema = new mongoose.Schema({
   title: {
     type: String,
@@ -65,7 +66,7 @@ const memoryQueryFields = ['comments', 'title', '_creator', 'description', 'memo
 const memoryUpdateFields = ['title', 'description', 'tags', 'people', 'comment', 'memoryDate','medias'];
 
 
-// console.log("MemorySchema",utils.schemaToObject(Object.keys(MemorySchema.paths)));
+// utils.log(utils.LoglevelEnum.Info,"MemorySchema",utils.schemaToObject(Object.keys(MemorySchema.paths)));
 
 // MemorySchema { title: '',
 //   description: '',
@@ -84,7 +85,7 @@ MemorySchema.statics.findByCriteria = function (tags, users, fromDate, toDate) {
   return Memory.find(queryObj).populate('comments tags people').then((memories) => {
     return memories;
   }).catch((e) => {
-    console.log("MemorySchema.statics.findByCriteria error", e);
+    utils.log(utils.LoglevelEnum.Info,"MemorySchema.statics.findByCriteria error", e);
     return [];
   });
 

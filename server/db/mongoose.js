@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
+const utils = require('../utils/utils.js');
 
 mongoose.Promise = global.Promise;
-//console.log("mongoose process.env.MONGODB_URI = ",process.env.MONGODB_URI);
+utils.log(utils.LoglevelEnum.Info,"mongoose process.env.MONGODB_URI = ",process.env.MONGODB_URI);
 
 // Just some options for the db connection
 // var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }, 

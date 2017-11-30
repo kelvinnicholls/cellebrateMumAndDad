@@ -9,7 +9,7 @@ import { ErrorService } from "../errors/error.service";
 import { UserService } from "../../users/user.service";
 import { Person } from "./person.model";
 import { Consts } from "../consts";
-import { Utils } from "../utils/utils";
+import { Utils,LoglevelEnum } from "../utils/utils";
 import { AuthUserService } from "../../auth/auth-user.service";
 
 @Injectable()
@@ -82,7 +82,7 @@ export class PersonService {
             personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
             personService.peopleChanged.next(personService.people);
             personService.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
-            //console.log(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
         });
 
     }
@@ -119,9 +119,9 @@ export class PersonService {
                 personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 this.socket.emit('personCreated', person, function (err) {
                     if (err) {
-                        console.log("personCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,"personCreated err: ", err);
                     } else {
-                        console.log("personCreated No Error");
+                        Utils.log(LoglevelEnum.Info,"personCreated No Error");
                     }
                 });
 

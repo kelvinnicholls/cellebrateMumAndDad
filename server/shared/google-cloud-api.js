@@ -34,10 +34,10 @@ const bucket = storage.bucket(bucketName);
 //     .then((results) => {
 //       const buckets = results[0];
 
-//       console.log('Buckets:');
+//       utils.log(utils.LoglevelEnum.Info,'Buckets:');
 //       buckets.forEach((bucket) => {
-//         console.log(bucket.name);
-//         console.log(bucket);
+//         utils.log(utils.LoglevelEnum.Info,bucket.name);
+//         utils.log(utils.LoglevelEnum.Info,bucket);
 //       });
 //     })
 //     .catch((err) => {
@@ -49,7 +49,7 @@ function uploadFile(filename) {
   bucket
     .upload(filename)
     .then(() => {
-      //console.log(`${filename} uploaded to ${bucketName}.`);
+      utils.log(utils.LoglevelEnum.Info,`${filename} uploaded to ${bucketName}.`);
     })
     .catch(err => {
       console.error('ERROR:', err);
@@ -61,13 +61,13 @@ function downloadFile(destFilename) {
     destination: destFilename,
   };
   let srcFilename = destFilename.substring(destFilename.indexOf("file_"));
-  //console.log('downloadFile : srcFilename',srcFilename);
-  //console.log('downloadFile : destFilename',destFilename);
+  utils.log(utils.LoglevelEnum.Info,'downloadFile : srcFilename',srcFilename);
+  utils.log(utils.LoglevelEnum.Info,'downloadFile : destFilename',destFilename);
   bucket
     .file(srcFilename)
     .download(options)
     .then(() => {
-      //console.log(`gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`);
+      utils.log(utils.LoglevelEnum.Info,`gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`);
     })
     .catch(err => {
       console.error('ERROR:', err);
@@ -80,7 +80,7 @@ function deleteFile(fullFilename) {
     .file(filename)
     .delete()
     .then(() => {
-      //console.log(`gs://${bucketName}/${filename} deleted.`);
+      utils.log(utils.LoglevelEnum.Info,`gs://${bucketName}/${filename} deleted.`);
     })
     .catch(err => {
       console.error('ERROR:', err);

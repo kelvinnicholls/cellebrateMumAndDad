@@ -7,7 +7,7 @@ import { DialogService } from "../../shared/dialog/dialog.service";
 import { DialogRetEnum } from "../../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../../shared/dialog/dialog.model";
 
-
+import { Utils, LoglevelEnum, SortDataType } from "../../shared/utils/utils";
 import { User } from "../user.model";
 import { Consts } from "../../shared/consts";
 import { PasswordStrengthBarComponent } from '../../shared/password-strength-bar/password-strength-bar.component';
@@ -35,7 +35,7 @@ export class ChangePasswordComponent implements OnInit {
                         result => {
                             this.router.navigate(['']);
                             this.appService.showToast(Consts.SUCCESS, "Password updated.");
-                            console.log(result);
+                            Utils.log(LoglevelEnum.Info,result);
                             this.myForm.reset();
                         }
                     );

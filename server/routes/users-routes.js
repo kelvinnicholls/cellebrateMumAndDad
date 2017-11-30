@@ -50,7 +50,7 @@ let checkCreateInitialAdminUser = true;
 
 let createInitialAdminUser = (adminUser) => {
 
-  //console.log("createInitialAdminUser",adminUser);
+  utils.log(utils.LoglevelEnum.Info,"createInitialAdminUser",adminUser);
 
   User.findOne({}).then((user) => {
     if (!user) {
@@ -76,7 +76,7 @@ let createInitialAdminUser = (adminUser) => {
 
       user.save().then((user) => {
         if (user) {
-          console.log("Initial User Created : ", user.name);
+          utils.log(utils.LoglevelEnum.Info,"Initial User Created : ", user.name);
         };
       });
     };
@@ -89,22 +89,22 @@ if (checkCreateInitialAdminUser) {
 };
 
 let upload = (req, res, next) => {
-  //console.log('upload',req, res);
+  utils.log(utils.LoglevelEnum.Info,'upload',req, res);
   multerUploadSingleFile(req, res, function (err) {
-    //console.log('multerUploadSingleFile',err);
+    utils.log(utils.LoglevelEnum.Info,'multerUploadSingleFile',err);
     req.passedUser = JSON.parse(req.body.user);
     delete req.body.user;
-    //console.log('req.file', req.file);
+    utils.log(utils.LoglevelEnum.Info,'req.file', req.file);
     if (err) {
       processErr(err);
     } else {
       if (!req.file) {
-        //console.log('No file was selected');
+        utils.log(utils.LoglevelEnum.Info,'No file was selected');
         next();
       } else {
-        //console.log('user patch File uploaded!');
+        utils.log(utils.LoglevelEnum.Info,'user patch File uploaded!');
         let fileName = req.file.filename;
-        //console.log("newFileName", fileName);
+        utils.log(utils.LoglevelEnum.Info,"newFileName", fileName);
         let media = new Media();
         let location = path.join(req.file.destination, fileName);
         media.location = location;
@@ -123,7 +123,7 @@ let upload = (req, res, next) => {
           };
           next();
         }).catch((e) => {
-          console.log("multerUploadSingleFile media.save e", e);
+          utils.log(utils.LoglevelEnum.Info,"multerUploadSingleFile media.save e", e);
         });
 
       }
@@ -140,14 +140,14 @@ let saveMedia = (body, req, _creatorRef, res, func) => {
   media.title = 'Profile picture for ' + req.loggedInUser.name;
   media._creator = req.loggedInUser._creatorRef;
   media.addedDate = new Date();
-  //console.log("create media for filestack media: ", media);
+  utils.log(utils.LoglevelEnum.Info,"create media for filestack media: ", media);
   media.save().then((media) => {
     body._profileMediaId = media._id;
     req.body.location = media.location;
-    //console.log("body.profilePicInfo media.save success", media);
+    utils.log(utils.LoglevelEnum.Info,"body.profilePicInfo media.save success", media);
     func(body, _creatorRef, res, req);
   }).catch((e) => {
-    console.log("body.profilePicInfo media.save e", e);
+    utils.log(utils.LoglevelEnum.Info,"body.profilePicInfo media.save e", e);
   });
 };
 
@@ -159,7 +159,7 @@ let createUser = (body, _creatorRef, res, req) => {
     user.location = req.body.location;
     res.send(_.pick(user, userOutFields));
   }).catch((e) => {
-    //console.log("1 router.post('/' e", e);
+    utils.log(utils.LoglevelEnum.Info,"1 router.post('/' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 };
@@ -183,15 +183,15 @@ router.post('/', authenticate, upload, (req, res) => {
 
 router.post('/login', (req, res) => {
   let body = _.pick(req.body, ['email', 'password']);
-  //console.log("body", body);
+  utils.log(utils.LoglevelEnum.Info,"body", body);
   User.findByCredentials(body.email, body.password).then((user) => {
-    //console.log("user", user);
+    utils.log(utils.LoglevelEnum.Info,"user", user);
     user.generateAuthToken().then((token) => {
-      //console.log("token", token);
+      utils.log(utils.LoglevelEnum.Info,"token", token);
       res.header('x-auth', token).send(_.pick(user, userOutFields));
     });
   }).catch((e) => {
-    //console.log("2 router.post('/login' e", e);
+    utils.log(utils.LoglevelEnum.Info,"2 router.post('/login' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -228,7 +228,7 @@ router.patch('/change-password', authenticate, (req, res) => {
 
           utils.getEncryptedPassword(newPassword, function (err, hash) {
             if (err) {
-              //console.log("router.patch('/change-password' e", e);
+              utils.log(utils.LoglevelEnum.Info,"router.patch('/change-password' e", e);
               res.status(400).send(CONSTS.AN_ERROR_OCURRED);
             } else if (hash) {
               let userObj = {
@@ -268,7 +268,7 @@ router.patch('/change-password', authenticate, (req, res) => {
 });
 
 let updateUser = (body, _creatorRef, res, req) => {
-  //console.log('body', body);
+  utils.log(utils.LoglevelEnum.Info,'body', body);
   let userObj = {
     _creatorRef
   };
@@ -286,7 +286,7 @@ let updateUser = (body, _creatorRef, res, req) => {
       res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
     };
   }, (e) => {
-    //console.log("3 router.patch('/:_creatorRef' e", e);
+    utils.log(utils.LoglevelEnum.Info,"3 router.patch('/:_creatorRef' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 };
@@ -295,12 +295,12 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
   if (!req.loggedInUser.guestUser) {
     let _creatorRef = new ObjectID(req.params._creatorRef);
     let token = req.header('x-auth');
-    //console.log("_creatorRef", _creatorRef);
+    utils.log(utils.LoglevelEnum.Info,"_creatorRef", _creatorRef);
     User.findOne({
       _creatorRef
     }).then((user) => {
-      //console.log("user", user);
-      //console.log("req.body", req.body);
+      utils.log(utils.LoglevelEnum.Info,"user", user);
+      utils.log(utils.LoglevelEnum.Info,"req.body", req.body);
       if (!user) {
         return Promise.reject();
       };
@@ -310,13 +310,13 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
       } catch (e) {
         return Promise.reject();
       };
-      //console.log("req.passedUser1", req.passedUser);
+      utils.log(utils.LoglevelEnum.Info,"req.passedUser1", req.passedUser);
 
       if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === _creatorRef.toHexString()) {
-        //console.log("req.passedUser2", req.passedUser);
+        utils.log(utils.LoglevelEnum.Info,"req.passedUser2", req.passedUser);
         let body = _.pick(req.passedUser, userUpdateFields);
         //body._profileMediaId = req.body._profileMediaId;
-        //console.log("body profilePicInfo", body);
+        utils.log(utils.LoglevelEnum.Info,"body profilePicInfo", body);
 
         if (body.profilePicInfo && body.profilePicInfo.location && body.profilePicInfo.isUrl) {
           saveMedia(body, req, _creatorRef, res, updateUser);
@@ -333,7 +333,7 @@ router.patch('/:_creatorRef', authenticate, upload, (req, res) => {
         }
       };
     }).catch((e) => {
-      //console.log("4 router.patch('/:_creatorRef' e", e);
+      utils.log(utils.LoglevelEnum.Info,"4 router.patch('/:_creatorRef' e", e);
       res.status(401).send(CONSTS.AN_ERROR_OCURRED);
     });
   };
@@ -377,7 +377,7 @@ router.get('/email/:email', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    //console.log("5a router.get('/   /:email' e", e);
+    utils.log(utils.LoglevelEnum.Info,"5a router.get('/   /:email' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -400,7 +400,7 @@ router.get('/name/:name', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    //console.log("5a router.get('/name/:name' e", e);
+    utils.log(utils.LoglevelEnum.Info,"5a router.get('/name/:name' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -433,7 +433,7 @@ router.get('/', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    //console.log("5 router.get('/' e", e);
+    utils.log(utils.LoglevelEnum.Info,"5 router.get('/' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -443,7 +443,7 @@ router.delete('/me/token', authenticate, (req, res) => {
   req.loggedInUser.removeToken(req.token).then(() => {
     res.status(200).send(CONSTS.USER_SUCCESSFULLY_LOGGED_OUT);
   }, (e) => {
-    //console.log("6 router.delete('/me/token' e", e);
+    utils.log(utils.LoglevelEnum.Info,"6 router.delete('/me/token' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 
@@ -485,7 +485,7 @@ router.delete('/:_creatorRef', authenticate, (req, res) => {
             res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
           };
         }, (e) => {
-          //console.log("7 router.delete('/:_creatorRef' e", e);
+          utils.log(utils.LoglevelEnum.Info,"7 router.delete('/:_creatorRef' e", e);
           res.status(400).send(CONSTS.AN_ERROR_OCURRED);
         });
 
@@ -501,7 +501,7 @@ router.delete('/:_creatorRef', authenticate, (req, res) => {
         }
       };
     }).catch((e) => {
-      //console.log("8 router.delete('/:_creatorRef' e", e);
+      utils.log(utils.LoglevelEnum.Info,"8 router.delete('/:_creatorRef' e", e);
       res.status(401).send(CONSTS.AN_ERROR_OCURRED);
     });
   };

@@ -9,7 +9,7 @@ import { ErrorService } from "../errors/error.service";
 import { UserService } from "../../users/user.service";
 import { Tag } from "./tag.model";
 import { Consts } from "../consts";
-import { Utils } from "../utils/utils";
+import { Utils,LoglevelEnum } from "../utils/utils";
 import { AuthUserService } from "../../auth/auth-user.service";
 
 
@@ -88,7 +88,7 @@ export class TagService {
             tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
             tagService.tagsChanged.next(this.tags);
             tagService.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
-            //console.log(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
         });
 
     }
@@ -125,9 +125,9 @@ export class TagService {
                 tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 this.socket.emit('tagCreated', tag, function (err) {
                     if (err) {
-                        //console.log("tagCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,"tagCreated err: ", err);
                     } else {
-                        //console.log("tagCreated No Error");
+                        Utils.log(LoglevelEnum.Info,"tagCreated No Error");
                     }
                 });
 

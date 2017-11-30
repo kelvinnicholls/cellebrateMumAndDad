@@ -21,16 +21,16 @@ let multerUploadSingleFile = multer({
     fileSize: 10000000
   }
 }).single('file');
-
+const utils = require('../utils/utils.js');
 
 let processErr = (err) => {
-  console.log('media patch err', err);
+  utils.log(utils.LoglevelEnum.Info,'media patch err', err);
   if (err.code === 'LIMIT_FILE_SIZE') {
-    console.log('File size is too large. Max limit is 10MB');
+    utils.log(utils.LoglevelEnum.Info,'File size is too large. Max limit is 10MB');
   } else if (err.code === 'filetype') {
-    console.log('Filetype is invalid. Must be .png .jpeg .gif or .jpg');
+    utils.log(utils.LoglevelEnum.Info,'Filetype is invalid. Must be .png .jpeg .gif or .jpg');
   } else {
-    console.log('Unable to upload file');
+    utils.log(utils.LoglevelEnum.Info,'Unable to upload file');
   }
 }
 

@@ -4,6 +4,7 @@ import { CommentDisplay, Comments } from "../comment.model";
 
 import { EventEmitter } from "@angular/core";
 import { CommentsService } from "../comments.service";
+import { Utils, LoglevelEnum } from "../../../shared/utils/utils";
 
 @Component({
     selector: 'app-comments-list',
@@ -31,16 +32,16 @@ export class CommentListComponent {
     private updatePagedCommentsDisplay(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        //console.log('startIndex : ', startIndex);
-        //console.log('endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info,'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info,'endIndex : ', endIndex);
         this.pagedCommentsDisplay = this.commentsDisplay.slice(startIndex, endIndex + 1);
     }
 
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
         this.eventPage = event.page;
-        //console.log('Page changed to: ' + this.eventPage);
-        //console.log('Number items per page: ' + this.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info,'Page changed to: ' + this.eventPage);
+        Utils.log(LoglevelEnum.Info,'Number items per page: ' + this.eventItemsPerPage);
         this.updatePagedCommentsDisplay(this.eventItemsPerPage, this.eventPage);
     }
 
