@@ -2,7 +2,7 @@ const Storage = require('@google-cloud/storage');
 const config = require('../config/config.js');
 const projectId = 'celebmumanddad';
 const bucketName = 'celebmumanddadphotos';
-
+const utils = require('../utils/utils.js');
 
 const credentialsObj = {
   "type": process.env.GOOGLE_TYPE,
