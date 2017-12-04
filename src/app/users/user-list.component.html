@@ -2,7 +2,7 @@
   <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Users</h2>
 
   <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1">
+    <mat-grid-list cols="2" gutterSize="10" rows="2" rowHeight="1:1">
       <mat-grid-tile *ngFor="let  user of pagedUsers">
         <mat-grid-tile-header>
           <span mat-line>
@@ -10,7 +10,7 @@
           </span>
         </mat-grid-tile-header>
         <img [alt]="user.name" [src]="getSource(user)" class="img-responsive"
-          style="max-height: 80px;" toggleFullscreen>
+          style="max-height: 100%;" toggleFullscreen>
         <mat-grid-tile-footer>
           <span mat-line>
             <a (click)="onDelete(user)">Delete</a>
@@ -35,7 +35,7 @@
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
     <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-sm"
-      [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
+      [boundaryLinks]="true" [itemsPerPage]="4" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 

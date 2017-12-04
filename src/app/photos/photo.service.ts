@@ -51,7 +51,7 @@ export class PhotoService {
         checked: this.photo + ' selected',
         checkedPlural: this.photoplural + '  selected',
         searchPlaceholder: 'Find ' + this.photo,
-        defaultTitle: 'Select ' + this.photoplural,
+        defaultTitle: this.photoplural,
         allSelected: 'All ' + this.photoplural + ' selected',
     };
 
@@ -59,10 +59,10 @@ export class PhotoService {
     public multiSelectPhotoOptions: IMultiSelectOption[] = [
     ];
 
-    public maxSize: number = 6;
+    public maxSize: number = 4;
     public bigTotalItems: number = 0;
     public numPages: number = 0;
-    public eventItemsPerPage: number = 6;
+    public eventItemsPerPage: number = 4;
 
     public photos: Photo[] = [];
     public eventPage: number = 1;

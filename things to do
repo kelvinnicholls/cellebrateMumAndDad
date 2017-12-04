@@ -43,14 +43,16 @@ x149) when deploying photos will be overwritten (I think) check!
 x152) When logging out remove socket connection
 x153) Adding a photo to a memory with no photos does not update memory list
 x154) test with no memories or photos - see if unauthorised error appears
-155) replace console.log with logger to have different logging levels set by process env env variable Info, Warn, Err
+x155) replace console.log with logger to have different logging levels set by process env env variable Info, Warn, Err
 x156) add N/A relationship
 x157) get error adding comments to memories
 x158) Remove message removes the wrong message!
 159) Toasts are remaining at top
 160) firefox navigates to blank on pop up
-
-
+161) add admin option to list files in bucket and files in images
+162) check why photos (etc) do not always display on start up
+163) mirror changes in photo input screen in user and memories
+164) Allow user to change how many photos/users/memories are displayed per page
 
 
 https://www.npmjs.com/package/angular2-image-zoom

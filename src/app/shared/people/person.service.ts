@@ -29,7 +29,7 @@ export class PersonService {
         checked: this.person + ' selected',
         checkedPlural: this.personplural + '  selected',
         searchPlaceholder: 'Find ' + this.person,
-        defaultTitle: 'Select ' + this.personplural,
+        defaultTitle: this.personplural,
         allSelected: 'All ' + this.personplural + ' selected',
     };
 

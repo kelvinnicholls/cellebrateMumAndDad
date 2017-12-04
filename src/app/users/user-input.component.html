@@ -1,6 +1,6 @@
 <!-- https://scotch.io/tutorials/how-to-deal-with-different-form-controls-in-angular-2 -->
 
-<div  class="row col col-md-4 offset-md-5">
+<div  class="row col col-md-3 offset-md-5">
   <h2 class="blog-post-title ">{{getTitle()}}</h2>
 </div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
@@ -9,12 +9,12 @@
       }">
 
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('email').invalid && (myForm.get('email').dirty || myForm.get('email').touched),
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty || myForm.get('email').touched)
       }">
-    <label for="email" class="col-md-4 col-form-label"><strong>Email address</strong></label>
-    <div class="col-md-5">
+    <label for="email" class="col-md-2 col-form-label"><strong>Email address</strong></label>
+    <div class="col-md-7">
       <input type="email" class="form-control" id="email" placeholder="Email address"
         [ngModel]="user?.email" formControlName="email" [ngClass]="{
         'form-control-danger': myForm.get('email').invalid && (myForm.get('email').dirty || myForm.get('email').touched),
@@ -31,12 +31,12 @@
   </div>
 
 
-  <div *ngIf="isNewUser()" class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div *ngIf="isNewUser()" class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('password').invalid && (myForm.get('password').dirty || myForm.get('password').touched),
         'has-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
-    <label for="password" class="col-md-4 col-form-label"><strong>Password</strong></label>
-    <div class="col-md-5">
+    <label for="password" class="col-md-2 col-form-label"><strong>Password</strong></label>
+    <div class="col-md-7">
       <input type="password"
         class="form-control" id="password" placeholder="Password" [ngModel]="user?.password" formControlName="password" [ngClass]="{
         'form-control-danger': myForm.get('password').invalid && (myForm.get('password').dirty || myForm.get('password').touched),
@@ -55,12 +55,12 @@
     </div>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('name').invalid && (myForm.get('name').dirty || myForm.get('name').touched),
         'has-success': myForm.get('name').valid && (myForm.get('name').dirty || myForm.get('name').touched)
       }">
-    <label for="name" class="col-md-4 col-form-label"><strong>Name</strong></label>
-    <div class="col-md-5">
+    <label for="name" class="col-md-2 col-form-label"><strong>Name</strong></label>
+    <div class="col-md-7">
       <input  type="text" class="form-control" id="name" placeholder="Name"
         [ngModel]="user?.name" formControlName="name" [ngClass]="{
         'form-control-danger': myForm.get('name').invalid && (myForm.get('name').dirty || myForm.get('name').touched),
@@ -75,12 +75,12 @@
   </div>
 
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('adminUser').invalid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched),
         'has-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched)
       }">
-    <label for="adminUser" class="col-md-4 col-form-label"><strong>Admin?</strong></label>
-    <div class="col-md-5">
+    <label for="adminUser" class="col-md-2 col-form-label"><strong>Admin?</strong></label>
+    <div class="col-md-7">
       <select class="form-control dropdown" [ngModel]="user?.adminUser"
         formControlName="adminUser" [ngClass]="{
         'form-control-danger': myForm.get('adminUser').invalid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched),
@@ -98,12 +98,12 @@
   </div>
 
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
     'has-danger': myForm.get('guestUser').invalid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched),
     'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched)
   }">
-<label for="guestUser" class="col-md-4 col-form-label"><strong>Guest?</strong></label>
-<div class="col-md-5">
+<label for="guestUser" class="col-md-2 col-form-label"><strong>Guest?</strong></label>
+<div class="col-md-7">
   <select class="form-control dropdown" [ngModel]="user?.guestUser"
     formControlName="guestUser" [ngClass]="{
     'form-control-danger': myForm.get('guestUser').invalid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched),
@@ -120,12 +120,12 @@
 </div>
 </div>
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
         'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)
       }">
-    <label for="emailUpdates" class="col-md-4 col-form-label"><strong>Email Updates?</strong></label>
-    <div class="col-md-5">
+    <label for="emailUpdates" class="col-md-2 col-form-label"><strong>Email Updates?</strong></label>
+    <div class="col-md-7">
       <select class="form-control dropdown"
         [ngModel]="user?.emailUpdates" formControlName="emailUpdates" [ngClass]="{
         'form-control-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
@@ -142,12 +142,12 @@
     </div>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('relationship').invalid && (myForm.get('relationship').dirty || myForm.get('relationship').touched),
         'has-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty || myForm.get('relationship').touched)
       }">
-    <label for="relationship" class="col-md-4 col-form-label"><strong>Relationship</strong></label>
-    <div class="col-md-5">
+    <label for="relationship" class="col-md-2 col-form-label"><strong>Relationship</strong></label>
+    <div class="col-md-7">
       <select class="form-control dropdown" [ngModel]="user?.relationship"
         formControlName="relationship" [ngClass]="{
         'form-control-danger': myForm.get('relationship').invalid && (myForm.get('relationship').dirty || myForm.get('relationship').touched),
@@ -168,12 +168,12 @@
     </div>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('dob').invalid,
         'has-success': myForm.get('dob').valid
       }">
-    <label for="dob" class="col-md-4 col-form-label"><strong>Date Of Birth</strong></label>
-    <div class="col-md-5">
+    <label for="dob" class="col-md-2 col-form-label"><strong>Date Of Birth</strong></label>
+    <div class="col-md-7">
       <div class="input-group">
         <input class="form-control" placeholder="DD-MM-YYYY" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()"
           ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="dob" [ngClass]="{
@@ -189,12 +189,12 @@
   </div>
 
 
-  <!-- <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <!-- <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('twitterId').invalid,
         'has-success': myForm.get('twitterId').valid
       }">
-    <label class="col-md-4 col-form-label"><strong>Twitter ID</strong></label>
-    <div class="col-md-5">
+    <label class="col-md-2 col-form-label"><strong>Twitter ID</strong></label>
+    <div class="col-md-7">
       <input type="text" id="twitterId" class="form-control" placeholder="Twitter ID"
         [ngModel]="user?.twitterId" formControlName="twitterId" [ngClass]="{
         'form-control-danger': myForm.get('twitterId').invalid ,
@@ -203,12 +203,12 @@
     </div>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-2" [ngClass]="{
+  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
         'has-danger': myForm.get('facebookId').invalid,
         'has-success': myForm.get('facebookId').valid
       }">
-    <label class="col-md-4 col-form-label"><strong>Facebook ID</strong></label>
-    <div class="col-md-5">
+    <label class="col-md-2 col-form-label"><strong>Facebook ID</strong></label>
+    <div class="col-md-7">
       <input type="text" id="facebookId" class="form-control" placeholder="Facebook ID"
         [ngModel]="user?.facebookId" formControlName="facebookId" [ngClass]="{
         'form-control-danger': myForm.get('facebookId').invalid,
@@ -218,8 +218,8 @@
   </div> -->
 
 
-  <div class="form-group row col col-md-8 offset-md-2">
-    <label for="profilePic" class="col-md-4 col-form-label"><strong>Profile picture</strong></label>
+  <div class="form-group row col col-md-8 offset-md-3">
+    <label for="profilePic" class="col-md-2 col-form-label"><strong>Profile picture</strong></label>
     <div class="col col-md-2">
       <span class="pull-right">
         <img [src]="getSource()" class="img-responsive" style="max-height: 50px;" toggleFullscreen>
@@ -254,7 +254,7 @@
 
 
 
-  <div class="form-group row col col-md-4 offset-md-4">
+  <div class="form-group row col col-md-4 offset-md-6">
     <button *ngIf="isCreateUser()" type="button" class="btn btn-md btn-danger"
       (click)="onClear()">Clear</button>
     <button class="btn btn-md btn-primary" type="submit"

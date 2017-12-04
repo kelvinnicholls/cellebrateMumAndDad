@@ -49,7 +49,7 @@ export class TagService {
         checked: this.tag + ' selected',
         checkedPlural: this.tagplural + '  selected',
         searchPlaceholder: 'Find ' + this.tag,
-        defaultTitle: 'Select ' + this.tagplural,
+        defaultTitle: this.tagplural,
         allSelected: 'All ' + this.tagplural + ' selected',
     };
 

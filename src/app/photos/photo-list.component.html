@@ -5,14 +5,14 @@
   </div>
   <!-- https://material.angular.io/components/grid-list/overview -->
   <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="3" gutterSize="10" rows="5" rowHeight="1:1">
+    <mat-grid-list cols="2" gutterSize="10" rows="2" rowHeight="1:1">
       <mat-grid-tile *ngFor="let photo of pagedPhotos">
         <mat-grid-tile-header>
           <span mat-line>
             <a routerLinkActive="active" routerLink="/photos/photo/{{photoService.getMode(photo)}}/{{photo.index}}">{{photo.title}}</a>
           </span>
         </mat-grid-tile-header>
-        <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 80px;" toggleFullscreen>
+        <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 100%;" toggleFullscreen>
         <mat-grid-tile-footer class="row col-md-13">
             <div class="col-md-6 text-center">
               <span *ngIf="photo && photo.comments &&  photo.comments.length > 0">
@@ -41,7 +41,7 @@
 
   <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
     <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize"
-      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="photoService.numPages = $event"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="4" [rotate]="false" (numPages)="photoService.numPages = $event"
       (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
