@@ -32,8 +32,8 @@ export class Search {
         if (arrayElement[elementName]) {
           let attributeValue = arrayElement[elementName];
           let typeOfAttributeValue = typeof attributeValue;
-          Utils.log(LoglevelEnum.Info,"attributeValue", attributeValue);
-          Utils.log(LoglevelEnum.Info,"typeOfAttributeValue", typeOfAttributeValue);
+          Utils.log(LoglevelEnum.Info,this,"attributeValue", attributeValue);
+          Utils.log(LoglevelEnum.Info,this,"typeOfAttributeValue", typeOfAttributeValue);
           switch (typeOfAttributeValue) {
             case 'string':
               if (searchElement.type === 'y_n_both') {
@@ -101,7 +101,7 @@ export class Search {
             case 'object':
               if (Object.prototype.toString.call(arrayElement[elementName]) === "[object Array]") {
                 if (searchElement.type === 'array') {
-                  Utils.log(LoglevelEnum.Info,attributeValue);
+                  Utils.log(LoglevelEnum.Info,this,attributeValue);
                   let matchingElementsCount = 0;
                   searchElement.value.forEach((searchElementValue) => {
                     attributeValue.forEach(attributeValueElement => {

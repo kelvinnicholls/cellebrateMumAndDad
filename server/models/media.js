@@ -78,7 +78,7 @@ let MediaSchema = new mongoose.Schema({
   }]
 });
 
-utils.log(utils.LoglevelEnum.Info,"MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));
+//utils.log(utils.LoglevelEnum.Info,"MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));
 
 // MediaSchema { location: '',
 //   isUrl: '',

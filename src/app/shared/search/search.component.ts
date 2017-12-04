@@ -62,15 +62,15 @@ export class SearchComponent implements OnInit {
 
 
   onTagsChange() {
-    //Utils.log(LoglevelEnum.Info,this.optionsModel);
+    //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
   }
 
   onPeopleChange() {
-    //Utils.log(LoglevelEnum.Info,this.optionsModel);
+    //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
   }
 
   onPhotosChange() {
-    //Utils.log(LoglevelEnum.Info,this.optionsModel);
+    //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
   }
 
   constructor(private searchService: SearchService, private formBuilder: FormBuilder, private tagService: TagService
@@ -203,7 +203,7 @@ export class SearchComponent implements OnInit {
   }
 
   onCaseSensitive(event) {
-    Utils.log(LoglevelEnum.Info,event);
+    Utils.log(LoglevelEnum.Info,this,event);
   }
 
   onButtonTwo() {
@@ -243,7 +243,7 @@ export class SearchComponent implements OnInit {
       //     for (let tag of tags) {
       //       searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
       //     };
-      //     Utils.log(LoglevelEnum.Info,searchComponent.tagService.multiSelectTagOptions);
+      //     Utils.log(LoglevelEnum.Info,this,searchComponent.tagService.multiSelectTagOptions);
       //   }
       // );
 
@@ -253,7 +253,7 @@ export class SearchComponent implements OnInit {
       //       for (let person of people) {
       //         searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
       //       };
-      //       Utils.log(LoglevelEnum.Info,searchComponent.personService.multiSelectPersonOptions);
+      //       Utils.log(LoglevelEnum.Info,this,searchComponent.personService.multiSelectPersonOptions);
       //     }
       //   );
 
@@ -263,7 +263,7 @@ export class SearchComponent implements OnInit {
       //       for (let photo of photos) {
       //         searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
       //       };
-      //       Utils.log(LoglevelEnum.Info,searchComponent.photoService.multiSelectPhotoOptions);
+      //       Utils.log(LoglevelEnum.Info,this,searchComponent.photoService.multiSelectPhotoOptions);
       //     }
       //   );
     //};

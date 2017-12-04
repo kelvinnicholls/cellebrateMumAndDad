@@ -95,7 +95,7 @@ export class MemoryService {
 
         memoryService.updateMemory(memory).subscribe(
             result => {
-                Utils.log(LoglevelEnum.Info,result);
+                Utils.log(LoglevelEnum.Info,this,result);
                 memory.comment = null;
                 let commentDate = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);
                 let userName = memoryService.userService.getLoggedInUser().name;
@@ -339,13 +339,13 @@ export class MemoryService {
             memoryService.memories.sort(Utils.dynamicSort('title'));
             memoryService.memoriesChanged.next(memoryService.memories);
             memoryService.appService.showToast(Consts.INFO, "New memory  : " + memory.title + " added by " + changedBy);
-            Utils.log(LoglevelEnum.Info,Consts.INFO, "New memory  : " + memory.title + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,this, "New memory  : " + memory.title + " added by " + changedBy);
         });
 
         memoryService.socket.on('updatedMemory', (memory, changedBy) => {
             let updatedMemory = memoryService.updateThisMemory(memory);
             memoryService.appService.showToast(Consts.INFO, "Memory  : " + updatedMemory.title + " updated by " + changedBy);
-            Utils.log(LoglevelEnum.Info,Consts.INFO, "Memory  : " + updatedMemory.title + " updated by " + changedBy);
+            Utils.log(LoglevelEnum.Info,this, "Memory  : " + updatedMemory.title + " updated by " + changedBy);
         });
 
 
@@ -356,7 +356,7 @@ export class MemoryService {
                 //this.allMemories.splice(this.allMemories.indexOf(memoryToBeDeleted), 1);
                 //this.memoriesChanged.next(this.allMemories);
                 memoryService.appService.showToast(Consts.INFO, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
-                Utils.log(LoglevelEnum.Info,Consts.INFO, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
+                Utils.log(LoglevelEnum.Info,this, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
             };
         });
     }
@@ -381,9 +381,9 @@ export class MemoryService {
                 memoryService.memoriesChanged.next(memoryService.memories);
                 this.socket.emit('memoryCreated', memory, function (err) {
                     if (err) {
-                        Utils.log(LoglevelEnum.Info,"memoryCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,this,"memoryCreated err: ", err);
                     } else {
-                        Utils.log(LoglevelEnum.Info,"memoryCreated No Error");
+                        Utils.log(LoglevelEnum.Info,this,"memoryCreated No Error");
                     }
                 });
                 return memory;
@@ -515,7 +515,7 @@ export class MemoryService {
         if (changeType == "U" && !memory.comment || changeType == "D") {
             retVal = Utils.checkIsAdminOrOwner(memory._creator, this.userService.getLoggedInUser(), this.authUserService);
         };
-        Utils.log(LoglevelEnum.Info,"isAllowed retVal", retVal);
+        Utils.log(LoglevelEnum.Info,this,"isAllowed retVal", retVal);
         return retVal;
     }
 
@@ -535,9 +535,9 @@ export class MemoryService {
                     memoryService.updateThisMemory(body.memory);
                     memoryService.socket.emit('memoryUpdated', body.memory, function (err) {
                         if (err) {
-                            Utils.log(LoglevelEnum.Info,"memoryUpdated err: ", err);
+                            Utils.log(LoglevelEnum.Info,this,"memoryUpdated err: ", err);
                         } else {
-                            Utils.log(LoglevelEnum.Info,"memoryUpdated No Error");
+                            Utils.log(LoglevelEnum.Info,this,"memoryUpdated No Error");
                         }
                     });
                     return response.json();
@@ -576,9 +576,9 @@ export class MemoryService {
                     memoryService.removeMemory(memory);
                     memoryService.socket.emit('memoryDeleted', memory, function (err) {
                         if (err) {
-                            Utils.log(LoglevelEnum.Info,"memoryDeleted err: ", err);
+                            Utils.log(LoglevelEnum.Info,this,"memoryDeleted err: ", err);
                         } else {
-                            Utils.log(LoglevelEnum.Info,"memoryDeleted No Error");
+                            Utils.log(LoglevelEnum.Info,this,"memoryDeleted No Error");
                         }
                     });
                     memoryService.appService.showToast(Consts.INFO, "Memory deleted.");

@@ -255,7 +255,7 @@ export class UserInputComponent implements OnInit, OnDestroy {
                         userInputComponent.userService.updateUser(userInputComponent.user)
                             .subscribe(
                             result => {
-                                Utils.log(LoglevelEnum.Info,result);
+                                Utils.log(LoglevelEnum.Info,this,result);
 
                                 if (submitType == Consts.UPDATE_CURRENT_USER) {
                                     userInputComponent.router.navigate(['']).then((ok) => {

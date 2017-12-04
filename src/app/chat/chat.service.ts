@@ -39,7 +39,7 @@ export class ChatService {
             longitude: this.location.longitude,
             socketId: socketId
         }, callback);
-        Utils.log(LoglevelEnum.Info,position.coords);
+        Utils.log(LoglevelEnum.Info,this,position.coords);
     }
 
     findChatUser(socketId: any): ChatUser {
@@ -74,17 +74,17 @@ export class ChatService {
         // });
 
         this.socket.on('connect', () => {
-            Utils.log(LoglevelEnum.Info,"Connected to server");
+            Utils.log(LoglevelEnum.Info,this,"Connected to server");
         });
 
         this.socket.on('disconnect', () => {
-            Utils.log(LoglevelEnum.Info,"Disconnected from server");
+            Utils.log(LoglevelEnum.Info,this,"Disconnected from server");
         });
 
         this.socket.on('updateUserList', (users) => {
             if (this.socket && this.socket.io) {
                 let socketId = this.socket.io.engine.id;
-                Utils.log(LoglevelEnum.Info,'updateUserList', users);
+                Utils.log(LoglevelEnum.Info,this,'updateUserList', users);
                 let chatUsers: ChatUser[] = [];
                 users.forEach(function (user) {
                     if (user.id != socketId) {
@@ -110,11 +110,11 @@ export class ChatService {
         this.addSocketCallbacks();
         this.socket.emit('join', this.name, function (err) {
             if (err) {
-                Utils.log(LoglevelEnum.Info,"join Error", err);
+                Utils.log(LoglevelEnum.Info,this,"join Error", err);
                 // alert(err);
                 // window.location.href = '/';
             } else {
-                Utils.log(LoglevelEnum.Info,"join No Error");
+                Utils.log(LoglevelEnum.Info,this,"join No Error");
             }
         });
     }
@@ -137,7 +137,7 @@ export class ChatService {
         navigator.geolocation.getCurrentPosition((position) => {
             this.setPosition(position, socketId, callback);
         }, () => {
-            Utils.log(LoglevelEnum.Info,"There was an error getting position");
+            Utils.log(LoglevelEnum.Info,this,"There was an error getting position");
         });
 
 

@@ -82,7 +82,7 @@ export class PersonService {
             personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
             personService.peopleChanged.next(personService.people);
             personService.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
-            Utils.log(LoglevelEnum.Info,Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,this, "New person  : " + person.person + " added by " + changedBy);
         });
 
     }
@@ -119,9 +119,9 @@ export class PersonService {
                 personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
                 this.socket.emit('personCreated', person, function (err) {
                     if (err) {
-                        Utils.log(LoglevelEnum.Info,"personCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,this,"personCreated err: ", err);
                     } else {
-                        Utils.log(LoglevelEnum.Info,"personCreated No Error");
+                        Utils.log(LoglevelEnum.Info,this,"personCreated No Error");
                     }
                 });
 

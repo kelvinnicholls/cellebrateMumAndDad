@@ -1,4 +1,4 @@
-<div *ngIf="users.length > 0">
+<div *ngIf="pagedUsers.length > 0">
   <h2 class="blog-post-title col-md-6 offset-md-2 kgn-center-text">Users</h2>
 
   <div class="col-md-6 offset-md-2 kgn-center-text">
@@ -51,7 +51,7 @@
 </div>
 
 
-<div *ngIf="users.length == 0">
+<div *ngIf="pagedUsers.length == 0">
   <div class="jumbotron jumbotron-fluid">
     <div class="container">
       <h1 class="display-1 text-center">{{getNoUsersText()}}</h1>

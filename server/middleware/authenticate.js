@@ -5,11 +5,11 @@ let {
 } = require('../models/user');
 
 let authenticate = (req, res, next) => {
-  utils.log(utils.LoglevelEnum.Info,'authenticate req',req);
-  utils.log(utils.LoglevelEnum.Info,'authenticate res',res);
-  utils.log(utils.LoglevelEnum.Info,'authenticate next',next);
+  //utils.log(utils.LoglevelEnum.Info,'authenticate req',req);
+  //utils.log(utils.LoglevelEnum.Info,'authenticate res',res);
+  //utils.log(utils.LoglevelEnum.Info,'authenticate next',next);
   var token = req.header('x-auth');
-  utils.log(utils.LoglevelEnum.Info,'authenticate token',token);
+  //utils.log(utils.LoglevelEnum.Info,'authenticate token',token);
   User.findByToken(token).then((user) => {
     if (!user) {
       return Promise.reject();

@@ -32,16 +32,16 @@ export class CommentListComponent {
     private updatePagedCommentsDisplay(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        Utils.log(LoglevelEnum.Info,'startIndex : ', startIndex);
-        Utils.log(LoglevelEnum.Info,'endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info,this,'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info,this,'endIndex : ', endIndex);
         this.pagedCommentsDisplay = this.commentsDisplay.slice(startIndex, endIndex + 1);
     }
 
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
         this.eventPage = event.page;
-        Utils.log(LoglevelEnum.Info,'Page changed to: ' + this.eventPage);
-        Utils.log(LoglevelEnum.Info,'Number items per page: ' + this.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info,this,'Page changed to: ' + this.eventPage);
+        Utils.log(LoglevelEnum.Info,this,'Number items per page: ' + this.eventItemsPerPage);
         this.updatePagedCommentsDisplay(this.eventItemsPerPage, this.eventPage);
     }
 

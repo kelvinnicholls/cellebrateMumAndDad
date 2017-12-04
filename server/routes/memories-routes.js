@@ -35,6 +35,7 @@ const {
 let transformCreatorToUser = (memories) => {
   return new Promise((resolve, reject) => {
     let numMemories = memories ? memories.length : 0;
+    utils.log(utils.LoglevelEnum.Info,"memories.transformCreatorToUser numMemories",numMemories);
     let processedMemories = 0;
     let transformedMemories = [];
     if (numMemories > 0) {
@@ -106,7 +107,9 @@ router.get('/', authenticate, (req, res) => {
   // };
 
   Memory.find(memoriesObj).populate('comments tags people medias').then((memories) => {
+    utils.log(utils.LoglevelEnum.Info,"GET memories.length",memories.length);
     transformCreatorToUser(memories).then((memories) => {
+      utils.log(utils.LoglevelEnum.Info,"after transformCreatorToUser memories.length",memories.length);
       let obj = {};
       obj['memories'] = memories;
       res.send(obj);

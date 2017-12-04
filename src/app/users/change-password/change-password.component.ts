@@ -35,7 +35,7 @@ export class ChangePasswordComponent implements OnInit {
                         result => {
                             this.router.navigate(['']);
                             this.appService.showToast(Consts.SUCCESS, "Password updated.");
-                            Utils.log(LoglevelEnum.Info,result);
+                            Utils.log(LoglevelEnum.Info,this,result);
                             this.myForm.reset();
                         }
                     );

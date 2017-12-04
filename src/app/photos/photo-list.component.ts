@@ -40,7 +40,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     this.photoService.deletePhoto(photo)
                         .subscribe(
-                        result => Utils.log(LoglevelEnum.Info,result)
+                        result => Utils.log(LoglevelEnum.Info,this,result)
                         );
                 }
             });
@@ -81,17 +81,18 @@ export class PhotoListComponent implements OnInit, OnDestroy {
     private updatePagedPhotos(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        Utils.log(LoglevelEnum.Info,'startIndex : ', startIndex);
-        Utils.log(LoglevelEnum.Info,'endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info,this,'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info,this,'endIndex : ', endIndex);
         this.setPhotosIndex();
         this.pagedPhotos = this.photos.slice(startIndex, endIndex + 1);
+        Utils.log(LoglevelEnum.Info,this,'pagedPhotos size: ' + this.pagedPhotos.length);
     }
 
     public pageChanged(event: any): void {
         this.photoService.eventItemsPerPage = event.itemsPerPage;
         this.photoService.eventPage = event.page;
-        Utils.log(LoglevelEnum.Info,'Page changed to: ' + this.photoService.eventPage);
-        Utils.log(LoglevelEnum.Info,'Number items per page: ' + this.photoService.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info,this,'Page changed to: ' + this.photoService.eventPage);
+        Utils.log(LoglevelEnum.Info,this,'Number items per page: ' + this.photoService.eventItemsPerPage);
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 
@@ -141,25 +142,27 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
             photoListComponent.toastService.showSuccess(msg);
         });
-        Utils.log(LoglevelEnum.Info,'PhotoListComponent ngOnInit.getPhotos() before');
+        Utils.log(LoglevelEnum.Info,this,'ngOnInit. newPhotoList before');
         photoListComponent.newPhotoList(photoListComponent.photoService.photos);
         // photoListComponent.photoService.getPhotos()
         //     .subscribe(
         //     (photos: Photo[]) => {
-        //         Utils.log(LoglevelEnum.Info,'PhotoListComponent ngOnInit.getPhotos() after');
+        //         Utils.log(LoglevelEnum.Info,this,'PhotoListComponent ngOnInit.getPhotos() after');
         //         photoListComponent.newPhotoList(photos)
         //     }
         //     );
         photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe(
-            (photos: Photo[]) =>
-                photoListComponent.newPhotoList(photos));
+            (photos: Photo[]) =>  {
+                Utils.log(LoglevelEnum.Info, this, 'photosChanged size: ' + photos.length);
+                photoListComponent.newPhotoList(photos);
+            });
         photoListComponent.subscription = photoListComponent.photoService.photoDeleted.subscribe(
             (photo: Photo) =>
                 photoListComponent.removePhoto(photo));
     }
 
     newPhotoList(photos: Photo[]) {
-
+        Utils.log(LoglevelEnum.Info,this,'newPhotoList size: ' + photos.length);
         this.photos = photos;
         this.photoService.bigTotalItems = this.photos.length;
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);

@@ -10,7 +10,7 @@ import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { CommentsService } from "../shared/comments/comments.service";
 import { SlideShowService } from "../shared/slideshow/slideshow.service";
-import { Utils,LoglevelEnum } from "../shared/utils/utils";
+import { Utils, LoglevelEnum } from "../shared/utils/utils";
 
 @Component({
     selector: 'app-memory-list',
@@ -38,7 +38,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     this.memoryService.deleteMemory(memory)
                         .subscribe(
-                        result => Utils.log(LoglevelEnum.Info,result)
+                        result => Utils.log(LoglevelEnum.Info, this, result)
                         );
                 }
             });
@@ -78,21 +78,22 @@ export class MemoryListComponent implements OnInit, OnDestroy {
     private updatePagedMemories(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        Utils.log(LoglevelEnum.Info,'startIndex : ', startIndex);
-        Utils.log(LoglevelEnum.Info,'endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info, this, 'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info, this, 'endIndex : ', endIndex);
         this.setMemoriesIndex();
         this.pagedMemories = this.memories.slice(startIndex, endIndex + 1);
+        Utils.log(LoglevelEnum.Info, this, 'pagedMemories size: ' + this.pagedMemories.length);
     }
 
     public pageChanged(event: any): void {
         this.memoryService.eventItemsPerPage = event.itemsPerPage;
         this.memoryService.eventPage = event.page;
-        Utils.log(LoglevelEnum.Info,'Page changed to: ' + this.memoryService.eventPage);
-        Utils.log(LoglevelEnum.Info,'Number items per page: ' + this.memoryService.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info, this, 'Page changed to: ' + this.memoryService.eventPage);
+        Utils.log(LoglevelEnum.Info, this, 'Number items per page: ' + this.memoryService.eventItemsPerPage);
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 
-    constructor(private slideShowService: SlideShowService,private dialogService: DialogService, private commentsService: CommentsService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private slideShowService: SlideShowService, private dialogService: DialogService, private commentsService: CommentsService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -100,10 +101,10 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         this.memoryService.search();
     }
 
-    onSlideShow(memory : Memory) {
+    onSlideShow(memory: Memory) {
         let galleryImages: NgxGalleryImage[] = [];
 
-        
+
         memory.mediasToDisplay.forEach((photo) => {
             if (photo && photo.photoInfo && photo.photoInfo.location) {
                 let location = photo.photoInfo.location.replace(/\\/g, "/");
@@ -139,24 +140,27 @@ export class MemoryListComponent implements OnInit, OnDestroy {
             memoryListComponent.toastService.showSuccess(msg);
         });
         //('MemoryListComponent ngOnInit.getMemories() before');
+        Utils.log(LoglevelEnum.Info,this,'ngOnInit. newMemoryList before');
         memoryListComponent.newMemoryList(memoryListComponent.memoryService.memories);
         // memoryListComponent.memoryService.getMemories()
         //     .subscribe(
         //     (memories: Memory[]) => {
-        //         Utils.log(LoglevelEnum.Info,'MemoryListComponent ngOnInit.getMemories() after');
+        //         Utils.log(LoglevelEnum.Info,this,'MemoryListComponent ngOnInit.getMemories() after');
         //         memoryListComponent.newMemoryList(memories)
         //     }
         //     );
         memoryListComponent.subscription = memoryListComponent.memoryService.memoriesChanged.subscribe(
-            (memories: Memory[]) =>
-                memoryListComponent.newMemoryList(memories));
+            (memories: Memory[]) => {
+                Utils.log(LoglevelEnum.Info, this, 'memoriesChanged size: ' + memories.length);
+                memoryListComponent.newMemoryList(memories);
+            });
         memoryListComponent.subscription = memoryListComponent.memoryService.memoryDeleted.subscribe(
             (memory: Memory) =>
                 memoryListComponent.removeMemory(memory));
     }
 
     newMemoryList(memories: Memory[]) {
-
+        Utils.log(LoglevelEnum.Info, this, 'newMemoryList size: ' + memories.length);
         this.memories = memories;
         this.memoryService.bigTotalItems = this.memories.length;
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);

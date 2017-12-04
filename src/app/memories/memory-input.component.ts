@@ -294,7 +294,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                         memoryInputComponent.memoryService.updateMemory(this.memory)
                             .subscribe(
                             result => {
-                                Utils.log(LoglevelEnum.Info,result);
+                                Utils.log(LoglevelEnum.Info,this,result);
                                 memoryInputComponent.router.navigate(['memories']).then((ok) => {
                                     if (ok) {
                                         memoryInputComponent.memoryService.showSuccessToast.emit("Memory updated.");
@@ -498,15 +498,15 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
 
     onTagsChange(event) {
-        //Utils.log(LoglevelEnum.Info,this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
     }
 
     onPeopleChange(event) {
-        //Utils.log(LoglevelEnum.Info,this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
     }
 
     onPhotosChange(event) {
-        //Utils.log(LoglevelEnum.Info,this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
     }
 
 }

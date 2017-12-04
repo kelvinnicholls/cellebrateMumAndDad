@@ -120,7 +120,7 @@ export class PhotoService {
 
         photoService.updatePhoto(photo).subscribe(
             result => {
-                Utils.log(LoglevelEnum.Info,result);
+                Utils.log(LoglevelEnum.Info,this,result);
                 photo.comment = null;
                 let commentDate = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);
                 let userName = photoService.userService.getLoggedInUser().name;
@@ -356,13 +356,13 @@ export class PhotoService {
             photoService.photos.sort(Utils.dynamicSort('title'));
             photoService.photosChanged.next(photoService.photos);
             photoService.appService.showToast(Consts.INFO, "New photo  : " + photo.title + " added by " + changedBy);
-            Utils.log(LoglevelEnum.Info,Consts.INFO, "New photo  : " + photo.title + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,this, "New photo  : " + photo.title + " added by " + changedBy);
         });
 
         photoService.socket.on('updatedPhoto', (photo, changedBy) => {
             let updatedPhoto = photoService.updateThisPhoto(photo);
             photoService.appService.showToast(Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
-            Utils.log(LoglevelEnum.Info,Consts.INFO, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
+            Utils.log(LoglevelEnum.Info,this, "Photo  : " + updatedPhoto.title + " updated by " + changedBy);
         });
 
 
@@ -373,7 +373,7 @@ export class PhotoService {
                 //this.allPhotos.splice(this.allPhotos.indexOf(photoToBeDeleted), 1);
                 //this.photosChanged.next(this.allPhotos);
                 photoService.appService.showToast(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
-                Utils.log(LoglevelEnum.Info,Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
+                Utils.log(LoglevelEnum.Info,this, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
             };
         });
     }
@@ -406,9 +406,9 @@ export class PhotoService {
                 photoService.photosChanged.next(photoService.photos);
                 this.socket.emit('photoCreated', photo, function (err) {
                     if (err) {
-                        Utils.log(LoglevelEnum.Info,"photoCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,this,"photoCreated err: ", err);
                     } else {
-                        Utils.log(LoglevelEnum.Info,"photoCreated No Error");
+                        Utils.log(LoglevelEnum.Info,this,"photoCreated No Error");
                     }
                 });
                 return photo;
@@ -543,7 +543,7 @@ export class PhotoService {
         if (changeType == "U" && !photo.comment || changeType == "D") {
             retVal = Utils.checkIsAdminOrOwner(photo._creator, this.userService.getLoggedInUser(), this.authUserService);
         };
-        Utils.log(LoglevelEnum.Info,"isAllowed retVal", retVal);
+        Utils.log(LoglevelEnum.Info,this,"isAllowed retVal", retVal);
         return retVal;
     }
 
@@ -568,9 +568,9 @@ export class PhotoService {
                     photoService.updateThisPhoto(body.media);
                     photoService.socket.emit('photoUpdated', body.media, function (err) {
                         if (err) {
-                            Utils.log(LoglevelEnum.Info,"photoUpdated err: ", err);
+                            Utils.log(LoglevelEnum.Info,this,"photoUpdated err: ", err);
                         } else {
-                            Utils.log(LoglevelEnum.Info,"photoUpdated No Error");
+                            Utils.log(LoglevelEnum.Info,this,"photoUpdated No Error");
                         }
                     });
                     return response.json();
@@ -609,9 +609,9 @@ export class PhotoService {
                     photoService.removePhoto(photo);
                     photoService.socket.emit('photoDeleted', photo, function (err) {
                         if (err) {
-                            Utils.log(LoglevelEnum.Info,"photoDeleted err: ", err);
+                            Utils.log(LoglevelEnum.Info,this,"photoDeleted err: ", err);
                         } else {
-                            Utils.log(LoglevelEnum.Info,"photoDeleted No Error");
+                            Utils.log(LoglevelEnum.Info,this,"photoDeleted No Error");
                         }
                     });
                     photoService.appService.showToast(Consts.INFO, "Photo deleted.");

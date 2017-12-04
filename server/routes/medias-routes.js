@@ -42,22 +42,22 @@ const {
 
 
 let upload = (req, res, next) => {
-  utils.log(utils.LoglevelEnum.Info,'upload',req, res);
+  utils.log(utils.LoglevelEnum.Info, 'upload', req, res);
   multerUploadSingleFile(req, res, function (err) {
-    utils.log(utils.LoglevelEnum.Info,'media-routes multerUploadSingleFile', err);
-    utils.log(utils.LoglevelEnum.Info,'req.body.media', req.body.media);
+    utils.log(utils.LoglevelEnum.Info, 'media-routes multerUploadSingleFile', err);
+    utils.log(utils.LoglevelEnum.Info, 'req.body.media', req.body.media);
     req.passedMedia = JSON.parse(req.body.media);
     delete req.body.media;
-    utils.log(utils.LoglevelEnum.Info,'req.file', req.file);
+    utils.log(utils.LoglevelEnum.Info, 'req.file', req.file);
     if (err) {
       processErr(err);
     } else {
       if (!req.file) {
-        utils.log(utils.LoglevelEnum.Info,'No file was selected');
+        utils.log(utils.LoglevelEnum.Info, 'No file was selected');
       } else {
-        utils.log(utils.LoglevelEnum.Info,'media patch File uploaded!');
+        utils.log(utils.LoglevelEnum.Info, 'media patch File uploaded!');
         let fileName = req.file.filename;
-        utils.log(utils.LoglevelEnum.Info,"newFileName", fileName);
+        utils.log(utils.LoglevelEnum.Info, "newFileName", fileName);
         let location = path.join(req.file.destination, fileName);
         req.passedMedia.location = location;
         req.passedMedia.originalFileName = req.file.originalname;
@@ -79,36 +79,36 @@ let addUserToComments = (media) => {
     let processedComments = 0;
     let commentsArr = [];
 
-    utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'numComments', numComments);
+    utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'numComments', numComments);
     if (retMedia.comments && retMedia.comments.length > 0) {
       for (let comment of retMedia.comments) {
-        utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'comment', comment);
+        utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'comment', comment);
         let userObj = {
           '_creatorRef': comment._creator
         };
         User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
-          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user', user);
-          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'typeof user', typeof user);
-          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'typeof comment', typeof comment);
+          utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user', user);
+          utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'typeof user', typeof user);
+          utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'typeof comment', typeof comment);
           if (user) {
             delete user._id;
             let newComment = JSON.parse(JSON.stringify(comment));
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user.name', user.name);
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user._profileMediaId', user._profileMediaId);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user.name', user.name);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user._profileMediaId', user._profileMediaId);
             newComment.user = {};
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment.user', newComment.user);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment.user', newComment.user);
             newComment.user.name = user.name;
             newComment.user._profileMediaId = user._profileMediaId;
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment.user2', newComment.user);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment.user2', newComment.user);
 
             commentsArr.push(newComment);
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment', newComment);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment', newComment);
           };
 
           processedComments++;
           if (numComments === processedComments) {
             retMedia.comments = commentsArr;
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'resolve', retMedia);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'resolve', retMedia);
             return resolve(retMedia);
           };
         }, (e) => {
@@ -126,6 +126,7 @@ let addUserToComments = (media) => {
 let transformCreatorToUser = (medias) => {
   return new Promise((resolve, reject) => {
     let numMedias = medias ? medias.length : 0;
+    utils.log(utils.LoglevelEnum.Info,"medias.transformCreatorToUser numMedias",numMedias);
     let processedMedias = 0;
     let transformedMedias = [];
     if (numMedias > 0) {
@@ -203,9 +204,9 @@ let downloadFile = (media) => {
 router.post('/', authenticate, upload, (req, res) => {
   if (!req.loggedInUser.guestUser) {
     let body = _.pick(req.passedMedia, mediaInsertFields);
-    utils.log(utils.LoglevelEnum.Info,'body', body);
+    utils.log(utils.LoglevelEnum.Info, 'body', body);
     let media = new Media(body);
-    utils.log(utils.LoglevelEnum.Info,'body.photoInfo', body.photoInfo);
+    utils.log(utils.LoglevelEnum.Info, 'body.photoInfo', body.photoInfo);
     if (body.photoInfo && body.photoInfo.location && body.photoInfo.isUrl) {
       media.location = body.photoInfo.location;
       media.isUrl = true;
@@ -217,13 +218,13 @@ router.post('/', authenticate, upload, (req, res) => {
     media.addedDate = new Date().getTime();
     media.comments = [];
     media._id = new ObjectID();
-    utils.log(utils.LoglevelEnum.Info,'media', media);
+    utils.log(utils.LoglevelEnum.Info, 'media', media);
 
     media.save().then((newMedia) => {
-      utils.log(utils.LoglevelEnum.Info,'media2', newMedia);
+      utils.log(utils.LoglevelEnum.Info, 'media2', newMedia);
       res.send(_.pick(newMedia, mediaOutFields));
     }, (e) => {
-      utils.log(utils.LoglevelEnum.Info,'media.save() e', e);
+      utils.log(utils.LoglevelEnum.Info, 'media.save() e', e);
       res.status(400).send();
     });
   };
@@ -240,20 +241,22 @@ router.get('/', authenticate, (req, res) => {
   // };
 
   Media.find(mediasObj).populate('comments tags people').then((medias) => {
+    utils.log(utils.LoglevelEnum.Info, "GET medias.length", medias.length);
     transformCreatorToUser(medias).then((medias) => {
+      utils.log(utils.LoglevelEnum.Info, "after transformCreatorToUser medias.length", medias.length);
       let obj = {};
       obj['medias'] = medias;
       downloadFiles(medias).then(() => {
         res.send(obj);
       }, (e) => {
-        utils.log(utils.LoglevelEnum.Info,"downloadFiles error", e);
+        utils.log(utils.LoglevelEnum.Info, "downloadFiles error", e);
       });
     }, (e) => {
-      utils.log(utils.LoglevelEnum.Info,"transformCreatorToUser error", e);
+      utils.log(utils.LoglevelEnum.Info, "transformCreatorToUser error", e);
     });
 
   }).catch((e) => {
-    utils.log(utils.LoglevelEnum.Info,"mediasApp.get('/medias/' error", e);
+    utils.log(utils.LoglevelEnum.Info, "mediasApp.get('/medias/' error", e);
   });
 });
 
@@ -271,10 +274,10 @@ router.get('/byCriteria', authenticate, (req, res) => {
     downloadFiles(medias).then(() => {
       res.send(obj);
     }, (e) => {
-      utils.log(utils.LoglevelEnum.Info,"downloadFiles error", e);
+      utils.log(utils.LoglevelEnum.Info, "downloadFiles error", e);
     });
   }, (e) => {
-    utils.log(utils.LoglevelEnum.Info,"mediasApp.get('/medias/byCriteria' error", e);
+    utils.log(utils.LoglevelEnum.Info, "mediasApp.get('/medias/byCriteria' error", e);
   });
 
 });
@@ -284,9 +287,9 @@ router.get('/title/:title', authenticate, (req, res) => {
   let mediaObj = {
     title
   };
-  utils.log(utils.LoglevelEnum.Info,"mediaObj", mediaObj);
+  utils.log(utils.LoglevelEnum.Info, "mediaObj", mediaObj);
   Media.findOne(mediaObj).then((media) => {
-    utils.log(utils.LoglevelEnum.Info,"media", media);
+    utils.log(utils.LoglevelEnum.Info, "media", media);
     if (media) {
       res.send({
         'titleFound': true,
@@ -299,7 +302,7 @@ router.get('/title/:title', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    utils.log(utils.LoglevelEnum.Info,"media router.get('/title/:title' e", e);
+    utils.log(utils.LoglevelEnum.Info, "media router.get('/title/:title' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -325,7 +328,7 @@ router.get('/:id', authenticate, (req, res) => {
           media
         });
       }, (e) => {
-        utils.log(utils.LoglevelEnum.Info,"downloadFile error", e);
+        utils.log(utils.LoglevelEnum.Info, "downloadFile error", e);
       });
     } else {
       res.status(404).send({
@@ -416,7 +419,7 @@ router.delete('/:id', authenticate, (req, res) => {
 
 let updateMedias = (res, body, medias, commentId) => {
 
-  utils.log(utils.LoglevelEnum.Info,"updateMedias", body, medias, commentId);
+  utils.log(utils.LoglevelEnum.Info, "updateMedias", body, medias, commentId);
 
   // let mediasObj = {
   //   _id : medias._id
@@ -431,8 +434,8 @@ let updateMedias = (res, body, medias, commentId) => {
       "comments": commentId
     };
   };
-  utils.log(utils.LoglevelEnum.Info,"updateObj", updateObj);
-  utils.log(utils.LoglevelEnum.Info,"medias", medias);
+  utils.log(utils.LoglevelEnum.Info, "updateObj", updateObj);
+  utils.log(utils.LoglevelEnum.Info, "medias", medias);
 
   Media.findOneAndUpdate(medias, updateObj, {
     new: true
@@ -445,7 +448,7 @@ let updateMedias = (res, body, medias, commentId) => {
           });
         }, (e) => {
           res.status(400).send();
-          utils.log(utils.LoglevelEnum.Info,e);
+          utils.log(utils.LoglevelEnum.Info, e);
         });
       } else {
         res.send({
@@ -460,13 +463,13 @@ let updateMedias = (res, body, medias, commentId) => {
 
   }, (e) => {
     res.status(400).send();
-    utils.log(utils.LoglevelEnum.Info,e);
+    utils.log(utils.LoglevelEnum.Info, e);
   });
 };
 
 
 router.patch('/:id', authenticate, upload, (req, res) => {
-  utils.log(utils.LoglevelEnum.Info,"router.patch1", req.passedMedia);
+  utils.log(utils.LoglevelEnum.Info, "router.patch1", req.passedMedia);
   if (!req.loggedInUser.guestUser) {
     let {
       id
@@ -474,7 +477,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
 
     let body = _.pick(req.passedMedia, mediaUpdateFields);
 
-    utils.log(utils.LoglevelEnum.Info,"router.patch2", body);
+    utils.log(utils.LoglevelEnum.Info, "router.patch2", body);
 
     if (!ObjectID.isValid(id)) {
       return res.status(404).send({
@@ -496,7 +499,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
 
       comment._creator = req.loggedInUser._creatorRef;
       comment.commentDate = new Date().getTime();
-      utils.log(utils.LoglevelEnum.Info,'comment', comment);
+      utils.log(utils.LoglevelEnum.Info, 'comment', comment);
 
       comment.save().then((comment) => {
         updateMedias(res, body, medias, comment._id);

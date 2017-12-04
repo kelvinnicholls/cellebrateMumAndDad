@@ -88,7 +88,7 @@ export class TagService {
             tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
             tagService.tagsChanged.next(this.tags);
             tagService.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
-            Utils.log(LoglevelEnum.Info,Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
+            Utils.log(LoglevelEnum.Info,this, "New tag  : " + tag.tag + " added by " + changedBy);
         });
 
     }
@@ -125,9 +125,9 @@ export class TagService {
                 tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
                 this.socket.emit('tagCreated', tag, function (err) {
                     if (err) {
-                        Utils.log(LoglevelEnum.Info,"tagCreated err: ", err);
+                        Utils.log(LoglevelEnum.Info,this,"tagCreated err: ", err);
                     } else {
-                        Utils.log(LoglevelEnum.Info,"tagCreated No Error");
+                        Utils.log(LoglevelEnum.Info,this,"tagCreated No Error");
                     }
                 });
 

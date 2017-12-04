@@ -306,7 +306,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
                             result => {
-                                Utils.log(LoglevelEnum.Info,result);
+                                Utils.log(LoglevelEnum.Info,this,result);
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
                                         photoInputComponent.photoService.showSuccessToast.emit("Photo updated.");
@@ -505,11 +505,11 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
 
     onTagsChange(event) {
-        //Utils.log(LoglevelEnum.Info,this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
     }
 
     onPeopleChange(event) {
-        //Utils.log(LoglevelEnum.Info,this.optionsModel);
+        //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
     }
 
 }

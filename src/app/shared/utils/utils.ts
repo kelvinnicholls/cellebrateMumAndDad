@@ -1,6 +1,8 @@
 import * as moment from 'moment';
 import { User } from "../../users/user.model";
 import { AuthUserService } from "../../auth/auth-user.service";
+import { Consts } from "../consts";
+
 
 export enum SortDataType {
     String
@@ -37,29 +39,32 @@ export class Utils {
     }
 
     public static checkIsAdminOrOwner(creator: string, loggedInUser: User, authUserService: AuthUserService): boolean {
-        Utils.log(LoglevelEnum.Info,"checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
+        Utils.log(LoglevelEnum.Info, this, "checkIsAdminOrOwner", creator, loggedInUser.adminUser, loggedInUser._creatorRef);
         let retVal = false;
 
         if (!authUserService.isGuestUser() && ((loggedInUser.adminUser.toString().toLowerCase() == 'yes' || (loggedInUser._creatorRef === creator)))) {
             retVal = true;
         };
-        Utils.log(LoglevelEnum.Info,"checkIsAdminOrOwner retVal", retVal);
+        Utils.log(LoglevelEnum.Info, this, "checkIsAdminOrOwner retVal", retVal);
         return retVal;
 
     }
 
     private static LOG_LEVEL = LoglevelEnum.Info;
 
-    public static setLogLevel(loglevelEnum : LoglevelEnum) {
+    public static setLogLevel(loglevelEnum: LoglevelEnum) {
         Utils.LOG_LEVEL = loglevelEnum;
     };
 
-    public static log(...args : any[]) {
+    public static log(...args: any[]) {
         let passedArguments = args.slice();
         if (passedArguments && passedArguments.length > 0) {
             let logLevel = passedArguments[0];
+            passedArguments[0] = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);
             if (logLevel <= Utils.LOG_LEVEL) {
-                passedArguments.shift();
+                let that = passedArguments[1];
+                let className: string = that.constructor.toString().match(/\w+/g)[1];
+                passedArguments[1] = className;
                 console.log.apply(this, passedArguments);
             };
         };

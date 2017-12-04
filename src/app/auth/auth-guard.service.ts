@@ -12,10 +12,10 @@ export class AuthGuard implements CanActivate, CanLoad {
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
 
     if (this.authService.isAuthorised(route)) {
-      Utils.log(LoglevelEnum.Info,"AuthGuard.canActivate is authorised");
+      Utils.log(LoglevelEnum.Info,this,"AuthGuard.canActivate is authorised");
       return true;
     };
-    Utils.log(LoglevelEnum.Info,"AuthGuard.canActivate is not authorised");
+    Utils.log(LoglevelEnum.Info,this,"AuthGuard.canActivate is not authorised");
     this.router.navigate(['not-found']);
     return false;
   }
