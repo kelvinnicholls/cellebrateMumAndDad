@@ -1,6 +1,6 @@
 <!-- https://scotch.io/tutorials/how-to-deal-with-different-form-controls-in-angular-2 -->
 
-<div  class="row col col-sm-3 offset-sm-5">
+<div  class="row col col-sm-8 offset-sm-5">
   <h2 class="blog-post-title ">{{getTitle()}}</h2>
 </div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
@@ -13,7 +13,7 @@
         'has-danger': myForm.get('email').invalid && (myForm.get('email').dirty || myForm.get('email').touched),
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty || myForm.get('email').touched)
       }">
-    <label for="email" class="col-sm-2 col-form-label"><strong>Email address</strong></label>
+    <label for="email" class="col-sm-3 col-form-label"><strong>Email address</strong></label>
     <div class="col-sm-7">
       <input type="email" class="form-control" id="email" placeholder="Email address"
         [ngModel]="user?.email" formControlName="email" [ngClass]="{
@@ -35,7 +35,7 @@
         'has-danger': myForm.get('password').invalid && (myForm.get('password').dirty || myForm.get('password').touched),
         'has-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
-    <label for="password" class="col-sm-2 col-form-label"><strong>Password</strong></label>
+    <label for="password" class="col-sm-3 col-form-label"><strong>Password</strong></label>
     <div class="col-sm-7">
       <input type="password"
         class="form-control" id="password" placeholder="Password" [ngModel]="user?.password" formControlName="password" [ngClass]="{
@@ -59,7 +59,7 @@
         'has-danger': myForm.get('name').invalid && (myForm.get('name').dirty || myForm.get('name').touched),
         'has-success': myForm.get('name').valid && (myForm.get('name').dirty || myForm.get('name').touched)
       }">
-    <label for="name" class="col-sm-2 col-form-label"><strong>Name</strong></label>
+    <label for="name" class="col-sm-3 col-form-label"><strong>Name</strong></label>
     <div class="col-sm-7">
       <input  type="text" class="form-control" id="name" placeholder="Name"
         [ngModel]="user?.name" formControlName="name" [ngClass]="{
@@ -79,7 +79,7 @@
         'has-danger': myForm.get('adminUser').invalid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched),
         'has-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty || myForm.get('adminUser').touched)
       }">
-    <label for="adminUser" class="col-sm-2 col-form-label"><strong>Admin?</strong></label>
+    <label for="adminUser" class="col-sm-3 col-form-label"><strong>Admin?</strong></label>
     <div class="col-sm-7">
       <select class="form-control dropdown" [ngModel]="user?.adminUser"
         formControlName="adminUser" [ngClass]="{
@@ -102,7 +102,7 @@
     'has-danger': myForm.get('guestUser').invalid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched),
     'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty || myForm.get('guestUser').touched)
   }">
-<label for="guestUser" class="col-sm-2 col-form-label"><strong>Guest?</strong></label>
+<label for="guestUser" class="col-sm-3 col-form-label"><strong>Guest?</strong></label>
 <div class="col-sm-7">
   <select class="form-control dropdown" [ngModel]="user?.guestUser"
     formControlName="guestUser" [ngClass]="{
@@ -124,7 +124,7 @@
         'has-danger': myForm.get('emailUpdates').invalid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched),
         'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty || myForm.get('emailUpdates').touched)
       }">
-    <label for="emailUpdates" class="col-sm-2 col-form-label"><strong>Email Updates?</strong></label>
+    <label for="emailUpdates" class="col-sm-3 col-form-label"><strong>Email Updates?</strong></label>
     <div class="col-sm-7">
       <select class="form-control dropdown"
         [ngModel]="user?.emailUpdates" formControlName="emailUpdates" [ngClass]="{
@@ -146,7 +146,7 @@
         'has-danger': myForm.get('relationship').invalid && (myForm.get('relationship').dirty || myForm.get('relationship').touched),
         'has-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty || myForm.get('relationship').touched)
       }">
-    <label for="relationship" class="col-sm-2 col-form-label"><strong>Relationship</strong></label>
+    <label for="relationship" class="col-sm-3 col-form-label"><strong>Relationship</strong></label>
     <div class="col-sm-7">
       <select class="form-control dropdown" [ngModel]="user?.relationship"
         formControlName="relationship" [ngClass]="{
@@ -172,7 +172,7 @@
         'has-danger': myForm.get('dob').invalid,
         'has-success': myForm.get('dob').valid
       }">
-    <label for="dob" class="col-sm-2 col-form-label"><strong>Date Of Birth</strong></label>
+    <label for="dob" class="col-sm-3 col-form-label"><strong>Date Of Birth</strong></label>
     <div class="col-sm-7">
       <div class="input-group">
         <input class="form-control" placeholder="DD-MM-YYYY" name="dob" [(ngModel)]="modelDob" [maxDate]="getMaxDate()" [minDate]="getMinDate()"
@@ -193,7 +193,7 @@
         'has-danger': myForm.get('twitterId').invalid,
         'has-success': myForm.get('twitterId').valid
       }">
-    <label class="col-sm-2 col-form-label"><strong>Twitter ID</strong></label>
+    <label class="col-sm-3 col-form-label"><strong>Twitter ID</strong></label>
     <div class="col-sm-7">
       <input type="text" id="twitterId" class="form-control" placeholder="Twitter ID"
         [ngModel]="user?.twitterId" formControlName="twitterId" [ngClass]="{
@@ -207,7 +207,7 @@
         'has-danger': myForm.get('facebookId').invalid,
         'has-success': myForm.get('facebookId').valid
       }">
-    <label class="col-sm-2 col-form-label"><strong>Facebook ID</strong></label>
+    <label class="col-sm-3 col-form-label"><strong>Facebook ID</strong></label>
     <div class="col-sm-7">
       <input type="text" id="facebookId" class="form-control" placeholder="Facebook ID"
         [ngModel]="user?.facebookId" formControlName="facebookId" [ngClass]="{
@@ -219,7 +219,7 @@
 
 
   <div class="form-group row col col-sm-8 offset-sm-3">
-    <label for="profilePic" class="col-sm-2 col-form-label"><strong>Profile picture</strong></label>
+    <label for="profilePic" class="col-sm-3 col-form-label"><strong>Profile picture</strong></label>
     <div class="col col-sm-2">
       <span class="pull-right">
         <img [src]="getSource()" class="img-responsive" style="max-height: 50px;" toggleFullscreen>
