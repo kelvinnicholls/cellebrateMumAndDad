@@ -31,10 +31,10 @@ import { AuthUserService } from "../auth/auth-user.service";
 @Injectable()
 export class MemoryService {
 
-    public maxSize: number = 4;
+    public maxSize: number = 6;
     public bigTotalItems: number = 0;
     public numPages: number = 0;
-    public eventItemsPerPage: number = 4;
+    public eventItemsPerPage: number = 6;
     private retrievedMemories = false;
 
     public memories: Memory[] = [];

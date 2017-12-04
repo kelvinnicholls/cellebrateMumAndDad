@@ -1,11 +1,11 @@
 <div *ngIf="pagedPhotos.length > 0">
-  <div  class="row col col-md-4 offset-md-4 kgn-center-text">
+  <div  class="row col col-sm-8 offset-sm-4 kgn-center-text">
     <h2 class="blog-post-title ">Photos</h2>
     <button type="button" class="btn btn-md btn-primary" (click)="onSlideShow()">Slide Show</button>
   </div>
   <!-- https://material.angular.io/components/grid-list/overview -->
-  <div class="col-md-6 offset-md-2 kgn-center-text">
-    <mat-grid-list cols="2" gutterSize="10" rows="2" rowHeight="1:1">
+  <div class="col-sm-8 offset-sm-2 kgn-center-text">
+    <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1">
       <mat-grid-tile *ngFor="let photo of pagedPhotos">
         <mat-grid-tile-header>
           <span mat-line>
@@ -13,13 +13,13 @@
           </span>
         </mat-grid-tile-header>
         <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 100%;" toggleFullscreen>
-        <mat-grid-tile-footer class="row col-md-13">
-            <div class="col-md-6 text-center">
+        <mat-grid-tile-footer class="row col-sm-13">
+            <div class="col-sm-6 text-center">
               <span *ngIf="photo && photo.comments &&  photo.comments.length > 0">
                 <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments<br/>({{photo.comments.length}})</a>
               </span>
             </div>
-            <div class="col-md-6 text-center">
+            <div class="col-sm-6 text-center">
               <span *ngIf="checkCanDelete(photo)">
                 <a (click)="onDelete(photo)">Delete</a>
               </span>
@@ -33,26 +33,26 @@
     <span [innerHTML]="photoService.showSearchCriteria()"></span>
   </ng-template>
 
-  <div *ngIf="photoService.searchRet" class="row col offset-md-2">
+  <div *ngIf="photoService.searchRet" class="row col offset-sm-2">
     <a placement="left" [ngbPopover]="popContent" popoverTitle="Existing Search Criteria" target="_blank" href="javascript:void(0)"
       (click)="toggleShowHideSearchCriteria()">{{toggleShowHideSearchCriteriaText}}</a>
   </div>
 
 
-  <div class="col-md-6 offset-md-4 text-center kgn-border-pad">
+  <div class="col-sm-6 offset-sm-4 text-center kgn-border-pad">
     <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize"
-      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="4" [rotate]="false" (numPages)="photoService.numPages = $event"
+      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="photoService.numPages = $event"
       (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
 
-  <div *ngIf="photoService.searchRet" class="row col col-md-4 offset-md-4">
+  <div *ngIf="photoService.searchRet" class="row col col-sm-4 offset-sm-4">
     <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
     <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 
-  <div *ngIf="!photoService.searchRet" class="row col col-md-4 offset-md-5">
+  <div *ngIf="!photoService.searchRet" class="row col col-sm-4 offset-sm-5">
     <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
   </div>
 
@@ -65,7 +65,7 @@
       <h1 class="display-1 text-center">{{getNoPhotosText()}}</h1>
     </div>
   </div>
-  <div *ngIf="photoService.searchRet" class="row col col-md-4 offset-md-5">
+  <div *ngIf="photoService.searchRet" class="row col col-sm-4 offset-sm-5">
     <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
   </div>
 </div>

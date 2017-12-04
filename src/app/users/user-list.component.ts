@@ -47,14 +47,14 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    public maxSize: number = 4;
+    public maxSize: number = 6;
     public bigTotalItems: number = this.users.length;
 
     public numPages: number = 0;
 
-    private itemsPerPage: number = 4;
+    private itemsPerPage: number = 6;
 
-    private eventItemsPerPage: number = 4;
+    private eventItemsPerPage: number = 6;
 
 
     private hideSearchCriteriaText: String = "Hide Search Criteria";

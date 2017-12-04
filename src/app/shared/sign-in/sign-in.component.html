@@ -1,9 +1,9 @@
-<form ngNativeValidate   class="form-signin col-md-8 offset-md-2" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
+<form ngNativeValidate   class="form-signin col-sm-8 offset-sm-2" [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
     <div class="form-group row">
-        <div class="col-md-6">
+        <div class="col-sm-6">
             <h2 class="form-signin-heading">Please sign in</h2>
         </div>
     </div>
@@ -12,8 +12,8 @@
         'has-danger': myForm.get('email').invalid && (myForm.get('email').dirty || myForm.get('email').touched),
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty || myForm.get('email').touched)
       }">
-        <label class="col-md-2 col-form-label">Email</label>
-        <div class="col-md-6">
+        <label class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-6">
             <input type="email" class="form-control" id="email" placeholder="Email address" autofocus formControlName="email">
             <div class="form-control-feedback" *ngIf="myForm.get('email').errors && (myForm.get('email').dirty || myForm.get('email').touched)">
                 <p *ngIf="myForm.get('email').errors.required">Email address is required.</p>
@@ -26,8 +26,8 @@
         'has-danger': myForm.get('password').invalid && (myForm.get('password').dirty || myForm.get('password').touched),
         'has-success': myForm.get('password').valid && (myForm.get('password').dirty || myForm.get('password').touched)
       }">
-        <label for="password" class="col-md-2 col-form-label">Password</label>
-        <div class="col-md-6">
+        <label for="password" class="col-sm-2 col-form-label">Password</label>
+        <div class="col-sm-6">
             <input type="password" class="form-control" id="password" placeholder="Password" formControlName="password">
             <div class="form-control-feedback" *ngIf="myForm.get('password').errors && (myForm.get('password').dirty || myForm.get('password').touched)">
                 <p *ngIf="myForm.get('password').errors.required">Password is required.</p>
@@ -36,6 +36,6 @@
         </div>
     </div>
     <div class="form-group row">
-        <button class="btn btn-md btn-primary offset-md-3" type="submit" [disabled]="!isFormValid()">Sign in</button>
+        <button class="btn btn-md btn-primary offset-sm-3" type="submit" [disabled]="!isFormValid()">Sign in</button>
     </div>
 </form>

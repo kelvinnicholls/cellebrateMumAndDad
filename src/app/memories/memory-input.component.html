@@ -1,18 +1,18 @@
-<div  class="row col col-md-3 offset-md-5">
+<div  class="row col col-sm-3 offset-sm-5">
   <h2 class="blog-post-title ">{{getTitle()}}</h2>
 </div>
 <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()" [ngClass]="{
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
-  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
         'has-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
         'has-success': myForm.get('title').valid && (myForm.get('title').dirty || myForm.get('title').touched)
       }">
-    <label for="title" class="col-md-2 col-form-label">
+    <label for="title" class="col-sm-2 col-form-label">
       <strong>Title</strong>
     </label>
-    <div class="col-md-7">
+    <div class="col-sm-7">
       <input type="text" class="form-control" id="title" placeholder="Title"
         [ngModel]="memory?.title" formControlName="title" [ngClass]="{
         'form-control-danger': myForm.get('title').invalid && (myForm.get('title').dirty || myForm.get('title').touched),
@@ -26,14 +26,14 @@
     </div>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
         'has-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'has-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }">
-    <label for="description" class="col-md-2 col-form-label">
+    <label for="description" class="col-sm-2 col-form-label">
       <strong>Description</strong>
     </label>
-    <div class="col-md-7">
+    <div class="col-sm-7">
       <textarea type="text" class="form-control" id="description"
         placeholder="Description" [ngModel]="memory?.description" formControlName="description" [ngClass]="{
         'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
@@ -44,14 +44,14 @@
   </div>
 
 
-  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
     'has-danger': myForm.get('memoryDate').invalid,
     'has-success': myForm.get('memoryDate').valid
   }">
-    <label for="memoryDate" class="col-md-2 col-form-label">
+    <label for="memoryDate" class="col-sm-2 col-form-label">
       <strong>Date of Memory</strong>
     </label>
-    <div class="col-md-7">
+    <div class="col-sm-7">
       <div class="input-group">
         <input class="form-control" placeholder="DD-MM-YYYY" name="memoryDate" id="memoryDate" [(ngModel)]="modelMemoryDate" [maxDate]="getMaxDate()"
           [minDate]="getMinDate()" ngbDatepicker #d="ngbDatepicker" firstDayOfWeek="7" formControlName="memoryDate" [ngClass]="{
@@ -65,14 +65,14 @@
     </div>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
     'has-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched),
     'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty || myForm.get('tags').touched)
   }">
-    <label for="tags" class="col-md-2 col-form-label">
+    <label for="tags" class="col-sm-2 col-form-label">
       <strong>Tags</strong>
     </label>
-    <div placement="left" [ngbTooltip]="getTags()" class="col-md-5">
+    <div placement="left" [ngbTooltip]="getTags()" class="col-sm-5">
 
       <ss-multiselect-dropdown [texts]="tagService.multiSelectTagsTexts" [settings]="getConsts().multiSelectSettings" [(options)]="tagService.multiSelectTagOptions"
          formControlName="tags" [(ngModel)]="tagService.selectedTags"
@@ -86,14 +86,14 @@
       type="button">Add Tag</button>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
     'has-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched),
     'has-success': myForm.get('people').valid && (myForm.get('people').dirty || myForm.get('people').touched)
   }">
-    <label for="people" class="col-md-2 col-form-label">
+    <label for="people" class="col-sm-2 col-form-label">
       <strong>People</strong>
     </label>
-    <div placement="left" [ngbTooltip]="getPeople()" class="col-md-5">
+    <div placement="left" [ngbTooltip]="getPeople()" class="col-sm-5">
 
       <ss-multiselect-dropdown [texts]="personService.multiSelectPeopleTexts" [settings]="getConsts().multiSelectSettings" [(options)]="personService.multiSelectPersonOptions"
        formControlName="people" [(ngModel)]="personService.selectedPeople"
@@ -107,14 +107,14 @@
       type="button">Add Person</button>
   </div>
 
-  <div class="form-group row col col-md-8 offset-md-3" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
     'has-danger': myForm.get('photos').invalid && (myForm.get('photos').dirty || myForm.get('photos').touched),
     'has-success': myForm.get('photos').valid && (myForm.get('photos').dirty || myForm.get('photos').touched)
   }">
-    <label for="photos" class="col-md-2 col-form-label">
+    <label for="photos" class="col-sm-2 col-form-label">
       <strong>Photos</strong>
     </label>
-    <div placement="left" class="col-md-7">
+    <div placement="left" class="col-sm-7">
 
       <ss-multiselect-dropdown [texts]="photoService.multiSelectPhotosTexts" [settings]="getConsts().multiSelectSettings" [(options)]="photoService.multiSelectPhotoOptions"
          formControlName="photos" [(ngModel)]="photoService.selectedPhotos"
@@ -127,17 +127,17 @@
 
   </div>
 
-  <div id="comments" *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="form-group row col col-md-8 offset-md-4">
+  <div id="comments" *ngIf="memory && memory.comments &&  memory.comments.length > 0" class="form-group row col col-sm-8 offset-sm-4">
     <a  target="_blank" href="javascript:void(0)" (click)="showComments()">Comments ({{memory.comments.length}})</a>
   </div>
 
-  <div *ngIf="photoService && photoService.selectedPhotos && photoService.selectedPhotos.length > 0" class="form-group row col col-md-4 offset-md-5">
+  <div *ngIf="photoService && photoService.selectedPhotos && photoService.selectedPhotos.length > 0" class="form-group row col col-sm-4 offset-sm-5">
     <div>
       <ngx-gallery [options]="galleryOptions" [images]="getGalleryImages()"></ngx-gallery>
     </div>
   </div>
 
-  <div class="form-group row col col-md-4 offset-md-6">
+  <div class="form-group row col col-sm-4 offset-sm-6">
     <button *ngIf="isAddMemory()" type="button" class="btn btn-md btn-danger"
       (click)="onClear()">Clear</button>
     <button  class="btn btn-md btn-primary" type="submit"

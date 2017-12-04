@@ -59,10 +59,10 @@ export class PhotoService {
     public multiSelectPhotoOptions: IMultiSelectOption[] = [
     ];
 
-    public maxSize: number = 4;
+    public maxSize: number = 6;
     public bigTotalItems: number = 0;
     public numPages: number = 0;
-    public eventItemsPerPage: number = 4;
+    public eventItemsPerPage: number = 6;
 
     public photos: Photo[] = [];
     public eventPage: number = 1;
