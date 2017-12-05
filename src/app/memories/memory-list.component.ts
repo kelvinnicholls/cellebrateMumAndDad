@@ -134,6 +134,14 @@ export class MemoryListComponent implements OnInit, OnDestroy {
     }
 
 
+    getNumOfPhotos(memory : Memory): String {
+        let retVal : String = "";
+        if (memory.medias && memory.medias.length > 0 ) {
+            retVal = "(" + memory.medias.length + ")";
+        };
+        return retVal;
+    };
+
     ngOnInit() {
         let memoryListComponent = this;
         memoryListComponent.memoryService.showSuccessToast.subscribe((msg) => {

@@ -5,7 +5,7 @@
       <mat-grid-tile *ngFor="let memory of pagedMemories">
         <mat-grid-tile-header>
           <span mat-line>
-            <a routerLinkActive="active" routerLink="/memories/memory/{{memoryService.getMode(memory)}}/{{memory.index}}">{{memory.title}}</a>
+            <a routerLinkActive="active" routerLink="/memories/memory/{{memoryService.getMode(memory)}}/{{memory.index}}">{{memory.title}} {{getNumOfPhotos(memory)}}</a>
           </span>
         </mat-grid-tile-header>
         <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length > 0 && memory.mediasToDisplay[0].getSource()}}"

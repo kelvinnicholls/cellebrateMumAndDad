@@ -55,7 +55,7 @@ x158) Remove message removes the wrong message!
 162) check why photos (etc) do not always display on start up - they were empty files!
 x163) mirror changes in photo input screen in user and memories
 164) Allow user to change how many photos/users/memories are displayed per page
-165) Add no of photos in memory next to description
+x165) Add no. of photos in memory next to description
 
 
 https://www.npmjs.com/package/angular2-image-zoom
