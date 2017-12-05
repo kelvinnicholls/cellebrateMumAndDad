@@ -621,6 +621,7 @@ export class MemoryService {
                 if (buttonPressed === SearchRetEnum.ButtonOne) {
                     this.memories = Search.restrict(this.allMemories, searchRet);
                     this.searchRet = searchRet;
+                    this.eventPage = 1;
                     this.memoriesChanged.next(this.memories);
                     this.appService.showToast(Consts.SUCCESS, "Memory list updated.");
                 } else {

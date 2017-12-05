@@ -654,6 +654,7 @@ export class PhotoService {
                 if (buttonPressed === SearchRetEnum.ButtonOne) {
                     this.photos = Search.restrict(this.allPhotos, searchRet);
                     this.searchRet = searchRet;
+                    this.eventPage = 1;
                     this.photosChanged.next(this.photos);
                     this.appService.showToast(Consts.SUCCESS, "Photo list updated.");
                 } else {

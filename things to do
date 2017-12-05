@@ -23,39 +23,18 @@
 115) prob with IbacktheWorkersRound.JPG
 116) Get Karma to run from VSC
 119) add new search photos component
-x125) Sort out hints being on for too long 
 129) right-clicking a photo in a slideshow should go to that photo/memory/user = 'contextmenu' therefore could add other options
-
-x130) move messages to last column
-x131) Don't show 503 error when checking duplicate names/titles Request timeout https://devcenter.heroku.com/articles/request-timeout
-     this is when getting memories/photos
-
-x132) remove hints
-x133) resize input cols
 134) check mobile rendering
-x145) Remove Twitter ID and Facebook ID
-x146) Add guest Users (add readOnly flag)
 147) Add option to associate photo with a memory when adding photo
      -- memories to photos and update memory and photo
      -- only allow user to see memories they can edit in pick list ??
-x148) Clear local storage on logout
-x149) when deploying photos will be overwritten (I think) check!
 150) check if photos exists on start up. If they don't remove all from bucket
 151) Add hidden option to copy all files in bucket to public/images
-x152) When logging out remove socket connection
-x153) Adding a photo to a memory with no photos does not update memory list
-x154) test with no memories or photos - see if unauthorised error appears
-x155) replace console.log with logger to have different logging levels set by process env env variable Info, Warn, Err
-x156) add N/A relationship
-x157) get error adding comments to memories
-x158) Remove message removes the wrong message!
 159) Toasts are remaining at top
 160) firefox navigates to blank on pop up
 161) add admin option to list files in bucket and files in images
 162) check why photos (etc) do not always display on start up - they were empty files!
-x163) mirror changes in photo input screen in user and memories
 164) Allow user to change how many photos/users/memories are displayed per page
-x165) Add no. of photos in memory next to description
 
 
 https://www.npmjs.com/package/angular2-image-zoom

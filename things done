@@ -114,3 +114,22 @@ x118) Add new slideshow  component
 x128) allow initial user to be created on server startup if it doesn't already exists - similar to test and dev and prod db
 x126) sort out lov's being under photos - use  z-index
 x127) test search memories
+x125) Sort out hints being on for too long 
+x130) move messages to last column
+x131) Don't show 503 error when checking duplicate names/titles Request timeout https://devcenter.heroku.com/articles/request-timeout
+     this is when getting memories/photos
+x132) remove hints
+x133) resize input cols
+x145) Remove Twitter ID and Facebook ID
+x146) Add guest Users (add readOnly flag)
+x148) Clear local storage on logout
+x149) when deploying photos will be overwritten (I think) check!
+x152) When logging out remove socket connection
+x153) Adding a photo to a memory with no photos does not update memory list
+x154) test with no memories or photos - see if unauthorised error appears
+x155) replace console.log with logger to have different logging levels set by process env env variable Info, Warn, Err
+x156) add N/A relationship
+x157) get error adding comments to memories
+x158) Remove message removes the wrong message!
+x163) mirror changes in photo input screen in user and memories
+x165) Add no. of photos in memory next to description

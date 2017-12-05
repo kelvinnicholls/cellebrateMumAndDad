@@ -411,6 +411,7 @@ export class UserService {
                 if (buttonPressed === SearchRetEnum.ButtonOne) {
                     this.users = Search.restrict(this.allUsers, searchRet);
                     this.searchRet = searchRet;
+                    this.eventPage = 1;
                     this.usersChanged.next(this.users);
                     this.appService.showToast(Consts.SUCCESS, "User list updated.");
                 } else {
