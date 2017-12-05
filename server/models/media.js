@@ -110,7 +110,7 @@ MediaSchema.statics.findByCriteria = function (tags, people, fromDate, toDate) {
   return Media.find(queryObj).populate('comments tags people').then((medias) => {
     return medias;
   }).catch((e) => {
-    utils.log(utils.LoglevelEnum.Info,"MediaSchema.statics.findByCriteria  error", e);
+    utils.log(utils.LoglevelEnum.Info, "MediaSchema.statics.findByCriteria  error", e);
     return [];
   });
 };

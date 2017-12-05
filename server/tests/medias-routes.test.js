@@ -229,8 +229,6 @@ describe('GET /medias', () => {
   });
 });
 
-
-
 describe('GET /medias/:id', () => {
   it('should get media for id', (done) => {
     let id = medias[0]._id.toHexString();

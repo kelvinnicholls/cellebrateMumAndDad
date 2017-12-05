@@ -133,3 +133,10 @@ x157) get error adding comments to memories
 x158) Remove message removes the wrong message!
 x163) mirror changes in photo input screen in user and memories
 x165) Add no. of photos in memory next to description
+x119) add new search photos component
+x147) Add option to associate photo with a memory when adding photo
+     -- memories to photos and update memory and photo
+     -- only allow user to see memories they can edit in pick list ??
+     -- too much pissing about for too little reward
+x92) check that sockets communicate tags/people correctly
+x65) Use free mongodb hosting https://mlab.com/

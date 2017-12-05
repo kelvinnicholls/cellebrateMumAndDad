@@ -124,9 +124,10 @@ let addUserToComments = (media) => {
 
 
 let transformCreatorToUser = (medias) => {
+  utils.log(utils.LoglevelEnum.Info, "transformCreatorToUser medias.length", medias.length);
   return new Promise((resolve, reject) => {
     let numMedias = medias ? medias.length : 0;
-    utils.log(utils.LoglevelEnum.Info,"medias.transformCreatorToUser numMedias",numMedias);
+    utils.log(utils.LoglevelEnum.Info, "medias.transformCreatorToUser numMedias", numMedias);
     let processedMedias = 0;
     let transformedMedias = [];
     if (numMedias > 0) {
@@ -170,19 +171,21 @@ let transformCreatorToUser = (medias) => {
 };
 
 let downloadFiles = (medias) => {
+  utils.log(utils.LoglevelEnum.Info, "downloadFiles medias.length", medias.length);
   return new Promise((resolve, reject) => {
     let numMedias = medias ? medias.length : 0;
     let processedMedias = 0;
     if (numMedias > 0) {
       for (let media of medias) {
-        downloadFile(media);
-        processedMedias++;
-        if (numMedias === processedMedias) {
-          return resolve();
-        };
+        downloadFile(media).then(() => {
+          processedMedias++;
+          if (numMedias === processedMedias) {
+            return resolve(medias);
+          };
+        });
       }
     } else {
-      return resolve();
+      return resolve(medias);
     };
   });
 };
@@ -230,6 +233,37 @@ router.post('/', authenticate, upload, (req, res) => {
   };
 });
 
+// let restrictMemories = (media, loggedInUser) => {
+//   if (media.memories && media.memories.length > 0) {
+//     let transformedMemories = [];
+//     for (let memory of media.memories) {
+//       if (memory._creator === loggedInUser._creatorRef) {
+//         transformedMemories.push(memory);
+//       };
+//     };
+//     media.memories = transformedMemories;
+//   };
+//   return media;
+// };
+//Media.find(mediasObj).populate('comments tags people memories').then((medias) => downloadFiles(medias).then((medias) => restrictMedias(medias, req.loggedInUser).then((medias) => transformCreatorToUser(medias).then((medias) => {
+
+// let restrictMedias = (medias, loggedInUser) => {
+//   utils.log(utils.LoglevelEnum.Info, "restrictMemories medias.length", medias.length);
+//   return new Promise((resolve, reject) => {
+//     let numMedias = medias ? medias.length : 0;
+//     if (loggedInUser.adminUser || numMedias === 0) {
+//       return resolve(medias);
+//     } else {
+//       // only show medias the user has access to
+//       let transformedMedias = [];
+//       for (let media of medias) {
+//         let newMedia = restrictMemories(media, loggedInUser);
+//         transformedMedias.push(newMedia);
+//       };
+//       return resolve(transformedMedias);
+//     };
+//   });
+// };
 
 router.get('/', authenticate, (req, res) => {
 
@@ -240,22 +274,12 @@ router.get('/', authenticate, (req, res) => {
   //   mediasObj._creator = req.loggedInUser._creatorRef;
   // };
 
-  Media.find(mediasObj).populate('comments tags people').then((medias) => {
-    utils.log(utils.LoglevelEnum.Info, "GET medias.length", medias.length);
-    transformCreatorToUser(medias).then((medias) => {
-      utils.log(utils.LoglevelEnum.Info, "after transformCreatorToUser medias.length", medias.length);
-      let obj = {};
-      obj['medias'] = medias;
-      downloadFiles(medias).then(() => {
-        res.send(obj);
-      }, (e) => {
-        utils.log(utils.LoglevelEnum.Info, "downloadFiles error", e);
-      });
-    }, (e) => {
-      utils.log(utils.LoglevelEnum.Info, "transformCreatorToUser error", e);
-    });
-
-  }).catch((e) => {
+  Media.find(mediasObj).populate('comments tags people memories').then((medias) => downloadFiles(medias).then((medias) => transformCreatorToUser(medias).then((medias) => {
+    utils.log(utils.LoglevelEnum.Info, "after find medias.length", medias.length);
+    let obj = {};
+    obj['medias'] = medias;
+    res.send(obj);
+  }))).catch((e) => {
     utils.log(utils.LoglevelEnum.Info, "mediasApp.get('/medias/' error", e);
   });
 });
@@ -318,7 +342,6 @@ router.get('/:id', authenticate, (req, res) => {
     });
   };
 
-
   Media.findOne({
     '_id': id
   }).populate('comments tags people').then((media) => {
@@ -368,7 +391,6 @@ router.delete('/:id', authenticate, (req, res) => {
         if (fs.existsSync(media.location)) {
           fs.unlinkSync(media.location);
         };
-
         res.send({
           media
         });
@@ -439,7 +461,7 @@ let updateMedias = (res, body, medias, commentId) => {
 
   Media.findOneAndUpdate(medias, updateObj, {
     new: true
-  }).populate('comments tags people').then((media) => {
+  }).populate('comments tags people memories').then((media) => {
     if (media) {
       if (media.comments) {
         addUserToComments(media).then((media) => {
