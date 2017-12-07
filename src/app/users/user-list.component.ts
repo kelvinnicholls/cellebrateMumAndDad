@@ -37,7 +37,7 @@ export class UserListComponent implements OnInit, OnDestroy {
                 if (buttonPressed === DialogRetEnum.ButtonOne) {
                     this.userService.deleteUser(user)
                         .subscribe(
-                        result => Utils.log(LoglevelEnum.Info,this,result)
+                        result => Utils.log(LoglevelEnum.Info, this, result)
                         );
                 }
             });
@@ -79,8 +79,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     private updatePagedUsers(itemsPerPage, page) {
         let startIndex = (itemsPerPage * (page - 1));
         let endIndex = startIndex + itemsPerPage - 1;
-        Utils.log(LoglevelEnum.Info,this,'startIndex : ', startIndex);
-        Utils.log(LoglevelEnum.Info,this,'endIndex : ', endIndex);
+        Utils.log(LoglevelEnum.Info, this, 'startIndex : ', startIndex);
+        Utils.log(LoglevelEnum.Info, this, 'endIndex : ', endIndex);
         this.setUsersIndex();
         this.pagedUsers = this.users.slice(startIndex, endIndex + 1);
     }
@@ -88,8 +88,8 @@ export class UserListComponent implements OnInit, OnDestroy {
     public pageChanged(event: any): void {
         this.eventItemsPerPage = event.itemsPerPage;
         this.userService.eventPage = event.page;
-        Utils.log(LoglevelEnum.Info,this,'Page changed to: ' + this.userService.eventPage);
-        Utils.log(LoglevelEnum.Info,this,'Number items per page: ' + this.eventItemsPerPage);
+        Utils.log(LoglevelEnum.Info, this, 'Page changed to: ' + this.userService.eventPage);
+        Utils.log(LoglevelEnum.Info, this, 'Number items per page: ' + this.eventItemsPerPage);
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
@@ -106,11 +106,18 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
+    toastDisplayed = false;
+
+
     ngOnInit() {
         let userListComponent = this;
         userListComponent.userService.showSuccessToast.subscribe((msg) => {
-            userListComponent.toastService.showSuccess(msg);
+            if (!userListComponent.toastDisplayed) {
+                userListComponent.toastService.showSuccess(msg);
+            };
+            userListComponent.toastDisplayed = true;
         });
+
         this.newUserList(userListComponent.userService.users);
         // userListComponent.userService.getUsers()
         //     .subscribe(

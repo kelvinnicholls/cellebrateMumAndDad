@@ -199,8 +199,6 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
 
 
-
-
     constructor(private ngbDateParserFormatter: NgbDateMomentParserFormatter
         , private userService: UserService
         , public tagService: TagService

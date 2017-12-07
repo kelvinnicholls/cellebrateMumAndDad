@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-
+import {NgbDateParserFormatter} from '@ng-bootstrap/ng-bootstrap';
 import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
 import { ErrorComponent } from "./errors/error.component";
 import { DialogComponent } from "./dialog/dialog.component";
@@ -59,6 +59,9 @@ export function ngbDateMomentParserFormatterFactory() {
     imports: [NgxGalleryModule, MultiselectDropdownModule, CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateMomentParserFormatter,
+        useFactory: ngbDateMomentParserFormatterFactory
+    },{
+        provide: NgbDateParserFormatter,
         useFactory: ngbDateMomentParserFormatterFactory
     }],
     bootstrap: []
