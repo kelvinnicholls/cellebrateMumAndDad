@@ -142,3 +142,5 @@ x92) check that sockets communicate tags/people correctly
 x65) Use free mongodb hosting https://mlab.com/
 x100) multiple toasts on update photo
 x170) date format display is wrong
+x169) After adding or deleting photo re-set pagination to page 1
+x172) adding a photo when in search mode should redo search

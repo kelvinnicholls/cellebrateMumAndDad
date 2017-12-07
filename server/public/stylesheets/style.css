@@ -121,7 +121,9 @@ body {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee', GradientType=0);
     /* IE6-9 */
 }
-
+.modal-content {
+    background-color:  #E5EBEF;
+}
 mat-grid-tile {
     border-radius: 10px;
     -webkit-border-radius: 10px;
@@ -138,5 +140,6 @@ body{
     color: #bbc1e0;
 }
 .form-control {
-    color : deepskyblue
+    color : deepskyblue;
+    background-color: #E5EBEF;
 }

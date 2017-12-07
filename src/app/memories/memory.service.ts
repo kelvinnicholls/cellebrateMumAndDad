@@ -375,7 +375,11 @@ export class MemoryService {
                 const result = response.json();
                 const memory = this.createMemory(result);
                 memoryService.allMemories.push(memory);
-                memoryService.memories.push(memory);
+                if (memoryService.searchRet) {
+                    memoryService.memories = Search.restrict(memoryService.allMemories, memoryService.searchRet);
+                } else {
+                    memoryService.memories = memoryService.allMemories.slice(0);
+                };
                 memoryService.allMemories.sort(Utils.dynamicSort('title'));
                 memoryService.memories.sort(Utils.dynamicSort('title'));
                 memoryService.memoriesChanged.next(memoryService.memories);

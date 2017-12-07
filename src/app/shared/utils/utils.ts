@@ -50,7 +50,7 @@ export class Utils {
 
     }
 
-    private static LOG_LEVEL = LoglevelEnum.Info;
+    private static LOG_LEVEL = LoglevelEnum.Error;
 
     public static setLogLevel(loglevelEnum: LoglevelEnum) {
         Utils.LOG_LEVEL = loglevelEnum;

@@ -139,7 +139,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let photoListComponent = this;
-
+        this.toastDisplayed = false;
         photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
             if (!photoListComponent.toastDisplayed) {
                 photoListComponent.toastService.showSuccess(msg);
@@ -170,6 +170,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.photos = photos;
         this.photoService.bigTotalItems = this.photos.length;
         this.photoService.eventPage = 1;
+        this.photoService.bigCurrentPage = 1;
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 

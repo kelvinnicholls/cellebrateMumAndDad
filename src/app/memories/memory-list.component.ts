@@ -146,7 +146,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         let memoryListComponent = this;
-
+        this.toastDisplayed = false;
         memoryListComponent.memoryService.showSuccessToast.subscribe((msg) => {
             if (!memoryListComponent.toastDisplayed) {
                 memoryListComponent.toastService.showSuccess(msg);
@@ -178,6 +178,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         Utils.log(LoglevelEnum.Info, this, 'newMemoryList size: ' + memories.length);
         this.memories = memories;
         this.memoryService.bigTotalItems = this.memories.length;
+        this.memoryService.bigCurrentPage = 1;
         this.memoryService.eventPage = 1;
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }

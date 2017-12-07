@@ -400,7 +400,11 @@ export class PhotoService {
                 const photo = this.createPhoto(result, photoInfo);
                 photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
                 photoService.allPhotos.push(photo);
-                photoService.photos.push(photo);
+                if (photoService.searchRet) {
+                    photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
+                } else {
+                    photoService.photos = photoService.allPhotos.slice(0);
+                };
                 photoService.allPhotos.sort(Utils.dynamicSort('title'));
                 photoService.photos.sort(Utils.dynamicSort('title'));
                 photoService.photosChanged.next(photoService.photos);
