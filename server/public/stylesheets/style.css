@@ -122,7 +122,7 @@ body {
     /* IE6-9 */
 }
 .modal-content {
-    background-color:  #E5EBEF;
+    background-color:  rgb(222, 231, 238);
 }
 mat-grid-tile {
     border-radius: 10px;
@@ -141,5 +141,5 @@ body{
 }
 .form-control {
     color : deepskyblue;
-    background-color: #E5EBEF;
+    background-color: rgb(210, 220, 226);
 }
