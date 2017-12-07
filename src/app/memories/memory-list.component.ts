@@ -178,6 +178,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         Utils.log(LoglevelEnum.Info, this, 'newMemoryList size: ' + memories.length);
         this.memories = memories;
         this.memoryService.bigTotalItems = this.memories.length;
+        this.memoryService.eventPage = 1;
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 

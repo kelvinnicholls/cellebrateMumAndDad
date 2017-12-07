@@ -131,6 +131,7 @@ export class UserListComponent implements OnInit, OnDestroy {
     newUserList(users: User[]) {
         this.users = users;
         this.bigTotalItems = this.users.length;
+        this.userService.eventPage = 1;
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 

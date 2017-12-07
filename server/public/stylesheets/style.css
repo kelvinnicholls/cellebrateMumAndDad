@@ -1,61 +1,69 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
-  cursor: pointer;
+    color: #00B7FF;
+    cursor: pointer;
 }
 
 button {
-  cursor:pointer;
-  margin: 10px;
+    cursor: pointer;
+    margin: 10px;
 }
+
 
 /*
  * Blog name and description
  */
 
 .blog-header {
-  padding-bottom: 1.25rem;
-  margin-bottom: 2rem;
-  border-bottom: .05rem solid #eee;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+    border-bottom: .05rem solid #eee;
 }
+
 .blog-title {
-  margin-bottom: 0;
-  font-size: 2rem;
-  font-weight: normal;
+    margin-bottom: 0;
+    font-size: 2rem;
+    font-weight: normal;
 }
+
 .blog-description {
-  font-size: 1.1rem;
-  color: #999;
+    font-size: 1.1rem;
+    color: #999;
 }
 
 @media (min-width: 40em) {
-  .blog-title {
-    font-size: 3.5rem;
-  }
+    .blog-title {
+        font-size: 3.5rem;
+    }
 }
+
 
 /*
  * Main column and sidebar layout
  */
 
+
 /* Sidebar modules for boxing content */
+
 .sidebar-module {
-  padding: 1rem;
-  /*margin: 0 -1rem 1rem;*/
+    padding: 1rem;
+    /*margin: 0 -1rem 1rem;*/
 }
+
 .sidebar-module-inset {
-  padding: 1rem;
-  background-color: #f5f5f5;
-  border-radius: .25rem;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: .25rem;
 }
+
 .sidebar-module-inset p:last-child,
 .sidebar-module-inset ul:last-child,
 .sidebar-module-inset ol:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 
@@ -64,34 +72,71 @@ button {
  */
 
 .blog-post {
-  margin-bottom: 4rem;
-}
-.blog-post-title {
-  margin-bottom: .25rem;
-  font-size: 2.5rem;
-}
-.blog-post-meta {
-  margin-bottom: 1.25rem;
-  color: #999;
+    margin-bottom: 4rem;
 }
 
+.blog-post-title {
+    margin-bottom: .25rem;
+    font-size: 2.5rem;
+}
+
+.blog-post-meta {
+    margin-bottom: 1.25rem;
+    color: #999;
+}
 
 .kgn-center-text {
-  text-align: center;
+    text-align: center;
 }
 
 .kgn-right-text {
-  text-align: right;
+    text-align: right;
 }
 
 .kgn-left-text {
-  text-align: left;
+    text-align: left;
 }
 
-.mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
-  transform: none !important;
+.mat-sidenav-container,
+.mat-sidenav-content,
+.mat-tab-body-content {
+    transform: none !important;
 }
 
-.dropdown-menu, .modal {
-  z-index: 2000;
+.dropdown-menu,
+.modal {
+    z-index: 2000;
+}
+
+body {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b3dced+0,29b8e5+50,bce0ee+100;Blue+Pipe */
+    background: rgb(179, 220, 237);
+    /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(179, 220, 237, 1) 0%, rgba(41, 184, 229, 1) 50%, rgba(188, 224, 238, 1) 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(179, 220, 237, 1) 0%, rgba(41, 184, 229, 1) 50%, rgba(188, 224, 238, 1) 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(179, 220, 237, 1) 0%, rgba(41, 184, 229, 1) 50%, rgba(188, 224, 238, 1) 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee', GradientType=0);
+    /* IE6-9 */
+}
+
+mat-grid-tile {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border: 2px solid #9441a5;
+}
+
+body{
+    color: #3f51b5;
+}
+
+.mat-grid-tile-footer a:not([href])  ,
+.mat-grid-tile-header a {
+    color: #bbc1e0;
+}
+.form-control {
+    color : deepskyblue
 }

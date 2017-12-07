@@ -14,7 +14,6 @@
 83) Add revolving set of photos below menu
 85) Use scroll bars
 98) check console errors before releasing
-x100) multiple toasts on update photo
 104) Comments in firefox goes to new tab first
 110) make sure that when adding comments to photos and memories only the comments are added and the photo/memory is not updated
 114) test with non-admin user
@@ -33,9 +32,8 @@ x100) multiple toasts on update photo
 167) Add option to create memory from photo search - add select boxes to photos
 168) People are not in alphabetical order - neither are tags
 169) After adding or deleting photo re-set pagination to page 1
-170) date format display is wrong
 171) if dev do not save photos to google cloud
-
+172)
 
 
 

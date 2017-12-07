@@ -169,6 +169,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         Utils.log(LoglevelEnum.Info, this, 'newPhotoList size: ' + photos.length);
         this.photos = photos;
         this.photoService.bigTotalItems = this.photos.length;
+        this.photoService.eventPage = 1;
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 

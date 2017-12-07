@@ -2,11 +2,11 @@
         'has-danger': myForm.invalid && (myForm.dirty || myForm.touched),
         'has-success': myForm.valid && (myForm.dirty || myForm.touched)
       }">
-  <div class="form-group row col col-sm-8 offset-sm-2" [ngClass]="{
+  <div class="form-group row col col-sm-8 offset-sm-3" [ngClass]="{
         'has-danger': myForm.get('comment').invalid && (myForm.get('comment').dirty || myForm.get('comment').touched),
         'has-success': myForm.get('comment').valid && (myForm.get('comment').dirty || myForm.get('comment').touched)
       }">
-    <label for="comment" class="col-sm-4 col-form-label"><strong>Comment</strong></label>
+    <label for="comment" class="col-sm-3 col-form-label"><strong>Comment</strong></label>
     <div class="col-sm-6">
       <textarea type="text" class="form-control" id="comment" placeholder="Comment"
         formControlName="comment"></textarea>

@@ -140,3 +140,5 @@ x147) Add option to associate photo with a memory when adding photo
      -- too much pissing about for too little reward
 x92) check that sockets communicate tags/people correctly
 x65) Use free mongodb hosting https://mlab.com/
+x100) multiple toasts on update photo
+x170) date format display is wrong
