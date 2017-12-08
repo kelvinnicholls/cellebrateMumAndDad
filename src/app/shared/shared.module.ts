@@ -17,6 +17,7 @@ import { sharedRouting } from "./shared.routing";
 import { SignInComponent } from "./sign-in/sign-in.component";
 import { CommentAddComponent } from "./comments/comment-add/comment-add.component";
 import { CommentComponent } from "./comments/comment/comment.component";
+import { InfoComponent } from "./info/info.component";
 import { CommentListComponent } from "./comments/comments-list/comments-list.component";
 import { AddTagComponent } from "./tags/add-tag.component";
 import { AddPersonComponent } from "./people/add-person.component";
@@ -47,6 +48,7 @@ export function ngbDateMomentParserFormatterFactory() {
         PageNotFoundComponent,
         SignInComponent,
         CommentAddComponent,
+        InfoComponent,
         CommentComponent,
         CommentListComponent,
         AddTagComponent,

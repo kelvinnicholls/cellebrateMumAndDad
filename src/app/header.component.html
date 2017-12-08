@@ -53,6 +53,10 @@
         <a class="nav-link" routerLink="/auth/get-encrypted-password">Encrypted Password</a>
       </li>
 
+      <li class="nav-item" routerLinkActive="active" >
+        <a class="nav-link" routerLink="/info">Info</a>
+      </li>
+
       <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()"
       id="usersNavItem">
       <a class="nav-link dropdown-toggle" id="logLevelDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"

@@ -1,0 +1,16 @@
+.kgn-info-normal {
+    color: #3366ff;
+}
+
+.kgn-info-heading {
+  color: #000080; 
+  font-size: large;
+}
+
+.kgn-info-underline {
+  text-decoration: underline;
+}
+
+.kgn-info-option {
+  color: #000080;
+}

@@ -32,7 +32,9 @@
 167) Add option to create memory from photo search - add select boxes to photos
 168) People are not in alphabetical order - neither are tags
 171) if dev do not save photos to google cloud
-173)
+173) toasts stay on top if page is navigated from before toast disappears - remove using ng on leave or something (https://johnsiu.com/angular-2-simple-mq-service/)
+174) ask if want to log out
+175)
 
 
 
