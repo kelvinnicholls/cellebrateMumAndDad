@@ -35,7 +35,6 @@ export class UserService {
     }
 
     usersChanged = new Subject<User[]>();
-    showSuccessToast = new EventEmitter<string>();
 
     public searchRet: SearchRet;
 

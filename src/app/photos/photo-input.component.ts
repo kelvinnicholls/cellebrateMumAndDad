@@ -309,7 +309,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                                 Utils.log(LoglevelEnum.Info,this,result);
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
-                                        photoInputComponent.photoService.showSuccessToast.emit("Photo updated.");
+                                        photoInputComponent.appService.showToast(Consts.SUCCESS, "Photo updated.");
                                     };
                                 });
                             }
@@ -342,7 +342,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                             data => {
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
-                                        photoInputComponent.photoService.showSuccessToast.emit("Photo created.");
+                                        photoInputComponent.appService.showToast(Consts.SUCCESS, "Photo created.");
                                     };
                                 });
                             },

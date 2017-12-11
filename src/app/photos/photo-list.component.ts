@@ -135,17 +135,8 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         };
     };
 
-    toastDisplayed = false;
-
     ngOnInit() {
         let photoListComponent = this;
-        this.toastDisplayed = false;
-        photoListComponent.photoService.showSuccessToast.subscribe((msg) => {
-            if (!photoListComponent.toastDisplayed) {
-                photoListComponent.toastService.showSuccess(msg);
-            };
-            photoListComponent.toastDisplayed = true;
-        });
         Utils.log(LoglevelEnum.Info, this, 'ngOnInit. newPhotoList before');
         photoListComponent.newPhotoList(photoListComponent.photoService.photos);
         // photoListComponent.photoService.getPhotos()

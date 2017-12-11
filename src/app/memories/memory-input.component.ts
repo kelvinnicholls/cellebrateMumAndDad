@@ -295,7 +295,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                                 Utils.log(LoglevelEnum.Info,this,result);
                                 memoryInputComponent.router.navigate(['memories']).then((ok) => {
                                     if (ok) {
-                                        memoryInputComponent.memoryService.showSuccessToast.emit("Memory updated.");
+                                        memoryInputComponent.appService.showToast(Consts.SUCCESS, "Memory updated.");
                                     };
                                 });
                             }
@@ -325,7 +325,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                             data => {
                                 memoryInputComponent.router.navigate(['memories']).then((ok) => {
                                     if (ok) {
-                                        memoryInputComponent.memoryService.showSuccessToast.emit("Memory created.");
+                                        memoryInputComponent.appService.showToast(Consts.SUCCESS, "Memory created.");
                                     };
                                 });
                             },

@@ -89,8 +89,6 @@ export class PhotoService {
     photosChanged = new Subject<Photo[]>();
     photoDeleted = new Subject<Photo>();
 
-    showSuccessToast = new EventEmitter<string>();
-
 
     public searchRet: SearchRet;
 
@@ -134,13 +132,6 @@ export class PhotoService {
 
                 photoService.commentsService.commentAddedSub.emit(commentDisplay);
 
-                // photoService.allPhotos[entityIndex].comments.push(commentDisplay);
-                // photoService.photos.forEach((element, index) => {
-                //     if (element.index === entityIndex) {
-                //         photoService.photos[index].comments.push(commentDisplay);
-                //         photoService.photosChanged.next(photoService.photos);
-                //     };
-                // });
                 callback();
             }
         );
@@ -149,7 +140,7 @@ export class PhotoService {
     createPhoto(photo, inPhotoInfo): Photo {
         let photoService = this;
         let comments: CommentDisplay[] = [];
-        //let commentIds: String[] = [];
+
 
 
 
@@ -187,11 +178,9 @@ export class PhotoService {
                     };
                 };
 
-                //let formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);    
 
                 let newCommentDisplay = new CommentDisplay(comment.comment, formattedDate, userName, profilePicLocation);
                 comments.push(newCommentDisplay);
-                //commentIds.push(comment._id);
             });
         };
 
@@ -209,18 +198,6 @@ export class PhotoService {
                     tags.push(newTag);
                     tagIds.push(tag._id);
                 };
-                // let newTag = new Tag(tag.tag, tag._id);
-                // tags.push(newTag);
-                // tagIds.push(tag._id);
-                // if (tag._id) {
-                //     let newTag = new Tag(tag.tag, tag._id);
-                //     tags.push(newTag);
-                //     tagIds.push(tag._id);
-                // } else {
-                //     let newTag = photoService.tagService.findTagById(tag);
-                //     tags.push(newTag);
-                //     tagIds.push(tag);
-                // };
             });
         };
 
@@ -240,18 +217,6 @@ export class PhotoService {
                     personIds.push(person._id);
                 };
 
-                // let newPerson = new Person(person.person, person._id);
-                // people.push(newPerson);
-                // personIds.push(person._id);
-                // if (person._id) {
-                //     let newPerson = new Person(person.person, person._id);
-                //     people.push(newPerson);
-                //     personIds.push(person._id);
-                // } else {
-                //     let newPerson = photoService.personService.findPersonById(person);
-                //     people.push(newPerson);
-                //     personIds.push(person);
-                // };
             });
         };
 
@@ -370,8 +335,6 @@ export class PhotoService {
             let photoToBeDeleted = photoService.findPhotoById(id);
             if (photoToBeDeleted) {
                 photoService.removePhoto(photoToBeDeleted);
-                //this.allPhotos.splice(this.allPhotos.indexOf(photoToBeDeleted), 1);
-                //this.photosChanged.next(this.allPhotos);
                 photoService.appService.showToast(Consts.INFO, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
                 Utils.log(LoglevelEnum.Info,this, "Photo  : " + photoToBeDeleted.title + " deleted by " + changedBy);
             };
@@ -503,14 +466,6 @@ export class PhotoService {
 
     getPhotos(refresh: Boolean = false) {
         let photoService = this;
-        // if ((!photoService.retrievedPhotos || refresh) && photoService.authUserService.isLoggedIn()) {
-        //     if (photoService.searchRet) {
-        //         photoService.photos = Search.restrict(photoService.allPhotos, photoService.searchRet);
-        //     } else {
-        //         photoService.photos = photoService.allPhotos.slice(0);
-        //     };
-
-        // } else {
         if ((!photoService.retrievedPhotos || refresh) && photoService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
@@ -620,7 +575,6 @@ export class PhotoService {
                     });
                     photoService.appService.showToast(Consts.INFO, "Photo deleted.");
 
-                    //photoService.photosChanged.next(photoService.allPhotos);
                     return response.json();
                 })
                 .catch((error: Response) => {

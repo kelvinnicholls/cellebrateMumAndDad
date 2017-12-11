@@ -263,18 +263,12 @@ export class UserInputComponent implements OnInit, OnDestroy {
                                             userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
                                         };
                                     });
-
-
-                                    //userInputComponent.router.navigate(['']);
-                                    //userInputComponent.appService.showToast(Consts.SUCCESS, "Logged In User updated.");
                                 } else {
                                     userInputComponent.router.navigate(['users']).then((ok) => {
                                         if (ok) {
-                                            userInputComponent.userService.showSuccessToast.emit("User updated");
+                                            userInputComponent.appService.showToast(Consts.SUCCESS, "User updated.");
                                         };
                                     });
-                                    //userInputComponent.toastService.showSuccess("User updated.");
-                                    //userInputComponent.router.navigate(['users']);
                                 };
                             }
                             );
@@ -306,11 +300,10 @@ export class UserInputComponent implements OnInit, OnDestroy {
                             data => {
                                 userInputComponent.router.navigate(['users']).then((ok) => {
                                     if (ok) {
-                                        userInputComponent.userService.showSuccessToast.emit("User created");
+                                        userInputComponent.appService.showToast(Consts.SUCCESS, "User created.");
                                     };
                                 });
-                                // userInputComponent.toastService.showSuccess("User created.");
-                                // userInputComponent.router.navigate(['users']);
+
                             },
                             error => console.error("UserInputComponent userService.newUser error", error)
                             );

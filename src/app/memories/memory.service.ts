@@ -62,9 +62,6 @@ export class MemoryService {
     memoriesChanged = new Subject<Memory[]>();
     memoryDeleted = new Subject<Memory>();
 
-    showSuccessToast = new EventEmitter<string>();
-
-
     public searchRet: SearchRet;
 
 

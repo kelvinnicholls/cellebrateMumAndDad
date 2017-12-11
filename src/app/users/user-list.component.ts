@@ -106,18 +106,10 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
-    toastDisplayed = false;
 
 
     ngOnInit() {
         let userListComponent = this;
-        this.toastDisplayed = false;
-        userListComponent.userService.showSuccessToast.subscribe((msg) => {
-            if (!userListComponent.toastDisplayed) {
-                userListComponent.toastService.showSuccess(msg);
-            };
-            userListComponent.toastDisplayed = true;
-        });
 
         this.newUserList(userListComponent.userService.users);
         // userListComponent.userService.getUsers()
