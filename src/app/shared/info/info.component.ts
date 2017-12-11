@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AuthUserService } from "../../auth/auth-user.service";
 
 @Component({
   selector: 'app-info',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
 })
 export class InfoComponent {
 
-  constructor() { }
+  constructor(public authUserService: AuthUserService) { }
 }
