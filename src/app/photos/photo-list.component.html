@@ -1,5 +1,5 @@
 <div *ngIf="pagedPhotos.length > 0">
-  <div  class="row col col-sm-8 offset-sm-4 kgn-center-text">
+  <div class="row col col-sm-8 offset-sm-4 kgn-center-text">
     <h2 class="blog-post-title ">Photos</h2>
     <button type="button" class="btn btn-md btn-primary" (click)="onSlideShow()">Slide Show</button>
   </div>
@@ -12,19 +12,25 @@
             <a routerLinkActive="active" routerLink="/photos/photo/{{photoService.getMode(photo)}}/{{photo.index}}">{{photo.title}}</a>
           </span>
         </mat-grid-tile-header>
-        <img  [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 100%;" toggleFullscreen>
+        <img [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 100%;" toggleFullscreen>
         <mat-grid-tile-footer class="row col-sm-13">
-            <div class="col-sm-6 text-center">
-              <span *ngIf="photo && photo.comments &&  photo.comments.length > 0">
-                <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments<br/>({{photo.comments.length}})</a>
-              </span>
-            </div>
-            <div class="col-sm-6 text-center">
-              <span *ngIf="checkCanDelete(photo)">
-                <a (click)="onDelete(photo)">Delete</a>
-              </span>
-            </div>
-          </mat-grid-tile-footer>
+          <div class="col-sm-4 text-center">
+            <span *ngIf="photo && photo.comments &&  photo.comments.length > 0">
+              <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments
+                <br/>({{photo.comments.length}})</a>
+            </span>
+          </div>
+          <div class="col-sm-4 text-center">
+            <span>
+              <a target="_blank" href="javascript:void(0)" (click)="addComment(photo)">Add Comment</a>
+            </span>
+          </div>
+          <div class="col-sm-4 text-center">
+            <span *ngIf="checkCanDelete(photo)">
+              <a (click)="onDelete(photo)">Delete</a>
+            </span>
+          </div>
+        </mat-grid-tile-footer>
       </mat-grid-tile>
     </mat-grid-list>
   </div>

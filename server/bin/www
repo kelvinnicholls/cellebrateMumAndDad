@@ -61,13 +61,13 @@ io.on('connection', (socket) => {
     disconnectUser(socket.id);
   });
 
-  socket.on('join', (name, callback) => {
+  socket.on('join', (name, userObj, callback) => {
     utils.log(utils.LoglevelEnum.Info,"join  name:", name);
     if (!isRealString(name)) {
       return callback("Name is required");
     };
     users.removeUser(socket.id);
-    let user = users.addUser(socket.id, name);
+    let user = users.addUser(socket.id, name, userObj);
     utils.log(utils.LoglevelEnum.Info,"User added :", user, users);
     //socket.leave(params.room);
     // io.emit // every connected user 
@@ -78,11 +78,11 @@ io.on('connection', (socket) => {
     // socket.emit from admin text welcome to the chat app
 
 
-    socket.emit('newMessage', generateMessage(toChatUser('Admin', 'Admin'), "Welcome to Celebrate Mum and Dad"));
+    socket.emit('newMessage', generateMessage(toChatUser('Admin', 'Admin', null), "Welcome to Celebrate Mum and Dad"));
 
     // socket.broadcast.emit from admin new user joined
 
-    socket.broadcast.emit('newMessage', generateMessage(toChatUser('Admin', 'Admin'), `${name} has joined Celebrate Mum and Dad`));
+    socket.broadcast.emit('newMessage', generateMessage(toChatUser('Admin', 'Admin',null), `${name} has joined Celebrate Mum and Dad`));
 
     io.emit('updateUserList', users.getUserList());
 
@@ -107,10 +107,10 @@ io.on('connection', (socket) => {
       utils.log(utils.LoglevelEnum.Info,"Create Message2", msg);
 
       if (msg.socketId && isRealString(msg.socketId)) {
-        io.to(msg.socketId).emit('newMessage', generateMessage(toChatUser(user.name, socket.id), msg.text));
+        io.to(msg.socketId).emit('newMessage', generateMessage(toChatUser(user.name, socket.id, user.userObj), msg.text));
         //socket(msg.socketId).emit('newMessage', generateMessage(toChatUser(user.name, socket.id), msg.text));
       } else {
-        socket.broadcast.emit('newMessage', generateMessage(toChatUser(user.name, socket.id), msg.text));
+        socket.broadcast.emit('newMessage', generateMessage(toChatUser(user.name, socket.id, user.userObj), msg.text));
       }
 
 
@@ -127,10 +127,10 @@ io.on('connection', (socket) => {
       utils.log(utils.LoglevelEnum.Info,"createLocationMessage2", coords, user);
 
       if (coords.socketId && isRealString(coords.socketId)) {
-        io.to(coords.socketId).emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id), coords.latitude, coords.longitude));
+        io.to(coords.socketId).emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id, user.userObj), coords.latitude, coords.longitude));
         //socket(msg.socketId).emit('newMessage', generateMessage(toChatUser(user.name, socket.id), msg.text));
       } else {
-        socket.broadcast.emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id), coords.latitude, coords.longitude));
+        socket.broadcast.emit('newMessage', generateLocationMessage(toChatUser(user.name, socket.id, user.userObj), coords.latitude, coords.longitude));
       }
 
     };
@@ -250,10 +250,11 @@ io.on('connection', (socket) => {
 
 });
 
-toChatUser = function (name, id) {
+toChatUser = function (name, id, userObj) {
   return {
     'name': name,
-    'id': id
+    'id': id,
+    'userObj': userObj,
   };
 }
 

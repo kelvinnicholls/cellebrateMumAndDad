@@ -5,6 +5,7 @@
     // this is a bug in edge https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/8282613/
     consider using bootstrap file picker  
 60) Implement email updates
+    https://www.w3schools.com/nodejs/nodejs_email.asp
 61) before go live delete repository from github and change config settings and make sure they aren't committed.
 64) Contact page
 66) remove console.logs before go live
@@ -23,7 +24,7 @@
 134) check mobile rendering
 150) check if photos exists on start up. If they don't remove all from bucket
 151) Add hidden option to copy all files in bucket to public/images
-160) firefox navigates to blank on pop up
+160) firefox navigates to blank on pop up - on add comments
 161) add admin option to list files in bucket and files in images
 162) check why photos (etc) do not always display on start up - they were empty files!
 164) Allow user to change how many photos/users/memories are displayed per page

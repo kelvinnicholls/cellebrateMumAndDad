@@ -1,9 +1,12 @@
 import { CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
+import { Consts } from "../shared/consts";
 export class Photo {
 
     public index;
+
+    public readonly entityType = Consts.PHOTO;
 
     constructor(public title: string,
         public _creator,

@@ -16,6 +16,7 @@ import { Consts } from "./consts";
 import { sharedRouting } from "./shared.routing";
 import { SignInComponent } from "./sign-in/sign-in.component";
 import { CommentAddComponent } from "./comments/comment-add/comment-add.component";
+import { CommentAddPopupComponent } from "./comments/comment-add-popup/comment-add-popup.component";
 import { CommentComponent } from "./comments/comment/comment.component";
 import { InfoComponent } from "./info/info.component";
 import { CommentListComponent } from "./comments/comments-list/comments-list.component";
@@ -48,6 +49,7 @@ export function ngbDateMomentParserFormatterFactory() {
         PageNotFoundComponent,
         SignInComponent,
         CommentAddComponent,
+        CommentAddPopupComponent,
         InfoComponent,
         CommentComponent,
         CommentListComponent,
@@ -55,7 +57,7 @@ export function ngbDateMomentParserFormatterFactory() {
         AddPersonComponent,
         ToggleFullscreenDirective
     ],
-    exports: [ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
+    exports: [ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddPopupComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
         MatGridListModule,
     ],
     imports: [NgxGalleryModule, MultiselectDropdownModule, CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],

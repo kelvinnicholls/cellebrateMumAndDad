@@ -112,7 +112,7 @@ export class PhotoService {
 
     private socket;
 
-    addComment(photo: Photo, comment, entityIndex, callback) {
+    addComment(photo: Photo, comment, callback) {
         let photoService = this;
         photo.comment = comment;
 
@@ -128,7 +128,7 @@ export class PhotoService {
                     profilePicLocation = photoService.userService.getLoggedInUser().profilePicInfo.location;
                 };
 
-                let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation);
+                let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation,photo);
 
                 photoService.commentsService.commentAddedSub.emit(commentDisplay);
 
@@ -160,7 +160,7 @@ export class PhotoService {
                         };
 
                     };
-                } else if (comment.user instanceof User) {
+                } else if (comment.user && comment.user.name) {
                     userName = comment.user.name;
                     formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);
                     if (comment.user._profileMediaId && comment.user._profileMediaId.location) {

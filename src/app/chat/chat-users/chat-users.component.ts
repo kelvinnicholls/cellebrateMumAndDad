@@ -16,4 +16,12 @@ export class ChatUsersComponent implements OnInit {
   ngOnInit() {
   }
 
+  public getSrc(location: String) {
+    let retLoc = location;
+    if (location.substring(0, 6) !== "images") {
+      retLoc = location.substring(14);
+    };
+    return retLoc;
+  }
+
 }

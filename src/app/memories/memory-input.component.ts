@@ -409,8 +409,8 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         memoryInputComponent.commentSub = memoryInputComponent.commentsService.commentSub
             .subscribe(
             (comment: Comment) => {
-                if (comment.entity === Consts.MEMORY) {
-                    memoryInputComponent.memoryService.addComment(memoryInputComponent.memory, comment.comment, comment.entityIndex, comment.callback);
+                if (comment.entity.entityType === Consts.MEMORY) {
+                    memoryInputComponent.memoryService.addComment(memoryInputComponent.memory, comment.comment, comment.callback);
                 };
             });
 

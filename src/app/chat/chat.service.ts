@@ -60,7 +60,7 @@ export class ChatService {
             if (msg.url) {
                 url = msg.url;
             };
-            let chatMessage = new ChatMessage(text, new ChatUser(msg.from.id, msg.from.name), formattedDate, url);
+            let chatMessage = new ChatMessage(text, new ChatUser(msg.from.id, msg.from.name, msg.from.userObj), formattedDate, url);
             this.chatUserMessages.push(chatMessage);
             this.chatUserMessages.sort(Utils.dynamicSort('-createdAt',SortDataType.Moment,Consts.CHAT_DATE_FORMAT));
         });
@@ -88,7 +88,7 @@ export class ChatService {
                 let chatUsers: ChatUser[] = [];
                 users.forEach(function (user) {
                     if (user.id != socketId) {
-                        chatUsers.push(new ChatUser(user.id, user.name));
+                        chatUsers.push(new ChatUser(user.id, user.name, user.userObj));
                     }
                 });
                 this.chatUsers = chatUsers;
@@ -104,11 +104,11 @@ export class ChatService {
     }
 
 
-    public connect(name: string) {
+    public connect(name: string, loggedInUser) {
         this.name = name;
         this.socket = io(Consts.API_URL_ROOT);
         this.addSocketCallbacks();
-        this.socket.emit('join', this.name, function (err) {
+        this.socket.emit('join', this.name, loggedInUser, function (err) {
             if (err) {
                 Utils.log(LoglevelEnum.Info,this,"join Error", err);
                 // alert(err);
@@ -160,7 +160,8 @@ export class ChatService {
         , public personService: PersonService) {
 
         if (this.authUserService.isLoggedIn()) {
-            this.connect(this.authUserService.getLoggedInUserName());
+            const loggedInUser = JSON.parse(localStorage.getItem(Consts.LOGGED_IN_USER));
+            this.connect(this.authUserService.getLoggedInUserName(),loggedInUser);
         }
         // let chatMessage1 = new ChatMessage("1 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum", "Kelvin", "August 5th 2017");
         // let chatMessage2 = new ChatMessage("2 Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.", "Sharon", "August 5th 2017");

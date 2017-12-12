@@ -1,6 +1,9 @@
+import { Consts } from "../shared/consts";
 export class User {
 
     public index;
+
+    public readonly entityType = Consts.USER;
 
     constructor(public email: string,
         public password: string,

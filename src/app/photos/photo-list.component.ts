@@ -12,12 +12,16 @@ import { CommentsService } from "../shared/comments/comments.service";
 import { SlideShowService } from "../shared/slideshow/slideshow.service";
 import { NgxGalleryImage } from 'ngx-gallery';
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
+import { Comment, CommentDisplay } from "../shared/comments/comment.model";
+
 @Component({
     selector: 'app-photo-list',
     templateUrl: './photo-list.component.html',
     styleUrls: ['./photo-list.component.css']
 })
 export class PhotoListComponent implements OnInit, OnDestroy {
+
+    private commentSub: EventEmitter<Comment>;
 
     routeId = "PhotoListComponent";
 
@@ -135,17 +139,14 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         };
     };
 
+    addComment(photo: Photo) {
+        this.commentsService.showAddComment(photo);
+    };
+
     ngOnInit() {
         let photoListComponent = this;
         Utils.log(LoglevelEnum.Info, this, 'ngOnInit. newPhotoList before');
         photoListComponent.newPhotoList(photoListComponent.photoService.photos);
-        // photoListComponent.photoService.getPhotos()
-        //     .subscribe(
-        //     (photos: Photo[]) => {
-        //         Utils.log(LoglevelEnum.Info,this,'PhotoListComponent ngOnInit.getPhotos() after');
-        //         photoListComponent.newPhotoList(photos)
-        //     }
-        //     );
         photoListComponent.subscription = photoListComponent.photoService.photosChanged.subscribe(
             (photos: Photo[]) => {
                 Utils.log(LoglevelEnum.Info, this, 'photosChanged size: ' + photos.length);
@@ -154,6 +155,14 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         photoListComponent.subscription = photoListComponent.photoService.photoDeleted.subscribe(
             (photo: Photo) =>
                 photoListComponent.removePhoto(photo));
+
+        photoListComponent.commentSub = photoListComponent.commentsService.commentSub
+            .subscribe(
+            (comment: Comment) => {
+                if (comment.entity.entityType === Consts.PHOTO) {
+                    photoListComponent.photoService.addComment(comment.entity as Photo, comment.comment, comment.callback);
+                };
+            });
     }
 
     newPhotoList(photos: Photo[]) {
@@ -165,8 +174,16 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     }
 
+    destroy(sub: any) {
+        if (sub) {
+            sub.unsubscribe();
+            sub = null;
+        }
+    }
+
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.destroy(this.subscription);
+        this.destroy(this.commentSub);
     }
 
     getNoPhotosText(): string {

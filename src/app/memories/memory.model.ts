@@ -2,9 +2,12 @@ import { CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 import { Photo } from "../photos/photo.model";
+import { Consts } from "../shared/consts";
 export class Memory {
 
     public index;
+
+    public readonly entityType = Consts.MEMORY;
 
     constructor(public title: string,
         public _creator,

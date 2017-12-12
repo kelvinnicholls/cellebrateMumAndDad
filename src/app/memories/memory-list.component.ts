@@ -11,6 +11,8 @@ import { Dialog } from "../shared/dialog/dialog.model";
 import { CommentsService } from "../shared/comments/comments.service";
 import { SlideShowService } from "../shared/slideshow/slideshow.service";
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
+import { Comment, CommentDisplay } from "../shared/comments/comment.model";
+
 
 @Component({
     selector: 'app-memory-list',
@@ -19,10 +21,12 @@ import { Utils, LoglevelEnum } from "../shared/utils/utils";
 })
 export class MemoryListComponent implements OnInit, OnDestroy {
 
+    private commentSub: EventEmitter<Comment>;
+
     routeId = "MemoryListComponent";
 
     showComments(memory: Memory) {
-        this.commentsService.showComments("Comments for photo: '" + memory.title + "'", memory.comments);
+        this.commentsService.showComments("Comments for memory: '" + memory.title + "'", memory.comments);
     }
 
     checkCanDelete(memory: Memory): boolean {
@@ -67,6 +71,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
             this.toggleShowHideSearchCriteriaText = this.hideSearchCriteriaText;
         }
     }
+
 
     private setMemoriesIndex() {
         let memoryListComponent = this;
@@ -133,10 +138,13 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         };
     }
 
+    addComment(memory: Memory) {
+        this.commentsService.showAddComment(memory);
+    };
 
-    getNumOfPhotos(memory : Memory): String {
-        let retVal : String = "";
-        if (memory.medias && memory.medias.length > 0 ) {
+    getNumOfPhotos(memory: Memory): String {
+        let retVal: String = "";
+        if (memory.medias && memory.medias.length > 0) {
             retVal = "(" + memory.medias.length + ")";
         };
         return retVal;
@@ -146,16 +154,8 @@ export class MemoryListComponent implements OnInit, OnDestroy {
     ngOnInit() {
         let memoryListComponent = this;
 
-        //('MemoryListComponent ngOnInit.getMemories() before');
-        Utils.log(LoglevelEnum.Info,this,'ngOnInit. newMemoryList before');
+        Utils.log(LoglevelEnum.Info, this, 'ngOnInit. newMemoryList before');
         memoryListComponent.newMemoryList(memoryListComponent.memoryService.memories);
-        // memoryListComponent.memoryService.getMemories()
-        //     .subscribe(
-        //     (memories: Memory[]) => {
-        //         Utils.log(LoglevelEnum.Info,this,'MemoryListComponent ngOnInit.getMemories() after');
-        //         memoryListComponent.newMemoryList(memories)
-        //     }
-        //     );
         memoryListComponent.subscription = memoryListComponent.memoryService.memoriesChanged.subscribe(
             (memories: Memory[]) => {
                 Utils.log(LoglevelEnum.Info, this, 'memoriesChanged size: ' + memories.length);
@@ -164,6 +164,14 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         memoryListComponent.subscription = memoryListComponent.memoryService.memoryDeleted.subscribe(
             (memory: Memory) =>
                 memoryListComponent.removeMemory(memory));
+
+                memoryListComponent.commentSub = memoryListComponent.commentsService.commentSub
+                .subscribe(
+                (comment: Comment) => {
+                    if (comment.entity.entityType === Consts.MEMORY) {
+                        memoryListComponent.memoryService.addComment(comment.entity as Memory, comment.comment, comment.callback);
+                    };
+                });
     }
 
     newMemoryList(memories: Memory[]) {
@@ -175,8 +183,17 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 
+    
+    destroy(sub: any) {
+        if (sub) {
+            sub.unsubscribe();
+            sub = null;
+        }
+    }
+
     ngOnDestroy() {
-        this.subscription.unsubscribe();
+        this.destroy(this.subscription);
+        this.destroy(this.commentSub);
     }
 
     getNoMemoriesText(): string {

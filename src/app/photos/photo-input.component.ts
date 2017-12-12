@@ -422,8 +422,8 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         photoInputComponent.commentSub = photoInputComponent.commentsService.commentSub
             .subscribe(
             (comment: Comment) => {
-                if (comment.entity === Consts.PHOTO) {
-                    photoInputComponent.photoService.addComment(photoInputComponent.photo, comment.comment, comment.entityIndex, comment.callback);
+                if ( comment.entity.entityType  === Consts.PHOTO) {
+                    photoInputComponent.photoService.addComment(photoInputComponent.photo, comment.comment, comment.callback);
                 };
             });
 

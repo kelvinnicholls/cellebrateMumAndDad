@@ -18,8 +18,8 @@ export class ChatMessageComponent implements OnInit {
 
   ngOnInit() {
   }
-  
-    constructor(private chatService: ChatService, private dialogService: DialogService) { }
+
+  constructor(private chatService: ChatService, private dialogService: DialogService) { }
 
 
   onRemove() {
@@ -32,6 +32,14 @@ export class ChatMessageComponent implements OnInit {
         }
       });
     this.dialogService.showDialog("Warning", "Do you really wish to remove this message from the list?", "Yes", "No", retDialogSub);
+  }
+
+  public getSrc(location: String) {
+    let retLoc = location;
+    if (location.substring(0, 6) !== "images") {
+      retLoc = location.substring(14);
+    };
+    return retLoc;
   }
 
 }

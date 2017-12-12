@@ -86,7 +86,7 @@ export class MemoryService {
 
     private socket;
 
-    addComment(memory: Memory, comment, entityIndex, callback) {
+    addComment(memory: Memory, comment, callback) {
         let memoryService = this;
         memory.comment = comment;
 
@@ -102,17 +102,10 @@ export class MemoryService {
                     profilePicLocation = memoryService.userService.getLoggedInUser().profilePicInfo.location;
                 };
 
-                let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation);
+                let commentDisplay = new CommentDisplay(comment, commentDate, userName, profilePicLocation,memory);
 
                 memoryService.commentsService.commentAddedSub.emit(commentDisplay);
 
-                // memoryService.allMemories[entityIndex].comments.push(commentDisplay);
-                // memoryService.memories.forEach((element, index) => {
-                //     if (element.index === entityIndex) {
-                //         memoryService.memories[index].comments.push(commentDisplay);
-                //         memoryService.memoriesChanged.next(memoryService.memories);
-                //     };
-                // });
                 callback();
             }
         );
@@ -141,7 +134,8 @@ export class MemoryService {
                         };
 
                     };
-                } else if (comment.user instanceof User) {
+
+                } else if (comment.user && comment.user.name) {
                     userName = comment.user.name;
                     formattedDate = moment(comment.commentDate).format(Consts.DATE_TIME_DISPLAY_FORMAT);
                     if (comment.user._profileMediaId && comment.user._profileMediaId.location) {
@@ -178,18 +172,6 @@ export class MemoryService {
                     tags.push(newTag);
                     tagIds.push(tag._id);
                 };
-                // let newTag = new Tag(tag.tag, tag._id);
-                // tags.push(newTag);
-                // tagIds.push(tag._id);
-                // if (tag._id) {
-                //         let newTag = new Tag(tag.tag, tag._id);
-                //         tags.push(newTag);
-                //         tagIds.push(tag._id);
-                //     } else {
-                //         let newTag = memoryService.tagService.findTagById(tag);
-                //         tags.push(newTag);
-                //         tagIds.push(tag);
-                //     };
             });
         };
 
@@ -208,18 +190,7 @@ export class MemoryService {
                     people.push(newPerson);
                     personIds.push(person._id);
                 };
-                // let newPerson = new Person(person.person, person._id);
-                // people.push(newPerson);
-                // personIds.push(person._id);
-                // if (person._id) {
-                //         let newPerson = new Person(person.person, person._id);
-                //         people.push(newPerson);
-                //         personIds.push(person._id);
-                //     } else {
-                //         let newPerson = memoryService.personService.findPersonById(person);
-                //         people.push(newPerson);
-                //         personIds.push(person);
-                //     };
+
             });
         };
 
@@ -240,19 +211,6 @@ export class MemoryService {
                     photos.push(newPhoto);
                     photoIds.push(photo._id);
                 };
-
-                // let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
-                // photos.push(newPhoto);
-                // photoIds.push(photo._id);
-                // if (photo._id) {
-                //     let newPhoto: Photo = memoryService.photoService.createNewPhoto(photo);
-                //     photos.push(newPhoto);
-                //     photoIds.push(photo._id);
-                // } else {
-                //     let newPhoto = memoryService.photoService.findPhotoById(photo);
-                //     photos.push(newPhoto);
-                //     photoIds.push(photo);
-                // };
             });
         };
 
@@ -349,9 +307,7 @@ export class MemoryService {
         memoryService.socket.on('deletedMemory', (id, changedBy) => {
             let memoryToBeDeleted = memoryService.findMemoryById(id);
             if (memoryToBeDeleted) {
-                memoryService.removeMemory(memoryToBeDeleted);
-                //this.allMemories.splice(this.allMemories.indexOf(memoryToBeDeleted), 1);
-                //this.memoriesChanged.next(this.allMemories);
+                memoryService.removeMemory(memoryToBeDeleted);;
                 memoryService.appService.showToast(Consts.INFO, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
                 Utils.log(LoglevelEnum.Info,this, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
             };
@@ -397,14 +353,6 @@ export class MemoryService {
 
     getMemories(refresh: Boolean = false) {
         let memoryService = this;
-        // if ((!memoryService.retrievedMemories || refresh) && memoryService.authUserService.isLoggedIn()) {
-        //     if (memoryService.searchRet) {
-        //         memoryService.memories = Search.restrict(memoryService.allMemories, memoryService.searchRet);
-        //     } else {
-        //         memoryService.memories = memoryService.allMemories.slice(0);
-        //     };
-        //     //return Observable.of(memoryService.memories);
-        // } else {
         if ((!memoryService.retrievedMemories || refresh) && memoryService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));

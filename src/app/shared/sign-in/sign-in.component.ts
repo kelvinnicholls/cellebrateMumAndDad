@@ -49,10 +49,11 @@ export class SignInComponent implements OnInit, OnDestroy {
                 let headers = res.headers._headers;
                 let userName = payload.name;
                 localStorage.setItem(Consts.TOKEN, headers.get(Consts.X_AUTH)[0]);
-                localStorage.setItem(Consts.LOGGED_IN_USER, JSON.stringify(payload));
+                let loggedInUser = JSON.stringify(payload);
+                localStorage.setItem(Consts.LOGGED_IN_USER, loggedInUser);
                 router.navigate(['']);
                 this.appService.showToast(Consts.SUCCESS, "User signed in successfully.");
-                this.chatService.connect(userName);
+                this.chatService.connect(userName,payload);
                 this.memoryService.getMemories(true);
                 this.userService.getUsers(true);
                 this.photoService.getPhotos(true);

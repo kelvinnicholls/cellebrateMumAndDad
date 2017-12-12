@@ -1,41 +1,46 @@
 <div class="col-sm-8 offset-sm-3">
   <h2 class="blog-post-title">Info</h2>
   <br>
+
   <p>
-    <span class="kgn-info-normal">This site is dedicated to my much missed mum and dad, Marion and Ken Nicholls, and is a way for family members and friends</span>
+    <span class="kgn-info-normal">This site is dedicated to my much missed mum and dad, Marion and Ken Nicholls, and is a way for family members and friends
+    </span>
     <br />
-    <span class="kgn-info-normal">to add photos, group them into memories and share them with one another so we can all remember them both with love and</span>
+    <span class="kgn-info-normal">to add photos, group them into memories and share them with one another so we can all remember them both with love and
+    </span>
     <br />
     <span class="kgn-info-normal">affection.</span>
   </p>
-  <p>
-    <br />
-    <strong>
-      <span class="kgn-info-heading">Logging In</span>
-    </strong>
-  </p>
-  <p>
-    <span class="kgn-info-normal">In order to view and add photos firstly you will need to
-      <a routerLink="/sign-in">Sign In</a>. To do this you will need your email address and password that
-    </span>
-    <br />
-    <span class="kgn-info-normal">should have been provided to you.</span>
-  </p>
-  <p>
-    <span class="kgn-info-normal">Press the
-      <a routerLink="/sign-in">Sign In</a> menu option.</span>
-    <br />
-    <br />
-    <img [src]="'systemImages/signIn.jpg'" class="img-responsive" style="max-height: 100px;">
-    <br />
-    <br />
-    <span class="kgn-info-normal">Enter the email address and password provided. Once you are successfully logged in you will stay </span>
-    <br />
-    <span class="kgn-info-normal">logged in on this browser on this device until you explicitly Log Out.</span>
-  </p>
-  <p>
-    <span class="kgn-info-normal">&nbsp;</span>
-  </p>
+  <div *ngIf="!authUserService.isLoggedIn()">
+    <p>
+      <br />
+      <strong>
+        <span class="kgn-info-heading">Logging In</span>
+      </strong>
+    </p>
+    <p>
+      <span class="kgn-info-normal">In order to view and add photos firstly you will need to
+        <a routerLink="/sign-in">Sign In</a>. To do this you will need your email address and password that
+      </span>
+      <br />
+      <span class="kgn-info-normal">should have been provided to you.</span>
+    </p>
+    <p>
+      <span class="kgn-info-normal">Press the
+        <a routerLink="/sign-in">Sign In</a> menu option.</span>
+      <br />
+      <br />
+      <img [src]="'systemImages/signIn.jpg'" class="img-responsive" style="max-height: 100px;">
+      <br />
+      <br />
+      <span class="kgn-info-normal">Enter the email address and password provided. Once you are successfully logged in you will stay </span>
+      <br />
+      <span class="kgn-info-normal">logged in on this browser on this device until you explicitly Log Out.</span>
+    </p>
+    <p>
+      <span class="kgn-info-normal">&nbsp;</span>
+    </p>
+  </div>
   <div *ngIf="authUserService.isLoggedIn()">
     <p>
       <strong>

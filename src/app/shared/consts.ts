@@ -42,6 +42,7 @@ export class Consts {
   public static INFO = "Info";
   public static CUSTOM = "Custom";
   public static PHOTO = 'PHOTO';
+  public static USER = 'USER';
   public static MEMORY = 'MEMORY';
 
   public static VIEW = 'view';

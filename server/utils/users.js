@@ -6,10 +6,11 @@ class Users {
 
 
   }
-  addUser(id, name) {
+  addUser(id, name, userObj) {
     let user = {
       id,
-      name
+      name,
+      userObj
     };
     this.users.push(user);
     return user;
