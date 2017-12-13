@@ -2,8 +2,8 @@
   <h6 *ngIf="chatMessage.from.id != chatMessage.from.name" class="blog-post-meta">{{chatMessage.createdAt}},
     <a class="blog-post-meta" style="cursor: pointer" routerLinkActive="active" [routerLink]="['chat',chatMessage.from.id]">
       <strong>{{chatMessage.from.name}}</strong>
-      <img *ngIf="chatMessage.from.userObj && chatMessage.from.userObj._profileMediaId && chatMessage.from.userObj._profileMediaId.location"
-        [src]="getSrc(chatMessage.from.userObj._profileMediaId.location)" class="img-responsive" style="max-height: 18px;">
+      <img *ngIf="chatMessage.from.userObj && chatMessage.from.userObj.profilePicInfo && chatMessage.from.userObj.profilePicInfo.location"
+        [src]="getSrc(chatMessage.from.userObj.profilePicInfo.location)" class="img-responsive" style="max-height: 18px;">
     </a>
   </h6>
   <h6 *ngIf="chatMessage.from.id == chatMessage.from.name" class="blog-post-meta">{{chatMessage.createdAt}},

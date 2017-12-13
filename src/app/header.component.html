@@ -78,7 +78,7 @@
       <li *ngIf="authUserService.isLoggedIn()" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="loggedInUserDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">
-          <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;"> {{authUserService.getLoggedInUserName()}}
+          <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;" toggleFullscreen> {{authUserService.getLoggedInUserName()}}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loggedInUserDropdown">
           <a class="dropdown-item" [routerLink]="['/users','user','edit-me']">Edit</a>
