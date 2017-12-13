@@ -437,11 +437,14 @@ let downloadFile = (user) => {
   return new Promise((resolve, reject) => {
     utils.log(utils.LoglevelEnum.Info, "downloadFile user", user);
     if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.location.length > 0 && !user._profileMediaId.isUrl) {
+      utils.log(utils.LoglevelEnum.Info, "before fs.existsSync user._profileMediaId.location", user._profileMediaId.location);
       if (!fs.existsSync(user._profileMediaId.location)) {
-        utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user.location", user._profileMediaId.location);
+        utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user._profileMediaId.location", user._profileMediaId.location);
         googleCloudApi.downloadFile(user._profileMediaId.location);
       };
+      utils.log(utils.LoglevelEnum.Info, "after fs.existsSync user._profileMediaId.location", user._profileMediaId.location);
     };
+    utils.log(utils.LoglevelEnum.Info, "downloadFile before resolve");
     return resolve();
   });
 };
