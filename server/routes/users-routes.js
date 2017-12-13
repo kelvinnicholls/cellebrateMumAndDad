@@ -420,6 +420,7 @@ let downloadFiles = (users) => {
     let processedUsers = 0;
     if (numUsers > 0) {
       for (let user of users) {
+        users.user = _.pick(user, userOutFields);
         downloadFile(user).then(() => {
           processedUsers++;
           if (numUsers === processedUsers) {
@@ -445,7 +446,7 @@ let downloadFile = (user) => {
       utils.log(utils.LoglevelEnum.Info, "after fs.existsSync user._profileMediaId.location", user._profileMediaId.location);
     };
     utils.log(utils.LoglevelEnum.Info, "downloadFile before resolve");
-    return resolve();
+    return resolve(user);
   });
 };
 
@@ -460,7 +461,6 @@ router.get('/', authenticate, (req, res) => {
   User.find(userObj).populate('_profileMediaId', ['location', 'isUrl']).then((users) => {
     if (users) {
       downloadFiles(users).then(() => {
-        users.user = _.pick(user, userOutFields);
         res.send(users);
       });
     } else {
