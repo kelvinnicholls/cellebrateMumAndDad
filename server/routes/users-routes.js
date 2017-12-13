@@ -415,10 +415,10 @@ router.get('/name/:name', authenticate, (req, res) => {
 
 let downloadFile = (user) => {
   utils.log(utils.LoglevelEnum.Info, "downloadFile user", user);
-  if (user.location && user.location.length > 0 && !user.isUrl) {
-    if (!fs.existsSync(user.location)) {
-      utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user.location", user.location);
-      googleCloudApi.downloadFile(user.location);
+  if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.location.length > 0 && !user._profileMediaId.isUrl) {
+    if (!fs.existsSync(user._profileMediaId.location)) {
+      utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user.location", user._profileMediaId.location);
+      googleCloudApi.downloadFile(user._profileMediaId.location);
     };
   };
 };
