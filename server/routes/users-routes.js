@@ -413,14 +413,37 @@ router.get('/name/:name', authenticate, (req, res) => {
   });
 });
 
-let downloadFile = (user) => {
-  utils.log(utils.LoglevelEnum.Info, "downloadFile user", user);
-  if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.location.length > 0 && !user._profileMediaId.isUrl) {
-    if (!fs.existsSync(user._profileMediaId.location)) {
-      utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user.location", user._profileMediaId.location);
-      googleCloudApi.downloadFile(user._profileMediaId.location);
+let downloadFiles = (users) => {
+  utils.log(utils.LoglevelEnum.Info, "downloadFiles users.length", users.length);
+  return new Promise((resolve, reject) => {
+    let numUsers = users ? users.length : 0;
+    let processedUsers = 0;
+    if (numUsers > 0) {
+      for (let user of users) {
+        downloadFile(user).then(() => {
+          processedUsers++;
+          if (numUsers === processedUsers) {
+            return resolve(users);
+          };
+        });
+      }
+    } else {
+      return resolve(users);
     };
-  };
+  });
+};
+
+let downloadFile = (user) => {
+  return new Promise((resolve, reject) => {
+    utils.log(utils.LoglevelEnum.Info, "downloadFile user", user);
+    if (user._profileMediaId && user._profileMediaId.location && user._profileMediaId.location.length > 0 && !user._profileMediaId.isUrl) {
+      if (!fs.existsSync(user._profileMediaId.location)) {
+        utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user.location", user._profileMediaId.location);
+        googleCloudApi.downloadFile(user._profileMediaId.location);
+      };
+    };
+    return resolve();
+  });
 };
 
 router.get('/', authenticate, (req, res) => {
@@ -433,11 +456,10 @@ router.get('/', authenticate, (req, res) => {
 
   User.find(userObj).populate('_profileMediaId', ['location', 'isUrl']).then((users) => {
     if (users) {
-      users.forEach((user) => {
-        downloadFile(user);
+      downloadFiles(users).then(() => {
         users.user = _.pick(user, userOutFields);
+        res.send(users);
       });
-      res.send(users);
     } else {
       res.status(404).send(CONSTS.NO_USERS_FOUND);
     }
