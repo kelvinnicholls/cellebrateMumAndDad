@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 const googleCloudApi = require('../shared/google-cloud-api');
-
+const fs = require('fs');
 
 var path = require('path');
 
