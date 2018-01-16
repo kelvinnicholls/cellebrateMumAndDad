@@ -2,7 +2,13 @@
   <h2 class="blog-post-title col-sm-8 offset-sm-2 kgn-center-text">Users</h2>
 
   <div class="col-sm-8 offset-sm-2 kgn-center-text">
-    <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1">
+
+    <div [@listState]="'newPage'" class="row row-eq-height">
+      <app-user-list-item class="col-sm-4 align-self-center" *ngFor="let user of pagedUsers; let i=index" [index]="i" [user]="user">
+      </app-user-list-item>
+    </div>
+
+    <!-- <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1">
       <mat-grid-tile *ngFor="let  user of pagedUsers">
         <mat-grid-tile-header>
           <span mat-line>
@@ -17,7 +23,7 @@
           </span>
         </mat-grid-tile-footer>
       </mat-grid-tile>
-    </mat-grid-list>
+    </mat-grid-list> -->
   </div>
 
 

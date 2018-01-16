@@ -6,6 +6,8 @@ export class Photo {
 
     public index;
 
+    defaultProfilePicFile = Consts.DEFAULT_PHOTO_PIC_FILE;
+
     public readonly entityType = Consts.PHOTO;
 
     constructor(public title: string,
@@ -30,7 +32,7 @@ export class Photo {
     }
 
     public getSource(): string {
-        let retVal: string = "";
+        let retVal: string = this.defaultProfilePicFile;
         if (this.photoInfo && this.photoInfo.location) {
             retVal = this.photoInfo.location;
         }

@@ -8,42 +8,20 @@ import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
+import { listStateTrigger } from '../shared/animations';
+
 @Component({
     selector: 'app-user-list',
     templateUrl: './user-list.component.html',
-    styleUrls: ['./user-list.component.css']
+    styleUrls: ['./user-list.component.css'],
+    animations: [
+        listStateTrigger
+    ]
 })
 export class UserListComponent implements OnInit, OnDestroy {
     users: User[] = [];
 
     pagedUsers: User[] = [];
-
-    defaultProfilePicFile = Consts.DEFAULT_PROFILE_PIC_FILE;;
-
-    getSource(user: User): string {
-        let retVal: string = this.defaultProfilePicFile;
-        if (user && user.profilePicInfo && user.profilePicInfo.location) {
-            retVal = user.profilePicInfo.location;
-        }
-        return retVal;
-    }
-
-    onDelete(user: User) {
-
-        let retDialogSub = new EventEmitter<DialogRetEnum>();
-
-        retDialogSub.subscribe(
-            (buttonPressed: DialogRetEnum) => {
-                if (buttonPressed === DialogRetEnum.ButtonOne) {
-                    this.userService.deleteUser(user)
-                        .subscribe(
-                        result => Utils.log(LoglevelEnum.Info, this, result)
-                        );
-                }
-            });
-
-        this.dialogService.showDialog("Warning", "Do you really wish to delete this user?", "Yes", "No", retDialogSub);
-    }
 
     subscription: Subscription;
 

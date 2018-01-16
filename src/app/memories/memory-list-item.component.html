@@ -1,5 +1,5 @@
 <figure placement="top" [ngbTooltip]="memory.description" class="figure mat-figure">
-  <img [alt]="memory.title" src="{{memory.mediasToDisplay &&  memory.mediasToDisplay.length > 0 && memory.mediasToDisplay[0].getSource()}}" class="figure-img img-fluid rounded img-thumbnail" toggleFullscreen
+  <img [alt]="memory.title" [src]="getSource()" class="figure-img img-fluid rounded img-thumbnail" toggleFullscreen
     [contextMenuSubject]="memory" [contextMenu]="basicMenu">
   <figcaption class="figure-caption text-center"><a routerLinkActive="active" routerLink="/memories/memory/{{memoryService.getMode(memory)}}/{{memory.index}}">{{memory.title}}</a></figcaption>
 </figure>

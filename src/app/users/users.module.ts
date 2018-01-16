@@ -6,12 +6,14 @@ import { ChangePasswordComponent } from "./change-password/change-password.compo
 import { UserListComponent } from "./user-list.component";
 import { usersRouting } from "./users.routing";
 import { SharedModule } from "../shared/shared.module";
+import { UserListItemComponent } from "./user-list-item.component";
 
 @NgModule({
     declarations: [
         UserInputComponent,
         ChangePasswordComponent,
-        UserListComponent
+        UserListComponent,
+        UserListItemComponent
     ],
     imports: [
         CommonModule,

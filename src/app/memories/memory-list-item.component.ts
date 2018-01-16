@@ -7,7 +7,7 @@ import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
 import { ContextMenuComponent } from 'ngx-contextmenu';
 import { CommentsService } from "../shared/comments/comments.service";
-
+import { Consts } from "../shared/consts";
 @Component({
     selector: 'app-memory-list-item',
     templateUrl: './memory-list-item.component.html',
@@ -28,6 +28,14 @@ export class MemoryListItemComponent {
     checkCanDelete(memory: Memory): boolean {
         return this.memoryService.isAllowed('D', memory);
     }
+
+    public getSource() {
+        let retSource = Consts.DEFAULT_PHOTO_PIC_FILE;
+        if (this.memory.mediasToDisplay && this.memory.mediasToDisplay.length > 0) {
+            retSource = this.memory.mediasToDisplay[0].getSource();
+        }
+        return retSource;
+    };
 
     deleteMemory() {
 
