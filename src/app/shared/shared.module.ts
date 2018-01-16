@@ -28,11 +28,6 @@ import { NgxGalleryModule } from 'ngx-gallery';
 
 import { ToggleFullscreenDirective } from './screenfull/screenfull.directive';
 
-import {
-    MatGridListModule
-} from '@angular/material';
-import { CdkTableModule } from '@angular/cdk/table';
-
 import { ContextMenuModule } from 'ngx-contextmenu';
 
 export function ngbDateMomentParserFormatterFactory() {
@@ -58,8 +53,7 @@ export function ngbDateMomentParserFormatterFactory() {
         AddPersonComponent,
         ToggleFullscreenDirective
     ],
-    exports: [ContextMenuModule,ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddPopupComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
-        MatGridListModule,
+    exports: [ContextMenuModule,ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddPopupComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent
     ],
     imports: [ContextMenuModule.forRoot({useBootstrap4: true,}),NgxGalleryModule, MultiselectDropdownModule, CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
