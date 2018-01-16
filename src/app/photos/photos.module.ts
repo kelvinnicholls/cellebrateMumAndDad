@@ -3,13 +3,15 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from "@angular/forms";
 import { PhotoInputComponent } from "./photo-input.component";
 import { PhotoListComponent } from "./photo-list.component";
+import { PhotoListItemComponent } from "./photo-list-item.component";
 import { photosRouting } from "./photos.routing";
 import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
     declarations: [
         PhotoInputComponent,
-        PhotoListComponent
+        PhotoListComponent,
+        PhotoListItemComponent
     ],
     imports: [
         CommonModule,

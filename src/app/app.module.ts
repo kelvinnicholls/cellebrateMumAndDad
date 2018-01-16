@@ -62,7 +62,7 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         ReactiveFormsModule,
         HttpModule,
         ToastModule.forRoot(),
-//        NgPipesModule,
+        //        NgPipesModule,
         ChatModule,
         SharedModule
     ],

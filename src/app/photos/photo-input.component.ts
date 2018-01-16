@@ -26,13 +26,15 @@ import { Comment, CommentDisplay } from "../shared/comments/comment.model";
 import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 //import { element } from 'protractor';
-import { Utils,LoglevelEnum } from "../shared/utils/utils";
+import { Utils, LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from "../auth/auth-user.service";
+
 
 @Component({
     selector: 'app-photo-input',
     templateUrl: './photo-input.component.html',
     styleUrls: ['./photo-input.component.css'],
+
     providers: [ToastService]
 })
 export class PhotoInputComponent implements OnInit, OnDestroy {
@@ -204,7 +206,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         , private toastService: ToastService
         , private dialogService: DialogService
         , private router: Router
-        , private authUserService: AuthUserService        
+        , private authUserService: AuthUserService
         , private fileStackService: FileStackService
         , private appService: AppService) {
         toastService.toast.setRootViewContainerRef(vcr);
@@ -306,7 +308,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
                         photoInputComponent.photoService.updatePhoto(this.photo)
                             .subscribe(
                             result => {
-                                Utils.log(LoglevelEnum.Info,this,result);
+                                Utils.log(LoglevelEnum.Info, this, result);
                                 photoInputComponent.router.navigate(['photos']).then((ok) => {
                                     if (ok) {
                                         photoInputComponent.appService.showToast(Consts.SUCCESS, "Photo updated.");
@@ -422,7 +424,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         photoInputComponent.commentSub = photoInputComponent.commentsService.commentSub
             .subscribe(
             (comment: Comment) => {
-                if ( comment.entity.entityType  === Consts.PHOTO) {
+                if (comment.entity.entityType === Consts.PHOTO) {
                     photoInputComponent.photoService.addComment(photoInputComponent.photo, comment.comment, comment.callback);
                 };
             });

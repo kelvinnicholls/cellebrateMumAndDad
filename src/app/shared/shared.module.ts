@@ -33,6 +33,7 @@ import {
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 
+import { ContextMenuModule } from 'ngx-contextmenu';
 
 export function ngbDateMomentParserFormatterFactory() {
     return new NgbDateMomentParserFormatter(Consts.DATE_DISPLAY_FORMAT, Consts.DATE_DB_FORMAT);
@@ -57,10 +58,10 @@ export function ngbDateMomentParserFormatterFactory() {
         AddPersonComponent,
         ToggleFullscreenDirective
     ],
-    exports: [ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddPopupComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
+    exports: [ContextMenuModule,ToggleFullscreenDirective, NgxGalleryModule, MultiselectDropdownModule, AddPersonComponent, AddTagComponent, CommentAddPopupComponent,CommentAddComponent, CommentComponent, CommentListComponent, PasswordStrengthBarComponent, ReversePipe, SearchComponent, SlideShowComponent, CommonModule, NgbModule, PaginationModule, FormsModule, ErrorComponent, DialogComponent, PageNotFoundComponent, CdkTableModule,
         MatGridListModule,
     ],
-    imports: [NgxGalleryModule, MultiselectDropdownModule, CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
+    imports: [ContextMenuModule.forRoot({useBootstrap4: true,}),NgxGalleryModule, MultiselectDropdownModule, CommonModule, ReactiveFormsModule, FormsModule, NgbModule.forRoot(), PaginationModule.forRoot(), sharedRouting],
     providers: [{
         provide: NgbDateMomentParserFormatter,
         useFactory: ngbDateMomentParserFormatterFactory

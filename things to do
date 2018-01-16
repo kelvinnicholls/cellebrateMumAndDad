@@ -32,10 +32,11 @@
 168) People are not in alphabetical order - neither are tags
 171) if dev do not save photos to google cloud
 174) ask if want to log out
-175)
+175) remove material design
+176) user async version of getPhotos in server so it doesn't return until all photos are downloaded
 
 
-
+https://github.com/isaacplmann/ngx-contextmenu
 
 
 

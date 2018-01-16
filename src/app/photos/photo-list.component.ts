@@ -4,7 +4,6 @@ import { Photo } from "./photo.model";
 import { PhotoService } from "./photo.service";
 import { ToastService } from "../shared/toast/toast.service";
 import { NgxGalleryOptions } from 'ngx-gallery';
-import { DialogService } from "../shared/dialog/dialog.service";
 import { Consts } from "../shared/consts";
 import { DialogRetEnum } from "../shared/dialog/dialog-ret.enum";
 import { Dialog } from "../shared/dialog/dialog.model";
@@ -13,13 +12,19 @@ import { SlideShowService } from "../shared/slideshow/slideshow.service";
 import { NgxGalleryImage } from 'ngx-gallery';
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
 import { Comment, CommentDisplay } from "../shared/comments/comment.model";
+import { listStateTrigger } from './animations';
 
 @Component({
     selector: 'app-photo-list',
     templateUrl: './photo-list.component.html',
-    styleUrls: ['./photo-list.component.css']
+    styleUrls: ['./photo-list.component.css'],
+    animations: [
+        listStateTrigger
+    ]
 })
 export class PhotoListComponent implements OnInit, OnDestroy {
+
+    
 
     private commentSub: EventEmitter<Comment>;
 
@@ -27,32 +32,9 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
 
-    showComments(photo: Photo) {
-        this.commentsService.showComments("Comments for photo: '" + photo.title + "'", photo.comments);
-    }
 
-    checkCanDelete(photo: Photo): boolean {
-        return this.photoService.isAllowed('D', photo);
-    }
-
-    onDelete(photo: Photo) {
-
-        let retDialogSub = new EventEmitter<DialogRetEnum>();
-
-        retDialogSub.subscribe(
-            (buttonPressed: DialogRetEnum) => {
-                if (buttonPressed === DialogRetEnum.ButtonOne) {
-                    this.photoService.deletePhoto(photo)
-                        .subscribe(
-                        result => Utils.log(LoglevelEnum.Info, this, result)
-                        );
-                }
-            });
-
-        this.dialogService.showDialog("Warning", "Do you really wish to delete this photo?", "Yes", "No", retDialogSub);
-    }
-
-
+    static numCols: number = 3;
+    static numRows: number = 2;
 
     photos: Photo[] = [];
 
@@ -100,9 +82,11 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     };
 
-    constructor(private slideShowService: SlideShowService, private dialogService: DialogService, private commentsService: CommentsService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private slideShowService: SlideShowService, private commentsService: CommentsService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
+        // https://stackoverflow.com/questions/36354325/angular-2-ngfor-using-numbers-instead-collections
     }
+
 
     onSlideShow() {
         let galleryImages: NgxGalleryImage[] = [];
@@ -139,9 +123,6 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         };
     };
 
-    addComment(photo: Photo) {
-        this.commentsService.showAddComment(photo);
-    };
 
     ngOnInit() {
         let photoListComponent = this;

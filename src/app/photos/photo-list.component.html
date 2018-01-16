@@ -5,34 +5,26 @@
   </div>
   <!-- https://material.angular.io/components/grid-list/overview -->
   <div class="col-sm-8 offset-sm-2 kgn-center-text">
-    <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1">
-      <mat-grid-tile *ngFor="let photo of pagedPhotos">
-        <mat-grid-tile-header>
-          <span mat-line>
-            <a routerLinkActive="active" routerLink="/photos/photo/{{photoService.getMode(photo)}}/{{photo.index}}">{{photo.title}}</a>
-          </span>
-        </mat-grid-tile-header>
-        <img [alt]="photo.title" src="{{photo.getSource()}}" class="img-responsive" style="max-height: 100%;" toggleFullscreen>
-        <mat-grid-tile-footer class="row col-sm-13">
-          <div class="col-sm-4 text-center">
-            <span *ngIf="photo && photo.comments &&  photo.comments.length > 0">
-              <a target="_blank" href="javascript:void(0)" (click)="showComments(photo)">Comments
-                <br/>({{photo.comments.length}})</a>
-            </span>
-          </div>
-          <div class="col-sm-4 text-center">
-            <span>
-              <a target="_blank" href="javascript:void(0)" (click)="addComment(photo)">Add Comment</a>
-            </span>
-          </div>
-          <div class="col-sm-4 text-center">
-            <span *ngIf="checkCanDelete(photo)">
-              <a (click)="onDelete(photo)">Delete</a>
-            </span>
-          </div>
-        </mat-grid-tile-footer>
-      </mat-grid-tile>
-    </mat-grid-list>
+    <!-- <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1"> -->
+    <!-- <div *ngFor="let row of getRows()">
+       <div [@listState]="getPagedPhotos(row).length" class="row row-eq-height"> 
+      <div [@listState]="'newPage'" class="row row-eq-height">
+        <app-photo-list-item  class="col-sm align-self-center" *ngFor="let photo of getPagedPhotos(row); let i=index" [index]="getIndex(i,row)"
+          [photo]="photo">
+        </app-photo-list-item>
+      </div>
+    </div> -->
+    <div [@listState]="'newPage'" class="row row-eq-height">
+      <app-photo-list-item class="col-sm-4 align-self-center" *ngFor="let photo of pagedPhotos; let i=index" [index]="i" [photo]="photo">
+      </app-photo-list-item>
+    </div>
+
+    <!-- <ul>
+      <li *ngFor="let photo of pagedPhotos" [contextMenu]="basicMenu" [contextMenuSubject]="photo">Right Click: {{photo?.title}}</li>
+    </ul> -->
+
+
+    <!-- </mat-grid-list> -->
   </div>
 
   <ng-template #popContent>

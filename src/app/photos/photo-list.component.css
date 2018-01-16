@@ -1,4 +1,15 @@
+
+
+.row-eq-height {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+
 .kgn-border-pad {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
