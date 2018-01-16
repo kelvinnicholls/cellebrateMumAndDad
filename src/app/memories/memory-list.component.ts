@@ -12,12 +12,15 @@ import { CommentsService } from "../shared/comments/comments.service";
 import { SlideShowService } from "../shared/slideshow/slideshow.service";
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
 import { Comment, CommentDisplay } from "../shared/comments/comment.model";
-
+import { listStateTrigger } from '../shared/animations';
 
 @Component({
     selector: 'app-memory-list',
     templateUrl: './memory-list.component.html',
-    styleUrls: ['./memory-list.component.css']
+    styleUrls: ['./memory-list.component.css'],
+    animations: [
+        listStateTrigger
+    ]
 })
 export class MemoryListComponent implements OnInit, OnDestroy {
 

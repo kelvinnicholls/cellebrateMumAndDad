@@ -3,28 +3,14 @@
     <h2 class="blog-post-title ">Photos</h2>
     <button type="button" class="btn btn-md btn-primary" (click)="onSlideShow()">Slide Show</button>
   </div>
-  <!-- https://material.angular.io/components/grid-list/overview -->
+
   <div class="col-sm-8 offset-sm-2 kgn-center-text">
-    <!-- <mat-grid-list cols="3" gutterSize="10" rows="2" rowHeight="1:1"> -->
-    <!-- <div *ngFor="let row of getRows()">
-       <div [@listState]="getPagedPhotos(row).length" class="row row-eq-height"> 
-      <div [@listState]="'newPage'" class="row row-eq-height">
-        <app-photo-list-item  class="col-sm align-self-center" *ngFor="let photo of getPagedPhotos(row); let i=index" [index]="getIndex(i,row)"
-          [photo]="photo">
-        </app-photo-list-item>
-      </div>
-    </div> -->
+
     <div [@listState]="'newPage'" class="row row-eq-height">
       <app-photo-list-item class="col-sm-4 align-self-center" *ngFor="let photo of pagedPhotos; let i=index" [index]="i" [photo]="photo">
       </app-photo-list-item>
     </div>
 
-    <!-- <ul>
-      <li *ngFor="let photo of pagedPhotos" [contextMenu]="basicMenu" [contextMenuSubject]="photo">Right Click: {{photo?.title}}</li>
-    </ul> -->
-
-
-    <!-- </mat-grid-list> -->
   </div>
 
   <ng-template #popContent>

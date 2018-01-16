@@ -5,11 +5,13 @@ import { MemoryInputComponent } from "./memory-input.component";
 import { MemoryListComponent } from "./memory-list.component";
 import { memoriesRouting } from "./memories.routing";
 import { SharedModule } from "../shared/shared.module";
+import { MemoryListItemComponent } from "./memory-list-item.component";
 
 @NgModule({
     declarations: [
         MemoryInputComponent,
-        MemoryListComponent
+        MemoryListComponent,
+        MemoryListItemComponent
     ],
     imports: [
         CommonModule,

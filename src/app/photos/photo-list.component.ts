@@ -12,7 +12,7 @@ import { SlideShowService } from "../shared/slideshow/slideshow.service";
 import { NgxGalleryImage } from 'ngx-gallery';
 import { Utils, LoglevelEnum } from "../shared/utils/utils";
 import { Comment, CommentDisplay } from "../shared/comments/comment.model";
-import { listStateTrigger } from './animations';
+import { listStateTrigger } from '../shared/animations';
 
 @Component({
     selector: 'app-photo-list',
