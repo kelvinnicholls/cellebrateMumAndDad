@@ -4,7 +4,10 @@
   </div>
   <hr>
   <div class="row">
-    <div class="col-sm-10" [@routeStateSlideIn]="getAnimationsData(routerOutlet)">
+    <div class="col-sm-10" [@routeState]="getAnimationsData(routerOutlet)"
+    (@routeState.start)="onRouteStateSlideInStart($event)"
+    (@routeState.done)="onRouteStateSlideInDone($event)"
+    >
       <router-outlet #routerOutlet="outlet"></router-outlet>
     </div>
     <div class="col-sm-2 blog-sidebar">

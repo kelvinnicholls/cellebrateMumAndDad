@@ -6,7 +6,7 @@
 
   <div class="col-sm-8 offset-sm-2 kgn-center-text">
 
-    <div [@listState]="'newPage'" class="row row-eq-height">
+    <div [@listState]="'newPage' + photoService.eventPage" class="row row-eq-height">
       <app-photo-list-item class="col-sm-4 align-self-center" *ngFor="let photo of pagedPhotos; let i=index" [index]="i" [photo]="photo">
       </app-photo-list-item>
     </div>

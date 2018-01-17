@@ -13,6 +13,9 @@ button {
     margin: 10px;
 }
 
+button:hover, img:hover, li:hover {
+     transform: scale(1.05);
+}
 
 /*
  * Blog name and description

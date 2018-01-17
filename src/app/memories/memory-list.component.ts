@@ -101,7 +101,7 @@ export class MemoryListComponent implements OnInit, OnDestroy {
         this.updatePagedMemories(this.memoryService.eventItemsPerPage, this.memoryService.eventPage);
     }
 
-    constructor(private slideShowService: SlideShowService, private dialogService: DialogService, private commentsService: CommentsService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private slideShowService: SlideShowService, private dialogService: DialogService, private commentsService: CommentsService, public memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 

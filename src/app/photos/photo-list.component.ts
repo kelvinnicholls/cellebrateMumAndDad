@@ -82,7 +82,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
         this.updatePagedPhotos(this.photoService.eventItemsPerPage, this.photoService.eventPage);
     };
 
-    constructor(private slideShowService: SlideShowService, private commentsService: CommentsService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private slideShowService: SlideShowService, private commentsService: CommentsService, public photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
         // https://stackoverflow.com/questions/36354325/angular-2-ngfor-using-numbers-instead-collections
     }

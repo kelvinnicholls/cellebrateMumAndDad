@@ -3,8 +3,9 @@ import { ToastService } from "./shared/toast/toast.service";
 import { AppService } from "./app.service";
 import { Toast } from "./shared/toast/toast.model";
 import { AuthUserService } from "./auth/auth-user.service";
-import  {routeStateSlideInTrigger} from './shared/route-animations';
+import { routeStateTrigger } from './shared/route-animations';
 import { RouterOutlet } from '@angular/router';
+import { AnimationEvent } from '@angular/animations/src/animation_event';
 
 @Component({
     selector: 'my-app',
@@ -12,7 +13,7 @@ import { RouterOutlet } from '@angular/router';
     styleUrls: ['./app.component.css'],
     providers: [ToastService],
     animations: [
-      routeStateSlideInTrigger
+        routeStateTrigger
     ]
 })
 export class AppComponent {
@@ -22,10 +23,18 @@ export class AppComponent {
     getAnimationsData(outlet: RouterOutlet) {
         const routeData = outlet.activatedRouteData['animation'];
         if (!routeData) {
-          return 'home';
+            return 'home';
         };
         return routeData['page'];
-      };
+    };
+
+    onRouteStateSlideInStart(event: AnimationEvent) {
+        console.log(event);
+    }
+
+    onRouteStateSlideInDone(event: AnimationEvent) {
+        console.log(event);
+    }
 
     constructor(private vcr: ViewContainerRef, private toastService: ToastService, private appService: AppService, public authUserService: AuthUserService) {
         toastService.toast.setRootViewContainerRef(vcr);

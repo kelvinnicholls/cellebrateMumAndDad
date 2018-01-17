@@ -71,7 +71,7 @@ export class UserListComponent implements OnInit, OnDestroy {
         this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
     }
 
-    constructor(private userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef, private dialogService: DialogService) {
+    constructor(public userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef, private dialogService: DialogService) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 

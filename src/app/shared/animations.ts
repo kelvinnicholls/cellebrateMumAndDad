@@ -2,10 +2,29 @@ import { stagger, trigger, query, state, style, transition, animate, keyframes }
 
 export const listStateTrigger = trigger('listState', [
     transition('* => *', [
-        animate('0.5s ease-out', keyframes([
+        animate('2s ease-out', keyframes([
             style({
                 opacity: 1,
-                transform: 'scale(1.5)',
+                transform: 'scale(1.05)',
+                offset: 0.2
+            }),style({
+                transform: 'scale(0.95)',
+                offset: 0.4
+            }), style({
+                opacity: 1,
+                transform: 'scale(1)',
+                offset: 1
+            })
+        ]))
+    ]),
+    transition(':enter', [
+        animate('2s ease-out', keyframes([
+            style({
+                opacity: 1,
+                transform: 'scale(1.05)',
+                offset: 0.2
+            }),style({
+                transform: 'scale(0.95)',
                 offset: 0.4
             }), style({
                 opacity: 1,

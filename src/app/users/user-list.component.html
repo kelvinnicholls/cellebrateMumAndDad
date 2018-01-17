@@ -3,7 +3,7 @@
 
   <div class="col-sm-8 offset-sm-2 kgn-center-text">
 
-    <div [@listState]="'newPage'" class="row row-eq-height">
+    <div [@listState]="'newPage' + userService.eventPage"  class="row row-eq-height">
       <app-user-list-item class="col-sm-4 align-self-center" *ngFor="let user of pagedUsers; let i=index" [index]="i" [user]="user">
       </app-user-list-item>
     </div>
