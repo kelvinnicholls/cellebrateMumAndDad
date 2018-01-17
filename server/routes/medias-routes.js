@@ -182,6 +182,8 @@ let downloadFiles = (medias) => {
           if (numMedias === processedMedias) {
             return resolve(medias);
           };
+        }).catch((err) => {
+          return resolve(medias);
         });
       }
     } else {
@@ -196,9 +198,18 @@ let downloadFile = (media) => {
   return new Promise((resolve, reject) => {
     if (media.location && media.location.length > 0) {
       if (!fs.existsSync(media.location)) {
-        googleCloudApi.downloadFile(media.location);
+        googleCloudApi.downloadFile(media.location).then(() => {
+            return resolve(media);
+          })
+          .catch(err => {
+            utils.log(utils.LoglevelEnum.Error,err);
+            return reject(err);
+          });
+      } else {
+        return resolve(media);
       };
-      return resolve();
+    } else {
+      return resolve(media);
     };
   });
 };
@@ -281,6 +292,7 @@ router.get('/', authenticate, (req, res) => {
     res.send(obj);
   }))).catch((e) => {
     utils.log(utils.LoglevelEnum.Info, "mediasApp.get('/medias/' error", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
 
@@ -299,9 +311,11 @@ router.get('/byCriteria', authenticate, (req, res) => {
       res.send(obj);
     }, (e) => {
       utils.log(utils.LoglevelEnum.Info, "downloadFiles error", e);
+      res.status(400).send(CONSTS.AN_ERROR_OCURRED);
     });
   }, (e) => {
     utils.log(utils.LoglevelEnum.Info, "mediasApp.get('/medias/byCriteria' error", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 
 });
@@ -352,6 +366,9 @@ router.get('/:id', authenticate, (req, res) => {
         });
       }, (e) => {
         utils.log(utils.LoglevelEnum.Info, "downloadFile error", e);
+        res.send({
+          media
+        });
       });
     } else {
       res.status(404).send({

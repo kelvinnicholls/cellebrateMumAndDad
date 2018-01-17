@@ -147,3 +147,4 @@ x172) adding a photo when in search mode should redo search
 x173) toasts stay on top if page is navigated from before toast disappears - remove using ng on leave or something (https://johnsiu.com/angular-2-simple-mq-service/)
 x166) Add info page with instructions
 x159) Toasts are remaining at top
+x175) remove material design

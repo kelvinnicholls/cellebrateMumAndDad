@@ -52,7 +52,7 @@ function uploadFile(filename) {
       utils.log(utils.LoglevelEnum.Info,`${filename} uploaded to ${bucketName}.`);
     })
     .catch(err => {
-      console.error('ERROR:', err);
+      utils.log(utils.LoglevelEnum.Error,err);
     });
 };
 
@@ -63,15 +63,9 @@ function downloadFile(destFilename) {
   let srcFilename = destFilename.substring(destFilename.indexOf("file_"));
   utils.log(utils.LoglevelEnum.Info,'downloadFile : srcFilename',srcFilename);
   utils.log(utils.LoglevelEnum.Info,'downloadFile : destFilename',destFilename);
-  bucket
+  return bucket
     .file(srcFilename)
-    .download(options)
-    .then(() => {
-      utils.log(utils.LoglevelEnum.Info,`gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`);
-    })
-    .catch(err => {
-      console.error('ERROR:', err);
-    });
+    .download(options);
 };
 
 function deleteFile(fullFilename) {
@@ -83,7 +77,7 @@ function deleteFile(fullFilename) {
       utils.log(utils.LoglevelEnum.Info,`gs://${bucketName}/${filename} deleted.`);
     })
     .catch(err => {
-      console.error('ERROR:', err);
+      utils.log(utils.LoglevelEnum.Error,err);
     });
 };
 module.exports = {

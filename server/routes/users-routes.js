@@ -426,6 +426,9 @@ let downloadFiles = (users) => {
           if (numUsers === processedUsers) {
             return resolve(users);
           };
+        }).catch(err => {
+          utils.log(utils.LoglevelEnum.Error,err);
+          return reject(err);
         });
       }
     } else {
@@ -441,12 +444,23 @@ let downloadFile = (user) => {
       utils.log(utils.LoglevelEnum.Info, "before fs.existsSync user._profileMediaId.location", user._profileMediaId.location);
       if (!fs.existsSync(user._profileMediaId.location)) {
         utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user._profileMediaId.location", user._profileMediaId.location);
-        googleCloudApi.downloadFile(user._profileMediaId.location);
+        googleCloudApi.downloadFile(user._profileMediaId.location).then(() => {
+            utils.log(utils.LoglevelEnum.Info, `gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`);
+            utils.log(utils.LoglevelEnum.Info, "downloadFile before resolve 1");
+            return resolve(user);
+          })
+          .catch(err => {
+            utils.log(utils.LoglevelEnum.Error,err);
+            return reject(err);
+          });
+      } else {
+        utils.log(utils.LoglevelEnum.Info, "downloadFile before resolve 2");
+        return resolve(user);
       };
       utils.log(utils.LoglevelEnum.Info, "after fs.existsSync user._profileMediaId.location", user._profileMediaId.location);
+    } else {
+      return resolve(user);
     };
-    utils.log(utils.LoglevelEnum.Info, "downloadFile before resolve");
-    return resolve(user);
   });
 };
 
