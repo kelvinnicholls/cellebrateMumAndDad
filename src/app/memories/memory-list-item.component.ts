@@ -21,7 +21,7 @@ export class MemoryListItemComponent {
 
     @Input() index: number;
 
-    constructor(private commentsService: CommentsService, private dialogService: DialogService, private memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private commentsService: CommentsService, private dialogService: DialogService, public memoryService: MemoryService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -54,7 +54,7 @@ export class MemoryListItemComponent {
         this.dialogService.showDialog("Warning", "Do you really wish to delete this memory?", "Yes", "No", retDialogSub);
     }
 
-    addComment(memory: Memory) {
+    addComment() {
         this.commentsService.showAddComment(this.memory);
     };
 

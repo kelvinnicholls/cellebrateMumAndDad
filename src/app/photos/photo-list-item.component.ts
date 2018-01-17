@@ -21,7 +21,7 @@ export class PhotoListItemComponent {
 
     @Input() index: number;
 
-    constructor(private commentsService: CommentsService, private dialogService: DialogService, private photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
+    constructor(private commentsService: CommentsService, private dialogService: DialogService, public photoService: PhotoService, private toastService: ToastService, private vcr: ViewContainerRef) {
         toastService.toast.setRootViewContainerRef(vcr);
     }
 
@@ -46,7 +46,7 @@ export class PhotoListItemComponent {
         this.dialogService.showDialog("Warning", "Do you really wish to delete this photo?", "Yes", "No", retDialogSub);
     }
 
-    addComment(photo: Photo) {
+    addComment() {
         this.commentsService.showAddComment(this.photo);
     };
 

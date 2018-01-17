@@ -32,13 +32,14 @@
 168) People are not in alphabetical order - neither are tags
 171) if dev do not save photos to google cloud
 174) ask if want to log out
-176) user async version of getPhotos in server so it doesn't return until all photos are downloaded
+175) Add like option
+176) get "Angular is running in the development mode. Call enableProdMode() to enable the production mode." on live
 
 
 
 
 
-https://github.com/isaacplmann/ngx-contextmenu
+https://github.com/isaacplmann/ngx-contextmenu  
 
 
 

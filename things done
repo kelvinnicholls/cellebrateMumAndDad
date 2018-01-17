@@ -148,3 +148,4 @@ x173) toasts stay on top if page is navigated from before toast disappears - rem
 x166) Add info page with instructions
 x159) Toasts are remaining at top
 x175) remove material design
+x176) user async version of getPhotos in server so it doesn't return until all photos are downloaded
