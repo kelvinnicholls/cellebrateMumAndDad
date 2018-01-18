@@ -445,7 +445,6 @@ let downloadFile = (user) => {
       if (!fs.existsSync(user._profileMediaId.location)) {
         utils.log(utils.LoglevelEnum.Info, "googleCloudApi.downloadFile user._profileMediaId.location", user._profileMediaId.location);
         googleCloudApi.downloadFile(user._profileMediaId.location).then(() => {
-            utils.log(utils.LoglevelEnum.Info, `gs://${bucketName}/${srcFilename} downloaded to ${destFilename}.`);
             utils.log(utils.LoglevelEnum.Info, "downloadFile before resolve 1");
             return resolve(user);
           })
