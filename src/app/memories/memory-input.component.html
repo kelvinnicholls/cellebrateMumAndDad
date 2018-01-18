@@ -31,15 +31,15 @@
         'has-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }">
     <label for="description" class="col-sm-3 col-form-label">
-      <strong>Description</strong>
+      <strong>Notes</strong>
     </label>
     <div class="col-sm-7">
       <textarea type="text" class="form-control" id="description"
-        placeholder="Description" [ngModel]="memory?.description" formControlName="description" [ngClass]="{
+        placeholder="Notes" [ngModel]="memory?.description" formControlName="description" [ngClass]="{
         'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }"></textarea>
-      <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter a description for this memory. </small>
+      <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter notes about this memory. </small>
     </div>
   </div>
 

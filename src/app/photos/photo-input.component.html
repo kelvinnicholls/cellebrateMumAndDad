@@ -28,14 +28,14 @@
         'has-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'has-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }">
-    <label for="description" class="col-sm-3 col-form-label"><strong>Description</strong></label>
+    <label for="description" class="col-sm-3 col-form-label"><strong>Notes</strong></label>
     <div class="col-sm-7">
       <textarea type="text" class="form-control" id="description"
-        placeholder="Description" [ngModel]="photo?.description" formControlName="description" [ngClass]="{
+        placeholder="Notes" [ngModel]="photo?.description" formControlName="description" [ngClass]="{
         'form-control-danger': myForm.get('description').invalid && (myForm.get('description').dirty || myForm.get('description').touched),
         'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty || myForm.get('description').touched)
       }"></textarea>
-      <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter a description for this photo. </small>
+      <small *ngIf="myForm.get('description').invalid" class="form-text text-muted">Enter notes about this photo. </small>
     </div>
   </div>
 
