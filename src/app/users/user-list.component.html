@@ -39,20 +39,20 @@
   </div>
 
 
-  <div class="col-sm-6 offset-sm-4 text-center kgn-border-pad">
-    <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-sm"
+  <div class="col-sm-6 offset-sm-5 text-center kgn-border-pad">
+    <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-md"
       [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
 
-  <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-4">
-    <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-    <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+  <div *ngIf="userService.searchRet" class="row text-center">
+    <button type="button" class="btn btn-md btn-danger col" (click)="onClearSearch()">Clear Search</button>
+    <button type="button" class="btn btn-md btn-primary col" (click)="onSearch()">Search</button>
   </div>
 
-  <div *ngIf="!userService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+  <div *ngIf="!userService.searchRet" class="row text-center">
+    <button type="button" class="btn btn-md btn-primary col" (click)="onSearch()">Search</button>
   </div>
 </div>
 
@@ -63,7 +63,7 @@
       <h1 class="display-1 text-center">{{getNoUsersText()}}</h1>
     </div>
   </div>
-  <div *ngIf="userService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
+  <div *ngIf="userService.searchRet" class="row text-center">
+    <button type="button" class="btn btn-md btn-danger col" (click)="onClearSearch()">Clear Search</button>
   </div>
 </div>

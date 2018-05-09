@@ -55,22 +55,24 @@
   </div>
 
 
-  <div class="col-sm-6 offset-sm-4 text-center kgn-border-pad">
+  <div class="col-sm-6 offset-sm-5 text-center kgn-border-pad">
     <pagination [totalItems]="memoryService.bigTotalItems" [(ngModel)]="memoryService.bigCurrentPage" [maxSize]="memoryService.maxSize"
-      class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="memoryService.numPages = $event"
+      class="pagination-md" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="memoryService.numPages = $event"
       (pageChanged)="pageChanged($event)"></pagination>
   </div>
 
 
 
-  <div *ngIf="memoryService.searchRet" class="row col col-sm-4 offset-sm-4">
-    <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
-    <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+  <div *ngIf="memoryService.searchRet" class="row text-center">
+    <button type="button" class="btn btn-md btn-danger col" (click)="onClearSearch()">Clear Search</button>
+    <button type="button" class="btn btn-md btn-primary col" (click)="onSearch()">Search</button>
   </div>
 
-  <div *ngIf="!memoryService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button type="button" class="btn btn-md btn-primary" (click)="onSearch()">Search</button>
+  <div *ngIf="!memoryService.searchRet" class="row text-center">
+    <button type="button" class="btn btn-md btn-primary col" (click)="onSearch()">Search</button>
   </div>
+
+
 </div>
 
 <div *ngIf="pagedMemories.length == 0">
@@ -79,7 +81,7 @@
       <h1 class="display-1 text-center">{{getNoMemoriesText()}}</h1>
     </div>
   </div>
-  <div *ngIf="memoryService.searchRet" class="row col col-sm-4 offset-sm-5">
-    <button type="button" class="btn btn-md btn-danger" (click)="onClearSearch()">Clear Search</button>
+  <div *ngIf="memoryService.searchRet" class="row text-center">
+    <button type="button" class="btn btn-md btn-danger col" (click)="onClearSearch()">Clear Search</button>
   </div>
 </div>
