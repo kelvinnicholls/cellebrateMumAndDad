@@ -1,0 +1,15 @@
+.mat-sidenav-container,
+.mat-sidenav-content,
+.mat-tab-body-content {
+    transform: none !important;
+}
+mat-grid-tile {
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border: 2px solid #9441a5;
+}
+.mat-grid-tile-footer a:not([href])  ,
+.mat-grid-tile-header a {
+    color: #bbc1e0;
+}

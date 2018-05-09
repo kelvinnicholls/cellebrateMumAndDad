@@ -1,0 +1,90 @@
+$colour-primary: #FAA9E0; // 
+$colour-primary-light: #7ed56f;
+$colour-primary-dark: #28b485;
+
+
+$colour-secondary: #F8B3EB;
+$colour-secondary-light: lighten($colour-secondary,5%);
+$colour-secondary-dark: darken($colour-secondary,5%);
+
+$colour-tertiary:#EAA3FC;
+$colour-tertiary-light: lighten($colour-tertiary,5%);
+$colour-tertiary-dark: darken($colour-tertiary,5%);
+
+$colour-quaternary: #FCE4B0;
+$colour-quaternary-light: lighten($colour-quaternary,5%);
+$colour-quaternary-dark: darken($colour-quaternary,5%);
+
+
+$colour-grey-dark: #777;
+$colour-grey-dark-2: #999;
+$colour-grey-dark-3: #333;
+$colour-black: #000; // Black
+$colour-white: #fff;
+
+$colour-footer: #2E2D2E;
+
+
+$colour-grey-light-1: #f7f7f7;
+$colour-grey-light-2: #eee;
+
+// font 
+
+$default-font-size: 1.6rem;
+
+// grid
+// $grid-width: 114rem;
+// $gutter-vertical: 8rem;
+// $gutter-vertical-small: 6rem;
+// $gutter-horizontal: 6rem;
+
+// #{$gutter-horizontal} allows us to refer to variables
+
+// $col-1-of-2:  calc((100% - #{$gutter-horizontal})/2);
+
+
+// $col-1-of-3:  calc((100% - (#{$gutter-horizontal}*2))/3);
+// $col-2-of-3:  calc((#{$col-1-of-3}*2) + #{$gutter-horizontal});
+
+// $col-1-of-4:  calc((100% - (#{$gutter-horizontal}*3))/4);
+// $col-2-of-4:  calc((#{$col-1-of-4}*2) + #{$gutter-horizontal});
+// $col-3-of-4:  calc((#{$col-1-of-4}*3) + #{$gutter-horizontal}*2);
+
+
+$box-shadow: 0 1.5rem 4rem rgba($colour-black, .15);
+$box-shadow-light: 0 1rem 3rem rgba($colour-black, .1);
+$box-shadow-dark: 0 1.5rem 4rem rgba($colour-black, .2);
+
+$linear-gradient-secondary: to right bottom,
+$colour-secondary-light,
+$colour-secondary-dark
+;
+
+$linear-gradient-primary: to right bottom,
+$colour-primary-light,
+$colour-primary-dark
+;
+
+$linear-gradient-tertiary : to right bottom,
+$colour-tertiary-light,
+$colour-tertiary-dark
+;
+
+$linear-gradient-span-secondary: to right bottom,
+rgba($colour-secondary-light, .85)
+, rgba($colour-secondary-dark, .85)
+;
+
+$linear-gradient-span-primary  : to right bottom,
+rgba($colour-primary-light, .85)
+, rgba($colour-primary-dark, .85)
+;
+
+$linear-gradient-span-tertiary  : to right bottom,
+rgba($colour-tertiary-light, .85)
+, rgba($colour-tertiary-dark, .85)
+;
+
+
+$border-radius: 3px;
+$input-border-radius: 2px;

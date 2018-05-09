@@ -3,7 +3,7 @@
     aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <a class="navbar-brand" routerLinkActive="active" routerLink="/">Celebrate Mum And Dad</a>
+  <a class="navbar-brand kgn-header__title" routerLinkActive="active" routerLink="/">Celebrate Mum And Dad</a>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
@@ -78,7 +78,7 @@
       <li *ngIf="authUserService.isLoggedIn()" class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="loggedInUserDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
           aria-expanded="false">
-          <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 20px;" toggleFullscreen> {{authUserService.getLoggedInUserName()}}
+          <img [src]="authUserService.getLoggedInUserProfilePicLocation()" class="img-responsive" style="max-height: 2rem;" toggleFullscreen> {{authUserService.getLoggedInUserName()}}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="loggedInUserDropdown">
           <a class="dropdown-item" [routerLink]="['/users','user','edit-me']">Edit</a>

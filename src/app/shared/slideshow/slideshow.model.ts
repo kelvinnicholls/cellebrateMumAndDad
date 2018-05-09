@@ -5,8 +5,8 @@ export class SlideShow {
     if (!this.galleryOptions) {
       this.galleryOptions = [
         {
-          width: '300px',
-          height: '200px',
+          width: '30rem',
+          height: '20rem',
           thumbnailsColumns: 4
         }
       ];

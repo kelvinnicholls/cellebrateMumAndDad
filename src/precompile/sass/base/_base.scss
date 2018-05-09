@@ -1,0 +1,165 @@
+// body {
+//     box-sizing: border-box;
+//     /* padding: 30px; */
+//     padding: 3rem;
+//     @include respond(tab-port) {
+//         padding: 0;
+//     }
+// }
+
+/* set root font size for rem */
+
+html {
+    /* font-size: 10px; */
+    /* a font-size of 10px makes converting from px to rem easy (divide by 10) */
+    /* however this overrides the ability of user's to change the default font size therefore change to a percentage 
+    62.5 % = 10/16*100 as 16px is the default but we want 10px*/
+    // defines what 1 rem is
+    font-size: 62.5%; // put biggest MAX_WIDTH media queries first 
+    // so that a small screen will be picked up last
+    // THE OPPOSITE IS TRUE FOR MOBILE FIRST WEBSITE
+    // @include respond(tab-land) {
+    //     // width < 1200?
+    //     font-size: 56.25%; //1 rem = 9px, 9/16 = 50%
+    // }
+    // @include respond(tab-port) {
+    //     // width < 900?
+    //     font-size: 50%; //1 rem = 8px, 8/16 = 50%
+    // }
+    // @include respond(phone) {    
+    //     // width < 600?
+    //     font-size: 43%; //1 rem = 7px, 8/16 = 43%
+    // }
+    // @include respond(big-desktop) {
+    //     // width > 1200?
+    //     font-size: 75%; //1rem = 12px, 12/16
+    // }
+    @include media-breakpoint-up(lg) {
+        font-size: 56.25%;
+    }
+    @include media-breakpoint-up(md) {
+        font-size: 50%;
+    }
+    @include media-breakpoint-up(sm) {
+        font-size: 43%;
+    }
+    @include media-breakpoint-up(xs) {
+        font-size: 37.5%;
+    }
+    @include media-breakpoint-up(xl) {
+        font-size: 75%;
+    }
+}
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+    /* not usually inherited, will be border-box from body */
+}
+
+::selection {
+    background-color: $colour-primary;
+    color: $colour-white;
+}
+
+// FROM style,css
+body {
+    padding: 50px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+    background-image: linear-gradient(to right bottom, rgba($colour-primary-light, 0.9), rgba($colour-primary-dark, 0.8))
+    , url(/systemImages/mum_and_dad_header.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
+}
+
+
+.figure-img {
+    box-shadow: $box-shadow-dark;
+}
+
+
+a {
+    color: #00B7FF;
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+    margin: 10px;
+}
+
+button:hover,
+img:hover,
+li:hover {
+    transform: scale(1.05);
+}
+
+.kgn-center-text {
+    text-align: center;
+}
+
+.kgn-right-text {
+    text-align: right;
+}
+
+.kgn-left-text {
+    text-align: left;
+}
+
+.dropdown-menu,
+.modal {
+    z-index: 2000;
+}
+
+// body {
+//     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#b3dced+0,29b8e5+50,bce0ee+100;Blue+Pipe */
+//     background: rgb(179, 220, 237);
+//     /* Old browsers */
+//     background: -moz-linear-gradient(top, rgba(179, 220, 237, 1) 0%, rgba(41, 184, 229, 1) 50%, rgba(188, 224, 238, 1) 100%);
+//     /* FF3.6-15 */
+//     background: -webkit-linear-gradient(top, rgba(179, 220, 237, 1) 0%, rgba(41, 184, 229, 1) 50%, rgba(188, 224, 238, 1) 100%);
+//     /* Chrome10-25,Safari5.1-6 */
+//     background: linear-gradient(to bottom, rgba(179, 220, 237, 1) 0%, rgba(41, 184, 229, 1) 50%, rgba(188, 224, 238, 1) 100%);
+//     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+//     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3dced', endColorstr='#bce0ee', GradientType=0);
+//     /* IE6-9 */
+// }
+.modal-content {
+    background-color: rgb(222, 231, 238);
+}
+
+.form-control {
+    color: deepskyblue;
+    background-color: rgb(210, 220, 226);
+}
+
+body {
+    color: #3f51b5;
+}
+
+.kgn-container__contents {
+    padding-top: 5rem;
+}
+
+
+.blog-post-title {
+    font-family: 'Tangerine', serif;
+    font-size: 5rem;
+    font-weight: 1000;
+    letter-spacing: 1rem;
+}
+
+.btn {
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 1.3rem;
+}
+
+
+.figure-caption {
+    font-family: 'Dancing Script', cursive;
+}

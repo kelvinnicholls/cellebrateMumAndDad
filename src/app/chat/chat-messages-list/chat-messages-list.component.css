@@ -1,4 +1,4 @@
 #messages-scroll {
-  max-height: 400px;
+  max-height: 40rem;
   overflow-y: scroll;
 }

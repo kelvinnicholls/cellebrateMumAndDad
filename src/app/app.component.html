@@ -1,9 +1,9 @@
-<div class="container-fluid">
+<div class="container-fluid kgn-container__header">
   <div class="row">
     <app-header></app-header>
   </div>
   <hr>
-  <div class="row">
+  <div class="row kgn-container__contents">
     <div class="col-sm-10" [@routeState]="getAnimationsData(routerOutlet)"
     (@routeState.start)="onRouteStateSlideInStart($event)"
     (@routeState.done)="onRouteStateSlideInDone($event)"

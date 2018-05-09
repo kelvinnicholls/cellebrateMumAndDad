@@ -400,8 +400,8 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
         memoryInputComponent.galleryOptions = [
             {
-                width: '300px',
-                height: '200px',
+                width: '30rem',
+                height: '20rem',
                 thumbnailsColumns: 4
             }
         ];
