@@ -55,12 +55,13 @@
   </div>
 
 
-  <div class="col-sm-6 offset-sm-5 text-center kgn-border-pad">
-    <pagination [totalItems]="memoryService.bigTotalItems" [(ngModel)]="memoryService.bigCurrentPage" [maxSize]="memoryService.maxSize"
-      class="pagination-md" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="memoryService.numPages = $event"
-      (pageChanged)="pageChanged($event)"></pagination>
-  </div>
-
+  <div class="col kgn-border-pad">
+      <div class="col kgn-center kgn-fit-content">
+        <pagination [totalItems]="memoryService.bigTotalItems" [(ngModel)]="memoryService.bigCurrentPage" [maxSize]="memoryService.maxSize"
+          class="pagination-md" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="memoryService.numPages = $event"
+          (pageChanged)="pageChanged($event)"></pagination>
+      </div>
+    </div>
 
 
   <div *ngIf="memoryService.searchRet" class="row text-center">

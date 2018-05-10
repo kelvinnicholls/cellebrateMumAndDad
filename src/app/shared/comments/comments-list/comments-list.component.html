@@ -14,10 +14,19 @@
           </ul>
         </div>
       </div>
-      <div class="col-sm-6 offset-sm-2 text-center kgn-border-pad">
+      <!-- <div class="col-sm-6 offset-sm-2 text-center kgn-border-pad">
         <pagination [totalItems]="bigTotalItems" [(ngModel)]="bigCurrentPage" [maxSize]="maxSize" class="pagination-sm" [boundaryLinks]="true"
           [itemsPerPage]="2" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
-      </div>
+      </div> -->
+
+      <div class="col kgn-border-pad">
+          <div class="col kgn-center kgn-fit-content">
+            <pagination [totalItems]="bigTotalItems" [(ngModel)]="bigCurrentPage" [maxSize]="maxSize"
+              class="pagination-md kgn-comment" [boundaryLinks]="true" [itemsPerPage]="2" [rotate]="false" (numPages)="numPages = $event"
+              (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="onClose()">Close</button>
       </div>

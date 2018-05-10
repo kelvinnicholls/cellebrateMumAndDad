@@ -39,11 +39,14 @@
   </div>
 
 
-  <div class="col-sm-6 offset-sm-5 text-center kgn-border-pad">
-    <pagination [totalItems]="bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="maxSize" class="pagination-md"
-      [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="numPages = $event" (pageChanged)="pageChanged($event)"></pagination>
-  </div>
 
+  <div class="col kgn-border-pad">
+      <div class="col kgn-center kgn-fit-content">
+        <pagination [totalItems]="userService.bigTotalItems" [(ngModel)]="userService.bigCurrentPage" [maxSize]="userService.maxSize"
+          class="pagination-md" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="userService.numPages = $event"
+          (pageChanged)="pageChanged($event)"></pagination>
+      </div>
+    </div>
 
 
   <div *ngIf="userService.searchRet" class="row text-center">

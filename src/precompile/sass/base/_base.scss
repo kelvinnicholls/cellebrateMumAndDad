@@ -163,3 +163,35 @@ body {
 .figure-caption {
     font-family: 'Dancing Script', cursive;
 }
+
+.kgn-center {
+    margin: 0 auto;
+}
+
+.kgn-fit-content {
+    width: fit-content;
+    height: fit-content;
+}
+
+
+ul.pagination:not(.kgn-comment) {
+
+    display : flex;
+
+
+    @include media-breakpoint-down(xs) {
+        display : inline-block;
+    }
+}
+
+.border-green {
+    border: 3px solid green;
+}
+
+.border-blue {
+    border: 3px solid blue;
+}
+
+.border-yellow {
+    border: 3px solid yellow;
+}

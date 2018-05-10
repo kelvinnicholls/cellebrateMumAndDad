@@ -23,10 +23,12 @@
   </div>
 
 
-  <div class="col-sm-6 offset-sm-5 text-center kgn-border-pad">
-    <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize"
-      class="pagination-md" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="photoService.numPages = $event"
-      (pageChanged)="pageChanged($event)"></pagination>
+  <div class="col kgn-border-pad">
+    <div class="col kgn-center kgn-fit-content">
+      <pagination [totalItems]="photoService.bigTotalItems" [(ngModel)]="photoService.bigCurrentPage" [maxSize]="photoService.maxSize"
+        class="pagination-md" [boundaryLinks]="true" [itemsPerPage]="6" [rotate]="false" (numPages)="photoService.numPages = $event"
+        (pageChanged)="pageChanged($event)"></pagination>
+    </div>
   </div>
 
 
