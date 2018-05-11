@@ -173,7 +173,6 @@ body {
     height: fit-content;
 }
 
-
 ul.pagination:not(.kgn-comment) {
 
     display : flex;
@@ -194,4 +193,23 @@ ul.pagination:not(.kgn-comment) {
 
 .border-yellow {
     border: 3px solid yellow;
+}
+
+
+ ss-multiselect-dropdown {
+    background-color: transparent !important;
+    border : none !important;
+    padding-left: 0 !important;
+}
+
+
+
+.has-success .col-form-label,
+.has-success .custom-control,
+.has-success .form-check-label,
+.has-success .form-control-feedback,
+.has-success .form-control-label
+.has-success .form-control
+.has-success .input-group-addon {
+    color: #0275d8;
 }
