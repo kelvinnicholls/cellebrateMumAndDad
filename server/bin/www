@@ -41,6 +41,11 @@ const {
   Users
 } = require('../utils/users');
 
+
+const {
+  sendEmail
+} = require('../shared/mailer');
+
 let users = new Users();
 
 let getUserName = (id) => {
@@ -56,6 +61,7 @@ let getUserName = (id) => {
 
 io.on('connection', (socket) => {
   utils.log(utils.LoglevelEnum.Info,'New user connected');
+  //sendEmail("Test Email From", "Test Email Subject", "Test Email Body Text New user connected");
   socket.on('disconnect', () => {
     utils.log(utils.LoglevelEnum.Info,"Client Disconnected");
     disconnectUser(socket.id);

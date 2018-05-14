@@ -35,11 +35,15 @@ const {
   mongoose
 } = require('../db/mongoose');
 
+
 const {
   multerUploadSingleFile,
   processErr
 } = require('../shared/file-upload');
 
+const {
+  sendEmail
+} = require('../shared/mailer');
 
 let upload = (req, res, next) => {
   utils.log(utils.LoglevelEnum.Info, 'upload', req, res);
