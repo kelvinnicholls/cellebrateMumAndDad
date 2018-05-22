@@ -44,8 +44,8 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
     mailOptions.html = bodyHtml;
   };
 
-  mailOptions.to = 'kelvin.nicholls@gmail.com';
-  mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
+  // mailOptions.to = 'kelvin.nicholls@gmail.com';
+  // mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
