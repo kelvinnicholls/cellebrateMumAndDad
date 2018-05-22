@@ -11,10 +11,13 @@ const utils = require('../utils/utils.js');
 
 const seed = process.env.JWT_SECRET;
 
-const userOutFields = ['email', 'name', 'adminUser','guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
-const userInsertFields = ['email', 'password', 'name', 'adminUser','guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
-const userUpdateFields = ['email', 'name', 'adminUser','guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
+const userOutFields = ['email', 'name', 'adminUser', 'guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_creator', '_creatorRef', '_profileMediaId', 'location', 'isUrl'];
+const userInsertFields = ['email', 'password', 'name', 'adminUser', 'guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
+const userUpdateFields = ['email', 'name', 'adminUser', 'guestUser', 'emailUpdates', 'relationship', 'dob', 'twitterId', 'facebookId', '_profileMediaId', 'profilePicInfo'];
 
+const {
+  CONSTS
+} = require('../shared/consts');
 
 let UserSchema = new mongoose.Schema({
   email: {
@@ -145,7 +148,7 @@ UserSchema.statics.findByCredentials = function (email, password) {
   let User = this;
   return User.findOne({
     email
-  }).populate('_profileMediaId', ['location','isUrl']).then((user) => {
+  }).populate('_profileMediaId', ['location', 'isUrl']).then((user) => {
     if (!user) {
       return Promise.reject();
     }
@@ -159,6 +162,85 @@ UserSchema.statics.findByCredentials = function (email, password) {
     });
   });
 };
+
+UserSchema.statics.findUsersToSendEmailTo = function (type, action, entity) {
+
+
+  utils.log(utils.LoglevelEnum.Info, 'UserSchema.statics.findUsersToSendEmailTo : ', type, action, entity);
+
+  let User = this;
+
+  let creatorRefs = [];
+
+
+  //type = Media : "Media",Memory : "Memory",User : "User", MediaComment : "MediaComment",    MemoryComment : "MemoryComment"
+  // entity = object containing data for type
+
+
+  let userFindObj = {
+    'emailUpdates': true,
+    'adminUser': true
+  };
+
+
+  return new Promise((resolve, reject) => {
+
+    // find all admin users with emailUpdate flag set
+
+    User.find(userFindObj).then((adminUsers) => {
+      if (!adminUsers) {
+        reject();
+      } else {
+
+
+        // populate creatorRefs depending on type, action and entity
+        // then use these to get a list of users
+        // only return those with emailUpdates true
+
+        userFindObj = {
+          'emailUpdates': true
+        }
+
+        switch (type) {
+          case CONSTS.Media:
+          case CONSTS.Memory:
+            if (action === CONSTS.Update) {
+              creatorRefs.push(mongoose.Types.ObjectId(entity._creator));
+            }
+            break;
+          case CONSTS.User:
+            userFindObj.adminUser = true;
+            if (action === CONSTS.Update) {
+              creatorRefs.push(mongoose.Types.ObjectId(entity._creator));
+            }
+            break;
+          case CONSTS.MediaComment:
+          case CONSTS.MemoryComment:
+            creatorRefs.push(mongoose.Types.ObjectId(entity._creator));
+            for (let comment of entity.comments) {
+              creatorRefs.push(mongoose.Types.ObjectId(comment._creator));
+            }
+          default:
+        };
+
+        if (creatorRefs && creatorRefs.length > 0) {
+          userFindObj._creatorRef = {
+            $in: creatorRefs
+          };
+        };
+
+        User.find(userFindObj).then((users) => {
+          if (!users) {
+            reject();
+          } else {
+            resolve(utils.union(users, adminUsers));
+          }
+        });
+      }
+    });
+  });
+};
+
 
 
 UserSchema.statics.findByToken = function (token) {
@@ -174,7 +256,7 @@ UserSchema.statics.findByToken = function (token) {
     '_id': decoded._id,
     'tokens.token': token,
     'tokens.access': 'auth'
-  }).populate('_profileMediaId', ['location','isUrl'])
+  }).populate('_profileMediaId', ['location', 'isUrl'])
 };
 
 
@@ -322,5 +404,3 @@ module.exports = {
   userInsertFields,
   userUpdateFields
 }
-
-

@@ -55,10 +55,12 @@ $box-shadow: 0 1.5rem 4rem rgba($colour-black, .15);
 $box-shadow-light: 0 1rem 3rem rgba($colour-black, .1);
 $box-shadow-dark: 0 1.5rem 4rem rgba($colour-black, .2);
 
+$text-shadow: 3px 3px rgba($colour-black, .15); 
+$text-shadow-white: 3px 3px rgba($colour-white, .15);
+
 $linear-gradient-secondary: to right bottom,
 $colour-secondary-light,
-$colour-secondary-dark
-;
+$colour-secondary-dark;
 
 $linear-gradient-primary: to right bottom,
 $colour-primary-light,

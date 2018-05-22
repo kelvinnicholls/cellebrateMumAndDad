@@ -4,6 +4,7 @@
     &__container {
         &__text {
             font-family: 'Tangerine', serif;
+            text-shadow: $text-shadow;
         
             &-1 {
                 font-size: 9rem;
@@ -19,6 +20,7 @@
     &__title {
         font-family: 'Tangerine', serif;
         font-size: 3rem;
+        text-shadow: $text-shadow-white;
     }
 }
 

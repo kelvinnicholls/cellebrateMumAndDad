@@ -49,7 +49,14 @@ const CONSTS = {
     },
     AN_OLD_AND_NEW_EMAIL_MUST_BE_PASSED: {
         error: "An old and new email must be passed!"
-    }
+    }, 
+    Media : "Media",
+    Memory : "Memory",
+    User : "User",
+    New : "New",
+    Update : "Update",
+    MediaComment : "MediaComment",
+    MemoryComment : "MemoryComment"
 }
 
 module.exports.CONSTS = CONSTS;

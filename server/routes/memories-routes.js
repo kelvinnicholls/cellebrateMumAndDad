@@ -32,10 +32,19 @@ const {
   ObjectID
 } = require('mongodb');
 
+
+const {
+  createAndSendEmail
+} = require('../shared/mailer');
+
+const {
+  CONSTS
+} = require('../shared/consts');
+
 let transformCreatorToUser = (memories) => {
   return new Promise((resolve, reject) => {
     let numMemories = memories ? memories.length : 0;
-    utils.log(utils.LoglevelEnum.Info,"memories.transformCreatorToUser numMemories",numMemories);
+    utils.log(utils.LoglevelEnum.Info, "memories.transformCreatorToUser numMemories", numMemories);
     let processedMemories = 0;
     let transformedMemories = [];
     if (numMemories > 0) {
@@ -89,10 +98,20 @@ router.post('/', authenticate, (req, res) => {
     memory.comments = [];
 
     memory.save().then((newMemory) => {
-      utils.log(utils.LoglevelEnum.Info,'memory2', newMemory);
+      utils.log(utils.LoglevelEnum.Info, 'memory2', newMemory);
       res.send(_.pick(newMemory, memoryOutFields));
+      User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.New, newMemory).then((users) => {
+        if (users && users.length > 0) {
+          createAndSendEmail(users, CONSTS.Memory, CONSTS.New, newMemory);
+
+        } else {
+          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post memory  no users found");
+        };
+      }, (e) => {
+        utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post memory error:", e);
+      });
     }, (e) => {
-      utils.log(utils.LoglevelEnum.Info,'memory.save() e', e);
+      utils.log(utils.LoglevelEnum.Info, 'memory.save() e', e);
       res.status(400).send();
     });
   };
@@ -107,17 +126,17 @@ router.get('/', authenticate, (req, res) => {
   // };
 
   Memory.find(memoriesObj).populate('comments tags people medias').then((memories) => {
-    utils.log(utils.LoglevelEnum.Info,"GET memories.length",memories.length);
+    utils.log(utils.LoglevelEnum.Info, "GET memories.length", memories.length);
     transformCreatorToUser(memories).then((memories) => {
-      utils.log(utils.LoglevelEnum.Info,"after transformCreatorToUser memories.length",memories.length);
+      utils.log(utils.LoglevelEnum.Info, "after transformCreatorToUser memories.length", memories.length);
       let obj = {};
       obj['memories'] = memories;
       res.send(obj);
     }, (e) => {
-      utils.log(utils.LoglevelEnum.Info,"transformCreatorToUser error", e);
+      utils.log(utils.LoglevelEnum.Info, "transformCreatorToUser error", e);
     });
   }).catch((e) => {
-    utils.log(utils.LoglevelEnum.Info,"app.get('/memories/' error", e);
+    utils.log(utils.LoglevelEnum.Info, "app.get('/memories/' error", e);
   });
 
 });
@@ -175,9 +194,9 @@ router.get('/title/:title', authenticate, (req, res) => {
   let memoryObj = {
     title
   };
-  utils.log(utils.LoglevelEnum.Info,"memoryObj", memoryObj);
+  utils.log(utils.LoglevelEnum.Info, "memoryObj", memoryObj);
   Memory.findOne(memoryObj).then((memory) => {
-    utils.log(utils.LoglevelEnum.Info,"memory", memory);
+    utils.log(utils.LoglevelEnum.Info, "memory", memory);
     if (memory) {
       res.send({
         'titleFound': true,
@@ -190,7 +209,7 @@ router.get('/title/:title', authenticate, (req, res) => {
     }
 
   }, (e) => {
-    utils.log(utils.LoglevelEnum.Info,"memory router.get('/title/:title' e", e);
+    utils.log(utils.LoglevelEnum.Info, "memory router.get('/title/:title' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
   });
 });
@@ -279,33 +298,33 @@ let addUserToComments = (memory) => {
     //('addUserToComments', 'numComments', numComments);
     if (retMemory.comments && retMemory.comments.length > 0) {
       for (let comment of retMemory.comments) {
-        utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'comment', comment);
+        utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'comment', comment);
         let userObj = {
           '_creatorRef': comment._creator
         };
         User.findOne(userObj).populate('_profileMemoryId', ['location']).then((user) => {
-          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user', user);
-          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'typeof user', typeof user);
-          utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'typeof comment', typeof comment);
+          utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user', user);
+          utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'typeof user', typeof user);
+          utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'typeof comment', typeof comment);
           if (user) {
             delete user._id;
             let newComment = JSON.parse(JSON.stringify(comment));
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user.name', user.name);
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'user._profileMemoryId', user._profileMemoryId);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user.name', user.name);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user._profileMemoryId', user._profileMemoryId);
             newComment.user = {};
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment.user', newComment.user);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment.user', newComment.user);
             newComment.user.name = user.name;
             newComment.user._profileMemoryId = user._profileMemoryId;
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment.user2', newComment.user);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment.user2', newComment.user);
 
             commentsArr.push(newComment);
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'newComment', newComment);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment', newComment);
           };
 
           processedComments++;
           if (numComments === processedComments) {
             retMemory.comments = commentsArr;
-            utils.log(utils.LoglevelEnum.Info,'addUserToComments', 'resolve', retMemory);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'resolve', retMemory);
             return resolve(retMemory);
           };
         }, (e) => {
@@ -320,7 +339,7 @@ let addUserToComments = (memory) => {
 
 let updateMemories = (res, body, memories, commentId) => {
 
-  utils.log(utils.LoglevelEnum.Info,"updateMemories", body, memories, commentId);
+  utils.log(utils.LoglevelEnum.Info, "updateMemories", body, memories, commentId);
 
   // let memoriesObj = {
   //   _id : memories._id
@@ -335,8 +354,8 @@ let updateMemories = (res, body, memories, commentId) => {
       "comments": commentId
     };
   };
-  utils.log(utils.LoglevelEnum.Info,"updateObj", updateObj);
-  utils.log(utils.LoglevelEnum.Info,"memories", memories);
+  utils.log(utils.LoglevelEnum.Info, "updateObj", updateObj);
+  utils.log(utils.LoglevelEnum.Info, "memories", memories);
 
   Memory.findOneAndUpdate(memories, updateObj, {
     new: true
@@ -349,7 +368,7 @@ let updateMemories = (res, body, memories, commentId) => {
           });
         }, (e) => {
           res.status(400).send();
-          utils.log(utils.LoglevelEnum.Info,e);
+          utils.log(utils.LoglevelEnum.Info, e);
         });
       } else {
         res.send({
@@ -364,7 +383,7 @@ let updateMemories = (res, body, memories, commentId) => {
 
   }, (e) => {
     res.status(400).send();
-    utils.log(utils.LoglevelEnum.Info,e);
+    utils.log(utils.LoglevelEnum.Info, e);
   });
 };
 
@@ -398,16 +417,36 @@ router.patch('/:id', authenticate, (req, res) => {
 
       comment._creator = req.loggedInUser._creatorRef;
       comment.commentDate = new Date().getTime();
-      utils.log(utils.LoglevelEnum.Info,'comment', comment);
+      utils.log(utils.LoglevelEnum.Info, 'comment', comment);
 
       comment.save().then((comment) => {
         updateMemories(res, body, memories, comment._id);
+        User.findUsersToSendEmailTo(CONSTS.MemoryComment, CONSTS.New, memories).then((users) => {
+          if (users && users.length > 0) {
+            createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memories, comment);
+          } else {
+            utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment no users found");
+          };
+        }, (e) => {
+          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment error:", e);
+        });
       });
     } else {
       if (!req.loggedInUser.adminUser) {
         memories._creator = req.loggedInUser._creatorRef;
       };
       updateMemories(res, body, memories, null);
+      User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memories).then((users) => {
+        if (users && users.length > 0) {
+          createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, memories);
+        } else {
+          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory no users found");
+        };
+      }, (e) => {
+        utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory error: ", e);
+      });
+
+
     };
   };
 });

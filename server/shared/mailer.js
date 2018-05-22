@@ -2,6 +2,12 @@ const nodemailer = require('nodemailer');
 
 const utils = require('../utils/utils.js');
 
+const moment = require('moment');
+
+const {
+  CONSTS
+} = require('../shared/consts');
+
 const transporter = nodemailer.createTransport({
   service: process.env.NODEMAILER_SERVICE,
   auth: {
@@ -14,19 +20,20 @@ const transporter = nodemailer.createTransport({
 let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
 
 
-
+  utils.log(utils.LoglevelEnum.Info, 'sendEmail params : ', from, subject, bodyText, bodyHtml, to);
 
   var mailOptions = {
-    from: from,
+    to: to,
     subject: subject
   };
 
 
-  if (to) {
-    mailOptions.to = to;
+  if (from) {
+    mailOptions.from = from;
   } else {
-    mailOptions.to = process.env.NODEMAILER_EMAIL;
+    mailOptions.from = process.env.NODEMAILER_EMAIL;
   }
+
 
   if (bodyText) {
     mailOptions.text = bodyText;
@@ -37,6 +44,8 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
     mailOptions.html = bodyHtml;
   };
 
+  mailOptions.to = 'kelvin.nicholls@gmail.com';
+  mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -47,6 +56,65 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
   });
 }
 
+
+let createAndSendEmail = (users, type, action, entity, commentEntity) => {
+  let from = "";
+  let subject = "Celebrate Mum And Dad - ";
+  let bodyText = "Date: " + moment().format('D MMM, YYYY HH:mm') + "\n";
+  let bodyHtml = "";
+
+  if (type === CONSTS.New) {
+    subject = subject + "new - ";
+  };
+
+
+  switch (type) {
+    case CONSTS.Media:
+      subject = subject + "Photo: " + entity.title;
+      bodyText += "Title: " + entity.title + "\n";
+      break;
+    case CONSTS.Memory:
+      subject = subject + "Memory: " + entity.title;
+      bodyText += "Title: " + entity.title + "\n";
+      break;
+    case CONSTS.User:
+      subject = subject + "User: " + entity.name;
+      bodyText += "Name: " + entity.name + "\n";
+      break;
+    case CONSTS.MediaComment:
+      subject = subject + "Comment on Photo: " + entity.title;
+      bodyText += "Title: " + entity.title + "\n";
+      bodyText += "Date of Comment: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
+      bodyText += "By: " + commentEntity._creator.toHexString() + "\n";
+      bodyText += "Comment: " + commentEntity.comment + "\n";
+      break;
+    case CONSTS.MemoryComment:
+      subject = subject + "Comment on Memory: " + entity.title;
+      bodyText += "Title: " + entity.title + "\n";
+      bodyText += "Date of Comment: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
+      bodyText += "By: " + commentEntity._creator.toHexString() + "\n";
+      bodyText += "Comment: " + commentEntity.comment + "\n";
+      break;
+    default:
+  };
+
+
+  if (action === CONSTS.New) {
+    subject = subject + " added. ";
+  } else {
+    subject = subject + " updated. ";
+  };
+
+  for (let user of users) {
+    if (user.emailUpdates  && !user.guestUser) {
+      let to = user.email;
+      sendEmail(from, subject, bodyText, bodyHtml, to);
+    }
+  };
+
+}
+
 module.exports = {
-  sendEmail
+  sendEmail,
+  createAndSendEmail
 }

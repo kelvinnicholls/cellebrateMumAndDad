@@ -44,6 +44,9 @@ const {
 
 const utils = require('../utils/utils.js');
 
+const {
+  createAndSendEmail
+} = require('../shared/mailer');
 
 let checkCreateInitialAdminUser = true;
 
@@ -166,6 +169,15 @@ let createUser = (body, _creatorRef, res, req) => {
   user.save().then((user) => {
     user.location = req.body.location;
     res.send(_.pick(user, userOutFields));
+    User.findUsersToSendEmailTo(CONSTS.User, CONSTS.New, user).then((users) => {
+      if (users && users.length > 0) {
+        createAndSendEmail(users, CONSTS.User, CONSTS.New, user);
+      } else {
+        utils.log(utils.LoglevelEnum.Info, "createAndSendEmail createUser no users found");
+      };
+    }, (e) => {
+      utils.log(utils.LoglevelEnum.Info, "createAndSendEmail createUser error:", e);
+    });
   }).catch((e) => {
     utils.log(utils.LoglevelEnum.Info, "1 router.post('/' e", e);
     res.status(400).send(CONSTS.AN_ERROR_OCURRED);
@@ -275,6 +287,7 @@ router.patch('/change-password', authenticate, (req, res) => {
   };
 });
 
+
 let updateUser = (body, _creatorRef, res, req) => {
   utils.log(utils.LoglevelEnum.Info, 'body', body);
   let userObj = {
@@ -290,6 +303,16 @@ let updateUser = (body, _creatorRef, res, req) => {
         googleCloudApi.uploadFile(user.location);
       };
       res.send(_.pick(user, userOutFields));
+      User.findUsersToSendEmailTo(CONSTS.User, CONSTS.Update, user).then((users) => {
+        if (users && users.length > 0) {
+          createAndSendEmail(users, CONSTS.User, CONSTS.Update, user);
+
+        } else {
+          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail updateUser no users found");
+        };
+      }, (e) => {
+        utils.log(utils.LoglevelEnum.Info, "createAndSendEmail updateUser error:", e);
+      });
     } else {
       res.status(404).send(CONSTS.USER_NOT_FOUND_FOR_EMAIL);
     };
@@ -427,7 +450,7 @@ let downloadFiles = (users) => {
             return resolve(users);
           };
         }).catch(err => {
-          utils.log(utils.LoglevelEnum.Error,err);
+          utils.log(utils.LoglevelEnum.Error, err);
           return reject(err);
         });
       }
@@ -449,7 +472,7 @@ let downloadFile = (user) => {
             return resolve(user);
           })
           .catch(err => {
-            utils.log(utils.LoglevelEnum.Error,err);
+            utils.log(utils.LoglevelEnum.Error, err);
             return reject(err);
           });
       } else {

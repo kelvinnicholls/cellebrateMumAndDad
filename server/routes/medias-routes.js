@@ -42,8 +42,13 @@ const {
 } = require('../shared/file-upload');
 
 const {
-  sendEmail
+  createAndSendEmail
 } = require('../shared/mailer');
+
+
+const {
+  CONSTS
+} = require('../shared/consts');
 
 let upload = (req, res, next) => {
   utils.log(utils.LoglevelEnum.Info, 'upload', req, res);
@@ -206,7 +211,7 @@ let downloadFile = (media) => {
             return resolve(media);
           })
           .catch(err => {
-            utils.log(utils.LoglevelEnum.Error,err);
+            utils.log(utils.LoglevelEnum.Error, err);
             return reject(err);
           });
       } else {
@@ -241,6 +246,16 @@ router.post('/', authenticate, upload, (req, res) => {
     media.save().then((newMedia) => {
       utils.log(utils.LoglevelEnum.Info, 'media2', newMedia);
       res.send(_.pick(newMedia, mediaOutFields));
+      User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.New, newMedia).then((users) => {
+        if (users && users.length > 0) {
+          createAndSendEmail(users, CONSTS.Media, CONSTS.New, newMedia);
+
+        } else {
+          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post media  no users found");
+        };
+      }, (e) => {
+        utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post media error:", e);
+      });
     }, (e) => {
       utils.log(utils.LoglevelEnum.Info, 'media.save() e', e);
       res.status(400).send();
@@ -528,7 +543,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
       });
     };
 
-    let medias = {
+    let mediaId = {
       '_id': id
     };
 
@@ -545,15 +560,59 @@ router.patch('/:id', authenticate, upload, (req, res) => {
       utils.log(utils.LoglevelEnum.Info, 'comment', comment);
 
       comment.save().then((comment) => {
-        updateMedias(res, body, medias, comment._id);
+        utils.log(utils.LoglevelEnum.Info, 'medias.patch : before updateMedias');
+        updateMedias(res, body, mediaId, comment._id);
+        utils.log(utils.LoglevelEnum.Info, 'medias.patch : after updateMedias');
+
+        Media.findOne({
+          '_id' : mongoose.Types.ObjectId(mediaId._id)
+        }).populate('comments tags people').then((media) => {
+          if (media) {
+            User.findUsersToSendEmailTo(CONSTS.MediaComment, CONSTS.New, media).then((users) => {
+              if (users && users.length > 0) {
+                createAndSendEmail(users, CONSTS.MediaComment, CONSTS.New, media, comment);
+              } else {
+                utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media comment no users found");
+              };
+            }, (e) => {
+              utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media comment error: ", e);
+            });
+          } else {
+            utils.log(utils.LoglevelEnum.Error,'media not found for id: ', id);
+          }
+        }, (e) => {
+          utils.log(utils.LoglevelEnum.Error,'media not found for id error: ', id, e);
+        });
       });
     } else {
 
       if (!req.loggedInUser.adminUser) {
-        medias._creator = req.loggedInUser._creatorRef;
+        mediaId._creator = req.loggedInUser._creatorRef;
       };
 
-      updateMedias(res, body, medias, null);
+      updateMedias(res, body, mediaId, null);
+
+      Media.findOne({
+        // '_id' : mongoose.Types.ObjectId(mediaId.id)
+        '_id' : mongoose.Types.ObjectId(mediaId._id)
+      }).populate('comments tags people').then((media) => {
+        if (media) {
+          User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.Update, media).then((users) => {
+            if (users && users.length > 0) {
+              createAndSendEmail(users, CONSTS.Media, CONSTS.Update, media);
+            } else {
+              utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media no users found");
+            };
+          }, (e) => {
+            utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media error: ", e);
+          });
+        } else {
+          utils.log(utils.LoglevelEnum.Error,'media not found for id: ' + id);
+        }
+      }, (e) => {
+        utils.log(utils.LoglevelEnum.Error,'media not found for id error: ', id, e);
+      });
+
     };
   };
 });

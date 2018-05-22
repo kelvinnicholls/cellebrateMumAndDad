@@ -81,6 +81,29 @@ utils.log = function (...arguments) {
   };
 };
 
+
+utils.union = function(arr1,arr2) {
+
+  if (!arr1) {
+    return arr2;
+  }
+
+  let retArr = arr1.slice();;
+
+  if (arr2) {
+    for (let i in arr2) {
+      let found = retArr.find(function(element) {
+        return element._id.toHexString() === arr2[i]._id.toHexString();
+      });
+      if (!found) {
+        retArr.push(arr2[i]);
+      };
+    };
+  }
+
+  return retArr;
+}
+
 utils.LoglevelEnum = {
   Error: 0,
   Warn: 1,

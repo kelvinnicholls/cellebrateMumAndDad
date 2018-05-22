@@ -23,6 +23,10 @@ const {
   mongoose
 } = require('../db/mongoose');
 
+const {
+  CONSTS
+} = require('../shared/consts');
+
 router.post('/', authenticate, (req, res) => {
   let body = _.pick(req.body, personInsertFields);
   utils.log(utils.LoglevelEnum.Info,'body', body);
