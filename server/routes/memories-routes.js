@@ -102,8 +102,11 @@ router.post('/', authenticate, (req, res) => {
       res.send(_.pick(newMemory, memoryOutFields));
       User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.New, newMemory).then((users) => {
         if (users && users.length > 0) {
-          createAndSendEmail(users, CONSTS.Memory, CONSTS.New, newMemory);
-
+          User.findOne({
+            '_creatorRef' : mongoose.Types.ObjectId(newMemory._creator)
+          }).then((user) => {
+            createAndSendEmail(users, CONSTS.Memory, CONSTS.New, newMemory, null, user);
+          });
         } else {
           utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post memory  no users found");
         };
@@ -423,7 +426,11 @@ router.patch('/:id', authenticate, (req, res) => {
         updateMemories(res, body, memories, comment._id);
         User.findUsersToSendEmailTo(CONSTS.MemoryComment, CONSTS.New, memories).then((users) => {
           if (users && users.length > 0) {
-            createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memories, comment);
+            User.findOne({
+              '_creatorRef' : mongoose.Types.ObjectId(comment._creator)
+            }).then((user) => {
+              createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memories, comment, user);
+            });
           } else {
             utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment no users found");
           };
@@ -438,15 +445,17 @@ router.patch('/:id', authenticate, (req, res) => {
       updateMemories(res, body, memories, null);
       User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memories).then((users) => {
         if (users && users.length > 0) {
-          createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, memories);
+          User.findOne({
+            '_creatorRef' : mongoose.Types.ObjectId(media._creator)
+          }).then((user) => {
+            createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, null, memories, user);
+          });
         } else {
           utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory no users found");
         };
       }, (e) => {
         utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory error: ", e);
       });
-
-
     };
   };
 });

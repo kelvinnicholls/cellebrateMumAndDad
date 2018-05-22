@@ -57,7 +57,7 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
 }
 
 
-let createAndSendEmail = (users, type, action, entity, commentEntity) => {
+let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
   let from = "";
   let subject = "Celebrate Mum And Dad - ";
   let bodyText = "Date: " + moment().format('D MMM, YYYY HH:mm') + "\n";
@@ -70,33 +70,49 @@ let createAndSendEmail = (users, type, action, entity, commentEntity) => {
 
   switch (type) {
     case CONSTS.Media:
-      subject = subject + "Photo: " + entity.title;
+      subject = subject + "Photo " + entity.title;
       bodyText += "Title: " + entity.title + "\n";
+      if (action === CONSTS.New) {
+        bodyText += "Added By: " + user.name + "\n";
+      } else {
+        bodyText += "Updated By: " + user.name + "\n";
+      };
       break;
     case CONSTS.Memory:
-      subject = subject + "Memory: " + entity.title;
+      subject = subject + "Memory " + entity.title;
       bodyText += "Title: " + entity.title + "\n";
+      if (action === CONSTS.New) {
+        bodyText += "Added By: " + user.name + "\n";
+      } else {
+        bodyText += "Updated By: " + user.name + "\n";
+      };
       break;
     case CONSTS.User:
-      subject = subject + "User: " + entity.name;
+      subject = subject + "User " + entity.name;
       bodyText += "Name: " + entity.name + "\n";
+      if (action === CONSTS.New) {
+        bodyText += "Added By: " + user.name + "\n";
+      } else {
+        bodyText += "Updated By: " + user.name + "\n";
+      };
       break;
     case CONSTS.MediaComment:
-      subject = subject + "Comment on Photo: " + entity.title;
-      bodyText += "Title: " + entity.title + "\n";
+      subject = subject + "Comment on Photo " + entity.title;
+      bodyText += "Photo Title: " + entity.title + "\n";
       bodyText += "Date of Comment: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
-      bodyText += "By: " + commentEntity._creator.toHexString() + "\n";
+      bodyText += "Added By: " + user.name + "\n";
       bodyText += "Comment: " + commentEntity.comment + "\n";
       break;
     case CONSTS.MemoryComment:
-      subject = subject + "Comment on Memory: " + entity.title;
-      bodyText += "Title: " + entity.title + "\n";
+      subject = subject + "Comment on Memory " + entity.title;
+      bodyText += "Memory Title: " + entity.title + "\n";
       bodyText += "Date of Comment: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
-      bodyText += "By: " + commentEntity._creator.toHexString() + "\n";
+      bodyText += "Added By: " + user.name + "\n";
       bodyText += "Comment: " + commentEntity.comment + "\n";
       break;
     default:
   };
+
 
 
   if (action === CONSTS.New) {

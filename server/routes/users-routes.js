@@ -171,7 +171,11 @@ let createUser = (body, _creatorRef, res, req) => {
     res.send(_.pick(user, userOutFields));
     User.findUsersToSendEmailTo(CONSTS.User, CONSTS.New, user).then((users) => {
       if (users && users.length > 0) {
-        createAndSendEmail(users, CONSTS.User, CONSTS.New, user);
+        User.findOne({
+          '_creatorRef' : mongoose.Types.ObjectId(user._creator)
+        }).then((creatorUser) => {
+          createAndSendEmail(users, CONSTS.User, CONSTS.New, user, null, creatorUser);
+        });
       } else {
         utils.log(utils.LoglevelEnum.Info, "createAndSendEmail createUser no users found");
       };
@@ -305,7 +309,12 @@ let updateUser = (body, _creatorRef, res, req) => {
       res.send(_.pick(user, userOutFields));
       User.findUsersToSendEmailTo(CONSTS.User, CONSTS.Update, user).then((users) => {
         if (users && users.length > 0) {
-          createAndSendEmail(users, CONSTS.User, CONSTS.Update, user);
+          User.findOne({
+            '_creatorRef' : mongoose.Types.ObjectId(user._creator)
+          }).then((creatorUser) => {
+            createAndSendEmail(users, CONSTS.User, CONSTS.Update, user, null, creatorUser);
+          });
+          
 
         } else {
           utils.log(utils.LoglevelEnum.Info, "createAndSendEmail updateUser no users found");

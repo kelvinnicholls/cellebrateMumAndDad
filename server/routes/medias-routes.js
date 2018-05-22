@@ -248,8 +248,12 @@ router.post('/', authenticate, upload, (req, res) => {
       res.send(_.pick(newMedia, mediaOutFields));
       User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.New, newMedia).then((users) => {
         if (users && users.length > 0) {
-          createAndSendEmail(users, CONSTS.Media, CONSTS.New, newMedia);
-
+          User.findOne({
+            '_creatorRef' : mongoose.Types.ObjectId(newMedia._creator)
+          }).then((user) => {
+            createAndSendEmail(users, CONSTS.Media, CONSTS.New, newMedia, null, user);
+          });
+          
         } else {
           utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post media  no users found");
         };
@@ -570,7 +574,11 @@ router.patch('/:id', authenticate, upload, (req, res) => {
           if (media) {
             User.findUsersToSendEmailTo(CONSTS.MediaComment, CONSTS.New, media).then((users) => {
               if (users && users.length > 0) {
-                createAndSendEmail(users, CONSTS.MediaComment, CONSTS.New, media, comment);
+                User.findOne({
+                  '_creatorRef' : mongoose.Types.ObjectId(comment._creator)
+                }).then((user) => {
+                  createAndSendEmail(users, CONSTS.MediaComment, CONSTS.New, media, comment, user);
+                });
               } else {
                 utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media comment no users found");
               };
@@ -599,7 +607,12 @@ router.patch('/:id', authenticate, upload, (req, res) => {
         if (media) {
           User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.Update, media).then((users) => {
             if (users && users.length > 0) {
-              createAndSendEmail(users, CONSTS.Media, CONSTS.Update, media);
+              User.findOne({
+                '_creatorRef' : mongoose.Types.ObjectId(media._creator)
+              }).then((user) => {
+                createAndSendEmail(users, CONSTS.Media, CONSTS.Update, null, media, user);
+              });
+              
             } else {
               utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media no users found");
             };
