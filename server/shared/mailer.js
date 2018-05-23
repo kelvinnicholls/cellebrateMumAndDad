@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const inLineCss = require('nodemailer-juice');
 
 const utils = require('../utils/utils.js');
 
@@ -17,7 +18,8 @@ const transporter = nodemailer.createTransport({
 });
 
 
-let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
+
+let sendEmail = (from, subject, bodyText, bodyHtml, to, attachments) => {
 
 
   utils.log(utils.LoglevelEnum.Info, 'sendEmail params : ', from, subject, bodyText, bodyHtml, to);
@@ -27,6 +29,9 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
     subject: subject
   };
 
+  if (attachments) {
+    mailOptions.attachments = attachments;
+  }
 
   if (from) {
     mailOptions.from = from;
@@ -44,8 +49,11 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
     mailOptions.html = bodyHtml;
   };
 
-  // mailOptions.to = 'kelvin.nicholls@gmail.com';
-  // mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
+  mailOptions.to = 'kelvin.nicholls@gmail.com';
+  mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
+
+
+  transporter.use('compile', inLineCss());
 
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
@@ -60,8 +68,40 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to) => {
 let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
   let from = "";
   let subject = "Celebrate Mum And Dad - ";
-  let bodyText = "Date: " + moment().format('D MMM, YYYY HH:mm') + "\n";
-  let bodyHtml = "";
+  let bodyText = "";
+  // let attachments = [{
+  //   path: 'server/public/systemImages/mum_and_dad_header.jpg',
+  //   cid: 'mum_and_dad_header.jpg' //same cid value as in the html img src
+  // }];
+  let attachments = [];
+  let bodyHtml = `
+  <style>
+  .kgn-div {
+    font-family: 'Pangolin', cursive;
+    font-weight: 400;
+    font-size: 16px; 
+    line-height: 1.7;
+    color:  #777;
+
+    background: linear-gradient(to right bottom, #7ed56f, #28b485);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center; 
+
+    width: fit-content;
+    height: fit-content;
+
+    padding : 20px;
+    border-radius: 5px;
+
+  }
+  .kgn-div strong {
+    color:  blue;
+  }
+  </style>
+  `;
+  bodyHtml += '<div class="kgn-div">\n';
 
   if (type === CONSTS.New) {
     subject = subject + "new - ";
@@ -71,44 +111,77 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
   switch (type) {
     case CONSTS.Media:
       subject = subject + "Photo " + entity.title;
-      bodyText += "Title: " + entity.title + "\n";
+      bodyText += "Title</strong>: " + entity.title + "\n";
+      bodyHtml += "<p><strong>Title</strong>: " + entity.title + "</p>\n";
       if (action === CONSTS.New) {
-        bodyText += "Added By: " + user.name + "\n";
+        bodyText += "Added By</strong>: " + user.name + "\n";
+        bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
       } else {
-        bodyText += "Updated By: " + user.name + "\n";
+        bodyText += "Updated By</strong>: " + user.name + "\n";
+        bodyHtml += "<p><strong>Updated By</strong>: " + user.name + "</p>\n";
       };
+      if (entity.location) {
+        attachments.push({
+          path: entity.location,
+          cid: entity.location
+        });
+        bodyHtml += "<img src=" + entity.location + " />" + "\n";
+      }
       break;
     case CONSTS.Memory:
       subject = subject + "Memory " + entity.title;
-      bodyText += "Title: " + entity.title + "\n";
+      bodyText += "Title</strong>: " + entity.title + "\n";
+      bodyHtml += "<p><strong>Title</strong>: " + entity.title + "</p>\n";
       if (action === CONSTS.New) {
-        bodyText += "Added By: " + user.name + "\n";
+        bodyText += "Added By</strong>: " + user.name + "\n";
+        bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
       } else {
-        bodyText += "Updated By: " + user.name + "\n";
+        bodyText += "Updated By</strong>: " + user.name + "\n";
+        bodyHtml += "<p><strong>Updated By</strong>: " + user.name + "</p>\n";
       };
+
       break;
     case CONSTS.User:
       subject = subject + "User " + entity.name;
-      bodyText += "Name: " + entity.name + "\n";
+      bodyText += "Name</strong>: " + entity.name + "\n";
+      bodyHtml += "<p><strong>Name</strong>: " + entity.name + "</p>\n";
       if (action === CONSTS.New) {
-        bodyText += "Added By: " + user.name + "\n";
+        bodyText += "Added By</strong>: " + user.name + "\n";
+        bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
       } else {
-        bodyText += "Updated By: " + user.name + "\n";
+        bodyText += "Updated By</strong>: " + user.name + "\n";
+        bodyHtml += "<p><strong>Updated By</strong> " + user.name + "</p>\n";
       };
       break;
     case CONSTS.MediaComment:
       subject = subject + "Comment on Photo " + entity.title;
-      bodyText += "Photo Title: " + entity.title + "\n";
-      bodyText += "Date of Comment: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
-      bodyText += "Added By: " + user.name + "\n";
-      bodyText += "Comment: " + commentEntity.comment + "\n";
+      bodyText += "Photo Title</strong>: " + entity.title + "\n";
+      bodyHtml += "<p><strong>Photo Title</strong>: " + entity.title + "</p>\n";
+      bodyText += "Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
+      bodyHtml += "<p><strong>Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "</p>\n";
+      bodyText += "Added By</strong>: " + user.name + "\n";
+      bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
+      bodyText += "Comment</strong>: " + commentEntity.comment + "\n";
+      bodyHtml += "<p><strong>Comment</strong>: " + commentEntity.comment + "</p>\n";
+      if (entity.location) {
+        attachments.push({
+          path: entity.location,
+          cid: entity.location
+        });
+        bodyHtml += "<img src=" + entity.location + " />" + "\n";
+      }
       break;
     case CONSTS.MemoryComment:
-      subject = subject + "Comment on Memory " + entity.title;
-      bodyText += "Memory Title: " + entity.title + "\n";
-      bodyText += "Date of Comment: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
-      bodyText += "Added By: " + user.name + "\n";
-      bodyText += "Comment: " + commentEntity.comment + "\n";
+      subject = subject + "Comment on memory " + entity.title;
+      bodyText += "Memory Title</strong>: " + entity.title + "\n";
+      bodyHtml += "<p><strong>Memory Title</strong>: " + entity.title + "</p>\n";
+      bodyText += "Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
+      bodyHtml += "<p><strong>Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "</p>\n";
+      bodyText += "Added By</strong>: " + user.name + "\n";
+      bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
+      bodyText += "Comment</strong>: " + commentEntity.comment + "\n";
+      bodyHtml += "<p><strong>Comment</strong>: " + commentEntity.comment + "</p>\n";
+
       break;
     default:
   };
@@ -121,10 +194,11 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
     subject = subject + " updated. ";
   };
 
+  bodyHtml += "</div>";
   for (let user of users) {
-    if (user.emailUpdates  && !user.guestUser) {
+    if (user.emailUpdates && !user.guestUser) {
       let to = user.email;
-      sendEmail(from, subject, bodyText, bodyHtml, to);
+      sendEmail(from, subject, bodyText, bodyHtml, to, attachments);
     }
   };
 

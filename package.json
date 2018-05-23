@@ -75,6 +75,7 @@
     "ngx-gallery": "^2.4.1",
     "ngx-pipes": "^1.6.1",
     "nodemailer": "^4.6.4",
+    "nodemailer-juice": "^1.0.0",
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.1.0",
     "serve-favicon": "^2.4.3",
