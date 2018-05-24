@@ -22,10 +22,17 @@ import { AuthUserService } from '../auth/auth-user.service';
 export class UserService {
 
     public users: User[] = [];
+
+    public maxSize: number = 6;
+    public bigTotalItems: number = 0;
+    public numPages: number = 0;
+    public eventItemsPerPage: number = 6;
     public eventPage: number = 1;
     public bigCurrentPage: number = 1;
+
     private allUsers: User[] = [];
     private retrievedUsers = false;
+    
     constructor(private authUserService: AuthUserService, private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) {
         this.initialize();
     }

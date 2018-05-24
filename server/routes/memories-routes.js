@@ -105,7 +105,11 @@ router.post('/', authenticate, (req, res) => {
           User.findOne({
             '_creatorRef' : mongoose.Types.ObjectId(newMemory._creator)
           }).then((user) => {
-            createAndSendEmail(users, CONSTS.Memory, CONSTS.New, newMemory, null, user);
+            let location = null;
+            if (newMemory.medias && newMemory.medias.length > 0) {
+              location =  newMemory.medias[0].location;
+            }
+            createAndSendEmail(users, CONSTS.Memory, CONSTS.New, newMemory, null, user, location);
           });
         } else {
           utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post memory  no users found");
@@ -436,7 +440,11 @@ router.patch('/:id', authenticate, (req, res) => {
                 User.findOne({
                   '_creatorRef' : mongoose.Types.ObjectId(comment._creator)
                 }).then((user) => {
-                  createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memory, comment, user);
+                  let location = null;
+                  if (memory.medias && memory.medias.length > 0) {
+                    location =  memory.medias[0].location;
+                  }
+                  createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memory, comment, user, location);
                 });
               } else {
                 utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment no users found");
@@ -460,14 +468,18 @@ router.patch('/:id', authenticate, (req, res) => {
       Memory.findOne({
         // '_id' : mongoose.Types.ObjectId(memoryId.id)
         '_id' : mongoose.Types.ObjectId(memoryId._id)
-      }).populate('comments tags people').then((memory) => {
+      }).populate('comments tags people medias').then((memory) => {
         if (memory) {
           User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memory).then((users) => {
             if (users && users.length > 0) {
               User.findOne({
                 '_creatorRef' : mongoose.Types.ObjectId(memory._creator)
               }).then((user) => {
-                createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, null, memory, user);
+                let location = null;
+                if (memory.medias && memory.medias.length > 0) {
+                  location =  memory.medias[0].location;
+                }
+                createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, memory, null, user, location);
               });
               
             } else {

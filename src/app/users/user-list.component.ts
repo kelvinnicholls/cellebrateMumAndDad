@@ -25,14 +25,14 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    public maxSize: number = 6;
-    public bigTotalItems: number = this.users.length;
+    //public maxSize: number = 6;
+    //public bigTotalItems: number = this.users.length;
 
-    public numPages: number = 0;
+    //public numPages: number = 0;
 
-    private itemsPerPage: number = 6;
+    //private itemsPerPage: number = 6;
 
-    private eventItemsPerPage: number = 6;
+    //private eventItemsPerPage: number = 6;
 
 
     private hideSearchCriteriaText: String = "Hide Search Criteria";
@@ -64,11 +64,12 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     public pageChanged(event: any): void {
-        this.eventItemsPerPage = event.itemsPerPage;
+        this.userService.eventItemsPerPage = event.itemsPerPage;
         this.userService.eventPage = event.page;
         Utils.log(LoglevelEnum.Info, this, 'Page changed to: ' + this.userService.eventPage);
-        Utils.log(LoglevelEnum.Info, this, 'Number items per page: ' + this.eventItemsPerPage);
-        this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
+        Utils.log(LoglevelEnum.Info, this, 'Number items per page: ' + this.userService.eventItemsPerPage);
+        this.updatePagedUsers(this.userService.eventItemsPerPage, this.userService.eventPage);
+
     }
 
     constructor(public userService: UserService, private toastService: ToastService, private vcr: ViewContainerRef, private dialogService: DialogService) {
@@ -81,7 +82,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
     onClearSearch() {
         this.userService.clearSearch();
-        this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
+        this.updatePagedUsers(this.userService.eventItemsPerPage, this.userService.eventPage);
     }
 
 
@@ -100,10 +101,12 @@ export class UserListComponent implements OnInit, OnDestroy {
     }
 
     newUserList(users: User[]) {
+        Utils.log(LoglevelEnum.Info, this, 'newUserList size: ' + users.length);
         this.users = users;
-        this.bigTotalItems = this.users.length;
+        this.userService.bigTotalItems = this.users.length;
         this.userService.eventPage = 1;
-        this.updatePagedUsers(this.eventItemsPerPage, this.userService.eventPage);
+        this.userService.bigCurrentPage = 1;
+        this.updatePagedUsers(this.userService.eventItemsPerPage, this.userService.eventPage);
     }
 
     ngOnDestroy() {

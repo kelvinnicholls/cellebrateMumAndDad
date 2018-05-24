@@ -610,7 +610,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
               User.findOne({
                 '_creatorRef' : mongoose.Types.ObjectId(media._creator)
               }).then((user) => {
-                createAndSendEmail(users, CONSTS.Media, CONSTS.Update, null, media, user);
+                createAndSendEmail(users, CONSTS.Media, CONSTS.Update, media, null, user);
               });
               
             } else {

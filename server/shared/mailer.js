@@ -65,7 +65,7 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to, attachments) => {
 }
 
 
-let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
+let createAndSendEmail = (users, type, action, entity, commentEntity, user, photoLocation) => {
   let from = "";
   let subject = "Celebrate Mum And Dad - ";
   let bodyText = "";
@@ -128,9 +128,9 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
       if (entity.location) {
         attachments.push({
           path: entity.location,
-          cid: entity.location
+          cid: 'khgigiylgitiutitpt'
         });
-        bodyHtml += "<img src=" + entity.location + " />" + "\n";
+        bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
       }
       break;
     case CONSTS.Memory:
@@ -144,7 +144,13 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
         bodyText += "Updated By</strong>: " + user.name + "\n";
         bodyHtml += "<p><strong>Updated By</strong>: " + user.name + "</p>\n";
       };
-
+      if (photoLocation) {
+        attachments.push({
+          path: photoLocation,
+          cid: 'khgigiylgitiutitpt'
+        });
+        bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
+      }
       break;
     case CONSTS.User:
       subject = subject + "User " + entity.name;
@@ -157,6 +163,20 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
         bodyText += "Updated By</strong>: " + user.name + "\n";
         bodyHtml += "<p><strong>Updated By</strong> " + user.name + "</p>\n";
       };
+      if (entity._profileMediaId && entity._profileMediaId.location) {
+        attachments.push({
+          path: entity._profileMediaId.location,
+          cid: 'khgigiylgitiutitpt'
+        });
+        bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
+      }
+      if (entity.location) {
+        attachments.push({
+          path: entity.location,
+          cid: 'khgigiylgitiutitpt'
+        });
+        bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
+      }
       break;
     case CONSTS.MediaComment:
       subject = subject + "Comment on Photo " + entity.title;
@@ -171,9 +191,9 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
       if (entity.location) {
         attachments.push({
           path: entity.location,
-          cid: entity.location
+          cid: 'khgigiylgitiutitpt'
         });
-        bodyHtml += "<img src=" + entity.location + " />" + "\n";
+        bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
       }
       break;
     case CONSTS.MemoryComment:
@@ -186,7 +206,13 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
       bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
       bodyText += "Comment</strong>: " + commentEntity.comment + "\n";
       bodyHtml += "<p><strong>Comment</strong>: " + commentEntity.comment + "</p>\n";
-
+      if (entity.medias && entity.medias.length > 0) {
+        attachments.push({
+          path: entity.medias[0].location,
+          cid: 'khgigiylgitiutitpt'
+        });
+        bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
+      }
       break;
     default:
   };
@@ -203,6 +229,7 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
   for (let user of users) {
     if (user.emailUpdates && !user.guestUser) {
       let to = user.email;
+      utils.log(utils.LoglevelEnum.Error, 'sendEmail: ', from, subject, bodyText, bodyHtml, to, attachments);
       sendEmail(from, subject, bodyText, bodyHtml, to, attachments);
     }
   };
