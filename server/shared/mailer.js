@@ -95,10 +95,15 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user) => {
     padding : 20px;
     border-radius: 5px;
 
+    border: solid 2px gray;
+
+    border: solid 2px gray;
+
   }
   .kgn-div strong {
     color:  blue;
   }
+
   </style>
   `;
   bodyHtml += '<div class="kgn-div">\n';

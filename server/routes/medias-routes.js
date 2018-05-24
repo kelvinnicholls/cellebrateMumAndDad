@@ -479,9 +479,9 @@ router.delete('/:id', authenticate, (req, res) => {
 // });
 
 
-let updateMedias = (res, body, medias, commentId) => {
+let updateMedias = (res, body, mediaId, commentId) => {
 
-  utils.log(utils.LoglevelEnum.Info, "updateMedias", body, medias, commentId);
+  utils.log(utils.LoglevelEnum.Info, "updateMedias", body, mediaId, commentId);
 
   // let mediasObj = {
   //   _id : medias._id
@@ -497,11 +497,11 @@ let updateMedias = (res, body, medias, commentId) => {
     };
   };
   utils.log(utils.LoglevelEnum.Info, "updateObj", updateObj);
-  utils.log(utils.LoglevelEnum.Info, "medias", medias);
+  utils.log(utils.LoglevelEnum.Info, "mediaId", mediaId);
 
-  Media.findOneAndUpdate(medias, updateObj, {
+  Media.findOneAndUpdate(mediaId, updateObj, {
     new: true
-  }).populate('comments tags people memories').then((media) => {
+  }).populate('comments tags people').then((media) => {
     if (media) {
       if (media.comments) {
         addUserToComments(media).then((media) => {
@@ -595,7 +595,7 @@ router.patch('/:id', authenticate, upload, (req, res) => {
     } else {
 
       if (!req.loggedInUser.adminUser) {
-        mediaId._creator = req.loggedInUser._creatorRef;
+        body._creator = req.loggedInUser._creatorRef;
       };
 
       updateMedias(res, body, mediaId, null);

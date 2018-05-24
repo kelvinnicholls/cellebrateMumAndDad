@@ -305,7 +305,7 @@ let addUserToComments = (memory) => {
         let userObj = {
           '_creatorRef': comment._creator
         };
-        User.findOne(userObj).populate('_profileMemoryId', ['location']).then((user) => {
+        User.findOne(userObj).populate('_profileMediaId', ['location']).then((user) => {
           utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user', user);
           utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'typeof user', typeof user);
           utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'typeof comment', typeof comment);
@@ -313,11 +313,11 @@ let addUserToComments = (memory) => {
             delete user._id;
             let newComment = JSON.parse(JSON.stringify(comment));
             utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user.name', user.name);
-            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user._profileMemoryId', user._profileMemoryId);
+            utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'user._profileMediaId', user._profileMediaId);
             newComment.user = {};
             utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment.user', newComment.user);
             newComment.user.name = user.name;
-            newComment.user._profileMemoryId = user._profileMemoryId;
+            newComment.user._profileMediaId = user._profileMediaId;
             utils.log(utils.LoglevelEnum.Info, 'addUserToComments', 'newComment.user2', newComment.user);
 
             commentsArr.push(newComment);
@@ -340,9 +340,9 @@ let addUserToComments = (memory) => {
   });
 };
 
-let updateMemories = (res, body, memories, commentId) => {
+let updateMemories = (res, body, memoryId, commentId) => {
 
-  utils.log(utils.LoglevelEnum.Info, "updateMemories", body, memories, commentId);
+  utils.log(utils.LoglevelEnum.Info, "updateMemories", body, memoryId, commentId);
 
   // let memoriesObj = {
   //   _id : memories._id
@@ -358,9 +358,9 @@ let updateMemories = (res, body, memories, commentId) => {
     };
   };
   utils.log(utils.LoglevelEnum.Info, "updateObj", updateObj);
-  utils.log(utils.LoglevelEnum.Info, "memories", memories);
+  utils.log(utils.LoglevelEnum.Info, "memoryId", memoryId);
 
-  Memory.findOneAndUpdate(memories, updateObj, {
+  Memory.findOneAndUpdate(memoryId, updateObj, {
     new: true
   }).populate('comments tags people medias').then((memory) => {
     if (memory) {
@@ -405,7 +405,7 @@ router.patch('/:id', authenticate, (req, res) => {
       });
     };
 
-    let memories = {
+    let memoryId = {
       '_id': id
     };
 
@@ -413,48 +413,74 @@ router.patch('/:id', authenticate, (req, res) => {
 
     if (body.comment) {
 
-      let memoriesCommentObj = {
+      let memoryCommentObj = {
         'comment': body.comment
       };
-      let comment = new Comment(memoriesCommentObj);
+      let comment = new Comment(memoryCommentObj);
 
       comment._creator = req.loggedInUser._creatorRef;
       comment.commentDate = new Date().getTime();
       utils.log(utils.LoglevelEnum.Info, 'comment', comment);
 
       comment.save().then((comment) => {
-        updateMemories(res, body, memories, comment._id);
-        User.findUsersToSendEmailTo(CONSTS.MemoryComment, CONSTS.New, memories).then((users) => {
-          if (users && users.length > 0) {
-            User.findOne({
-              '_creatorRef' : mongoose.Types.ObjectId(comment._creator)
-            }).then((user) => {
-              createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memories, comment, user);
+        utils.log(utils.LoglevelEnum.Info, 'memories.patch : before updateMemories');
+        updateMemories(res, body, memoryId, comment._id);
+        utils.log(utils.LoglevelEnum.Info, 'memories.patch : after updateMemories');
+
+        Memory.findOne({
+          '_id' : mongoose.Types.ObjectId(memoryId._id)
+        }).populate('comments tags people medias').then((memory) => {
+          if (memory) {
+            User.findUsersToSendEmailTo(CONSTS.MemoryComment, CONSTS.New, memory).then((users) => {
+              if (users && users.length > 0) {
+                User.findOne({
+                  '_creatorRef' : mongoose.Types.ObjectId(comment._creator)
+                }).then((user) => {
+                  createAndSendEmail(users, CONSTS.MemoryComment, CONSTS.New, memory, comment, user);
+                });
+              } else {
+                utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment no users found");
+              };
+            }, (e) => {
+              utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment error: ", e);
             });
           } else {
-            utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment no users found");
-          };
+            utils.log(utils.LoglevelEnum.Error,'memory not found for id: ', id);
+          }
         }, (e) => {
-          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory comment error:", e);
+          utils.log(utils.LoglevelEnum.Error,'memory not found for id error: ', id, e);
         });
       });
     } else {
       if (!req.loggedInUser.adminUser) {
-        memories._creator = req.loggedInUser._creatorRef;
+        body._creator = req.loggedInUser._creatorRef;
       };
-      updateMemories(res, body, memories, null);
-      User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memories).then((users) => {
-        if (users && users.length > 0) {
-          User.findOne({
-            '_creatorRef' : mongoose.Types.ObjectId(media._creator)
-          }).then((user) => {
-            createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, null, memories, user);
+      updateMemories(res, body, memoryId, null);
+
+      Memory.findOne({
+        // '_id' : mongoose.Types.ObjectId(memoryId.id)
+        '_id' : mongoose.Types.ObjectId(memoryId._id)
+      }).populate('comments tags people').then((memory) => {
+        if (memory) {
+          User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memory).then((users) => {
+            if (users && users.length > 0) {
+              User.findOne({
+                '_creatorRef' : mongoose.Types.ObjectId(memory._creator)
+              }).then((user) => {
+                createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, null, memory, user);
+              });
+              
+            } else {
+              utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory no users found");
+            };
+          }, (e) => {
+            utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory error: ", e);
           });
         } else {
-          utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory no users found");
-        };
+          utils.log(utils.LoglevelEnum.Error,'memory not found for id: ' + id);
+        }
       }, (e) => {
-        utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory error: ", e);
+        utils.log(utils.LoglevelEnum.Error,'memory not found for id error: ', id, e);
       });
     };
   };
