@@ -14,6 +14,9 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.NODEMAILER_EMAIL,
     pass: process.env.NODEMAILER_PASSWORD
+  },
+  tls: {
+      rejectUnauthorized: false
   }
 });
 
@@ -49,8 +52,8 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to, attachments) => {
     mailOptions.html = bodyHtml;
   };
 
-  mailOptions.to = 'kelvin.nicholls@gmail.com';
-  mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
+  // mailOptions.to = 'kelvin.nicholls@gmail.com';
+  // mailOptions.subject = 'Email to : ' + to + ' ' + mailOptions.subject
 
 
   transporter.use('compile', inLineCss());
@@ -103,6 +106,12 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
   .kgn-div strong {
     color:  blue;
   }
+
+  img {
+    max-width: 25%; 
+    height: auto;
+  }
+
 
   </style>
   `;

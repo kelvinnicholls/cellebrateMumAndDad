@@ -34,6 +34,7 @@
 174) ask if want to log out
 175) Add like option
 176) get "Angular is running in the development mode. Call enableProdMode() to enable the production mode." on live
+177) don't send new user created or logged in email message to the user logging in or the new user
 
 
 

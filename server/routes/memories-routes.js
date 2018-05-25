@@ -460,39 +460,51 @@ router.patch('/:id', authenticate, (req, res) => {
         });
       });
     } else {
-      if (!req.loggedInUser.adminUser) {
-        body._creator = req.loggedInUser._creatorRef;
-      };
-      updateMemories(res, body, memoryId, null);
+      // if (!req.loggedInUser.adminUser) {
+      //   body._creator = req.loggedInUser._creatorRef;
+      // };
 
       Memory.findOne({
-        // '_id' : mongoose.Types.ObjectId(memoryId.id)
-        '_id' : mongoose.Types.ObjectId(memoryId._id)
-      }).populate('comments tags people medias').then((memory) => {
-        if (memory) {
-          User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memory).then((users) => {
-            if (users && users.length > 0) {
-              User.findOne({
-                '_creatorRef' : mongoose.Types.ObjectId(memory._creator)
-              }).then((user) => {
-                let location = null;
-                if (memory.medias && memory.medias.length > 0) {
-                  location =  memory.medias[0].location;
-                }
-                createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, memory, null, user, location);
+        '_id': mongoose.Types.ObjectId(memoryId._id)
+      }).then((origMedia) => {
+        if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === origMedia._creator.toHexString()) {
+          updateMemories(res, body, memoryId, null);
+
+          Memory.findOne({
+            // '_id' : mongoose.Types.ObjectId(memoryId.id)
+            '_id' : mongoose.Types.ObjectId(memoryId._id)
+          }).populate('comments tags people medias').then((memory) => {
+            if (memory) {
+              User.findUsersToSendEmailTo(CONSTS.Memory, CONSTS.Update, memory).then((users) => {
+                if (users && users.length > 0) {
+                  User.findOne({
+                    '_creatorRef' : mongoose.Types.ObjectId(memory._creator)
+                  }).then((user) => {
+                    let location = null;
+                    if (memory.medias && memory.medias.length > 0) {
+                      location =  memory.medias[0].location;
+                    }
+                    createAndSendEmail(users, CONSTS.Memory, CONSTS.Update, memory, null, user, location);
+                  });
+                  
+                } else {
+                  utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory no users found");
+                };
+              }, (e) => {
+                utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory error: ", e);
               });
-              
             } else {
-              utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory no users found");
-            };
+              utils.log(utils.LoglevelEnum.Error,'memory not found for id: ' + id);
+            }
           }, (e) => {
-            utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch memory error: ", e);
+            utils.log(utils.LoglevelEnum.Error,'memory not found for id error: ', id, e);
           });
+
         } else {
-          utils.log(utils.LoglevelEnum.Error,'memory not found for id: ' + id);
-        }
-      }, (e) => {
-        utils.log(utils.LoglevelEnum.Error,'memory not found for id error: ', id, e);
+          res.status(404).send({
+            error: "cannot update memory owned by other user unless logged on as admin user."
+          });
+        };
       });
     };
   };

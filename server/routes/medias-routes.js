@@ -249,11 +249,11 @@ router.post('/', authenticate, upload, (req, res) => {
       User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.New, newMedia).then((users) => {
         if (users && users.length > 0) {
           User.findOne({
-            '_creatorRef' : mongoose.Types.ObjectId(newMedia._creator)
+            '_creatorRef': mongoose.Types.ObjectId(newMedia._creator)
           }).then((user) => {
             createAndSendEmail(users, CONSTS.Media, CONSTS.New, newMedia, null, user);
           });
-          
+
         } else {
           utils.log(utils.LoglevelEnum.Info, "createAndSendEmail post media  no users found");
         };
@@ -569,13 +569,13 @@ router.patch('/:id', authenticate, upload, (req, res) => {
         utils.log(utils.LoglevelEnum.Info, 'medias.patch : after updateMedias');
 
         Media.findOne({
-          '_id' : mongoose.Types.ObjectId(mediaId._id)
+          '_id': mongoose.Types.ObjectId(mediaId._id)
         }).populate('comments tags people').then((media) => {
           if (media) {
             User.findUsersToSendEmailTo(CONSTS.MediaComment, CONSTS.New, media).then((users) => {
               if (users && users.length > 0) {
                 User.findOne({
-                  '_creatorRef' : mongoose.Types.ObjectId(comment._creator)
+                  '_creatorRef': mongoose.Types.ObjectId(comment._creator)
                 }).then((user) => {
                   createAndSendEmail(users, CONSTS.MediaComment, CONSTS.New, media, comment, user);
                 });
@@ -586,46 +586,56 @@ router.patch('/:id', authenticate, upload, (req, res) => {
               utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media comment error: ", e);
             });
           } else {
-            utils.log(utils.LoglevelEnum.Error,'media not found for id: ', id);
+            utils.log(utils.LoglevelEnum.Error, 'media not found for id: ', id);
           }
         }, (e) => {
-          utils.log(utils.LoglevelEnum.Error,'media not found for id error: ', id, e);
+          utils.log(utils.LoglevelEnum.Error, 'media not found for id error: ', id, e);
         });
       });
     } else {
 
-      if (!req.loggedInUser.adminUser) {
-        body._creator = req.loggedInUser._creatorRef;
-      };
+      // if (!req.loggedInUser.adminUser) {
+      //   body._creator = req.loggedInUser._creatorRef;
+      // };
 
-      updateMedias(res, body, mediaId, null);
 
       Media.findOne({
-        // '_id' : mongoose.Types.ObjectId(mediaId.id)
-        '_id' : mongoose.Types.ObjectId(mediaId._id)
-      }).populate('comments tags people').then((media) => {
-        if (media) {
-          User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.Update, media).then((users) => {
-            if (users && users.length > 0) {
-              User.findOne({
-                '_creatorRef' : mongoose.Types.ObjectId(media._creator)
-              }).then((user) => {
-                createAndSendEmail(users, CONSTS.Media, CONSTS.Update, media, null, user);
+        '_id': mongoose.Types.ObjectId(mediaId._id)
+      }).then((origMedia) => {
+        if (req.loggedInUser.adminUser || req.loggedInUser._creatorRef.toHexString() === origMedia._creator.toHexString()) {
+          updateMedias(res, body, mediaId, null);
+
+          Media.findOne({
+            // '_id' : mongoose.Types.ObjectId(mediaId.id)
+            '_id': mongoose.Types.ObjectId(mediaId._id)
+          }).populate('comments tags people').then((media) => {
+            if (media) {
+              User.findUsersToSendEmailTo(CONSTS.Media, CONSTS.Update, media).then((users) => {
+                if (users && users.length > 0) {
+                  User.findOne({
+                    '_creatorRef': mongoose.Types.ObjectId(media._creator)
+                  }).then((user) => {
+                    createAndSendEmail(users, CONSTS.Media, CONSTS.Update, media, null, user);
+                  });
+
+                } else {
+                  utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media no users found");
+                };
+              }, (e) => {
+                utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media error: ", e);
               });
-              
             } else {
-              utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media no users found");
-            };
+              utils.log(utils.LoglevelEnum.Error, 'media not found for id: ' + id);
+            }
           }, (e) => {
-            utils.log(utils.LoglevelEnum.Info, "createAndSendEmail patch media error: ", e);
+            utils.log(utils.LoglevelEnum.Error, 'media not found for id error: ', id, e);
           });
         } else {
-          utils.log(utils.LoglevelEnum.Error,'media not found for id: ' + id);
-        }
-      }, (e) => {
-        utils.log(utils.LoglevelEnum.Error,'media not found for id error: ', id, e);
+          res.status(404).send({
+            error: "cannot update photo owned by other user unless logged on as admin user."
+          });
+        };
       });
-
     };
   };
 });
