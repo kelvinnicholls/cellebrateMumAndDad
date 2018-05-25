@@ -43,8 +43,16 @@ const {
 
 
 const {
-  sendEmail
+  createAndSendEmail
 } = require('../shared/mailer');
+
+const {
+  CONSTS
+} = require('../shared/consts');
+
+const {
+  User
+} = require('../models/user');
 
 let users = new Users();
 
@@ -61,7 +69,7 @@ let getUserName = (id) => {
 
 io.on('connection', (socket) => {
   utils.log(utils.LoglevelEnum.Info,'New user connected');
-  //sendEmail("Test Email From", "Test Email Subject", "Test Email Body Text New user connected");
+
   socket.on('disconnect', () => {
     utils.log(utils.LoglevelEnum.Info,"Client Disconnected");
     disconnectUser(socket.id);
@@ -75,6 +83,16 @@ io.on('connection', (socket) => {
     users.removeUser(socket.id);
     let user = users.addUser(socket.id, name, userObj);
     utils.log(utils.LoglevelEnum.Info,"User added :", user, users);
+
+    User.find({
+      'adminUser' : true,
+      'emailUpdates' : true,
+      'guestUser' : false
+    }).then((adminUsers) => {
+  
+      createAndSendEmail(adminUsers, CONSTS.Login, CONSTS.New, null, null, null, null, user.name);
+    });
+
     //socket.leave(params.room);
     // io.emit // every connected user 
     // io.to(params.room).emit

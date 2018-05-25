@@ -65,7 +65,7 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to, attachments) => {
 }
 
 
-let createAndSendEmail = (users, type, action, entity, commentEntity, user, photoLocation) => {
+let createAndSendEmail = (users, type, action, entity, commentEntity, user, photoLocation, userName) => {
   let from = "";
   let subject = "Celebrate Mum And Dad - ";
   let bodyText = "";
@@ -214,17 +214,23 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
         bodyHtml += '<img src="cid:khgigiylgitiutitpt" />' + '\n';
       }
       break;
+    case CONSTS.Login:
+      subject = subject + "New login from user " + userName;
+      bodyText += "User Name</strong>: " + userName + "\n";
+      bodyHtml += "<p><strong>User Name</strong>: " + userName + "</p>\n";
+      bodyText += "Date and time of Login: </strong>: " + moment().format('D MMM, YYYY HH:mm') + "\n";
+      bodyHtml += "<p><strong>Date and time of Login: </strong>: " + moment().format('D MMM, YYYY HH:mm') + "</p>\n";
+      break;
     default:
   };
 
-
-
-  if (action === CONSTS.New) {
-    subject = subject + " added. ";
-  } else {
-    subject = subject + " updated. ";
+  if (!type === CONSTS.Login) {
+    if (action === CONSTS.New) {
+      subject = subject + " added. ";
+    } else {
+      subject = subject + " updated. ";
+    };
   };
-
   bodyHtml += "</div>";
   for (let user of users) {
     if (user.emailUpdates && !user.guestUser) {

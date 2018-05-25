@@ -53,6 +53,7 @@ const CONSTS = {
     Media : "Media",
     Memory : "Memory",
     User : "User",
+    Login : "Login",
     New : "New",
     Update : "Update",
     MediaComment : "MediaComment",
