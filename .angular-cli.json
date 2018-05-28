@@ -21,7 +21,11 @@
       "styles": [
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "./node_modules/jszip-utils/dist/jszip-utils.js",
+        "./node_modules/jszip/dist/jszip.js",
+        "./node_modules/file-saver/FileSaver.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

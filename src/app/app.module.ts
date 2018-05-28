@@ -38,6 +38,7 @@ import { SharedModule } from "./shared/shared.module";
 import { ChatModule } from "./chat/chat.module";
 import { UserService } from "./users/user.service";
 import { PhotoService } from "./photos/photo.service";
+import { ZipperService } from "./shared/zipper/zipper-service";
 import { MemoryService } from "./memories/memory.service";
 import { TagService } from "./shared/tags/tag.service";
 import { PersonService } from "./shared/people/person.service";
@@ -66,7 +67,7 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         ChatModule,
         SharedModule
     ],
-    providers: [CommentsService, PersonService, TagService, AuthService, UserService, PhotoService, MemoryService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, SlideShowService, FileStackService],
+    providers: [CommentsService, PersonService, TagService, AuthService, UserService, PhotoService, ZipperService, MemoryService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, SlideShowService, FileStackService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

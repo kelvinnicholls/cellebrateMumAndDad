@@ -25,6 +25,7 @@ import { CommentsService } from "../shared/comments/comments.service";
 import { Utils, LoglevelEnum, SortDataType } from "../shared/utils/utils";
 import { User } from "../users/user.model";
 import { AuthUserService } from "../auth/auth-user.service";
+import { ZipperService } from "../shared/zipper/zipper-service";
 
 @Injectable()
 export class PhotoService {
@@ -42,6 +43,13 @@ export class PhotoService {
             photoTitle = photo.title;
         };
         return photoTitle;
+    }
+
+
+    public zipPhotos () {
+
+        this.zipperService.zipFiles(this.allPhotos);
+
     }
 
     // Text configuration 
@@ -77,6 +85,7 @@ export class PhotoService {
         , private tagService: TagService
         , private personService: PersonService
         , private authUserService: AuthUserService
+        , private zipperService: ZipperService
         , private router: Router) {
         this.initialize();
 
