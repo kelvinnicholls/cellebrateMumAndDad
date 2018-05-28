@@ -1,6 +1,5 @@
 import { Injectable } from "@angular/core";
 
-;
 import * as JSZip from '../../../../node_modules/jszip/dist/jszip.js';
 import * as JSZipUtils from '../../../../node_modules/jszip-utils/dist/jszip-utils.js';
 
@@ -41,3 +40,4 @@ export class ZipperService {
         });
     }
 
+}
