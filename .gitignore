@@ -1,8 +1,8 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 //server/public/js/app/bundle.js
-server/public/images/file*
-!server/public/images
+//server/public/images/file*
+//!server/public/images
 
 npm-debug.log.*
 
@@ -11,7 +11,7 @@ server/config/encryptedPasswords
 server/config/seedUser
 //server/public/js/app/*.chunk.js
 
-
+backup
 
 # compiled output
 /dist
