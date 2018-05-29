@@ -48,8 +48,11 @@ export class PhotoService {
 
     public zipPhotos () {
 
-        this.zipperService.zipFiles(this.allPhotos);
-
+        this.getProfilePhotos().subscribe((profilePhotos) => {
+            let mergedPhotos = profilePhotos.slice();
+            mergedPhotos = mergedPhotos.concat(this.allPhotos);
+            this.zipperService.zipFiles(mergedPhotos);
+        });
     }
 
     // Text configuration 
@@ -76,6 +79,7 @@ export class PhotoService {
     public eventPage: number = 1;
     public bigCurrentPage: number = 1;
     private allPhotos: Photo[] = [];
+
     constructor(private http: Http
         , private errorService: ErrorService
         , private appService: AppService
@@ -471,6 +475,32 @@ export class PhotoService {
             mediaDate
         );
         return newPhoto;
+    }
+
+    
+
+    public getProfilePhotos() {
+        let photoService = this;
+        if (photoService.authUserService.isLoggedIn()) {
+            const headers: Headers = new Headers();
+            headers.set(Consts.X_AUTH, localStorage.getItem('token'));
+
+            return this.http.get(Consts.API_URL_MEDIAS_ROOT_PROFILE_PICS, { headers: headers })
+                .map((response: Response) => {
+                    const photos = response.json().medias;
+                    let transformedPhotos: Photo[] = [];
+                    for (let photo of photos) {
+                        let newPhoto: Photo = photoService.createNewPhoto(photo);
+                        transformedPhotos.push(newPhoto);
+                    };
+                    transformedPhotos.sort(Utils.dynamicSort('title'));
+                    return transformedPhotos;
+                })
+                .catch((error: Response) => {
+                    photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
+                    return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
+                });
+        };
     }
 
     getPhotos(refresh: Boolean = false) {

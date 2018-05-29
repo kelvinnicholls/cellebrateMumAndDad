@@ -11,6 +11,8 @@ server/config/encryptedPasswords
 server/config/seedUser
 //server/public/js/app/*.chunk.js
 
+server/public/imagesLocal
+
 backup
 
 # compiled output

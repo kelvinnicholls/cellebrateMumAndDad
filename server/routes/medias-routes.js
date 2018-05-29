@@ -319,6 +319,27 @@ router.get('/', authenticate, (req, res) => {
   });
 });
 
+
+router.get('/profilePics', authenticate, (req, res) => {
+
+  let mediasObj = {
+    'isProfilePic': true
+  };
+  // if (!req.loggedInUser.adminUser) {
+  //   mediasObj._creator = req.loggedInUser._creatorRef;
+  // };
+
+  Media.find(mediasObj).populate('comments tags people memories').then((medias) => downloadFiles(medias).then((medias) => transformCreatorToUser(medias).then((medias) => {
+    utils.log(utils.LoglevelEnum.Info, "after find medias.length", medias.length);
+    let obj = {};
+    obj['medias'] = medias;
+    res.send(obj);
+  }))).catch((e) => {
+    utils.log(utils.LoglevelEnum.Info, "mediasApp.get('/medias/profilePics' error", e);
+    res.status(400).send(CONSTS.AN_ERROR_OCURRED);
+  });
+});
+
 router.get('/byCriteria', authenticate, (req, res) => {
   let {
     tags,

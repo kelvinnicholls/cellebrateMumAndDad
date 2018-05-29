@@ -11,6 +11,7 @@ export class Consts {
   public static API_URL_MEMORIES_ROOT_TITLE: string = Consts.API_URL_MEMORIES_ROOT + '/title';
   public static API_URL_MEDIAS_ROOT: string = Consts.API_URL_ROOT + 'medias';
   public static API_URL_MEDIAS_ROOT_TITLE: string = Consts.API_URL_MEDIAS_ROOT + '/title';
+  public static API_URL_MEDIAS_ROOT_PROFILE_PICS: string = Consts.API_URL_MEDIAS_ROOT + '/profilePics';
   public static API_URL_TAGS_ROOT: string = Consts.API_URL_ROOT + 'tags';
   public static API_URL_TAGS_ROOT_TAG: string = Consts.API_URL_TAGS_ROOT + '/tag';
   public static API_URL_PEOPLE_ROOT: string = Consts.API_URL_ROOT + 'people';
