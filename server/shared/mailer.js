@@ -9,24 +9,29 @@ const {
   CONSTS
 } = require('../shared/consts');
 
-// const transporter = nodemailer.createTransport({
-//   service: process.env.NODEMAILER_SERVICE,
-//   auth: {
-//     user: process.env.NODEMAILER_EMAIL,
-//     pass: process.env.NODEMAILER_PASSWORD
-//   },
-//   tls: {
-//       rejectUnauthorized: false
-//   }
-// });
+let rejectUnauthorized = false;
+if (process.env.NODE_ENV === 'production') {
+  rejectUnauthorized = true;
+};
 
 const transporter = nodemailer.createTransport({
   service: process.env.NODEMAILER_SERVICE,
   auth: {
     user: process.env.NODEMAILER_EMAIL,
     pass: process.env.NODEMAILER_PASSWORD
+  },
+  tls: {
+      rejectUnauthorized: rejectUnauthorized
   }
 });
+
+// const transporter = nodemailer.createTransport({
+//   service: process.env.NODEMAILER_SERVICE,
+//   auth: {
+//     user: process.env.NODEMAILER_EMAIL,
+//     pass: process.env.NODEMAILER_PASSWORD
+//   }
+// });
 
 
 
@@ -77,6 +82,11 @@ let sendEmail = (from, subject, bodyText, bodyHtml, to, attachments) => {
 
 
 let createAndSendEmail = (users, type, action, entity, commentEntity, user, photoLocation, userName) => {
+
+  let rootUrl = "http://localhost:3000/";
+  if (process.env.NODE_ENV === 'production') {
+    rootUrl = "https://celeb-mum-and-dad.herokuapp.com/";
+  };
   let from = "";
   let subject = "Celebrate Mum And Dad - ";
   let bodyText = "";
@@ -134,7 +144,7 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
     case CONSTS.Media:
       subject = subject + "Photo " + entity.title;
       bodyText += "Title</strong>: " + entity.title + "\n";
-      bodyHtml += "<p><strong>Title</strong>: " + entity.title + "</p>\n";
+      bodyHtml += '<p><strong>Title</strong>: <a href="'+ rootUrl +'photos/photo/view/' + entity._id + '">'+ entity.title +'</a></p>\n';
       if (action === CONSTS.New) {
         bodyText += "Added By</strong>: " + user.name + "\n";
         bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
@@ -153,7 +163,8 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
     case CONSTS.Memory:
       subject = subject + "Memory " + entity.title;
       bodyText += "Title</strong>: " + entity.title + "\n";
-      bodyHtml += "<p><strong>Title</strong>: " + entity.title + "</p>\n";
+      bodyHtml += '<p><strong>Title</strong>: <a href="'+ rootUrl +'memories/memory/view/' + entity._id + '">'+ entity.title +'</a></p>\n';
+
       if (action === CONSTS.New) {
         bodyText += "Added By</strong>: " + user.name + "\n";
         bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
@@ -172,7 +183,8 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
     case CONSTS.User:
       subject = subject + "User " + entity.name;
       bodyText += "Name</strong>: " + entity.name + "\n";
-      bodyHtml += "<p><strong>Name</strong>: " + entity.name + "</p>\n";
+      bodyHtml += '<p><strong>Name</strong>: <a href="'+ rootUrl +'users/user/' + entity._creatorRef + '">'+ entity.name +'</a></p>\n';
+
       if (action === CONSTS.New) {
         bodyText += "Added By</strong>: " + user.name + "\n";
         bodyHtml += "<p><strong>Added By</strong>: " + user.name + "</p>\n";
@@ -198,7 +210,7 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
     case CONSTS.MediaComment:
       subject = subject + "Comment on Photo " + entity.title;
       bodyText += "Photo Title</strong>: " + entity.title + "\n";
-      bodyHtml += "<p><strong>Photo Title</strong>: " + entity.title + "</p>\n";
+      bodyHtml += '<p><strong>Photo Title</strong>: <a href="'+ rootUrl +'photos/photo/view/' + entity._id + '">'+ entity.title +'</a></p>\n';
       bodyText += "Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
       bodyHtml += "<p><strong>Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "</p>\n";
       bodyText += "Added By</strong>: " + user.name + "\n";
@@ -216,7 +228,8 @@ let createAndSendEmail = (users, type, action, entity, commentEntity, user, phot
     case CONSTS.MemoryComment:
       subject = subject + "Comment on memory " + entity.title;
       bodyText += "Memory Title</strong>: " + entity.title + "\n";
-      bodyHtml += "<p><strong>Memory Title</strong>: " + entity.title + "</p>\n";
+      bodyHtml += '<p><strong>Memory Title</strong>: <a href="'+ rootUrl +'memories/memory/view/' + entity._id + '">'+ entity.title +'</a></p>\n';
+      
       bodyText += "Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "\n";
       bodyHtml += "<p><strong>Date of Comment</strong>: " + moment(commentEntity.commentDate).format('D MMM, YYYY HH:mm') + "</p>\n";
       bodyText += "Added By</strong>: " + user.name + "\n";

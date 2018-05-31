@@ -29,7 +29,7 @@ import { Tag } from "../shared/tags/tag.model";
 import { Person } from "../shared/people/person.model";
 import { Photo } from "../photos/photo.model";
 //import { element } from 'protractor';
-import { Utils,LoglevelEnum } from "../shared/utils/utils";
+import { Utils, LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from "../auth/auth-user.service";
 
 @Component({
@@ -291,14 +291,14 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                         );
                         memoryInputComponent.memoryService.updateMemory(this.memory)
                             .subscribe(
-                            result => {
-                                Utils.log(LoglevelEnum.Info,this,result);
-                                memoryInputComponent.router.navigate(['memories']).then((ok) => {
-                                    if (ok) {
-                                        memoryInputComponent.appService.showToast(Consts.SUCCESS, "Memory updated.");
-                                    };
-                                });
-                            }
+                                result => {
+                                    Utils.log(LoglevelEnum.Info, this, result);
+                                    memoryInputComponent.router.navigate(['memories']).then((ok) => {
+                                        if (ok) {
+                                            memoryInputComponent.appService.showToast(Consts.SUCCESS, "Memory updated.");
+                                        };
+                                    });
+                                }
                             );
                         memoryInputComponent.memory = null;
                         memoryInputComponent._creator = null;
@@ -322,14 +322,14 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
                             this.ngbDateParserFormatter.formatForDB(this.myForm.value.memoryDate));
                         memoryInputComponent.memoryService.addMemory(memoryInputComponent.memory)
                             .subscribe(
-                            data => {
-                                memoryInputComponent.router.navigate(['memories']).then((ok) => {
-                                    if (ok) {
-                                        memoryInputComponent.appService.showToast(Consts.SUCCESS, "Memory created.");
-                                    };
-                                });
-                            },
-                            error => console.error("MemoryComponent memoryService.newMemory error", error)
+                                data => {
+                                    memoryInputComponent.router.navigate(['memories']).then((ok) => {
+                                        if (ok) {
+                                            memoryInputComponent.appService.showToast(Consts.SUCCESS, "Memory created.");
+                                        };
+                                    });
+                                },
+                                error => console.error("MemoryComponent memoryService.newMemory error", error)
                             );
                         memoryInputComponent.memory = null;
                         memoryInputComponent._creator = null;
@@ -408,18 +408,18 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
 
         memoryInputComponent.commentSub = memoryInputComponent.commentsService.commentSub
             .subscribe(
-            (comment: Comment) => {
-                if (comment.entity.entityType === Consts.MEMORY) {
-                    memoryInputComponent.memoryService.addComment(memoryInputComponent.memory, comment.comment, comment.callback);
-                };
-            });
+                (comment: Comment) => {
+                    if (comment.entity.entityType === Consts.MEMORY) {
+                        memoryInputComponent.memoryService.addComment(memoryInputComponent.memory, comment.comment, comment.callback);
+                    };
+                });
 
 
         memoryInputComponent.commentAddedSub = memoryInputComponent.commentsService.commentAddedSub
             .subscribe(
-            (comment: CommentDisplay) => {
-                memoryInputComponent.memory.comments.push(comment);
-            });
+                (comment: CommentDisplay) => {
+                    memoryInputComponent.memory.comments.push(comment);
+                });
 
         memoryInputComponent._creator = memoryInputComponent.userService.getLoggedInUser()._creatorRef;
 
@@ -436,7 +436,14 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
             memoryInputComponent.paramsSubscription = memoryInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     memoryInputComponent.index = queryParams['index'];
-                    memoryInputComponent.memory = memoryInputComponent.memoryService.findMemoryByIndex(memoryInputComponent.index);
+
+                    if (Utils.isObjectId(memoryInputComponent.index)) {
+                        memoryInputComponent.memory = memoryInputComponent.memoryService.findMemoryById(memoryInputComponent.index);
+                    } else {
+                        memoryInputComponent.memory = memoryInputComponent.memoryService.findMemoryByIndex(memoryInputComponent.index);
+                    };
+
+
                     memoryInputComponent.modelMemoryDate = this.getMemoryDate();
                     memoryInputComponent.submitType = Consts.UPDATE_MEMORY;
                     memoryInputComponent.tagService.selectedTags = memoryInputComponent.extractIdsAsArray(memoryInputComponent.memory.tagsToDisplay);

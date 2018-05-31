@@ -451,7 +451,12 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
             photoInputComponent.paramsSubscription = photoInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     photoInputComponent.index = queryParams['index'];
-                    photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
+
+                    if (Utils.isObjectId(photoInputComponent.index)) {
+                        photoInputComponent.photo = photoInputComponent.photoService.findPhotoById(photoInputComponent.index);
+                    } else {
+                        photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
+                    };
                     photoInputComponent.modelMediaDate = this.getMediaDate();
                     photoInputComponent.submitType = Consts.UPDATE_PHOTO;
                     photoInputComponent.tagService.selectedTags = photoInputComponent.extractIdsAsArray(photoInputComponent.photo.tagsToDisplay);

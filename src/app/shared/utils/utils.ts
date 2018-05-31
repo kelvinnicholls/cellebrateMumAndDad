@@ -69,5 +69,16 @@ export class Utils {
             };
         };
     };
+
+
+    public static isObjectId (id : any):boolean {
+        let retVal:boolean = false;
+        if (id.match(/^[0-9a-fA-F]{24}$/)) {
+            retVal = true; 
+        };
+        return retVal;
+    };
+
+
 };
 

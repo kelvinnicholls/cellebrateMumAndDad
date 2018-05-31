@@ -434,7 +434,13 @@ export class UserInputComponent implements OnInit, OnDestroy {
             userInputComponent.paramsSubscription = userInputComponent.route.params.subscribe(
                 (queryParams: Params) => {
                     userInputComponent.index = queryParams['index'];
-                    userInputComponent.user = userInputComponent.userService.findUserByIndex(userInputComponent.index);
+                    if (Utils.isObjectId(userInputComponent.index)) {
+                        userInputComponent.user = userInputComponent.userService.findUserByCreatorRef(userInputComponent.index);
+                    } else {
+                        userInputComponent.user = userInputComponent.userService.findUserByIndex(userInputComponent.index);
+                    };
+
+                    
                     userInputComponent.modelDob = userInputComponent.getDob();
                     userInputComponent.submitType = Consts.UPDATE_USER;
                     userInputComponent.mode = Consts.EDIT;
