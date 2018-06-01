@@ -56,7 +56,7 @@ export class SignInComponent implements OnInit, OnDestroy {
                 this.chatService.connect(userName,payload);
                 this.memoryService.getMemories(true);
                 this.userService.getUsers(true);
-                this.photoService.getPhotos(true);
+                this.photoService.getPhotos(true).subscribe();
                 this.tagService.getTags(true);
                 this.personService.getPeople(true);
             }
