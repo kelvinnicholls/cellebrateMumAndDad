@@ -11,11 +11,24 @@ import { Utils,LoglevelEnum } from "./shared/utils/utils";
 export class HeaderComponent {
     constructor(public authService: AuthService,public authUserService: AuthUserService,public photoService: PhotoService) { }
 
-    loglevelEnum : LoglevelEnum;
+    public loglevelEnum : LoglevelEnum;
 
     setLogLevel(logLevel : LoglevelEnum) {
         Utils.setLogLevel(logLevel);
     };
+
+    isError() {
+        return Utils.getLogLevel() === LoglevelEnum.Error;
+    }
+
+    isWarn() {
+        return Utils.getLogLevel() === LoglevelEnum.Warn;
+    }
+
+
+    isInfo() {
+        return Utils.getLogLevel() === LoglevelEnum.Info;
+    }
 
 
     zipPhotos() {

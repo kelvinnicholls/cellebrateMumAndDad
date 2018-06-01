@@ -56,6 +56,11 @@ export class Utils {
         Utils.LOG_LEVEL = loglevelEnum;
     };
 
+
+    public static getLogLevel() {
+        return Utils.LOG_LEVEL;
+    };
+
     public static log(...args: any[]) {
         let passedArguments = args.slice();
         if (passedArguments && passedArguments.length > 0) {

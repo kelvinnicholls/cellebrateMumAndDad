@@ -80,7 +80,7 @@ export class MemoryService {
 
     findMemoryById(id: any): Memory {
         return this.allMemories.find((memory) => {
-            return memory._id === id;
+            return memory._id == id;
         });
     }
 

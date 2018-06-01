@@ -32,7 +32,7 @@
           <div class="dropdown-divider"></div>
           <a routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="dropdown-item" routerLink="/photos/photo/add">Add Photo</a>
           <div class="dropdown-divider"></div>
-          <a  *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()" (click)="zipPhotos()" class="dropdown-item">Zip Photos</a>
+          <a *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()" (click)="zipPhotos()" class="dropdown-item">Zip Photos</a>
         </div>
       </li>
 
@@ -55,20 +55,26 @@
         <a class="nav-link" routerLink="/auth/get-encrypted-password">Encrypted Password</a>
       </li>
 
-      <li class="nav-item" routerLinkActive="active" >
+      <li class="nav-item" routerLinkActive="active">
         <a class="nav-link" routerLink="/info">Info</a>
       </li>
 
       <li class="nav-item dropdown" routerLinkActive="active" *ngIf="authUserService.isLoggedIn() && authUserService.isAdminUser()"
-      id="usersNavItem">
-      <a class="nav-link dropdown-toggle" id="logLevelDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
-        aria-expanded="false">Change Log Level</a>
-      <div class="dropdown-menu" aria-labelledby="logLevelDropdown">
-        <a  (click)="setLogLevel(0)" class="dropdown-item">Error</a>
-        <a  (click)="setLogLevel(1)" class="dropdown-item">Warn</a>
-        <a  (click)="setLogLevel(2)" class="dropdown-item">Info</a>
-      </div>
-    </li>
+        id="usersNavItem">
+        <a class="nav-link dropdown-toggle" id="logLevelDropdown" data-toggle="dropdown" aria-haspopup="true" style="cursor: pointer"
+          aria-expanded="false">Change Log Level</a>
+        <div class="dropdown-menu" aria-labelledby="logLevelDropdown">
+          <a [ngClass]="{
+          'active': isError()
+        }" (click)="setLogLevel(0)" class="dropdown-item">Error</a>
+          <a [ngClass]="{
+          'active': isWarn()
+        }" (click)="setLogLevel(1)" class="dropdown-item">Warn</a>
+          <a [ngClass]="{
+          'active': isInfo()
+        }" (click)="setLogLevel(2)" class="dropdown-item">Info</a>
+        </div>
+      </li>
 
     </ul>
 

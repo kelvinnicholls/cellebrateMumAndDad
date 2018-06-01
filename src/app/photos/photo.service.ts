@@ -118,6 +118,8 @@ export class PhotoService {
     }
 
     findPhotoById(id: any): Photo {
+        Utils.log(LoglevelEnum.Error,"PhotoService.findPhotoById","id =",id);
+        Utils.log(LoglevelEnum.Error,"PhotoService.findPhotoById","this.allPhotos.length =",this.allPhotos.length);
         return this.allPhotos.find((photo) => {
             return photo._id === id;
         });

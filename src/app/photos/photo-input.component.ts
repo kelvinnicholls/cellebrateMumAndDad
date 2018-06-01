@@ -454,6 +454,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
 
                     if (Utils.isObjectId(photoInputComponent.index)) {
                         photoInputComponent.photo = photoInputComponent.photoService.findPhotoById(photoInputComponent.index);
+                        Utils.log(LoglevelEnum.Error,"PhotoInputComponent.findPhotoById","photoInputComponent.photo._id =",photoInputComponent.photo._id);
                     } else {
                         photoInputComponent.photo = photoInputComponent.photoService.findPhotoByIndex(photoInputComponent.index);
                     };
