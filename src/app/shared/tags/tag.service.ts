@@ -86,6 +86,7 @@ export class TagService {
         tagService.socket.on('createdTag', (tag, changedBy) => {
             tagService.tags.push(tag);
             tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+            tagService.sortTags();
             tagService.tagsChanged.next(this.tags);
             tagService.appService.showToast(Consts.INFO, "New tag  : " + tag.tag + " added by " + changedBy);
             Utils.log(LoglevelEnum.Info,this, "New tag  : " + tag.tag + " added by " + changedBy);
@@ -123,6 +124,7 @@ export class TagService {
                 let tag = new Tag(result.tag, result._id, result._creator);
                 tagService.tags.push(tag);
                 tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+                tagService.sortTags();
                 this.socket.emit('tagCreated', tag, function (err) {
                     if (err) {
                         Utils.log(LoglevelEnum.Info,this,"tagCreated err: ", err);
@@ -140,6 +142,16 @@ export class TagService {
             });
     }
 
+
+    sortTags() {
+        let tagService = this;
+        tagService.multiSelectTagOptions = tagService.multiSelectTagOptions.slice();
+        tagService.multiSelectTagOptions = tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
+
+        tagService.tags = tagService.tags.slice();
+        tagService.tags = tagService.tags.sort(Utils.dynamicSort('tag'));
+
+    }
 
     public getTags(refresh: Boolean = false) {
         let tagService = this;
@@ -159,8 +171,8 @@ export class TagService {
                         transformedTags.push(newTag);
                         tagService.multiSelectTagOptions.push({ id: tag._id, name: tag.tag });
                     };
-                    transformedTags.sort(Utils.dynamicSort('tag'));
                     this.tags = transformedTags;
+                    tagService.sortTags();
                     tagService.retrievedTags = true;
                 }).catch((error: Response) => {
                     tagService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));

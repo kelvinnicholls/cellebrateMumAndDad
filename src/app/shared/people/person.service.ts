@@ -80,6 +80,7 @@ export class PersonService {
         personService.socket.on('createdPerson', (person, changedBy) => {
             personService.people.push(person);
             personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+            personService.sortPeople();
             personService.peopleChanged.next(personService.people);
             personService.appService.showToast(Consts.INFO, "New person  : " + person.person + " added by " + changedBy);
             Utils.log(LoglevelEnum.Info,this, "New person  : " + person.person + " added by " + changedBy);
@@ -117,6 +118,7 @@ export class PersonService {
                 let person = new Person(result.person, result._id, result._creator);
                 personService.people.push(person);
                 personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+                personService.sortPeople();
                 this.socket.emit('personCreated', person, function (err) {
                     if (err) {
                         Utils.log(LoglevelEnum.Info,this,"personCreated err: ", err);
@@ -134,6 +136,16 @@ export class PersonService {
             });
     }
 
+
+    sortPeople() {
+        let personService = this;
+        personService.multiSelectPersonOptions = personService.multiSelectPersonOptions.slice();
+        personService.multiSelectPersonOptions = personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
+
+        personService.people = personService.people.slice();
+        personService.people = personService.people.sort(Utils.dynamicSort('person'));
+
+    }
 
     public getPeople(refresh: Boolean = false) {
         let personService = this;
@@ -154,8 +166,8 @@ export class PersonService {
                         transformedPersons.push(newPerson);
                         personService.multiSelectPersonOptions.push({ id: person._id, name: person.person });
                     };
-                    transformedPersons.sort(Utils.dynamicSort('person'));
                     this.people = transformedPersons;
+                    personService.sortPeople();
                     personService.retrievedPeople = true;
                 }).catch((error: Response) => {
                     personService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
