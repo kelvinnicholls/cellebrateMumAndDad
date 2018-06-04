@@ -118,8 +118,9 @@ export class PhotoService {
     }
 
     findPhotoById(id: any): Photo {
-        Utils.log(LoglevelEnum.Error, "PhotoService.findPhotoById", "id =", id);
-        Utils.log(LoglevelEnum.Error, "PhotoService.findPhotoById", "this.allPhotos.length =", this.allPhotos.length);
+        Utils.log(LoglevelEnum.Error, this,"PhotoService.findPhotoById", "id =", id);
+        Utils.log(LoglevelEnum.Error, this,"PhotoService.findPhotoById", "this.allPhotos.length =", this.allPhotos.length);
+        Utils.log(LoglevelEnum.Error, this,"PhotoService.findPhotoById", "this.retrievedPhotos =", this.retrievedPhotos);
         if (this.retrievedPhotos) {
             return this.allPhotos.find((photo) => {
                 return photo._id === id;
@@ -516,14 +517,14 @@ export class PhotoService {
 
     getPhotos(refresh: Boolean = false) {
         let photoService = this;
-        Utils.log(LoglevelEnum.Error, "PhotoService.getPhotos", "refresh =", refresh);
+        Utils.log(LoglevelEnum.Error, photoService,"PhotoService.getPhotos", "refresh =", refresh);
         if ((!photoService.retrievedPhotos || refresh) && photoService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
             return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
                 .map((response: Response) => {
-                    Utils.log(LoglevelEnum.Error, "PhotoService.getPhotos", "response =", response);
+                    Utils.log(LoglevelEnum.Error, photoService,"PhotoService.getPhotos", "response =", response);
                     const photos = response.json().medias;
                     let transformedPhotos: Photo[] = [];
                     photoService.multiSelectPhotoOptions = [];
@@ -541,7 +542,7 @@ export class PhotoService {
                     };
                     photoService.bigTotalItems = photoService.photos.length;
                     photoService.retrievedPhotos = true;
-                    Utils.log(LoglevelEnum.Error, "PhotoService.getPhotos", " photoService.photos.length =",  photoService.photos.length);
+                    Utils.log(LoglevelEnum.Error, photoService,"PhotoService.getPhotos", " photoService.photos.length =",  photoService.photos.length);
                 })
                 .catch((error: Response) => {
                     photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
