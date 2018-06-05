@@ -97,7 +97,7 @@ export class PhotoService {
 
     async initialize() {
         Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 1");
-        this.getPhotos().subscribe();
+        await this.getPhotos().toPromise();
         Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 2");
     }
 
