@@ -130,7 +130,9 @@ export class PhotoService {
         } else {
             this.getPhotos(true).subscribe(
                 () => {
+                    Utils.log(LoglevelEnum.Error, this, "this.getPhotos(true).subscribe", "this.allPhotos.length =", this.allPhotos.length);
                     let retPhoto: Photo = this.allPhotos.find((photo) => {
+                        Utils.log(LoglevelEnum.Error, this, "let retPhoto: Photo = this.allPhotos.find((photo) =>", "photo =", photo);
                         return photo._id === id;
                     });
                     Utils.log(LoglevelEnum.Error, this, "PhotoService.findPhotoById", "retPhoto =", retPhoto);
@@ -547,6 +549,7 @@ export class PhotoService {
                     photoService.bigTotalItems = photoService.photos.length;
                     photoService.retrievedPhotos = true;
                     Utils.log(LoglevelEnum.Error, photoService, "PhotoService.getPhotos", " photoService.photos.length =", photoService.photos.length);
+                    return photoService.photos;
                 })
                 .catch((error: Response) => {
                     photoService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
