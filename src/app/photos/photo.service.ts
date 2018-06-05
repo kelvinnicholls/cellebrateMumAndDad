@@ -96,7 +96,9 @@ export class PhotoService {
     }
 
     async initialize() {
+        Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 1");
         this.getPhotos().subscribe();
+        Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 2");
     }
 
     photosChanged = new Subject<Photo[]>();
@@ -537,7 +539,7 @@ export class PhotoService {
                     for (let photo of photos) {
                         let newPhoto: Photo = photoService.createNewPhoto(photo);
                         transformedPhotos.push(newPhoto);
-                        photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
+                        photoService.multiSelectPhotoOptions.push({ id: newPhoto._id, name: newPhoto.title });
                     };
                     transformedPhotos.sort(Utils.dynamicSort('title'));
                     photoService.allPhotos = transformedPhotos;
