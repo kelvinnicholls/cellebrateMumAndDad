@@ -42,11 +42,10 @@ export class PersonService {
         , private userService: UserService
         , private authUserService: AuthUserService
         , private appService: AppService) {
-        this.initialize();
     }
 
-    async initialize() {
-        this.getPeople();
+    initialize(): Promise<any> {
+        return this.getPeople().toPromise();
     }
 
     public findPersonById(id: any): Person {
@@ -153,7 +152,7 @@ export class PersonService {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
             let personService = this;
-            this.http.get(Consts.API_URL_PEOPLE_ROOT, { headers: headers })
+            return this.http.get(Consts.API_URL_PEOPLE_ROOT, { headers: headers })
                 .map((response: Response) => {
                     let people = response.json().people;
                     let transformedPersons: Person[] = [];
@@ -166,13 +165,14 @@ export class PersonService {
                         transformedPersons.push(newPerson);
                         personService.multiSelectPersonOptions.push({ id: person._id, name: person.person });
                     };
-                    this.people = transformedPersons;
+                    personService.people = transformedPersons;
                     personService.sortPeople();
                     personService.retrievedPeople = true;
+                    return personService.people;
                 }).catch((error: Response) => {
                     personService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-                }).subscribe();
+                });
         };
     };
 }

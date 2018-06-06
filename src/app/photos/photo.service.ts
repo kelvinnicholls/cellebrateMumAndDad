@@ -1,7 +1,6 @@
 import { Http, Response, Headers } from "@angular/http";
 import { Injectable, EventEmitter } from "@angular/core";
 import { Subject } from 'rxjs/Subject';
-import { Router } from "@angular/router";
 import * as moment from 'moment';
 import { IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
 import 'rxjs/Rx';
@@ -29,13 +28,6 @@ import { ZipperService } from "../shared/zipper/zipper-service";
 
 @Injectable()
 export class PhotoService {
-
-
-    // static init():PhotoService {
-
-    //     Utils.log(LoglevelEnum.Error, this, "PhotoService.init");
-    //     // this.getPhotos().subscribe();
-    // }
 
     initialize(): Promise<any> {
         return this.getPhotos().toPromise();
@@ -101,17 +93,12 @@ export class PhotoService {
         , private personService: PersonService
         , private authUserService: AuthUserService
         , private zipperService: ZipperService
-        // , private router: Router
     ) {
 
 
     }
 
-    // initialize(): Promise<Photo[]> {
-    //     //Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 1");
-    //     return this.getPhotos().toPromise();
-    //     //Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 2");
-    // }
+
 
     photosChanged = new Subject<Photo[]>();
     photoDeleted = new Subject<Photo>();
@@ -132,27 +119,10 @@ export class PhotoService {
     }
 
     findPhotoById(id: any): Photo {
-        Utils.log(LoglevelEnum.Error, this, "PhotoService.findPhotoById", "id =", id);
-        Utils.log(LoglevelEnum.Error, this, "PhotoService.findPhotoById", "this.allPhotos.length =", this.allPhotos.length);
-        Utils.log(LoglevelEnum.Error, this, "PhotoService.findPhotoById", "this.retrievedPhotos =", this.retrievedPhotos);
-        if (this.retrievedPhotos) {
-            let retPhoto: Photo = this.allPhotos.find((photo) => {
-                return photo._id === id;
-            });
-            Utils.log(LoglevelEnum.Error, this, "PhotoService.findPhotoById", "retPhoto =", retPhoto);
-            return retPhoto;
-        } else {
-            this.getPhotos(true).subscribe(
-                () => {
-                    Utils.log(LoglevelEnum.Error, this, "this.getPhotos(true).subscribe", "this.allPhotos.length =", this.allPhotos.length);
-                    let retPhoto: Photo = this.allPhotos.find((photo) => {
-                        Utils.log(LoglevelEnum.Error, this, "let retPhoto: Photo = this.allPhotos.find((photo) =>", "photo =", photo);
-                        return photo._id === id;
-                    });
-                    Utils.log(LoglevelEnum.Error, this, "PhotoService.findPhotoById", "retPhoto =", retPhoto);
-                    return retPhoto;
-                });
-        }
+        let retPhoto: Photo = this.allPhotos.find((photo) => {
+            return photo._id === id;
+        });
+        return retPhoto;
     }
 
     private socket;
@@ -537,14 +507,12 @@ export class PhotoService {
 
     getPhotos(refresh: Boolean = false) {
         let photoService = this;
-        Utils.log(LoglevelEnum.Error, photoService, "PhotoService.getPhotos", "refresh =", refresh);
         if ((!photoService.retrievedPhotos || refresh) && photoService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
             return this.http.get(Consts.API_URL_MEDIAS_ROOT, { headers: headers })
                 .map((response: Response) => {
-                    Utils.log(LoglevelEnum.Error, photoService, "PhotoService.getPhotos", "response =", response);
                     const photos = response.json().medias;
                     let transformedPhotos: Photo[] = [];
                     photoService.multiSelectPhotoOptions = [];
@@ -562,7 +530,6 @@ export class PhotoService {
                     };
                     photoService.bigTotalItems = photoService.photos.length;
                     photoService.retrievedPhotos = true;
-                    Utils.log(LoglevelEnum.Error, photoService, "PhotoService.getPhotos", " photoService.photos.length =", photoService.photos.length);
                     return photoService.photos;
                 })
                 .catch((error: Response) => {

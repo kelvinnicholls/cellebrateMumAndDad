@@ -38,13 +38,12 @@ export class UserService {
         , private errorService: ErrorService
         , private appService: AppService
         , private searchService: SearchService
-        // , private router: Router
+
     ) {
-        this.initialize();
     }
 
-    async initialize() {
-        this.getUsers();
+    initialize(): Promise<any> {
+        return this.getUsers().toPromise();
     }
 
     usersChanged = new Subject<User[]>();
@@ -204,7 +203,7 @@ export class UserService {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
-            this.http.get(Consts.API_URL_USERS_ROOT, { headers: headers })
+            return this.http.get(Consts.API_URL_USERS_ROOT, { headers: headers })
                 .map((response: Response) => {
                     const users = response.json();
                     let transformedUsers: User[] = [];
@@ -239,11 +238,12 @@ export class UserService {
                         userService.users = userService.allUsers.slice(0);
                     };
                     userService.retrievedUsers = true;
+                    return userService.users;
                 })
                 .catch((error: Response) => {
                     userService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-                }).subscribe();
+                });
         };
     }
 

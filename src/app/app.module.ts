@@ -57,45 +57,29 @@ import { Consts } from "./shared/consts";
 
 // https://www.intertech.com/Blog/angular-4-tutorial-run-code-during-app-initialization/
 // https://hackernoon.com/hook-into-angular-initialization-process-add41a6b7e
+
+
 export function init_photo_service(photoService: PhotoService) {
     return () => photoService.initialize();
 }
 
-
-// USE DUMMY SERVICE TO TEST
-
-
-export function onAppInit1(/* dependencies */): () => Promise<any> {
-    return (): Promise<any> => {
-        return new Promise((resolve, reject) => {
-            console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit1:: inside promise`);
-
-            setTimeout(() => {
-                console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit1:: inside setTimeout`);
-                // doing something
-                // ...
-                resolve();
-            }, 3000);
-        });
-    };
+export function init_memory_service(memoryService: MemoryService) {
+    return () => memoryService.initialize();
 }
 
-export function onAppInit2(/* dependencies */): () => Promise<any> {
-    return (): Promise<any> => {
-        return new Promise((resolve, reject) => {
-            console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit2:: inside promise`);
-
-            setTimeout(() => {
-                console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit2:: inside setTimeout`);
-                // doing something
-                // ...
-
-                resolve();
-            }, 5000);
-        });
-    };
+export function init_user_service(userService: UserService) {
+    return () => userService.initialize();
 }
 
+
+export function init_tag_service(tagService: TagService) {
+    return () => tagService.initialize();
+}
+
+
+export function init_person_service(personService: PersonService) {
+    return () => personService.initialize();
+}
 
 @NgModule({
     declarations: [
@@ -119,18 +103,6 @@ export function onAppInit2(/* dependencies */): () => Promise<any> {
         , AuthService
         , UserService
         , PhotoService
-        , {
-            provide: APP_INITIALIZER,
-            useFactory: onAppInit1,
-            multi: true,
-            deps: [/* your dependencies */]
-        }
-        , {
-            provide: APP_INITIALIZER,
-            useFactory: onAppInit2,
-            multi: true,
-            deps: [/* your dependencies */]
-        }
         , ZipperService
         , MemoryService
         , ErrorService
@@ -144,6 +116,10 @@ export function onAppInit2(/* dependencies */): () => Promise<any> {
         , SlideShowService
         , FileStackService
         ,{ provide: APP_INITIALIZER, useFactory: init_photo_service, deps: [PhotoService], multi: true }
+        ,{ provide: APP_INITIALIZER, useFactory: init_memory_service, deps: [MemoryService], multi: true }
+        ,{ provide: APP_INITIALIZER, useFactory: init_user_service, deps: [UserService], multi: true }
+        ,{ provide: APP_INITIALIZER, useFactory: init_tag_service, deps: [TagService], multi: true }
+        ,{ provide: APP_INITIALIZER, useFactory: init_person_service, deps: [PersonService], multi: true }
     ],
     bootstrap: [AppComponent]
 })

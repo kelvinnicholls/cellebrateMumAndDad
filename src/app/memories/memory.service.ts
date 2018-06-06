@@ -51,12 +51,13 @@ export class MemoryService {
         , private tagService: TagService
         , private personService: PersonService
         , private authUserService: AuthUserService
-        , private router: Router) {
-        this.initialize();
+    ) {
+       
     }
 
-    async initialize() {
-        this.getMemories();
+
+    initialize(): Promise<any> {
+        return this.getMemories().toPromise();
     }
 
     memoriesChanged = new Subject<Memory[]>();
@@ -357,7 +358,7 @@ export class MemoryService {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
 
-            this.http.get(Consts.API_URL_MEMORIES_ROOT, { headers: headers })
+            return this.http.get(Consts.API_URL_MEMORIES_ROOT, { headers: headers })
                 .map((response: Response) => {
                     const memories = response.json().memories;
                     let transformedMemories: Memory[] = [];
@@ -451,11 +452,12 @@ export class MemoryService {
                     };
                     memoryService.bigTotalItems = memoryService.memories.length;
                     memoryService.retrievedMemories = true;
+                    return memoryService.memories;
                 })
                 .catch((error: Response) => {
                     memoryService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-                }).subscribe();
+                });
         };
     }
 

@@ -64,13 +64,14 @@ export class TagService {
         , private userService: UserService
         , private authUserService: AuthUserService
         , private appService: AppService) {
-        this.initialize();
     }
 
 
-    async initialize() {
-        this.getTags();
+    initialize(): Promise<any> {
+        return this.getTags().toPromise();
     }
+
+
 
     showTagSub = new EventEmitter<EventEmitter<Tag>>();
 
@@ -158,7 +159,7 @@ export class TagService {
         if ((!tagService.retrievedTags || refresh) && tagService.authUserService.isLoggedIn()) {
             const headers: Headers = new Headers();
             headers.set(Consts.X_AUTH, localStorage.getItem('token'));
-            this.http.get(Consts.API_URL_TAGS_ROOT, { headers: headers })
+            return this.http.get(Consts.API_URL_TAGS_ROOT, { headers: headers })
                 .map((response: Response) => {
                     let tags = response.json().tags;
                     let transformedTags: Tag[] = [];
@@ -169,15 +170,16 @@ export class TagService {
                             tag._id,
                             tag._creator);
                         transformedTags.push(newTag);
-                        tagService.multiSelectTagOptions.push({ id: tag._id, name: tag.tag });
+                        tagService.multiSelectTagOptions.push({ id: tag._id, name: tag.tag }); 
                     };
-                    this.tags = transformedTags;
+                    tagService.tags = transformedTags;
                     tagService.sortTags();
                     tagService.retrievedTags = true;
+                    return tagService.tags;
                 }).catch((error: Response) => {
                     tagService.errorService.handleError((error.toString && error.toString()) || (error.json && error.json()));
                     return Observable.throw((error.toString && error.toString()) || (error.json && error.json()));
-                }).subscribe();
+                });
         };
     };
 }
