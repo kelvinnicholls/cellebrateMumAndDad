@@ -33,7 +33,13 @@ export class UserService {
     private allUsers: User[] = [];
     private retrievedUsers = false;
     
-    constructor(private authUserService: AuthUserService, private http: Http, private errorService: ErrorService, private appService: AppService, private searchService: SearchService, private router: Router) {
+    constructor(private authUserService: AuthUserService
+        , private http: Http
+        , private errorService: ErrorService
+        , private appService: AppService
+        , private searchService: SearchService
+        // , private router: Router
+    ) {
         this.initialize();
     }
 

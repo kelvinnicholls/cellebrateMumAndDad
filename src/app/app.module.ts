@@ -1,4 +1,5 @@
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { Http } from "@angular/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 //import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -44,11 +45,56 @@ import { TagService } from "./shared/tags/tag.service";
 import { PersonService } from "./shared/people/person.service";
 import { FileStackService } from "./shared/file-stack/file-stack.service";
 
+import * as moment from 'moment';
+import { Consts } from "./shared/consts";
+// import { Router } from "@angular/router";
+// import { PhotoService2 } from "./photos/photo.service2";
+// import { UserService2 } from "./users/user.service2";
 
 //https://www.npmjs.com/package/angular2-tooltip
 //import {ToolTipModule} from 'angular2-tooltip'
 //https://ng-bootstrap.github.io/#/getting-started
 
+// https://www.intertech.com/Blog/angular-4-tutorial-run-code-during-app-initialization/
+// https://hackernoon.com/hook-into-angular-initialization-process-add41a6b7e
+export function init_photo_service(photoService: PhotoService) {
+    return () => photoService.initialize();
+}
+
+
+// USE DUMMY SERVICE TO TEST
+
+
+export function onAppInit1(/* dependencies */): () => Promise<any> {
+    return (): Promise<any> => {
+        return new Promise((resolve, reject) => {
+            console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit1:: inside promise`);
+
+            setTimeout(() => {
+                console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit1:: inside setTimeout`);
+                // doing something
+                // ...
+                resolve();
+            }, 3000);
+        });
+    };
+}
+
+export function onAppInit2(/* dependencies */): () => Promise<any> {
+    return (): Promise<any> => {
+        return new Promise((resolve, reject) => {
+            console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit2:: inside promise`);
+
+            setTimeout(() => {
+                console.log(`${moment().format(Consts.DATE_TIME_DISPLAY_FORMAT)} onAppInit2:: inside setTimeout`);
+                // doing something
+                // ...
+
+                resolve();
+            }, 5000);
+        });
+    };
+}
 
 
 @NgModule({
@@ -67,7 +113,38 @@ import { FileStackService } from "./shared/file-stack/file-stack.service";
         ChatModule,
         SharedModule
     ],
-    providers: [CommentsService, PersonService, TagService, AuthService, UserService, PhotoService, ZipperService, MemoryService, ErrorService, AuthGuard, { provide: ToastOptions, useClass: ToastCustomOption }, AppService, DialogService, ChatService, AuthUserService, SearchService, SlideShowService, FileStackService],
+    providers: [CommentsService
+        , PersonService
+        , TagService
+        , AuthService
+        , UserService
+        , PhotoService
+        , {
+            provide: APP_INITIALIZER,
+            useFactory: onAppInit1,
+            multi: true,
+            deps: [/* your dependencies */]
+        }
+        , {
+            provide: APP_INITIALIZER,
+            useFactory: onAppInit2,
+            multi: true,
+            deps: [/* your dependencies */]
+        }
+        , ZipperService
+        , MemoryService
+        , ErrorService
+        , AuthGuard
+        , { provide: ToastOptions, useClass: ToastCustomOption }
+        , AppService
+        , DialogService
+        , ChatService
+        , AuthUserService
+        , SearchService
+        , SlideShowService
+        , FileStackService
+        ,{ provide: APP_INITIALIZER, useFactory: init_photo_service, deps: [PhotoService], multi: true }
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

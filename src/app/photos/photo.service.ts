@@ -31,6 +31,17 @@ import { ZipperService } from "../shared/zipper/zipper-service";
 export class PhotoService {
 
 
+    // static init():PhotoService {
+
+    //     Utils.log(LoglevelEnum.Error, this, "PhotoService.init");
+    //     // this.getPhotos().subscribe();
+    // }
+
+    initialize(): Promise<any> {
+        return this.getPhotos().toPromise();
+    }
+
+
     photo: string = "photo";
     photoplural: string = this.photo + "'s";
     public selectedPhotos: String[] = [];
@@ -90,16 +101,17 @@ export class PhotoService {
         , private personService: PersonService
         , private authUserService: AuthUserService
         , private zipperService: ZipperService
-        , private router: Router) {
-        this.initialize();
+        // , private router: Router
+    ) {
+
 
     }
 
-    async initialize() {
-        Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 1");
-        await this.getPhotos().toPromise();
-        Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 2");
-    }
+    // initialize(): Promise<Photo[]> {
+    //     //Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 1");
+    //     return this.getPhotos().toPromise();
+    //     //Utils.log(LoglevelEnum.Error, this, "PhotoService.initialize 2");
+    // }
 
     photosChanged = new Subject<Photo[]>();
     photoDeleted = new Subject<Photo>();
