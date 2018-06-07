@@ -42,9 +42,18 @@ export class UserService {
     ) {
     }
 
+
+    
     initialize(): Promise<any> {
-        return this.getUsers().toPromise();
+        if (this.authUserService.isLoggedIn()) {
+            return this.getUsers().toPromise();
+        } else
+        {
+            return Promise.resolve();;
+        }
     }
+
+
 
     usersChanged = new Subject<User[]>();
 

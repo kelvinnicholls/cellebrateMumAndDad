@@ -68,9 +68,13 @@ export class TagService {
 
 
     initialize(): Promise<any> {
-        return this.getTags().toPromise();
+        if (this.authUserService.isLoggedIn()) {
+            return this.getTags().toPromise();
+        } else
+        {
+            return Promise.resolve();;
+        }
     }
-
 
 
     showTagSub = new EventEmitter<EventEmitter<Tag>>();

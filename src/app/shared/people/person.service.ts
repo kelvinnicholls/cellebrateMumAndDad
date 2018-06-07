@@ -44,8 +44,14 @@ export class PersonService {
         , private appService: AppService) {
     }
 
+
     initialize(): Promise<any> {
-        return this.getPeople().toPromise();
+        if (this.authUserService.isLoggedIn()) {
+            return this.getPeople().toPromise();
+        } else
+        {
+            return Promise.resolve();;
+        }
     }
 
     public findPersonById(id: any): Person {

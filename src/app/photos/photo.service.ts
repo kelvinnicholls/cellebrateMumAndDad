@@ -29,9 +29,16 @@ import { ZipperService } from "../shared/zipper/zipper-service";
 @Injectable()
 export class PhotoService {
 
+
     initialize(): Promise<any> {
-        return this.getPhotos().toPromise();
+        if (this.authUserService.isLoggedIn()) {
+            return this.getPhotos().toPromise();
+        } else
+        {
+            return Promise.resolve();;
+        }
     }
+
 
 
     photo: string = "photo";

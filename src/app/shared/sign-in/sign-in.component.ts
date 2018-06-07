@@ -14,6 +14,7 @@ import { PersonService } from "../../shared/people/person.service";
 import { PhotoService } from "../../photos/photo.service";
 import { MemoryService } from "../../memories/memory.service";
 
+import { Utils, LoglevelEnum } from '../../shared/utils/utils';
 
 import { PasswordStrengthBarComponent } from '../password-strength-bar/password-strength-bar.component';
 import { PasswordValidationService } from '../password-validation.service';
@@ -53,16 +54,25 @@ export class SignInComponent implements OnInit, OnDestroy {
                 localStorage.setItem(Consts.LOGGED_IN_USER, loggedInUser);
                 router.navigate(['']);
                 this.appService.showToast(Consts.SUCCESS, "User signed in successfully.");
-                this.chatService.connect(userName,payload);
-                this.memoryService.getMemories(true);
-                this.userService.getUsers(true);
-                this.photoService.getPhotos(true).subscribe();
-                this.tagService.getTags(true);
-                this.personService.getPeople(true);
+                this.chatService.connect(userName, payload);
+
+
+
+                let memPromise = this.memoryService.getMemories(true).toPromise();
+                let userPromise = this.userService.getUsers(true).toPromise();
+                let photoPromise = this.photoService.getPhotos(true).toPromise();
+                let tagPromise = this.tagService.getTags(true).toPromise();
+                let peoplePromise = this.personService.getPeople(true).toPromise();
+
+                Promise.all([memPromise, userPromise, photoPromise, tagPromise, peoplePromise]).then((retVals) => {
+                    Utils.log(LoglevelEnum.Info, this, "SignInComponent.onSubmit all promises complete", retVals);
+                }).catch((err) => {
+                    Utils.log(LoglevelEnum.Error, this, "SignInComponent.onSubmit all promises not complete", err);
+                });
             }
-            , (err) => {
-                this.errorService.handleError(JSON.parse(err._body));
-            });
+                , (err) => {
+                    this.errorService.handleError(JSON.parse(err._body));
+                });
         this.myForm.reset();
     }
 

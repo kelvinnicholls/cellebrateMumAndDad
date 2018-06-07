@@ -57,7 +57,12 @@ export class MemoryService {
 
 
     initialize(): Promise<any> {
-        return this.getMemories().toPromise();
+        if (this.authUserService.isLoggedIn()) {
+            return this.getMemories().toPromise();
+        } else
+        {
+            return Promise.resolve();;
+        }
     }
 
     memoriesChanged = new Subject<Memory[]>();
