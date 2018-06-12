@@ -26,6 +26,7 @@ import { CommentsService } from "../shared/comments/comments.service";
 import { Utils, LoglevelEnum, SortDataType } from "../shared/utils/utils";
 import { User } from "../users/user.model";
 import { AuthUserService } from "../auth/auth-user.service";
+import { OrderByOption, OrderByDataTypeEnum } from "../shared/search/order-by-option.model";
 
 
 @Injectable()
@@ -593,6 +594,14 @@ export class MemoryService {
         searchFields.push('from_date');
         searchFields.push('to_date');
 
-        this.searchService.showSearch("Search Memories", "Enter criteria to restrict list of memories", "Find", "Cancel", retSearchSub, SearchTypeEnum.Memories, searchFields);
+
+        let orderByFields: OrderByOption[] = [];
+        orderByFields.push(new OrderByOption('title','Title',OrderByDataTypeEnum.String,true));
+        orderByFields.push(new OrderByOption('description','Description'));
+        orderByFields.push(new OrderByOption('addedDate','Date Added',OrderByDataTypeEnum.Date));
+        orderByFields.push(new OrderByOption('memoryDate','Date of Memory',OrderByDataTypeEnum.Date));
+
+
+        this.searchService.showSearch("Search Memories", "Enter criteria to restrict list of memories", "Find", "Cancel", retSearchSub, SearchTypeEnum.Memories, searchFields,orderByFields);
     }
 }

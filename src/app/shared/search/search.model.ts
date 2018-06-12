@@ -4,10 +4,20 @@ import { SearchRet } from "./search-ret.model";
 import { SearchTypeEnum } from "./search-type.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
 import { Consts } from "../../shared/consts";
-import { Utils, LoglevelEnum } from "../../shared/utils/utils";
+import { Utils, LoglevelEnum, SortDataType } from "../../shared/utils/utils";
+import { OrderByOption, OrderByDirectionEnum, OrderByDataTypeEnum } from "./order-by-option.model";
+
+
 
 export class Search {
-  constructor(public title: string, public message: string, public buttonOneTitle: string, public buttonTwoTitle: string, public retSearchSub: EventEmitter<SearchRet>, public searchType: SearchTypeEnum, public searchFields: String[]) { }
+  constructor(public title: string
+    , public message: string
+    , public buttonOneTitle: string
+    , public buttonTwoTitle: string
+    , public retSearchSub: EventEmitter<SearchRet>
+    , public searchType: SearchTypeEnum
+    , public searchFields: String[]
+    , public orderByOptions: OrderByOption[]) { }
 
   static convertCase(val: String, convert: Boolean) {
     let retVal: String = val;
@@ -32,8 +42,8 @@ export class Search {
         if (arrayElement[elementName]) {
           let attributeValue = arrayElement[elementName];
           let typeOfAttributeValue = typeof attributeValue;
-          Utils.log(LoglevelEnum.Info,this,"attributeValue", attributeValue);
-          Utils.log(LoglevelEnum.Info,this,"typeOfAttributeValue", typeOfAttributeValue);
+          Utils.log(LoglevelEnum.Info, this, "attributeValue", attributeValue);
+          Utils.log(LoglevelEnum.Info, this, "typeOfAttributeValue", typeOfAttributeValue);
           switch (typeOfAttributeValue) {
             case 'string':
               if (searchElement.type === 'y_n_both') {
@@ -101,7 +111,7 @@ export class Search {
             case 'object':
               if (Object.prototype.toString.call(arrayElement[elementName]) === "[object Array]") {
                 if (searchElement.type === 'array') {
-                  Utils.log(LoglevelEnum.Info,this,attributeValue);
+                  Utils.log(LoglevelEnum.Info, this, attributeValue);
                   let matchingElementsCount = 0;
                   searchElement.value.forEach((searchElementValue) => {
                     attributeValue.forEach(attributeValueElement => {
@@ -110,7 +120,7 @@ export class Search {
                       };
                     });
                   });
-                  if ((matchingElementsCount === searchElement.value.length && searchRet.matchAll) || (matchingElementsCount >0 && !searchRet.matchAll)) {
+                  if ((matchingElementsCount === searchElement.value.length && searchRet.matchAll) || (matchingElementsCount > 0 && !searchRet.matchAll)) {
                     matchingElementFound = true;
                   };
                   nonMatchingElementFound = !matchingElementFound;
@@ -134,11 +144,38 @@ export class Search {
 
   static restrict(array: any[], searchRet: SearchRet) {
     let retArray: any[] = [];
-    array.forEach((element) => {
-      if (this.elementMatches(element, searchRet)) {
-        retArray.push(element);
+
+    if (searchRet.searchElements && searchRet.searchElements.length > 0) {
+      // restict array based on passed data
+      array.forEach((element) => {
+        if (this.elementMatches(element, searchRet)) {
+          retArray.push(element);
+        }
+      });
+    } else {
+      // just sort the passed array not restricting
+      retArray = array.slice();
+    }
+
+
+    let property = searchRet.orderByOption.field;
+
+    if (property) {
+      let format = null;
+      if (searchRet.orderByDirection === OrderByDirectionEnum.Descending) {
+        property = '-' + property;
       }
-    });
+
+      let sortDataType: SortDataType = SortDataType.String;
+
+      if (searchRet.orderByOption.type === OrderByDataTypeEnum.Date) {
+        sortDataType = SortDataType.Moment;
+        format = Consts.DATE_TIME_DISPLAY_FORMAT;
+      }
+      retArray = retArray.sort(Utils.dynamicSort(property, sortDataType, format));
+    }
+
+
     return retArray;
   }
 }

@@ -17,6 +17,7 @@ import { Person } from "../people/person.model";
 import { Photo } from "../../photos/photo.model";
 import { AuthUserService } from "../../auth/auth-user.service";
 import { Utils, LoglevelEnum, SortDataType } from "../../shared/utils/utils";
+import { OrderByOption, OrderByDirectionEnum, OrderByDataTypeEnum } from "./order-by-option.model";
 
 @Component({
   selector: 'app-search',
@@ -26,14 +27,26 @@ import { Utils, LoglevelEnum, SortDataType } from "../../shared/utils/utils";
 export class SearchComponent implements OnInit {
   search: Search;
   display = 'none';
+  availableOrderByFields: OrderByOption[];
+
   myForm: FormGroup;
+
+  public orderByDirectionEnumAsc:string = OrderByDirectionEnum.Ascending.toString();
+  public orderByDirectionEnumDesc:string = OrderByDirectionEnum.Descending.toString();
+
+  public selectedOrderByField: string;
+
+  public selectedOrderByDirection: string;
+
   private showSearchSub: EventEmitter<Search>;
   private retSearchSub: EventEmitter<SearchRet>;
   private searchRet: SearchRet = new SearchRet();
 
   private hideMatchCriteriaText: String = "Hide Match Criteria";
   public showMatchCriteriaText: String = "Show Match Criteria";
+
   public toggleShowHideMatchCriteriaText = this.showMatchCriteriaText;
+
 
   getConsts() {
     return Consts;
@@ -44,6 +57,18 @@ export class SearchComponent implements OnInit {
       this.toggleShowHideMatchCriteriaText = this.showMatchCriteriaText;
     } else {
       this.toggleShowHideMatchCriteriaText = this.hideMatchCriteriaText;
+    }
+  }
+
+  private hideOrderByCriteriaText: String = "Hide Order By Fields";
+  public showOrderByCriteriaText: String = "Show Order By Fields";
+  public toggleShowHideOrderByCriteriaText = this.showOrderByCriteriaText;
+
+  toggleShowHideOrderByCriteria() {
+    if (this.toggleShowHideOrderByCriteriaText === this.hideOrderByCriteriaText) {
+      this.toggleShowHideOrderByCriteriaText = this.showOrderByCriteriaText;
+    } else {
+      this.toggleShowHideOrderByCriteriaText = this.hideOrderByCriteriaText;
     }
   }
 
@@ -122,6 +147,7 @@ export class SearchComponent implements OnInit {
     this.photoService.selectedPhotos = [];
     this.myForm.get('from_date').setValue('1900-01-01');
     this.myForm.get('to_date').setValue(moment().format(Consts.DATE_DB_FORMAT));
+    this.myForm.get('orderByDirection').setValue(this.orderByDirectionEnumAsc);
   }
 
   onSubmit() {
@@ -197,13 +223,25 @@ export class SearchComponent implements OnInit {
 
     this.searchRet.searchRetEnum = SearchRetEnum.ButtonOne;
     // add search criteria to searchRet, this may need to be onSubmit
+
+    this.searchRet.orderByDirection = OrderByDirectionEnum[<string>this.myForm.value.orderByDirection];
+
+    this.searchRet.orderByOption = this.availableOrderByFields.find(element => {
+      //return element.field === this.selectedOrderByField;
+
+      return element.field === this.myForm.value.orderByField;
+
+
+
+    });
+
     this.search.retSearchSub.emit(this.searchRet);
     this.reset();
 
   }
 
   onCaseSensitive(event) {
-    Utils.log(LoglevelEnum.Info,this,event);
+    Utils.log(LoglevelEnum.Info, this, event);
   }
 
   onButtonTwo() {
@@ -233,44 +271,50 @@ export class SearchComponent implements OnInit {
 
     let searchComponent = this;
 
-   // if (searchComponent.authUserService.isLoggedIn()) {
+    // if (searchComponent.authUserService.isLoggedIn()) {
 
 
 
-      // searchComponent.tagService.getTags().subscribe(
-      //   (tags: Tag[]) => {
-      //     searchComponent.tagService.multiSelectTagOptions = [];
-      //     for (let tag of tags) {
-      //       searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
-      //     };
-      //     Utils.log(LoglevelEnum.Info,this,searchComponent.tagService.multiSelectTagOptions);
-      //   }
-      // );
+    // searchComponent.tagService.getTags().subscribe(
+    //   (tags: Tag[]) => {
+    //     searchComponent.tagService.multiSelectTagOptions = [];
+    //     for (let tag of tags) {
+    //       searchComponent.tagService.multiSelectTagOptions.push({ id: tag.id, name: tag.tag });
+    //     };
+    //     Utils.log(LoglevelEnum.Info,this,searchComponent.tagService.multiSelectTagOptions);
+    //   }
+    // );
 
-      //   searchComponent.personService.getPeople().subscribe(
-      //     (people: Person[]) => {
-      //       searchComponent.personService.multiSelectPersonOptions = [];
-      //       for (let person of people) {
-      //         searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
-      //       };
-      //       Utils.log(LoglevelEnum.Info,this,searchComponent.personService.multiSelectPersonOptions);
-      //     }
-      //   );
+    //   searchComponent.personService.getPeople().subscribe(
+    //     (people: Person[]) => {
+    //       searchComponent.personService.multiSelectPersonOptions = [];
+    //       for (let person of people) {
+    //         searchComponent.personService.multiSelectPersonOptions.push({ id: person.id, name: person.person });
+    //       };
+    //       Utils.log(LoglevelEnum.Info,this,searchComponent.personService.multiSelectPersonOptions);
+    //     }
+    //   );
 
-      //   searchComponent.photoService.getPhotos().subscribe(
-      //     (photos: Photo[]) => {
-      //       searchComponent.photoService.multiSelectPhotoOptions = [];
-      //       for (let photo of photos) {
-      //         searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
-      //       };
-      //       Utils.log(LoglevelEnum.Info,this,searchComponent.photoService.multiSelectPhotoOptions);
-      //     }
-      //   );
+    //   searchComponent.photoService.getPhotos().subscribe(
+    //     (photos: Photo[]) => {
+    //       searchComponent.photoService.multiSelectPhotoOptions = [];
+    //       for (let photo of photos) {
+    //         searchComponent.photoService.multiSelectPhotoOptions.push({ id: photo._id, name: photo.title });
+    //       };
+    //       Utils.log(LoglevelEnum.Info,this,searchComponent.photoService.multiSelectPhotoOptions);
+    //     }
+    //   );
     //};
+
+
+    //this.selectedOrderByDirection = this.orderByDirectionEnumAsc;
+    //this.myForm.get('orderByDirection').setValue(this.orderByDirectionEnumAsc);
 
     this.myForm = this.formBuilder.group({
       caseSensitive: new FormControl(null, null),
       matchAll: new FormControl('true', null),
+      orderByField: new FormControl(null, null),
+      orderByDirection: new FormControl(this.orderByDirectionEnumAsc, null),
       matchCriteria: new FormControl('Starts With', null),
       email: new FormControl(null, null),
       name: new FormControl(null, null),
@@ -291,59 +335,82 @@ export class SearchComponent implements OnInit {
 
     this.showSearchSub = this.searchService.showSearchSub
       .subscribe(
-      (search: Search) => {
-        this.reset();
-        this.search = search;
-        this.display = 'block';
-        switch (this.search.searchType) {
-          case SearchTypeEnum.Users:
-            this.myForm = this.formBuilder.group({
-              caseSensitive: new FormControl(null, null),
-              matchAll: new FormControl('true', null),
-              matchCriteria: new FormControl('Starts With', null),
-              email: new FormControl(null, null),
-              name: new FormControl(null, null),
-              twitterId: new FormControl(null, null),
-              facebookId: new FormControl(null, null),
-              adminUser: new FormControl(null, null),
-              guestUser: new FormControl(null, null),
-              emailUpdates: new FormControl(null, null),
-              relationship: new FormControl(null, null),
-              from_date: new FormControl('1900-01-01', null),
-              to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
-            });
-            break;
-          case SearchTypeEnum.Photos:
-            this.myForm = this.formBuilder.group({
-              caseSensitive: new FormControl(null, null),
-              matchAll: new FormControl('true', null),
-              matchCriteria: new FormControl('Starts With', null),
-              title: new FormControl(null, null),
-              description: new FormControl(null, null),
-              tags: new FormControl(null, null),
-              people: new FormControl(null, null),
-              from_date: new FormControl('1900-01-01', null),
-              to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
-            });
-            break;
-          case SearchTypeEnum.Memories:
-            this.myForm = this.formBuilder.group({
-              caseSensitive: new FormControl(null, null),
-              matchAll: new FormControl('true', null),
-              matchCriteria: new FormControl('Starts With', null),
-              title: new FormControl(null, null),
-              description: new FormControl(null, null),
-              tags: new FormControl(null, null),
-              people: new FormControl(null, null),
-              photos: new FormControl(null, null),
-              from_date: new FormControl('1900-01-01', null),
-              to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
-            });
-            break;
+        (search: Search) => {
+          this.reset();
+          this.search = search;
+          this.display = 'block';
+          this.availableOrderByFields = search.orderByOptions;
 
-        };
-        this.searchRet = new SearchRet();
-      }
+
+
+          //this.selectedOrderByDirection = this.orderByDirectionEnumAsc;
+
+          //this.myForm.value.orderByDirection.setValue(this.orderByDirectionEnumAsc);
+          //this.myForm.get('orderByDirection').setValue(this.orderByDirectionEnumAsc);
+
+          this.selectedOrderByDirection = this.orderByDirectionEnumAsc;
+
+          search.orderByOptions.forEach((orderByField) => {
+            if (orderByField.isDefault) {
+              this.selectedOrderByField = orderByField.field;
+            }
+          })
+
+          switch (this.search.searchType) {
+            case SearchTypeEnum.Users:
+              this.myForm = this.formBuilder.group({
+                caseSensitive: new FormControl(null, null),
+                matchAll: new FormControl('true', null),
+                orderByField: new FormControl(this.selectedOrderByField, null),
+                orderByDirection: new FormControl(this.selectedOrderByDirection, null),
+                matchCriteria: new FormControl('Starts With', null),
+                email: new FormControl(null, null),
+                name: new FormControl(null, null),
+                twitterId: new FormControl(null, null),
+                facebookId: new FormControl(null, null),
+                adminUser: new FormControl(null, null),
+                guestUser: new FormControl(null, null),
+                emailUpdates: new FormControl(null, null),
+                relationship: new FormControl(null, null),
+                from_date: new FormControl('1900-01-01', null),
+                to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+              });
+              break;
+            case SearchTypeEnum.Photos:
+              this.myForm = this.formBuilder.group({
+                caseSensitive: new FormControl(null, null),
+                matchAll: new FormControl('true', null),
+                orderByField: new FormControl(this.selectedOrderByField, null),
+                orderByDirection: new FormControl(this.selectedOrderByDirection, null),
+                matchCriteria: new FormControl('Starts With', null),
+                title: new FormControl(null, null),
+                description: new FormControl(null, null),
+                tags: new FormControl(null, null),
+                people: new FormControl(null, null),
+                from_date: new FormControl('1900-01-01', null),
+                to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+              });
+              break;
+            case SearchTypeEnum.Memories:
+              this.myForm = this.formBuilder.group({
+                caseSensitive: new FormControl(null, null),
+                matchAll: new FormControl('true', null),
+                orderByField: new FormControl(this.selectedOrderByField, null),
+                orderByDirection: new FormControl(this.selectedOrderByDirection, null),
+                matchCriteria: new FormControl('Starts With', null),
+                title: new FormControl(null, null),
+                description: new FormControl(null, null),
+                tags: new FormControl(null, null),
+                people: new FormControl(null, null),
+                photos: new FormControl(null, null),
+                from_date: new FormControl('1900-01-01', null),
+                to_date: new FormControl(moment().format(Consts.DATE_DB_FORMAT), null)
+              });
+              break;
+
+          };
+          this.searchRet = new SearchRet();
+        }
       );
 
   }

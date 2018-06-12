@@ -1,7 +1,7 @@
 <div class="backdrop" [ngStyle]="{'display': display}"></div>
-<div  class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display': display}">
   <div class="modal-dialog" role="document">
-    <div  id="search-scroll" class="modal-content">
+    <div id="search-scroll" class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">{{ search?.title }}</h4>
         <button type="button" class="close" aria-label="Close" (click)="onClose()">
@@ -14,6 +14,66 @@
             <strong>{{ search?.message }}</strong>
           </p>
 
+
+          <div class="form-group row col col-sm-12">
+            <a target="_blank" href="javascript:void(0)" (click)="toggleShowHideOrderByCriteria()">{{toggleShowHideOrderByCriteriaText}}</a>
+          </div>
+          <div [hidden]="toggleShowHideOrderByCriteriaText === showOrderByCriteriaText">
+
+            <div class="form-group row col col-sm-12" [ngClass]="{
+        'has-danger': myForm.get('orderByField').invalid && (myForm.get('orderByField').dirty || myForm.get('orderByField').touched),
+        'has-success': myForm.get('orderByField').valid && (myForm.get('orderByField').dirty || myForm.get('orderByField').touched)
+      }">
+              <label for="orderByFields" class="col-sm-4 col-form-label">
+                <strong>Order By</strong>
+              </label>
+              <div class="col-sm-8">
+                <select class="form-control dropdown" [ngModel]="selectedOrderByField" formControlName="orderByField" [ngClass]="{
+        'form-control-danger': myForm.get('orderByField').invalid && (myForm.get('orderByField').dirty || myForm.get('orderByField').touched),
+        'form-control-success': myForm.get('orderByField').valid && (myForm.get('orderByField').dirty || myForm.get('orderByField').touched)
+      }">
+                  <option *ngFor="let orderByField of availableOrderByFields" value="{{orderByField.field}}">
+                    {{orderByField.description}}
+                  </option>
+                </select>
+                <div class="form-control-feedback" *ngIf="myForm.get('orderByField').errors && (myForm.get('orderByField').dirty || myForm.get('orderByField').touched)">
+                  <p *ngIf="myForm.get('orderByField').errors.required">Order By Field is required</p>
+
+                </div>
+                <small *ngIf="myForm.get('orderByField').invalid" class="form-text text-muted">Order By Field?</small>
+              </div>
+            </div>
+            
+
+            <div class="form-group row col col-sm-12" [ngClass]="{
+              'has-danger': myForm.get('orderByDirection').invalid && (myForm.get('orderByDirection').dirty || myForm.get('orderByDirection').touched),
+              'has-success': myForm.get('orderByDirection').valid && (myForm.get('orderByDirection').dirty || myForm.get('orderByDirection').touched)
+            }">
+                                  <label for="orderByDirection" class="col-sm-4 col-form-label">
+                      <strong>Direction</strong>
+                    </label>
+                    <div class="col-sm-8">
+                      <select class="form-control dropdown" [ngModel]="selectedOrderByDirection" formControlName="orderByDirection" [ngClass]="{
+              'form-control-danger': myForm.get('orderByDirection').invalid && (myForm.get('orderByDirection').dirty || myForm.get('orderByDirection').touched),
+              'form-control-success': myForm.get('orderByDirection').valid && (myForm.get('orderByDirection').dirty || myForm.get('orderByDirection').touched)
+            }">
+                        <option  value="{{orderByDirectionEnumAsc}}">{{orderByDirectionEnumAsc}}</option>
+                        <option  value="{{orderByDirectionEnumDesc}}">{{orderByDirectionEnumDesc}}</option>
+                      </select>
+                      <div class="form-control-feedback" *ngIf="myForm.get('orderByDirection').errors && (myForm.get('orderByDirection').dirty || myForm.get('orderByDirection').touched)">
+                        <p *ngIf="myForm.get('orderByDirection').errors.required">Order By Direction is required</p>
+      
+                      </div>
+                      <small *ngIf="myForm.get('orderByDirection').invalid" class="form-text text-muted">Order By Direction?</small>
+                    </div>
+                  </div>
+
+
+          </div>
+
+
+
+
           <div class="form-group row col col-sm-12">
             <a target="_blank" href="javascript:void(0)" (click)="toggleShowHideMatchCriteria()">{{toggleShowHideMatchCriteriaText}}</a>
           </div>
@@ -22,8 +82,7 @@
             <div class="form-group row col col-sm-12" [ngClass]="{
         'has-success': myForm.get('caseSensitive').valid && myForm.get('caseSensitive').dirty 
       }">
-              <label class="custom-control custom-checkbox offset-sm-4"
-                [ngClass]="{
+              <label class="custom-control custom-checkbox offset-sm-4" [ngClass]="{
         'form-control-success': myForm.get('caseSensitive').valid && myForm.get('caseSensitive').dirty
       }">
                 <input type="checkbox" class="custom-control-input form-control checkbox-inline" id="caseSensitive" formControlName="caseSensitive">
@@ -35,8 +94,7 @@
             <div class="form-group row col col-sm-12" [ngClass]="{
         'has-success': myForm.get('matchAll').valid && myForm.get('matchAll').dirty 
       }">
-              <label class="custom-control custom-checkbox offset-sm-4"
-                [ngClass]="{
+              <label class="custom-control custom-checkbox offset-sm-4" [ngClass]="{
         'form-control-success': myForm.get('matchAll').valid && myForm.get('matchAll').dirty
       }">
                 <input type="checkbox" class="custom-control-input form-control checkbox-inline" id="matchAll" formControlName="matchAll">
@@ -139,30 +197,30 @@
             <div *ngIf="canShow('guestUser')" class="form-group row col col-sm-12" [ngClass]="{
               'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && myForm.get('guestUser').value.length > 0)
             }">
-      
-                    <label for="guestUser" class="col-sm-4 col-form-label">
-                      <strong>Guest User?</strong>
-                    </label>
-                    <div id="guestUser" [ngClass]="{
+
+              <label for="guestUser" class="col-sm-4 col-form-label">
+                <strong>Guest User?</strong>
+              </label>
+              <div id="guestUser" [ngClass]="{
               'form-control-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && myForm.get('guestUser').value.length > 0)
             }">
-                      <label class="custom-control custom-radio">
-                        <input id="guestUserYes" name="guestUser" type="radio" value="Yes" class="custom-control-input" formControlName="guestUser">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Yes</span>
-                      </label>
-                      <label class="custom-control custom-radio">
-                        <input id="guestUserNo" name="guestUser" type="radio" value="No" class="custom-control-input" formControlName="guestUser">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">No</span>
-                      </label>
-                      <label class="custom-control custom-radio">
-                        <input id="guestUserBoth" name="guestUser" type="radio" value="Both" class="custom-control-input" formControlName="guestUser">
-                        <span class="custom-control-indicator"></span>
-                        <span class="custom-control-description">Both</span>
-                      </label>
-                    </div>
-                  </div>
+                <label class="custom-control custom-radio">
+                  <input id="guestUserYes" name="guestUser" type="radio" value="Yes" class="custom-control-input" formControlName="guestUser">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Yes</span>
+                </label>
+                <label class="custom-control custom-radio">
+                  <input id="guestUserNo" name="guestUser" type="radio" value="No" class="custom-control-input" formControlName="guestUser">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">No</span>
+                </label>
+                <label class="custom-control custom-radio">
+                  <input id="guestUserBoth" name="guestUser" type="radio" value="Both" class="custom-control-input" formControlName="guestUser">
+                  <span class="custom-control-indicator"></span>
+                  <span class="custom-control-description">Both</span>
+                </label>
+              </div>
+            </div>
 
             <div *ngIf="canShow('email')" class="form-group row col col-sm-12" [ngClass]="{
         'has-success': myForm.get('email').valid && (myForm.get('email').dirty && myForm.get('email').value.length > 0)
@@ -171,8 +229,7 @@
                 <strong>Email address</strong>
               </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="email" placeholder="Email address"
-                  formControlName="email" [ngClass]="{
+                <input type="text" class="form-control" id="email" placeholder="Email address" formControlName="email" [ngClass]="{
         'form-control-success': myForm.get('email').valid && (myForm.get('email').dirty && myForm.get('email').value.length > 0)
       }">
               </div>
@@ -185,8 +242,7 @@
                 <strong>Name</strong>
               </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name"
-                  [ngClass]="{
+                <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name" [ngClass]="{
         'form-control-success': myForm.get('name').valid && (myForm.get('name').dirty && myForm.get('name').value.length > 0)
       }">
               </div>
@@ -199,8 +255,7 @@
                 <strong>Twitter ID</strong>
               </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="twitterId" placeholder="Twitter ID"
-                  formControlName="twitterId" [ngClass]="{
+                <input type="text" class="form-control" id="twitterId" placeholder="Twitter ID" formControlName="twitterId" [ngClass]="{
         'form-control-success': myForm.get('twitterId').valid && myForm.get('twitterId').dirty && myForm.get('twitterId').value.length > 0
       }">
               </div>
@@ -213,8 +268,7 @@
                 <strong>Facebook ID</strong>
               </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="facebookId" placeholder="Facebook ID"
-                  formControlName="facebookId" [ngClass]="{
+                <input type="text" class="form-control" id="facebookId" placeholder="Facebook ID" formControlName="facebookId" [ngClass]="{
         'form-control-success': myForm.get('facebookId').valid && (myForm.get('facebookId').dirty && myForm.get('facebookId').value.length > 0)
       }">
               </div>
@@ -229,8 +283,7 @@
               <div class="col-sm-8" [ngClass]="{
         'form-control-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty && myForm.get('relationship').value.length > 0)
       }">
-                <select multiple class="form-control" id="relationship"
-                  formControlName="relationship">
+                <select multiple class="form-control" id="relationship" formControlName="relationship">
                   <option value="Son">Son</option>
                   <option value="Daughter">Daughter</option>
                   <option value="Brother">Brother</option>
@@ -249,8 +302,7 @@
                 <strong>Name</strong>
               </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="title" placeholder="Title" formControlName="title"
-                  [ngClass]="{
+                <input type="text" class="form-control" id="title" placeholder="Title" formControlName="title" [ngClass]="{
               'form-control-success': myForm.get('title').valid && (myForm.get('title').dirty && myForm.get('title').value.length > 0)
             }">
               </div>
@@ -263,8 +315,7 @@
                 <strong>Description</strong>
               </label>
               <div class="col-sm-8">
-                <input type="text" class="form-control" id="description" placeholder="Description"
-                  formControlName="description" [ngClass]="{
+                <input type="text" class="form-control" id="description" placeholder="Description" formControlName="description" [ngClass]="{
               'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty && myForm.get('description').value.length > 0)
             }">
               </div>
@@ -279,8 +330,8 @@
 
               <div class="col-sm-8">
                 <ss-multiselect-dropdown [texts]="tagService.multiSelectTagsTexts" [settings]="getConsts().multiSelectSettings" [(options)]="tagService.multiSelectTagOptions"
-                 formControlName="tags" [(ngModel)]="tagService.selectedTags"
-                  (ngModelChange)="onTagsChange($event)" class="form-control" [ngClass]="{
+                  formControlName="tags" [(ngModel)]="tagService.selectedTags" (ngModelChange)="onTagsChange($event)" class="form-control"
+                  [ngClass]="{
             'form-control-danger': myForm.get('tags').invalid && (myForm.get('tags').dirty || myForm.get('tags').touched)
           }"></ss-multiselect-dropdown>
               </div>
@@ -295,8 +346,8 @@
               </label>
               <div class="col-sm-8">
                 <ss-multiselect-dropdown [texts]="personService.multiSelectPeopleTexts" [settings]="getConsts().multiSelectSettings" [(options)]="personService.multiSelectPersonOptions"
-                  formControlName="people" [(ngModel)]="personService.selectedPeople"
-                  (ngModelChange)="onPeopleChange($event)" class="form-control" [ngClass]="{
+                  formControlName="people" [(ngModel)]="personService.selectedPeople" (ngModelChange)="onPeopleChange($event)"
+                  class="form-control" [ngClass]="{
             'form-control-danger': myForm.get('people').invalid && (myForm.get('people').dirty || myForm.get('people').touched)
           }"></ss-multiselect-dropdown>
               </div>
@@ -311,8 +362,8 @@
               </label>
               <div class="col-sm-8">
                 <ss-multiselect-dropdown [texts]="photoService.multiSelectPhotosTexts" [settings]="getConsts().multiSelectSettings" [(options)]="photoService.multiSelectPhotoOptions"
-                 formControlName="photos" [(ngModel)]="photoService.selectedPhotos"
-                  (ngModelChange)="onPhotosChange($event)" class="form-control" [ngClass]="{
+                  formControlName="photos" [(ngModel)]="photoService.selectedPhotos" (ngModelChange)="onPhotosChange($event)"
+                  class="form-control" [ngClass]="{
             'form-control-danger': myForm.get('photos').invalid && (myForm.get('photos').dirty || myForm.get('photos').touched)
           }"></ss-multiselect-dropdown>
               </div>
@@ -325,8 +376,7 @@
                 <strong>Date From</strong>
               </label>
               <div class="col-sm-8">
-                <input type="date" id="from_date" class="form-control"
-                  formControlName="from_date" [ngClass]="{
+                <input type="date" id="from_date" class="form-control" formControlName="from_date" [ngClass]="{
               'form-control-success': myForm.get('from_date').valid && (myForm.get('from_date').dirty && myForm.get('from_date').value.length > 0)
             }">
               </div>
@@ -339,8 +389,7 @@
                 <strong>Date To</strong>
               </label>
               <div class="col-sm-8">
-                <input type="date" id="to_date" class="form-control"
-                  formControlName="to_date" [ngClass]="{
+                <input type="date" id="to_date" class="form-control" formControlName="to_date" [ngClass]="{
               'form-control-success': myForm.get('to_date').valid && (myForm.get('to_date').dirty && myForm.get('to_date').value.length > 0)
             }">
               </div>

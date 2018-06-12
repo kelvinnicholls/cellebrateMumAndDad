@@ -16,7 +16,7 @@ import { Search } from "../shared/search/search.model";
 import { SearchTypeEnum } from "../shared/search/search-type.enum";
 import { Utils,LoglevelEnum } from "../shared/utils/utils";
 import { AuthUserService } from '../auth/auth-user.service';
-
+import { OrderByOption, OrderByDataTypeEnum } from "../shared/search/order-by-option.model";
 
 @Injectable()
 export class UserService {
@@ -450,6 +450,14 @@ export class UserService {
         searchFields.push('relationship');
         searchFields.push('from_date');
         searchFields.push('to_date');
-        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub, SearchTypeEnum.Users, searchFields);
+
+        let orderByFields: OrderByOption[] = [];
+        orderByFields.push(new OrderByOption('email','Email'));
+        orderByFields.push(new OrderByOption('name','Name',OrderByDataTypeEnum.String,true));
+        orderByFields.push(new OrderByOption('dob','Date Of Birth',OrderByDataTypeEnum.Date));
+        orderByFields.push(new OrderByOption('relationship','Relationship'));
+
+
+        this.searchService.showSearch("Search Users", "Enter criteria to restrict list of users", "Find", "Cancel", retSearchSub, SearchTypeEnum.Users, searchFields, orderByFields);
     }
 }

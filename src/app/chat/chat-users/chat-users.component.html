@@ -8,7 +8,7 @@
         <strong>{{chatUser.name}}
         </strong>
         <img *ngIf="chatUser.userObj && chatUser.userObj.profilePicInfo && chatUser.userObj.profilePicInfo.location"
-          [src]="getSrc(chatUser.userObj.profilePicInfo.location)" class="img-responsive" style="max-height: 1.8rem;">
+          [src]="getSrc(chatUser.userObj.profilePicInfo.location)" class="img-responsive rounded-circle" style="max-height: 1.8rem;">
       </a>
     </h6>
   </div>

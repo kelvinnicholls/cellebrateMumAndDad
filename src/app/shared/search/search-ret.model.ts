@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { SearchRetEnum } from "./search-ret.enum";
 import { SearchMatchCriteriaEnum } from "./search-match-criteria.enum";
 import { Consts } from "../../shared/consts";
-
+import { OrderByOption,OrderByDirectionEnum } from "./order-by-option.model";
 
 @Injectable()
 export class SearchRet {
@@ -13,6 +13,10 @@ export class SearchRet {
     private _matchCriteria: SearchMatchCriteriaEnum = SearchMatchCriteriaEnum.StartsWith;
     private static lineBreak: string = "<br />";
 
+
+    public orderByDirection: OrderByDirectionEnum = OrderByDirectionEnum.Ascending;
+    public orderByOption : OrderByOption;
+
     public getSearchCriteria(tagService,personService) {
         let searchRet = this;
         let retVal: string = "";
@@ -21,6 +25,10 @@ export class SearchRet {
         retVal += this._matchAll ? "Match: <strong>all fields</strong>" : "Match <strong>any field</strong>";
         retVal += SearchRet.lineBreak;
         retVal += "Match Criteria: <strong>" + this._matchCriteria.toString() + "</strong>";
+        retVal += SearchRet.lineBreak;
+        retVal += "Order By: <strong>" + this.orderByOption.field + "</strong>";
+        retVal += SearchRet.lineBreak;
+        retVal += "Order By Direction: <strong>" + this.orderByDirection + "</strong>";
         retVal += SearchRet.lineBreak;
         this.searchElements.forEach((element) => {
             if (element.value) {

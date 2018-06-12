@@ -25,6 +25,7 @@ import { Utils, LoglevelEnum, SortDataType } from "../shared/utils/utils";
 import { User } from "../users/user.model";
 import { AuthUserService } from "../auth/auth-user.service";
 import { ZipperService } from "../shared/zipper/zipper-service";
+import { OrderByOption, OrderByDataTypeEnum } from '../shared/search/order-by-option.model';
 
 @Injectable()
 export class PhotoService {
@@ -676,6 +677,12 @@ export class PhotoService {
         searchFields.push('from_date');
         searchFields.push('to_date');
 
-        this.searchService.showSearch("Search Photos", "Enter criteria to restrict list of photos", "Find", "Cancel", retSearchSub, SearchTypeEnum.Photos, searchFields);
+        let orderByFields: OrderByOption[] = [];
+        orderByFields.push(new OrderByOption('title','Title',OrderByDataTypeEnum.String,true));
+        orderByFields.push(new OrderByOption('description','Description'));
+        orderByFields.push(new OrderByOption('addedDate','Date Added',OrderByDataTypeEnum.Date));
+        orderByFields.push(new OrderByOption('mediaDate','Date Taken',OrderByDataTypeEnum.Date));
+
+        this.searchService.showSearch("Search Photos", "Enter criteria to restrict list of photos", "Find", "Cancel", retSearchSub, SearchTypeEnum.Photos, searchFields, orderByFields);
     }
 }
