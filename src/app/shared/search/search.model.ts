@@ -170,7 +170,7 @@ export class Search {
 
       if (searchRet.orderByOption.type === OrderByDataTypeEnum.Date) {
         sortDataType = SortDataType.Moment;
-        format = Consts.DATE_TIME_DISPLAY_FORMAT;
+        //format = Consts.DATE_TIME_DISPLAY_FORMAT;
       }
       retArray = retArray.sort(Utils.dynamicSort(property, sortDataType, format));
     }

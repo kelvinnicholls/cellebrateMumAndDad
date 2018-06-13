@@ -1,5 +1,5 @@
 import { Http, Response, Headers } from "@angular/http";
-import { Injectable, EventEmitter } from "@angular/core";
+import { Injectable, EventEmitter, ElementRef } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment';
 import { IMultiSelectTexts, IMultiSelectOption } from 'angular-2-dropdown-multiselect';
@@ -26,6 +26,7 @@ import { User } from "../users/user.model";
 import { AuthUserService } from "../auth/auth-user.service";
 import { ZipperService } from "../shared/zipper/zipper-service";
 import { OrderByOption, OrderByDataTypeEnum } from '../shared/search/order-by-option.model';
+import { Error } from '../shared/errors/error.model';
 
 @Injectable()
 export class PhotoService {
@@ -283,6 +284,7 @@ export class PhotoService {
     }
 
 
+
     titleExists(title: string, _id: string): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             const headers: Headers = new Headers();
@@ -336,6 +338,7 @@ export class PhotoService {
         this.socket = socket;
         let photoService = this;
         photoService.socket.on('createdPhoto', (photo, changedBy) => {
+            Utils.log(LoglevelEnum.Error, this, "New photo  : " + photo.title + " added by " + changedBy);
             let createdPhoto = photoService.createPhoto(photo, null);
             photoService.allPhotos.push(createdPhoto);
             photoService.multiSelectPhotoOptions.push({ id: createdPhoto._id, name: createdPhoto.title });
@@ -457,12 +460,6 @@ export class PhotoService {
             });
         };
 
-        let addedDate = null;
-        if (photo.mediaDate) {
-            addedDate = moment(photo.addedDate).format(Consts.DATE_DB_FORMAT);
-        };
-
-
         let mediaDate = null;
         if (photo.mediaDate) {
             mediaDate = moment(photo.mediaDate).format(Consts.DATE_DB_FORMAT);
@@ -471,7 +468,7 @@ export class PhotoService {
         let newPhoto = new Photo(
             photo.title,
             photo._creator,
-            addedDate,
+            photo.addedDate,
             photo._id,
             photo.description,
             null,
@@ -486,7 +483,6 @@ export class PhotoService {
         );
         return newPhoto;
     }
-
 
 
     public getProfilePhotos() {

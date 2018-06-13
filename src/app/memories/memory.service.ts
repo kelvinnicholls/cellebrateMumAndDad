@@ -420,10 +420,6 @@ export class MemoryService {
                             });
                         };
 
-                        let addedDate = null;
-                        if (memory.addedDate) {
-                            addedDate = moment(memory.addedDate).format(Consts.DATE_DB_FORMAT);
-                        };
 
 
                         let memoryDate = null;
@@ -434,7 +430,7 @@ export class MemoryService {
                         let newMemory = new Memory(
                             memory.title,
                             memory._creator,
-                            addedDate,
+                            memory.addedDate,
                             memory._id,
                             memory.description,
                             photos,
