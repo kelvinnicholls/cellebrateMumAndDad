@@ -9,13 +9,13 @@
       <form ngNativeValidate   [formGroup]="myForm" (ngSubmit)="onSubmit()">
         <div class="modal-body">
           <div class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('person').valid && (myForm.get('person').dirty && myForm.get('person').value.length > 0)
+        'has-success': myForm.get('person').valid && (myForm.get('person').dirty && isNotEmpty(myForm.get('person').value))
       }">
             <label for="person" class="col-sm-4 col-form-label"><strong>Person</strong></label>
             <div class="col-sm-8">
               <input type="text" class="form-control"
                 id="person" placeholder="New Person" formControlName="person" [ngClass]="{
-        'form-control-success': myForm.get('person').valid && (myForm.get('person').dirty && myForm.get('person').value.length > 0)
+        'form-control-success': myForm.get('person').valid && (myForm.get('person').dirty && isNotEmpty(myForm.get('person').value))
       }">
               <div class="form-control-feedback" *ngIf="myForm.get('person').errors && (myForm.get('person').dirty || myForm.get('person').touched)">
                 <p *ngIf="myForm.get('person').errors.required">Person is required!</p>

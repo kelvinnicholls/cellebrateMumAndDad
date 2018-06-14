@@ -61,6 +61,19 @@ export class Utils {
         return Utils.LOG_LEVEL;
     };
 
+
+    public static isNotEmpty(value : any):boolean {
+        let retVal: boolean = false;
+        if (value && value instanceof Array) {
+           if (value.length > 0) {
+               retVal = true;
+           }
+        }
+        return retVal;
+    }
+
+   
+
     public static log(...args: any[]) {
         let passedArguments = args.slice(0);
         if (passedArguments && passedArguments.length > 0) {

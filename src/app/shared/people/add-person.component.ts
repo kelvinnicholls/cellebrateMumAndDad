@@ -10,6 +10,7 @@ import { DialogRetEnum } from "../dialog/dialog-ret.enum";
 import { Dialog } from "../dialog/dialog.model";
 import { DialogService } from "../dialog/dialog.service";
 import { AuthUserService } from "../../auth/auth-user.service";
+import { Utils } from "../utils/utils";
 
 @Component({
   selector: 'app-add-person',
@@ -48,6 +49,9 @@ export class AddPersonComponent implements OnInit {
     this.myForm.get('autoSelect').setValue(true);
   }
 
+  isNotEmpty(val: any)  {
+    return Utils.isNotEmpty(val);
+  }
 
   isDirty(val: string, name: string) {
     return (val && val.length > 0 && this.myForm.controls[name] && this.myForm.controls[name].dirty);
