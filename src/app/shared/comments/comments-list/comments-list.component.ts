@@ -57,7 +57,7 @@ export class CommentListComponent {
         this.showCommentsSub = this.commentsService.showCommentsSub
             .subscribe(
             (comments: Comments) => {
-                this.commentsDisplay = comments.commentsDisplay.slice();
+                this.commentsDisplay = comments.commentsDisplay.slice(0);
                 this.commentsDisplay.reverse();
                 this.maxSize = 4;
                 this.bigTotalItems = this.commentsDisplay.length;

@@ -37,7 +37,7 @@ export class PhotoService {
             return this.getPhotos().toPromise();
         } else
         {
-            return Promise.resolve();;
+            return Promise.resolve();
         }
     }
 
@@ -61,7 +61,7 @@ export class PhotoService {
     public zipPhotos() {
 
         this.getProfilePhotos().subscribe((profilePhotos) => {
-            let mergedPhotos = profilePhotos.slice();
+            let mergedPhotos = profilePhotos.slice(0);
             mergedPhotos = mergedPhotos.concat(this.allPhotos);
             this.zipperService.zipFiles(mergedPhotos);
         });
@@ -338,7 +338,6 @@ export class PhotoService {
         this.socket = socket;
         let photoService = this;
         photoService.socket.on('createdPhoto', (photo, changedBy) => {
-            Utils.log(LoglevelEnum.Error, this, "New photo  : " + photo.title + " added by " + changedBy);
             let createdPhoto = photoService.createPhoto(photo, null);
             photoService.allPhotos.push(createdPhoto);
             photoService.multiSelectPhotoOptions.push({ id: createdPhoto._id, name: createdPhoto.title });
@@ -633,7 +632,7 @@ export class PhotoService {
     }
 
     clearSearch() {
-        this.photos = this.allPhotos;
+        this.photos = this.allPhotos.slice(0);
         this.searchRet = null;
         //this.eventPage = 1;
         //this.bigCurrentPage = 1;

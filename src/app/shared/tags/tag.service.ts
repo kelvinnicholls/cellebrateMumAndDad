@@ -72,7 +72,7 @@ export class TagService {
             return this.getTags().toPromise();
         } else
         {
-            return Promise.resolve();;
+            return Promise.resolve();
         }
     }
 
@@ -150,10 +150,10 @@ export class TagService {
 
     sortTags() {
         let tagService = this;
-        tagService.multiSelectTagOptions = tagService.multiSelectTagOptions.slice();
+        tagService.multiSelectTagOptions = tagService.multiSelectTagOptions.slice(0);
         tagService.multiSelectTagOptions = tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
 
-        tagService.tags = tagService.tags.slice();
+        tagService.tags = tagService.tags.slice(0);
         tagService.tags = tagService.tags.sort(Utils.dynamicSort('tag'));
 
     }

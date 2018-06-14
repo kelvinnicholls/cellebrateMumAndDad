@@ -30,7 +30,7 @@ export class PhotoListComponent implements OnInit, OnDestroy {
 
     routeId = "PhotoListComponent";
 
-    defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;;
+    defaultPhotoFile = Consts.DEFAULT_PHOTO_PIC_FILE;
 
 
     static numCols: number = 3;

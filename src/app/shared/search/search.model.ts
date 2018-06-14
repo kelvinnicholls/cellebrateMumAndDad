@@ -154,7 +154,7 @@ export class Search {
       });
     } else {
       // just sort the passed array not restricting
-      retArray = array.slice();
+      retArray = array.slice(0);
     }
 
 

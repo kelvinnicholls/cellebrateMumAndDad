@@ -99,7 +99,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         retTagSub.subscribe((tag: Tag) => {
             if (tag) {
-                photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.slice();
+                photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.slice(0);
                 photoInputComponent.tagService.multiSelectTagOptions = photoInputComponent.tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
                 if (tag.autoSelect) {
                     photoInputComponent.tagService.selectedTags.push(tag.id);
@@ -128,7 +128,7 @@ export class PhotoInputComponent implements OnInit, OnDestroy {
         let photoInputComponent = this;
         retPersonSub.subscribe((person: Person) => {
             if (person) {
-                photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.slice();
+                photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.slice(0);
                 photoInputComponent.personService.multiSelectPersonOptions = photoInputComponent.personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
                 if (person.autoSelect) {
                     photoInputComponent.personService.selectedPeople.push(person.id);

@@ -49,7 +49,7 @@ export class UserService {
             return this.getUsers().toPromise();
         } else
         {
-            return Promise.resolve();;
+            return Promise.resolve();
         }
     }
 
@@ -407,7 +407,7 @@ export class UserService {
     }
 
     clearSearch() {
-        this.users = this.allUsers;
+        this.users = this.allUsers.slice(0);
         this.searchRet = null;
         //this.eventPage = 1;
         //this.bigCurrentPage = 1;

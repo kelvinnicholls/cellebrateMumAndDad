@@ -62,7 +62,7 @@ export class Utils {
     };
 
     public static log(...args: any[]) {
-        let passedArguments = args.slice();
+        let passedArguments = args.slice(0);
         if (passedArguments && passedArguments.length > 0) {
             let logLevel = passedArguments[0];
             passedArguments[0] = moment().format(Consts.DATE_TIME_DISPLAY_FORMAT);

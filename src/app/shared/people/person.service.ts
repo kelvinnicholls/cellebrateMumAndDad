@@ -50,7 +50,7 @@ export class PersonService {
             return this.getPeople().toPromise();
         } else
         {
-            return Promise.resolve();;
+            return Promise.resolve();
         }
     }
 
@@ -144,10 +144,10 @@ export class PersonService {
 
     sortPeople() {
         let personService = this;
-        personService.multiSelectPersonOptions = personService.multiSelectPersonOptions.slice();
+        personService.multiSelectPersonOptions = personService.multiSelectPersonOptions.slice(0);
         personService.multiSelectPersonOptions = personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
 
-        personService.people = personService.people.slice();
+        personService.people = personService.people.slice(0);
         personService.people = personService.people.sort(Utils.dynamicSort('person'));
 
     }

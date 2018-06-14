@@ -62,7 +62,7 @@ export class MemoryService {
             return this.getMemories().toPromise();
         } else
         {
-            return Promise.resolve();;
+            return Promise.resolve();
         }
     }
 
@@ -314,7 +314,7 @@ export class MemoryService {
         memoryService.socket.on('deletedMemory', (id, changedBy) => {
             let memoryToBeDeleted = memoryService.findMemoryById(id);
             if (memoryToBeDeleted) {
-                memoryService.removeMemory(memoryToBeDeleted);;
+                memoryService.removeMemory(memoryToBeDeleted);
                 memoryService.appService.showToast(Consts.INFO, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
                 Utils.log(LoglevelEnum.Info,this, "Memory  : " + memoryToBeDeleted.title + " deleted by " + changedBy);
             };
@@ -549,7 +549,7 @@ export class MemoryService {
     }
 
     clearSearch() {
-        this.memories = this.allMemories;
+        this.memories = this.allMemories.slice(0);
         this.searchRet = null;
         //this.eventPage = 1;
         //this.bigCurrentPage = 1;

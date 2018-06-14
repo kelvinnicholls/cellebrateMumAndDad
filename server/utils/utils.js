@@ -71,7 +71,7 @@ utils.genQueryForCriteria = function (tags, people, fromDate, toDate, dateField)
 };
 
 utils.log = function (...arguments) {
-  let passedArguments = arguments.slice();
+  let passedArguments = arguments.slice(0);
   if (passedArguments && passedArguments.length > 0) {
     let logLevel = passedArguments[0];
     if (logLevel <= process.env.LOG_LEVEL) {
@@ -88,7 +88,7 @@ utils.union = function(arr1,arr2) {
     return arr2;
   }
 
-  let retArr = arr1.slice();;
+  let retArr = arr1.slice(0);
 
   if (arr2) {
     for (let i in arr2) {

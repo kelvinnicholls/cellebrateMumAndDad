@@ -117,7 +117,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         let memoryInputComponent = this;
         retTagSub.subscribe((tag: Tag) => {
             if (tag) {
-                memoryInputComponent.tagService.multiSelectTagOptions = memoryInputComponent.tagService.multiSelectTagOptions.slice();
+                memoryInputComponent.tagService.multiSelectTagOptions = memoryInputComponent.tagService.multiSelectTagOptions.slice(0);
                 memoryInputComponent.tagService.multiSelectTagOptions = memoryInputComponent.tagService.multiSelectTagOptions.sort(Utils.dynamicSort('name'));
                 if (tag.autoSelect) {
                     memoryInputComponent.tagService.selectedTags.push(tag.id);
@@ -146,7 +146,7 @@ export class MemoryInputComponent implements OnInit, OnDestroy {
         let memoryInputComponent = this;
         retPersonSub.subscribe((person: Person) => {
             if (person) {
-                memoryInputComponent.personService.multiSelectPersonOptions = memoryInputComponent.personService.multiSelectPersonOptions.slice();
+                memoryInputComponent.personService.multiSelectPersonOptions = memoryInputComponent.personService.multiSelectPersonOptions.slice(0);
                 memoryInputComponent.personService.multiSelectPersonOptions = memoryInputComponent.personService.multiSelectPersonOptions.sort(Utils.dynamicSort('name'));
                 if (person.autoSelect) {
                     memoryInputComponent.personService.selectedPeople.push(person.id);
