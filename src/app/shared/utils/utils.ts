@@ -64,7 +64,7 @@ export class Utils {
 
     public static isNotEmpty(value : any):boolean {
         let retVal: boolean = false;
-        if (value && value instanceof Array) {
+        if (value) {
            if (value.length > 0) {
                retVal = true;
            }
@@ -72,7 +72,6 @@ export class Utils {
         return retVal;
     }
 
-   
 
     public static log(...args: any[]) {
         let passedArguments = args.slice(0);
