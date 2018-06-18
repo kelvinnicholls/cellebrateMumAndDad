@@ -98,6 +98,12 @@ export class SearchComponent implements OnInit {
     //Utils.log(LoglevelEnum.Info,this,this.optionsModel);
   }
 
+
+  isNotEmpty(val: any)  {
+    return Utils.isNotEmpty(val);
+  }
+
+
   constructor(private searchService: SearchService, private formBuilder: FormBuilder, private tagService: TagService
     , private personService: PersonService, private photoService: PhotoService, private authUserService: AuthUserService
   ) { }

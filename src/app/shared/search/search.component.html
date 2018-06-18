@@ -104,13 +104,13 @@
             </div>
 
             <div class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('matchCriteria').valid && (myForm.get('matchCriteria').dirty && myForm.get('matchCriteria').value.length > 0)
+        'has-success': myForm.get('matchCriteria').valid && (myForm.get('matchCriteria').dirty && isNotEmpty(myForm.get('matchCriteria')))
       }">
               <label for="matchCriteria" class="col-sm-4 col-form-label">
                 <strong>Match Criteria</strong>
               </label>
               <div id="matchCriteria" [ngClass]="{
-        'form-control-success': myForm.get('matchCriteria').valid && (myForm.get('matchCriteria').dirty && myForm.get('matchCriteria').value.length > 0)
+        'form-control-success': myForm.get('matchCriteria').valid && (myForm.get('matchCriteria').dirty && isNotEmpty(myForm.get('matchCriteria')))
       }">
                 <label class="custom-control custom-radio">
                   <input id="startsWith" name="matchCriteria" type="radio" value="Starts With" class="custom-control-input" formControlName="matchCriteria">
@@ -139,14 +139,14 @@
 
           <div [hidden]="toggleShowHideSearchFieldsText === showSearchFieldsText">
             <div *ngIf="canShow('adminUser')" class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty && myForm.get('adminUser').value.length > 0)
+        'has-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty && isNotEmpty(myForm.get('adminUser')))
       }">
 
               <label for="adminUser" class="col-sm-4 col-form-label">
                 <strong>Admin user</strong>
               </label>
               <div id="adminUser" [ngClass]="{
-        'form-control-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty && myForm.get('adminUser').value.length > 0)
+        'form-control-success': myForm.get('adminUser').valid && (myForm.get('adminUser').dirty && isNotEmpty(myForm.get('adminUser')))
       }">
                 <label class="custom-control custom-radio">
                   <input id="adminUserYes" name="adminUser" type="radio" value="Yes" class="custom-control-input" formControlName="adminUser">
@@ -167,14 +167,14 @@
             </div>
 
             <div *ngIf="canShow('emailUpdates')" class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty && myForm.get('emailUpdates').value.length > 0)
+        'has-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty && isNotEmpty(myForm.get('emailUpdates')))
       }">
 
               <label for="emailUpdates" class="col-sm-4 col-form-label">
                 <strong>Email Updates?</strong>
               </label>
               <div id="emailUpdates" [ngClass]="{
-        'form-control-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty && myForm.get('emailUpdates').value.length > 0)
+        'form-control-success': myForm.get('emailUpdates').valid && (myForm.get('emailUpdates').dirty && isNotEmpty(myForm.get('emailUpdates')))
       }">
                 <label class="custom-control custom-radio">
                   <input id="emailUpdatesYes" name="emailUpdates" type="radio" value="Yes" class="custom-control-input" formControlName="emailUpdates">
@@ -195,14 +195,14 @@
             </div>
 
             <div *ngIf="canShow('guestUser')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && myForm.get('guestUser').value.length > 0)
+              'has-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && isNotEmpty(myForm.get('guestUser')))
             }">
 
               <label for="guestUser" class="col-sm-4 col-form-label">
                 <strong>Guest User?</strong>
               </label>
               <div id="guestUser" [ngClass]="{
-              'form-control-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && myForm.get('guestUser').value.length > 0)
+              'form-control-success': myForm.get('guestUser').valid && (myForm.get('guestUser').dirty && isNotEmpty(myForm.get('guestUser')))
             }">
                 <label class="custom-control custom-radio">
                   <input id="guestUserYes" name="guestUser" type="radio" value="Yes" class="custom-control-input" formControlName="guestUser">
@@ -223,27 +223,27 @@
             </div>
 
             <div *ngIf="canShow('email')" class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('email').valid && (myForm.get('email').dirty && myForm.get('email').value.length > 0)
+        'has-success': myForm.get('email').valid && (myForm.get('email').dirty && isNotEmpty(myForm.get('email')))
       }">
               <label for="email" class="col-sm-4 col-form-label">
                 <strong>Email address</strong>
               </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="email" placeholder="Email address" formControlName="email" [ngClass]="{
-        'form-control-success': myForm.get('email').valid && (myForm.get('email').dirty && myForm.get('email').value.length > 0)
+        'form-control-success': myForm.get('email').valid && (myForm.get('email').dirty && isNotEmpty(myForm.get('email')))
       }">
               </div>
             </div>
 
             <div *ngIf="canShow('name')" class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('name').valid && (myForm.get('name').dirty && myForm.get('name').value.length > 0)
+        'has-success': myForm.get('name').valid && (myForm.get('name').dirty && isNotEmpty(myForm.get('name')))
       }">
               <label for="name" class="col-sm-4 col-form-label">
                 <strong>Name</strong>
               </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="name" placeholder="Name" formControlName="name" [ngClass]="{
-        'form-control-success': myForm.get('name').valid && (myForm.get('name').dirty && myForm.get('name').value.length > 0)
+        'form-control-success': myForm.get('name').valid && (myForm.get('name').dirty && isNotEmpty(myForm.get('name')))
       }">
               </div>
             </div>
@@ -262,26 +262,26 @@
             </div>
 
             <div *ngIf="canShow('facebookId')" class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('facebookId').valid && (myForm.get('facebookId').dirty && myForm.get('facebookId').value.length > 0)
+        'has-success': myForm.get('facebookId').valid && (myForm.get('facebookId').dirty && isNotEmpty(myForm.get('facebookId')))
       }">
               <label for="facebookId" class="col-sm-4 col-form-label">
                 <strong>Facebook ID</strong>
               </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="facebookId" placeholder="Facebook ID" formControlName="facebookId" [ngClass]="{
-        'form-control-success': myForm.get('facebookId').valid && (myForm.get('facebookId').dirty && myForm.get('facebookId').value.length > 0)
+        'form-control-success': myForm.get('facebookId').valid && (myForm.get('facebookId').dirty && isNotEmpty(myForm.get('facebookId')))
       }">
               </div>
             </div>
 
             <div *ngIf="canShow('relationship')" class="form-group row col col-sm-12" [ngClass]="{
-        'has-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty && myForm.get('relationship').value.length > 0)
+        'has-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty && isNotEmpty(myForm.get('relationship')))
       }">
               <label for="relationship" class="col-sm-4 col-form-label">
                 <strong>Relationship</strong>
               </label>
               <div class="col-sm-8" [ngClass]="{
-        'form-control-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty && myForm.get('relationship').value.length > 0)
+        'form-control-success': myForm.get('relationship').valid && (myForm.get('relationship').dirty && isNotEmpty(myForm.get('relationship')))
       }">
                 <select multiple class="form-control" id="relationship" formControlName="relationship">
                   <option value="Son">Son</option>
@@ -296,33 +296,33 @@
             </div>
 
             <div *ngIf="canShow('title')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('title').valid && (myForm.get('title').dirty && myForm.get('title').value.length > 0)
+              'has-success': myForm.get('title').valid && (myForm.get('title').dirty && isNotEmpty(myForm.get('title')))
             }">
               <label for="title" class="col-sm-4 col-form-label">
                 <strong>Name</strong>
               </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="title" placeholder="Title" formControlName="title" [ngClass]="{
-              'form-control-success': myForm.get('title').valid && (myForm.get('title').dirty && myForm.get('title').value.length > 0)
+              'form-control-success': myForm.get('title').valid && (myForm.get('title').dirty && isNotEmpty(myForm.get('title')))
             }">
               </div>
             </div>
 
             <div *ngIf="canShow('description')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('description').valid && (myForm.get('description').dirty && myForm.get('description').value.length > 0)
+              'has-success': myForm.get('description').valid && (myForm.get('description').dirty && isNotEmpty(myForm.get('description')))
             }">
               <label for="description" class="col-sm-4 col-form-label">
                 <strong>Description</strong>
               </label>
               <div class="col-sm-8">
                 <input type="text" class="form-control" id="description" placeholder="Description" formControlName="description" [ngClass]="{
-              'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty && myForm.get('description').value.length > 0)
+              'form-control-success': myForm.get('description').valid && (myForm.get('description').dirty && isNotEmpty(myForm.get('description')))
             }">
               </div>
             </div>
 
             <div *ngIf="canShow('tags')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty && myForm.get('tags').value.length > 0)
+              'has-success': myForm.get('tags').valid && (myForm.get('tags').dirty && isNotEmpty(myForm.get('tags')))
             }">
               <label for="tags" class="col-sm-4 col-form-label">
                 <strong>Tags</strong>
@@ -339,7 +339,7 @@
             </div>
 
             <div *ngIf="canShow('people')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('people').valid && (myForm.get('people').dirty && myForm.get('people').value.length > 0)
+              'has-success': myForm.get('people').valid && (myForm.get('people').dirty && isNotEmpty(myForm.get('people')))
             }">
               <label for="people" class="col-sm-4 col-form-label">
                 <strong>People</strong>
@@ -355,7 +355,7 @@
 
 
             <div *ngIf="canShow('photos')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('photos').valid && (myForm.get('photos').dirty && myForm.get('photos').value.length > 0)
+              'has-success': myForm.get('photos').valid && (myForm.get('photos').dirty && isNotEmpty(myForm.get('photos')))
             }">
               <label for="photos" class="col-sm-4 col-form-label">
                 <strong>Photos</strong>
@@ -370,27 +370,27 @@
             </div>
 
             <div *ngIf="canShow('from_date')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('from_date').valid && (myForm.get('from_date').dirty && myForm.get('from_date').value.length > 0)
+              'has-success': myForm.get('from_date').valid && (myForm.get('from_date').dirty && isNotEmpty(myForm.get('from_date')))
             }">
               <label for="from_date" class="col-sm-4 col-form-label">
                 <strong>Date From</strong>
               </label>
               <div class="col-sm-8">
                 <input type="date" id="from_date" class="form-control" formControlName="from_date" [ngClass]="{
-              'form-control-success': myForm.get('from_date').valid && (myForm.get('from_date').dirty && myForm.get('from_date').value.length > 0)
+              'form-control-success': myForm.get('from_date').valid && (myForm.get('from_date').dirty && isNotEmpty(myForm.get('from_date')))
             }">
               </div>
             </div>
 
             <div *ngIf="canShow('to_date')" class="form-group row col col-sm-12" [ngClass]="{
-              'has-success': myForm.get('to_date').valid && (myForm.get('to_date').dirty && myForm.get('to_date').value.length > 0)
+              'has-success': myForm.get('to_date').valid && (myForm.get('to_date').dirty && isNotEmpty(myForm.get('to_date')))
             }">
               <label for="to_date" class="col-sm-4 col-form-label">
                 <strong>Date To</strong>
               </label>
               <div class="col-sm-8">
                 <input type="date" id="to_date" class="form-control" formControlName="to_date" [ngClass]="{
-              'form-control-success': myForm.get('to_date').valid && (myForm.get('to_date').dirty && myForm.get('to_date').value.length > 0)
+              'form-control-success': myForm.get('to_date').valid && (myForm.get('to_date').dirty && isNotEmpty(myForm.get('to_date')))
             }">
               </div>
             </div>
