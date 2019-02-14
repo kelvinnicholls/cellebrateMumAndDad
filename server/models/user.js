@@ -92,6 +92,8 @@ let UserSchema = new mongoose.Schema({
       required: true,
     }
   }]
+}, {
+  usePushEach: true
 });
 
 // utils.log(utils.LoglevelEnum.Info,"UserSchema",utils.schemaToObject(Object.keys(UserSchema.paths)));

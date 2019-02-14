@@ -53,6 +53,8 @@ let MemorySchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment'
   }]
+}, {
+  usePushEach: true
 });
 
 

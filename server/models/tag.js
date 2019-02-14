@@ -21,6 +21,8 @@ let TagSchema = new mongoose.Schema({
   addedDate: {
     type: Date
   },
+}, {
+  usePushEach: true
 });
 
 const tagInsertFields = ['tag'];

@@ -76,6 +76,8 @@ let MediaSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Comment'
   }]
+}, {
+  usePushEach: true
 });
 
 //utils.log(utils.LoglevelEnum.Info,"MediaSchema",utils.schemaToObject(Object.keys(MediaSchema.paths)));

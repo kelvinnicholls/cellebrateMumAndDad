@@ -22,10 +22,12 @@ let CommentSchema = new mongoose.Schema({
     required: true,
     type: String
   }
+}, {
+  usePushEach: true
 });
 
 
-CommentSchema.methods.toJSON  = function () {
+CommentSchema.methods.toJSON = function () {
   let comment = this;
   return _.pick(comment, commentOutFields);
 };

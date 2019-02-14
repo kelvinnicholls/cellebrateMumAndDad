@@ -22,6 +22,8 @@ let PersonSchema = new mongoose.Schema({
 addedDate: {
   type: Date
 },
+}, {
+  usePushEach: true
 });
 
 const personInsertFields = ['person'];
